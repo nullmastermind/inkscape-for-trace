@@ -259,38 +259,38 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#cr"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Ismertető<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Tippek</tspan></tspan></text>
-  <rect id="al" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="ak" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
-   <flowRegion>
-    <use xlink:href="#al"/>
-   </flowRegion>
-   <flowDiv>Az alábbi tippek és trükkök segítenek elsajátítani az Inkscape használatát, és bemutatunk néhány munkát gyorsító „rejtett” tulajdonságot is.</flowDiv>
-  </flowRoot>
-  <rect id="ak" x="20" y="169" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ak"/>
    </flowRegion>
-   <flowDiv>Sugárirányú elhelyezés csempézett klónokkal</flowDiv>
+   <flowDiv>Az alábbi tippek és trükkök segítenek elsajátítani az Inkscape használatát, és bemutatunk néhány munkát gyorsító „rejtett” tulajdonságot is.</flowDiv>
   </flowRoot>
-  <rect id="aj" x="20" y="181.56" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="aj" x="20" y="169" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aj"/>
    </flowRegion>
-   <flowDiv>Az könnyen átlátható, hogy a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">csempézett klónok létrehozása</flowSpan> párbeszédablakkal hogyan készíthető derékszögű rács vagy minta. De mi a teendő akkor, ha <flowSpan font-style="italic">sugárirányú</flowSpan> elrendezésre van szükség, ahol az objektumoknak közös a forgáspontjuk? Ez szintén megoldható!</flowDiv>
+   <flowDiv>Sugárirányú elhelyezés csempézett klónokkal</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="220.46" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="181.56" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
-   <flowDiv>Ha a sugárirányú minta csak 3, 4, 6, 8, vagy 12 elemű kell legyen, akkor érdemes a P3, P31M, P3M1, P4, P4M, P6, vagy a P6M szimmetriákat kipróbálni. Ezek jól fognak működni a hópelyhek és hasonlók esetében. Egy általánosabb módszer azonban a következő.</flowDiv>
+   <flowDiv>Az könnyen átlátható, hogy a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">csempézett klónok létrehozása</flowSpan> párbeszédablakkal hogyan készíthető derékszögű rács vagy minta. De mi a teendő akkor, ha <flowSpan font-style="italic">sugárirányú</flowSpan> elrendezésre van szükség, ahol az objektumoknak közös a forgáspontjuk? Ez szintén megoldható!</flowDiv>
   </flowRoot>
-  <rect id="ah" x="20" y="259.03" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="220.46" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
+   </flowRegion>
+   <flowDiv>Ha a sugárirányú minta csak 3, 4, 6, 8, vagy 12 elemű kell legyen, akkor érdemes a P3, P31M, P3M1, P4, P4M, P6, vagy a P6M szimmetriákat kipróbálni. Ezek jól fognak működni a hópelyhek és hasonlók esetében. Egy általánosabb módszer azonban a következő.</flowDiv>
+  </flowRoot>
+  <rect id="ag" x="20" y="259.03" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ag"/>
    </flowRegion>
    <flowDiv>Válassza a P1 szimmetriát (egyszerű eltolás), majd az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Eltolás</flowSpan> lapon <flowSpan font-style="italic">ellensúlyozza</flowSpan> ezt az eltolást úgy, hogy a <flowSpan font-family="Liberation Sans,Arial,sans-serif">Soronként / Y irányú eltolás</flowSpan> és az <flowSpan font-family="Liberation Sans,Arial,sans-serif">Oszloponként / X irányú eltolás</flowSpan> értékét is −100%-ra állítja. Így minden klón pontosan az eredeti objektumra halmozódik. Már csak annyit kell tennie, hogy a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Forgatás</flowSpan> lapon megad némi oszloponkénti elforgatást, és a mintát egy sorból és több oszlopból készíti. Az alábbi példa egy függőleges vonalból készült 30 oszloppal, minden oszlop 6°-os elforgatásával:</flowDiv>
   </flowRoot>
@@ -324,17 +324,17 @@
   <use transform="translate(20 338.05) rotate(162 150 58.9) translate(-20 -338.05)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
   <use transform="translate(20 338.05) rotate(168 150 58.9) translate(-20 -338.05)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
   <use transform="translate(20 338.05) rotate(174 150 58.9) translate(-20 -338.05)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <rect id="ag" x="20" y="467.55" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ag"/>
-   </flowRegion>
-   <flowDiv>Ebből már könnyen kaphat egy óralapot, ha a középső részt kivágja vagy egyszerűen letakarja egy fehér körrel (kapcsolja le a klónt, ha logikai műveletet akar végezni rajta).</flowDiv>
-  </flowRoot>
-  <rect id="af" x="20" y="495.48" width="300" height="1e3px" display="none"/>
+  <rect id="af" x="20" y="467.55" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#af"/>
+   </flowRegion>
+   <flowDiv>Ebből már könnyen kaphat egy óralapot, ha a középső részt kivágja vagy egyszerűen letakarja egy fehér körrel (kapcsolja le a klónt, ha logikai műveletet akar végezni rajta).</flowDiv>
+  </flowRoot>
+  <rect id="ae" x="20" y="495.48" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ae"/>
    </flowRegion>
    <flowDiv>Még érdekesebb hatás érhető el sorokat és oszlopokat is használva. Az alábbi minta 10 oszloppal és 8 sorral készült, soronként 2°-os, oszloponként 18°-os forgatással. Itt minden vonalcsoport egy „oszlop”, így a csoportok 18°-onként követik egymást; az egyedi vonalak minden oszlopban 2°-onként helyezkednek el:</flowDiv>
   </flowRoot>
@@ -418,10 +418,10 @@
   <use transform="translate(20 552.69) rotate(169.5 150 71.649) translate(-20 -552.69)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
   <use transform="translate(20 552.69) rotate(171 150 71.65) translate(-20 -552.69)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
   <use transform="translate(20 552.69) rotate(172.5 150 71.651) translate(-20 -552.69)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <rect id="ae" x="20" y="707.69" width="300" height="1e3px" display="none"/>
+  <rect id="ad" x="20" y="707.69" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ae"/>
+    <use xlink:href="#ad"/>
    </flowRegion>
    <flowDiv>A fenti példában a vonalak a középpontjuk körül forogtak. De hogyan oldható meg a középpont alakzaton kívül helyezése? Kattintson kétszer a kijelölés eszközzel az objektumon, hogy a forgatási módot aktiválja. Most mozgassa el az objektum forgatási középpontját (egy kis kereszt alakú fogantyú) arra a pontra, ahol szeretné, hogy a csempézett klónok forgatási középpontja legyen. Alkalmazza a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Csempézett klón létrehozása</flowSpan> parancsot az objektumon. Így készíthet – véletlenszerűséget is hozzáadva a méretezéshez, a forgatáshoz és esetleg az átlátszósághoz – tetszetős „kitöréseket” vagy „csillagrobbanásokat”:</flowDiv>
   </flowRoot>
@@ -500,52 +500,52 @@
   <use transform="translate(20 797) matrix(1.1627 -.6377 .6377 1.1627 -73.507 83.13) translate(-20 -797)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
   <use transform="translate(20 797) matrix(1.5217 -.57461 .57461 1.5217 -122.51 46.016) translate(-20 -797)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
   <use transform="translate(20 797) matrix(.54625 -.90456 .90456 .54625 -1.5938 170.63) translate(-20 -797)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <rect id="ad" x="20" y="968.41" width="300" height="1e3px" display="none"/>
+  <rect id="ac" x="20" y="968.41" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ad"/>
-   </flowRegion>
-   <flowDiv>Hogyan lehet szeletelést (téglalap alakú exportterületeket) létrehozni?</flowDiv>
-  </flowRoot>
-  <rect id="ac" x="20" y="980.97" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ac"/>
    </flowRegion>
-   <flowDiv>Hozzon létre egy új réteget, majd ezen a rétegen láthatatlan téglalapokat, melyek befedik a kép részleteit. A dokumentum beállított mértékegysége a px (ez az alapértelmezett) legyen. Kapcsolja be a rácsot, majd igazítsa rácshoz a téglalapokat, ezáltal mindegyik mérete egész számú px lesz. Minden téglalapra állítson be valamilyen értelmes azonosítót, és exportálja őket egy-egy külön fájlba (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">PNG kép exportálása…</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">E</flowSpan>)). Így minden téglalap megjegyzi a hozzá tartozó fájlnevet. Ezután már nagyon könnyű lesz újra exportálni a téglalapokat: váltson az exportrétegre, a <flowSpan font-weight="bold">Tab</flowSpan> billentyűvel (vagy a Keresés funkcióval azonosító alapján) jelölje ki az exportálandó téglalapot, majd a párbeszédablakban kattintson az <flowSpan font-family="Liberation Sans,Arial,sans-serif">Exportálásra</flowSpan>. De írhat egy parancsfájlt is, minden exportálandó területhez egy ilyen paranccsal:</flowDiv>
+   <flowDiv>Hogyan lehet szeletelést (téglalap alakú exportterületeket) létrehozni?</flowDiv>
   </flowRoot>
-  <rect id="ab" x="20" y="1094.3" width="300" height="1e3px" display="none"/>
+  <rect id="ab" x="20" y="980.97" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ab"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i area-id -t fájlnév.svg</flowSpan></flowDiv>
+   <flowDiv>Hozzon létre egy új réteget, majd ezen a rétegen láthatatlan téglalapokat, melyek befedik a kép részleteit. A dokumentum beállított mértékegysége a px (ez az alapértelmezett) legyen. Kapcsolja be a rácsot, majd igazítsa rácshoz a téglalapokat, ezáltal mindegyik mérete egész számú px lesz. Minden téglalapra állítson be valamilyen értelmes azonosítót, és exportálja őket egy-egy külön fájlba (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">PNG kép exportálása…</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">E</flowSpan>)). Így minden téglalap megjegyzi a hozzá tartozó fájlnevet. Ezután már nagyon könnyű lesz újra exportálni a téglalapokat: váltson az exportrétegre, a <flowSpan font-weight="bold">Tab</flowSpan> billentyűvel (vagy a Keresés funkcióval azonosító alapján) jelölje ki az exportálandó téglalapot, majd a párbeszédablakban kattintson az <flowSpan font-family="Liberation Sans,Arial,sans-serif">Exportálásra</flowSpan>. De írhat egy parancsfájlt is, minden exportálandó területhez egy ilyen paranccsal:</flowDiv>
   </flowRoot>
-  <rect id="aa" x="20" y="1111.8" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="1094.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aa"/>
    </flowRegion>
-   <flowDiv>A <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-t</flowSpan> kapcsoló jelzi a programnak, hogy a mentett fájlneveket használja, ellenkező esetben az <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-e</flowSpan> kapcsolóval lehetne megadni az exportálandó fájl nevét. A másik lehetőség az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Kiterjesztések </flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Web</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szeletelő</flowSpan> kiterjesztés, vagy a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Kiterjesztések</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exportálás</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Guillotine</flowSpan> hasonló eredménnyel.</flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i area-id -t fájlnév.svg</flowSpan></flowDiv>
   </flowRoot>
-  <rect id="cn" x="20" y="1166.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cn" x="20" y="1111.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cn"/>
    </flowRegion>
-   <flowDiv>Nemlineáris színátmenetek</flowDiv>
+   <flowDiv>A <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-t</flowSpan> kapcsoló jelzi a programnak, hogy a mentett fájlneveket használja, ellenkező esetben az <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-e</flowSpan> kapcsolóval lehetne megadni az exportálandó fájl nevét. A másik lehetőség az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Kiterjesztések </flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Web</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szeletelő</flowSpan> kiterjesztés, vagy a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Kiterjesztések</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exportálás</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Guillotine</flowSpan> hasonló eredménnyel.</flowDiv>
   </flowRoot>
-  <rect id="cm" x="20" y="1177.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cm" x="20" y="1166.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cm"/>
    </flowRegion>
-   <flowDiv>Az SVG 1.1-es verziója nem támogatja a nemlineáris színátmeneteket (vagyis ahol nemlineáris átmenet van egyik színből a másikba). Azonban mégis készíthető hasonló, <flowSpan font-style="italic">többfázisú</flowSpan> színátmenettel.</flowDiv>
+   <flowDiv>Nemlineáris színátmenetek</flowDiv>
   </flowRoot>
-  <rect id="cl" x="20" y="1216.3" width="300" height="1e3px" display="none"/>
+  <rect id="cl" x="20" y="1177.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cl"/>
+   </flowRegion>
+   <flowDiv>Az SVG 1.1-es verziója nem támogatja a nemlineáris színátmeneteket (vagyis ahol nemlineáris átmenet van egyik színből a másikba). Azonban mégis készíthető hasonló, <flowSpan font-style="italic">többfázisú</flowSpan> színátmenettel.</flowDiv>
+  </flowRoot>
+  <rect id="ck" x="20" y="1216.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ck"/>
    </flowRegion>
    <flowDiv>Először készítsen egy egyszerű, kétfázisú színátmenetet (a kitöltés és körvonal párbeszédablakban lehet ezt hozzárendelni vagy a színátmenet eszközzel). Most adjon a színátmenet közepére egy új fázist a színátmenet eszközzel vagy a színátmenet sávon való dupla kattintással vagy a négyzet alakú színátmenet-fázis kijelölésével és az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Új fázis beszúrása</flowSpan> gombra való kattintással a színátmenet eszköz fenn levő eszköztárán. Kicsit húzza el az új fázist. Végül e középső fázis elé és mögé is vegyen fel további fázisokat, melyeket szintén mozgasson el kissé, hogy az átmenet egyenletes legyen. Minél több fázispont van, annál folyamatosabb lesz az átmenet. Ez a kiinduló fekete-fehér, kétfázisú színátmenet:</flowDiv>
   </flowRoot>
@@ -556,10 +556,10 @@
    </linearGradient>
   </defs>
   <rect transform="translate(20 1325.4) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#z)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="ck" x="20" y="1353.5" width="300" height="1e3px" display="none"/>
+  <rect id="cj" x="20" y="1353.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ck"/>
+    <use xlink:href="#cj"/>
    </flowRegion>
    <flowDiv>Itt pedig néhány „nemlineáris”, többfázisú színátmenetet láthat (vizsgálja meg őket a Színátmenet-szerkesztővel):</flowDiv>
   </flowRoot>
@@ -652,17 +652,17 @@
   <rect transform="translate(20 1389.5) matrix(0 -1 -1 0 0 0)" x="-32.181" y="-293.2" width="16.125" height="286.4" fill="url(#w)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1389.5) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#x)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1389.5) matrix(0 -1 -1 0 0 0)" x="-128.52" y="-293.2" width="16.125" height="286.4" fill="url(#y)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="cj" x="20" y="1535.4" width="300" height="1e3px" display="none"/>
+  <rect id="ci" x="20" y="1535.4" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#cj"/>
+    <use xlink:href="#ci"/>
    </flowRegion>
    <flowDiv>Excentrikus sugárirányú színátmenetek</flowDiv>
   </flowRoot>
-  <rect id="ci" x="20" y="1548" width="300" height="1e3px" display="none"/>
+  <rect id="ch" x="20" y="1548" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ci"/>
+    <use xlink:href="#ch"/>
    </flowRegion>
    <flowDiv>A sugárirányú színátmenet nem csak szimmetrikus lehet. A Színátmenet eszközzel a <flowSpan font-weight="bold">Shift</flowSpan> nyomva tartása mellett húzza el a középső fogantyút. Így tudja elmozgatni a középpontból az átmenet X alakú <flowSpan font-style="italic">fókuszfogantyú</flowSpan>ját. Ezt a vezérlőelemet bármikor visszaigazíthatja középre, elég ha a színátmenet középpontjának közelébe húzza.</flowDiv>
   </flowRoot>
@@ -678,350 +678,350 @@
   </defs>
   <rect transform="translate(20 1605.3)" x="71.384" y=".59618" width="74.385" height="68.187" fill="url(#p)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
   <rect transform="translate(20 1605.3)" x="154.23" y=".59618" width="74.385" height="68.187" fill="url(#q)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
-  <rect id="ch" x="20" y="1692" width="300" height="1e3px" display="none"/>
+  <rect id="cg" x="20" y="1692" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ch"/>
-   </flowRegion>
-   <flowDiv>Igazítás a lap közepére</flowDiv>
-  </flowRoot>
-  <rect id="cg" x="20" y="1704.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cg"/>
    </flowRegion>
-   <flowDiv>Bármit a lap közepére vagy szélére igazíthat, ha kijelöli az objektumot vagy csoportot, majd az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Igazítás és elrendezés</flowSpan> párbeszédablakban (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>) az <flowSpan font-family="Liberation Sans,Arial,sans-serif">Ehhez viszonyítva</flowSpan>: listából a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lap</flowSpan>ot választja.</flowDiv>
+   <flowDiv>Igazítás a lap közepére</flowDiv>
   </flowRoot>
-  <rect id="cf" x="20" y="1748.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cf" x="20" y="1704.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cf"/>
    </flowRegion>
-   <flowDiv>A dokumentum tisztítása</flowDiv>
+   <flowDiv>Bármit a lap közepére vagy szélére igazíthat, ha kijelöli az objektumot vagy csoportot, majd az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Igazítás és elrendezés</flowSpan> párbeszédablakban (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>) az <flowSpan font-family="Liberation Sans,Arial,sans-serif">Ehhez viszonyítva</flowSpan>: listából a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lap</flowSpan>ot választja.</flowDiv>
   </flowRoot>
-  <rect id="ce" x="20" y="1759.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ce" x="20" y="1748.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ce"/>
    </flowRegion>
-   <flowDiv>Minden már nem használt színátmenet, minta és jelölő (pontosabban azok, amelyeket Ön szerkesztett) megőrződik a megfelelő palettákon, és új objektumokhoz újfent használható. De ha szeretné a dokumentumot optimalizálni, akkor a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan> menüben található <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Dokumentum tisztítása</flowSpan> segít ebben. Ez a parancs minden használaton kívüli színátmenetet, mintát és jelölőt eltávolít a dokumentumból, csökkentve ezzel a fájl méretét.</flowDiv>
+   <flowDiv>A dokumentum tisztítása</flowDiv>
   </flowRoot>
-  <rect id="cd" x="20" y="1826.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cd" x="20" y="1759.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv>Rejtett sajátságok és az XML-szerkesztő</flowDiv>
+   <flowDiv>Minden már nem használt színátmenet, minta és jelölő (pontosabban azok, amelyeket Ön szerkesztett) megőrződik a megfelelő palettákon, és új objektumokhoz újfent használható. De ha szeretné a dokumentumot optimalizálni, akkor a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan> menüben található <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Dokumentum tisztítása</flowSpan> segít ebben. Ez a parancs minden használaton kívüli színátmenetet, mintát és jelölőt eltávolít a dokumentumból, csökkentve ezzel a fájl méretét.</flowDiv>
   </flowRoot>
-  <rect id="cc" x="20" y="1838.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cc" x="20" y="1826.1" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cc"/>
    </flowRegion>
-   <flowDiv>Az XML-szerkesztő (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>) külső szerkesztő igénybevétele nélkül is lehetőséget ad majdnem mindent módosítani a dokumentumban. Ezenfelül az Inkscape általában több SVG-tulajdonságot támogat, mint amennyihez a grafikus felhasználói felületen hozzáférést biztosít. Az XML-szerkesztő az egyik út az efféle tulajdonságokhoz (ha Ön tisztában van az SVG-vel).</flowDiv>
+   <flowDiv>Rejtett sajátságok és az XML-szerkesztő</flowDiv>
   </flowRoot>
-  <rect id="cb" x="20" y="1904" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cb" x="20" y="1838.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv>A vonalzók mértékegységének módosítása</flowDiv>
+   <flowDiv>Az XML-szerkesztő (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>) külső szerkesztő igénybevétele nélkül is lehetőséget ad majdnem mindent módosítani a dokumentumban. Ezenfelül az Inkscape általában több SVG-tulajdonságot támogat, mint amennyihez a grafikus felhasználói felületen hozzáférést biztosít. Az XML-szerkesztő az egyik út az efféle tulajdonságokhoz (ha Ön tisztában van az SVG-vel).</flowDiv>
   </flowRoot>
-  <rect id="ca" x="20" y="1916.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ca" x="20" y="1904" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ca"/>
    </flowRegion>
-   <flowDiv>Az alapértelmezett sablonban a vonalzók mértékegysége a mm. A koordináták is ebben a mértékegységben jelennek meg a jobb alsó sarokban, és a mértékegység-választó listákban is ez az előre kiválasztott. (Az <flowSpan font-weight="bold">egeret</flowSpan> a vonalzó felett tartva a gyorstippen mindig láthatja, hogy éppen mi a mértékegység.) A <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Dokumentum-beállítások</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lap</flowSpan> részén állítható be az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Alapértelmezett mértékegység</flowSpan>.</flowDiv>
+   <flowDiv>A vonalzók mértékegységének módosítása</flowDiv>
   </flowRoot>
-  <rect id="bz" x="20" y="1982" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bz" x="20" y="1916.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bz"/>
    </flowRegion>
-   <flowDiv>Bélyegző</flowDiv>
+   <flowDiv>Az alapértelmezett sablonban a vonalzók mértékegysége a mm. A koordináták is ebben a mértékegységben jelennek meg a jobb alsó sarokban, és a mértékegység-választó listákban is ez az előre kiválasztott. (Az <flowSpan font-weight="bold">egeret</flowSpan> a vonalzó felett tartva a gyorstippen mindig láthatja, hogy éppen mi a mértékegység.) A <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Dokumentum-beállítások</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lap</flowSpan> részén állítható be az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Alapértelmezett mértékegység</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="by" x="20" y="1994.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="by" x="20" y="1982" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#by"/>
    </flowRegion>
-   <flowDiv>Egy objektumról gyorsan készíthet sok másolatot a <flowSpan font-style="italic">bélyegző</flowSpan> funkcióval. Mialatt egy objektumot mozgat (vagy méretez vagy forgat), az <flowSpan font-weight="bold">egérgomb</flowSpan> nyomva tartása közben nyomja le a <flowSpan font-weight="bold">Szóköz</flowSpan> billentyűt. Ez egy „lenyomatot” hagy az adott objektumról. A műveletet ismételheti, ahányszor csak tetszik.</flowDiv>
+   <flowDiv>Bélyegző</flowDiv>
   </flowRoot>
-  <rect id="bx" x="20" y="2049.3" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bx" x="20" y="1994.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bx"/>
    </flowRegion>
-   <flowDiv>A Toll eszköz fortélyai</flowDiv>
+   <flowDiv>Egy objektumról gyorsan készíthet sok másolatot a <flowSpan font-style="italic">bélyegző</flowSpan> funkcióval. Mialatt egy objektumot mozgat (vagy méretez vagy forgat), az <flowSpan font-weight="bold">egérgomb</flowSpan> nyomva tartása közben nyomja le a <flowSpan font-weight="bold">Szóköz</flowSpan> billentyűt. Ez egy „lenyomatot” hagy az adott objektumról. A műveletet ismételheti, ahányszor csak tetszik.</flowDiv>
   </flowRoot>
-  <rect id="bw" x="20" y="2061.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bw" x="20" y="2049.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv>A Toll (Bézier) eszközzel befejezheti az aktuális vonalat:</flowDiv>
+   <flowDiv>A Toll eszköz fortélyai</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2085.2)" r="2"/>
-  <rect id="bv" x="40" y="2079.2" width="280" height="1e3px" display="none"/>
+  <rect id="bv" x="20" y="2061.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bv"/>
    </flowRegion>
-   <flowDiv>az <flowSpan font-weight="bold">Enter</flowSpan> megnyomásával;</flowDiv>
+   <flowDiv>A Toll (Bézier) eszközzel befejezheti az aktuális vonalat:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2102.5)" r="2"/>
-  <rect id="bu" x="40" y="2096.5" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2085.2)" r="2"/>
+  <rect id="bu" x="40" y="2079.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bu"/>
    </flowRegion>
-   <flowDiv>a bal egérgombbal <flowSpan font-weight="bold">duplán kattintva</flowSpan>;</flowDiv>
+   <flowDiv>az <flowSpan font-weight="bold">Enter</flowSpan> megnyomásával;</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2119.8)" r="2"/>
-  <rect id="bt" x="40" y="2113.8" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2102.5)" r="2"/>
+  <rect id="bt" x="40" y="2096.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bt"/>
    </flowRegion>
-   <flowDiv>a <flowSpan font-weight="bold">jobb</flowSpan> egérgombbal kattintva;</flowDiv>
+   <flowDiv>a bal egérgombbal <flowSpan font-weight="bold">duplán kattintva</flowSpan>;</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2137.1)" r="2"/>
-  <rect id="bs" x="40" y="2131.1" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2119.8)" r="2"/>
+  <rect id="bs" x="40" y="2113.8" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bs"/>
    </flowRegion>
-   <flowDiv>egy másik eszköz kiválasztásával.</flowDiv>
+   <flowDiv>a <flowSpan font-weight="bold">jobb</flowSpan> egérgombbal kattintva;</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="2148.4" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2137.1)" r="2"/>
+  <rect id="br" x="40" y="2131.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>Amíg egy útvonal befejezetlen (azaz zöld, az aktuális szakasz pedig vörös), addig objektumként nem létezik a dokumentumban. Ezért ilyenkor a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Visszavonás</flowSpan> helyett az <flowSpan font-weight="bold">Esc</flowSpan> (az egész útvonal törlése) vagy a <flowSpan font-weight="bold">Backspace</flowSpan> (az utolsó szakasz törlése) billentyűvel lehet érvényteleníteni az útvonalat.</flowDiv>
+   <flowDiv>egy másik eszköz kiválasztásával.</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="2197.8" width="300" height="1e3px" display="none"/>
+  <rect id="bq" x="20" y="2148.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>Egy létező útvonalhoz új al-útvonal adható az útvonal kijelölése után, a <flowSpan font-weight="bold">Shift</flowSpan> nyomva tartása mellett tetszőleges helyen kezdve a rajzolást. De ha egyszerűen csak <flowSpan font-style="italic">folytatni</flowSpan> szeretne egy útvonalat, akkor a Shift nem is kell; elég a kijelölt útvonal egyik horgonyától kezdenie rajzolni.</flowDiv>
+   <flowDiv>Amíg egy útvonal befejezetlen (azaz zöld, az aktuális szakasz pedig vörös), addig objektumként nem létezik a dokumentumban. Ezért ilyenkor a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Visszavonás</flowSpan> helyett az <flowSpan font-weight="bold">Esc</flowSpan> (az egész útvonal törlése) vagy a <flowSpan font-weight="bold">Backspace</flowSpan> (az utolsó szakasz törlése) billentyűvel lehet érvényteleníteni az útvonalat.</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="2252.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bp" x="20" y="2197.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bp"/>
    </flowRegion>
-   <flowDiv>Unicode-értékek bevitele</flowDiv>
+   <flowDiv>Egy létező útvonalhoz új al-útvonal adható az útvonal kijelölése után, a <flowSpan font-weight="bold">Shift</flowSpan> nyomva tartása mellett tetszőleges helyen kezdve a rajzolást. De ha egyszerűen csak <flowSpan font-style="italic">folytatni</flowSpan> szeretne egy útvonalat, akkor a Shift nem is kell; elég a kijelölt útvonal egyik horgonyától kezdenie rajzolni.</flowDiv>
   </flowRoot>
-  <rect id="bo" x="20" y="2263.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bo" x="20" y="2252.5" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bo"/>
    </flowRegion>
-   <flowDiv>A Szöveg eszközzel dolgozva a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> lenyomásával válthat a Unicode és a szokásos beviteli mód között. Unicode módban minden karaktert egy 4 jegyű hexadecimális szám megadásával tud beírni, így lehetőség van tetszőleges jelek bevitelére (feltéve, hogy Ön ismeri az adott karakter Unicode-értékét, és az aktuális betűkészlet tartalmazza is a karaktert). A Unicode módot az <flowSpan font-weight="bold">Enter</flowSpan> billentyűvel hagyhatja el. Például a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>+<flowSpan font-weight="bold">2</flowSpan>+<flowSpan font-weight="bold">0</flowSpan>+<flowSpan font-weight="bold">1</flowSpan>+<flowSpan font-weight="bold">4</flowSpan>+<flowSpan font-weight="bold">Enter</flowSpan> beszúrja az em-dash (—) karaktert. Ha beszúrás nélkül szeretne kilépni a Unicode módból, akkor nyomja le az <flowSpan font-weight="bold">Esc</flowSpan> billentyűt.</flowDiv>
+   <flowDiv>Unicode-értékek bevitele</flowDiv>
   </flowRoot>
-  <rect id="bn" x="20" y="2344.7" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="2263.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bn"/>
    </flowRegion>
-   <flowDiv>A <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szöveg</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Unicode-karakterek…</flowSpan> párbeszédablak használható a betűkészletjelek keresésére és dokumentumba való beillesztésére.</flowDiv>
+   <flowDiv>A Szöveg eszközzel dolgozva a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> lenyomásával válthat a Unicode és a szokásos beviteli mód között. Unicode módban minden karaktert egy 4 jegyű hexadecimális szám megadásával tud beírni, így lehetőség van tetszőleges jelek bevitelére (feltéve, hogy Ön ismeri az adott karakter Unicode-értékét, és az aktuális betűkészlet tartalmazza is a karaktert). A Unicode módot az <flowSpan font-weight="bold">Enter</flowSpan> billentyűvel hagyhatja el. Például a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>+<flowSpan font-weight="bold">2</flowSpan>+<flowSpan font-weight="bold">0</flowSpan>+<flowSpan font-weight="bold">1</flowSpan>+<flowSpan font-weight="bold">4</flowSpan>+<flowSpan font-weight="bold">Enter</flowSpan> beszúrja az em-dash (—) karaktert. Ha beszúrás nélkül szeretne kilépni a Unicode módból, akkor nyomja le az <flowSpan font-weight="bold">Esc</flowSpan> billentyűt.</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="2376.6" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bm" x="20" y="2344.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv>Ikonok rajzolása rács segítségével</flowDiv>
+   <flowDiv>A <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szöveg</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Unicode-karakterek…</flowSpan> párbeszédablak használható a betűkészletjelek keresésére és dokumentumba való beillesztésére.</flowDiv>
   </flowRoot>
-  <rect id="bl" x="20" y="2389.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bl" x="20" y="2376.6" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv>Tegyük fel, hogy rajzolni akar egy 24×24 pixeles ikont. Állítsa a vászon méretét 24×24 pixelre (a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Dokumentum-beállítások</flowSpan> ablakban), a rácstávolság pedig legyen 0,5 px (48×48 rácsvonal). Ha ezután a kitöltött objektumokat a <flowSpan font-style="italic">páros</flowSpan>, a körvonalas objektumokat pedig a <flowSpan font-style="italic">páratlan</flowSpan> rácsvonalakhoz igazítja, és a körvonalak szélessége pixelben megadva páros szám, továbbá a rajzot az alapértelmezett 96 DPI felbontással (úgy, hogy 1 px megfelel 1 bitkép-pixelnek) exportálja, akkor egy éles bitképet kap, nincs szükség élsimításra.</flowDiv>
+   <flowDiv>Ikonok rajzolása rács segítségével</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="2466.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bk" x="20" y="2389.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
-   <flowDiv>Objektumforgatás</flowDiv>
+   <flowDiv>Tegyük fel, hogy rajzolni akar egy 24×24 pixeles ikont. Állítsa a vászon méretét 24×24 pixelre (a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Dokumentum-beállítások</flowSpan> ablakban), a rácstávolság pedig legyen 0,5 px (48×48 rácsvonal). Ha ezután a kitöltött objektumokat a <flowSpan font-style="italic">páros</flowSpan>, a körvonalas objektumokat pedig a <flowSpan font-style="italic">páratlan</flowSpan> rácsvonalakhoz igazítja, és a körvonalak szélessége pixelben megadva páros szám, továbbá a rajzot az alapértelmezett 96 DPI felbontással (úgy, hogy 1 px megfelel 1 bitkép-pixelnek) exportálja, akkor egy éles bitképet kap, nincs szükség élsimításra.</flowDiv>
   </flowRoot>
-  <rect id="bj" x="20" y="2479.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bj" x="20" y="2466.5" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bj"/>
    </flowRegion>
-   <flowDiv>A Kijelölő eszközzel egy objektumra <flowSpan font-weight="bold">kattintva</flowSpan> láthatja a méretező nyilakat, ismételt <flowSpan font-weight="bold">kattintásra</flowSpan> a forgató és nyíró nyilak jelennek meg. A sarkokban levő valamelyik nyíl húzásával forgathatja az objektumot a középpontja (egy kereszt alakú jel) körül. Ha forgatás közben nyomva tartja a <flowSpan font-weight="bold">Shift</flowSpan> billentyűt, akkor a forgatás középpontja átkerül az átellenes sarokba. A forgatás középpontja egérrel is elhúzható bárhová.</flowDiv>
+   <flowDiv>Objektumforgatás</flowDiv>
   </flowRoot>
-  <rect id="bi" x="20" y="2539" width="300" height="1e3px" display="none"/>
+  <rect id="bi" x="20" y="2479.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>Forgathat (15°-onként) a <flowSpan font-weight="bold">[</flowSpan> és a <flowSpan font-weight="bold">]</flowSpan> billentyűkkel, vagy (90°-onként) a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> és <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> billentyűkkel is. Ha az <flowSpan font-weight="bold">Alt</flowSpan> módosítóval használja a <flowSpan font-weight="bold">[</flowSpan> vagy <flowSpan font-weight="bold">]</flowSpan> billentyűk valamelyikét, akkor lassan, pixelenként forgathat.</flowDiv>
+   <flowDiv>A Kijelölő eszközzel egy objektumra <flowSpan font-weight="bold">kattintva</flowSpan> láthatja a méretező nyilakat, ismételt <flowSpan font-weight="bold">kattintásra</flowSpan> a forgató és nyíró nyilak jelennek meg. A sarkokban levő valamelyik nyíl húzásával forgathatja az objektumot a középpontja (egy kereszt alakú jel) körül. Ha forgatás közben nyomva tartja a <flowSpan font-weight="bold">Shift</flowSpan> billentyűt, akkor a forgatás középpontja átkerül az átellenes sarokba. A forgatás középpontja egérrel is elhúzható bárhová.</flowDiv>
   </flowRoot>
-  <rect id="bh" x="20" y="2583" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bh" x="20" y="2539" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv>Vetett árnyék</flowDiv>
+   <flowDiv>Forgathat (15°-onként) a <flowSpan font-weight="bold">[</flowSpan> és a <flowSpan font-weight="bold">]</flowSpan> billentyűkkel, vagy (90°-onként) a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> és <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> billentyűkkel is. Ha az <flowSpan font-weight="bold">Alt</flowSpan> módosítóval használja a <flowSpan font-weight="bold">[</flowSpan> vagy <flowSpan font-weight="bold">]</flowSpan> billentyűk valamelyikét, akkor lassan, pixelenként forgathat.</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="2595.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bg" x="20" y="2583" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>Vetett árnyék gyorsan létrehozható bármely objektum számára a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szűrők</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Árnyékok és ragyogások</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Vetett árnyék…</flowSpan> funkcióval.</flowDiv>
+   <flowDiv>Vetett árnyék</flowDiv>
   </flowRoot>
-  <rect id="bf" x="20" y="2624.9" width="300" height="1e3px" display="none"/>
+  <rect id="bf" x="20" y="2595.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>Egyszerűen készíthet egy objektumnak vetett árnyékot elmosással a kitöltés és körvonal palettán. Jelöljön ki egy objektumot, készítsen róla egy másolatot a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> billentyűkkel, majd a <flowSpan font-weight="bold">PgDown</flowSpan> lenyomásával helyezze az eredeti objektum mögé a másolatot. Kicsit mozgassa jobbra és lefelé az eredetihez képest, végül a Kitöltés és körvonal párbeszédablakban állítsa az Elmosás értéket mondjuk 5,0-re. Készen is van!</flowDiv>
+   <flowDiv>Vetett árnyék gyorsan létrehozható bármely objektum számára a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szűrők</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Árnyékok és ragyogások</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Vetett árnyék…</flowSpan> funkcióval.</flowDiv>
   </flowRoot>
-  <rect id="be" x="20" y="2690.2" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="be" x="20" y="2624.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv>Szöveg útvonalra illesztése</flowDiv>
+   <flowDiv>Egyszerűen készíthet egy objektumnak vetett árnyékot elmosással a kitöltés és körvonal palettán. Jelöljön ki egy objektumot, készítsen róla egy másolatot a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> billentyűkkel, majd a <flowSpan font-weight="bold">PgDown</flowSpan> lenyomásával helyezze az eredeti objektum mögé a másolatot. Kicsit mozgassa jobbra és lefelé az eredetihez képest, végül a Kitöltés és körvonal párbeszédablakban állítsa az Elmosás értéket mondjuk 5,0-re. Készen is van!</flowDiv>
   </flowRoot>
-  <rect id="bd" x="20" y="2702.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bd" x="20" y="2690.2" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>Egy szöveg útvonalra illesztéséhez a szöveget és a görbét is jelölje ki, majd a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szöveg</flowSpan> menüből válassza az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Útvonalra való illesztés</flowSpan> parancsot. A szöveg az útvonal elején fog kezdődni. Ajánlott egy külön erre a célra készült útvonalra illeszteni, és nem valamelyik másik rajzelemre – ez több módosítási lehetőséget biztosít anélkül, hogy a már kész elemeket kellene bolygatni.</flowDiv>
+   <flowDiv>Szöveg útvonalra illesztése</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="2768.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bc" x="20" y="2702.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
-   <flowDiv>Az eredeti kijelölése</flowDiv>
+   <flowDiv>Egy szöveg útvonalra illesztéséhez a szöveget és a görbét is jelölje ki, majd a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szöveg</flowSpan> menüből válassza az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Útvonalra való illesztés</flowSpan> parancsot. A szöveg az útvonal elején fog kezdődni. Ajánlott egy külön erre a célra készült útvonalra illeszteni, és nem valamelyik másik rajzelemre – ez több módosítási lehetőséget biztosít anélkül, hogy a már kész elemeket kellene bolygatni.</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="2780.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bb" x="20" y="2768.1" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv>Ha van egy útvonalra illesztett szövege, egy kapcsolt pereme vagy egy klónja, nehézkes lehet kijelölni a forrásobjektumot vagy ‑útvonalat, mert alul van, láthatatlan vagy zárolt. De a mágikus <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> billentyűparancs a segítségére siet; jelölje ki a szöveget, kapcsolt peremet vagy klónt, és a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> hatására a kijelölés áttevődik a megfelelő útvonalra, peremforrásra vagy a klón eredetijére.</flowDiv>
+   <flowDiv>Az eredeti kijelölése</flowDiv>
   </flowRoot>
-  <rect id="ba" x="20" y="2846" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ba" x="20" y="2780.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
-   <flowDiv>Az ablakgeometria helyreállítása</flowDiv>
+   <flowDiv>Ha van egy útvonalra illesztett szövege, egy kapcsolt pereme vagy egy klónja, nehézkes lehet kijelölni a forrásobjektumot vagy ‑útvonalat, mert alul van, láthatatlan vagy zárolt. De a mágikus <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> billentyűparancs a segítségére siet; jelölje ki a szöveget, kapcsolt peremet vagy klónt, és a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> hatására a kijelölés áttevődik a megfelelő útvonalra, peremforrásra vagy a klón eredetijére.</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2858.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="az" x="20" y="2846" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
-   <flowDiv>Ha egy dokumentumot több – a monitorok felbontásában vagy a megjelenítők számában eltérő – rendszeren is megnyit, előfordulhat, hogy az ablak kilóg a képernyőről, mivel az Inkscape az elmentett ablakpozíciót veszi alapul megnyitáskor. Elég maximalizálni az ablakot (miáltal illeszkedni fog a képernyőhöz, használja a tálcaikont), majd mentse el, és nyissa meg újra. Az ablakgeometria mentése ki is kapcsolható (az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Inkscape Beállítások</flowSpan> <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Felület</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ablakok lapján</flowSpan>).</flowDiv>
+   <flowDiv>Az ablakgeometria helyreállítása</flowDiv>
   </flowRoot>
-  <rect id="ay" x="20" y="2934.7" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ay" x="20" y="2858.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv>Átlátszóság, színátmenetek és PostScript-exportálás</flowDiv>
+   <flowDiv>Ha egy dokumentumot több – a monitorok felbontásában vagy a megjelenítők számában eltérő – rendszeren is megnyit, előfordulhat, hogy az ablak kilóg a képernyőről, mivel az Inkscape az elmentett ablakpozíciót veszi alapul megnyitáskor. Elég maximalizálni az ablakot (miáltal illeszkedni fog a képernyőhöz, használja a tálcaikont), majd mentse el, és nyissa meg újra. Az ablakgeometria mentése ki is kapcsolható (az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Inkscape Beállítások</flowSpan> <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Felület</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ablakok lapján</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="2948.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ax" x="20" y="2934.7" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
-   <flowDiv>Az <flowSpan font-style="italic">átlátszóság</flowSpan>ot a PostScript és az EPS formátum nem támogatja, így célszerű kerülni a használatát, ha ilyen formátumokba készül exportálni. Ha egyenletesen átlátszó objektum takar egyszínű objektumot, akkor a következőt teheti: jelölje ki az átlátszó objektumot; váltson a Pipetta eszközre (<flowSpan font-weight="bold">F7</flowSpan> vagy <flowSpan font-weight="bold">d</flowSpan>); győződjön meg arról, hogy az eszköz a <flowSpan font-family="Liberation Sans,Arial,sans-serif">Átlátszatlanság: Leolvasás</flowSpan> gombja deaktiválva van az eszköztáron; kattintson ugyanarra az objektumra. Ezáltal a pipetta felveszi és egyben be is állítja a látható színt, de ezúttal már átlátszóság nélkül. Ismételje ezt minden átlátszó objektumra. Ha az átlátszó objektum különféle egyszínű objektumokat takar, akkor megfelelően fel kell darabolni, és a műveletet ezeken a darabokon kell végrehajtani. Ne feledje, hogy a színpipetta nem változtatja meg az objektum átlátszatlanság értékét, csak a kitöltés vagy a körvonal színének alfa értékét, ezért győződjön meg róla, hogy minden objektum átlátszatlansága 100% -ra van állítva, mielőtt elindulna.</flowDiv>
+   <flowDiv>Átlátszóság, színátmenetek és PostScript-exportálás</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="3086.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="aw" x="20" y="2948.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aw"/>
    </flowRegion>
-   <flowDiv>Interaktivitás</flowDiv>
+   <flowDiv>Az <flowSpan font-style="italic">átlátszóság</flowSpan>ot a PostScript és az EPS formátum nem támogatja, így célszerű kerülni a használatát, ha ilyen formátumokba készül exportálni. Ha egyenletesen átlátszó objektum takar egyszínű objektumot, akkor a következőt teheti: jelölje ki az átlátszó objektumot; váltson a Pipetta eszközre (<flowSpan font-weight="bold">F7</flowSpan> vagy <flowSpan font-weight="bold">d</flowSpan>); győződjön meg arról, hogy az eszköz a <flowSpan font-family="Liberation Sans,Arial,sans-serif">Átlátszatlanság: Leolvasás</flowSpan> gombja deaktiválva van az eszköztáron; kattintson ugyanarra az objektumra. Ezáltal a pipetta felveszi és egyben be is állítja a látható színt, de ezúttal már átlátszóság nélkül. Ismételje ezt minden átlátszó objektumra. Ha az átlátszó objektum különféle egyszínű objektumokat takar, akkor megfelelően fel kell darabolni, és a műveletet ezeken a darabokon kell végrehajtani. Ne feledje, hogy a színpipetta nem változtatja meg az objektum átlátszatlanság értékét, csak a kitöltés vagy a körvonal színének alfa értékét, ezért győződjön meg róla, hogy minden objektum átlátszatlansága 100% -ra van állítva, mielőtt elindulna.</flowDiv>
   </flowRoot>
-  <rect id="av" x="20" y="3097.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="av" x="20" y="3086.9" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#av"/>
    </flowRegion>
-   <flowDiv>A legtöbb SVG elem finomhangolható, hogy reagáljon a felhasználó aktivitására (a legtöbb esetben ez persze akkor fog működni, ha az SVG-t egy böngészőben tekintik meg).</flowDiv>
+   <flowDiv>Interaktivitás</flowDiv>
   </flowRoot>
-  <rect id="au" x="20" y="3125.9" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="3097.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#au"/>
    </flowRegion>
-   <flowDiv>A legegyszerűbb lehetőség egy kattintható link hozzáadása az objektumokhoz. Ehhez az objektumon történő <flowSpan font-weight="bold">jobb kattintással</flowSpan> válasszuk ki a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Hivatkozás létrehozása</flowSpan> lehetőséget a helyi menüből. Az „Objektum attribútumai” párbeszédablak fog megjelenni, ahol adjuk meg a link célját a <flowSpan font-family="Liberation Sans,Arial,sans-serif">href</flowSpan> értékeként.</flowDiv>
+   <flowDiv>A legtöbb SVG elem finomhangolható, hogy reagáljon a felhasználó aktivitására (a legtöbb esetben ez persze akkor fog működni, ha az SVG-t egy böngészőben tekintik meg).</flowDiv>
   </flowRoot>
-  <rect id="at" x="20" y="3175.3" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="3125.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
-   <flowDiv>További lehetőségek az „Objektumtulajdonságok” paletta interaktivitás részében találhatóak (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). Itt tetszőlege funkciókat lehet megvalósítani JavaScripttel. Néhány egyszerű példa.</flowDiv>
+   <flowDiv>A legegyszerűbb lehetőség egy kattintható link hozzáadása az objektumokhoz. Ehhez az objektumon történő <flowSpan font-weight="bold">jobb kattintással</flowSpan> válasszuk ki a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Hivatkozás létrehozása</flowSpan> lehetőséget a helyi menüből. Az „Objektum attribútumai” párbeszédablak fog megjelenni, ahol adjuk meg a link célját a <flowSpan font-family="Liberation Sans,Arial,sans-serif">href</flowSpan> értékeként.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3219.9)" r="2"/>
-  <rect id="as" x="40" y="3213.9" width="280" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="3175.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv>Új fájl megnyitása ugyanebben az ablakban az objektumon való kattintáskor:</flowDiv>
+   <flowDiv>További lehetőségek az „Objektumtulajdonságok” paletta interaktivitás részében találhatóak (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). Itt tetszőlege funkciókat lehet megvalósítani JavaScripttel. Néhány egyszerű példa.</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3238.5)" r="2"/>
-  <rect id="ar" x="60" y="3232.5" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(35 3219.9)" r="2"/>
+  <rect id="ar" x="40" y="3213.9" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv>Az <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> értéke legyen: <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.location='fájl2.svg';</flowSpan></flowDiv>
+   <flowDiv>Új fájl megnyitása ugyanebben az ablakban az objektumon való kattintáskor:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3256)" r="2"/>
-  <rect id="aq" x="40" y="3250" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(55 3238.5)" r="2"/>
+  <rect id="aq" x="60" y="3232.5" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
-   <flowDiv>Egy tetszőleges webes hivatkozás megnyitása új ablakban az objektumon való kattintáskor:</flowDiv>
+   <flowDiv>Az <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> értéke legyen: <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.location='fájl2.svg';</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3282.3)" r="2"/>
-  <rect id="ap" x="60" y="3276.3" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(35 3256)" r="2"/>
+  <rect id="ap" x="40" y="3250" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
-   <flowDiv>Az <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> értéke legye: <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.open("https://inkscape.org","_blank");</flowSpan></flowDiv>
+   <flowDiv>Egy tetszőleges webes hivatkozás megnyitása új ablakban az objektumon való kattintáskor:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3310.5)" r="2"/>
-  <rect id="ao" x="40" y="3304.5" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(55 3282.3)" r="2"/>
+  <rect id="ao" x="60" y="3276.3" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
    </flowRegion>
-   <flowDiv>Átlátszóság csökkentése az objektumra való rámutatáskor:</flowDiv>
+   <flowDiv>Az <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> értéke legye: <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.open("https://inkscape.org","_blank");</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3329)" r="2"/>
-  <rect id="an" x="60" y="3323" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(35 3310.5)" r="2"/>
+  <rect id="an" x="40" y="3304.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#an"/>
    </flowRegion>
-   <flowDiv>Az <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseover</flowSpan> értéke legyen: <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 0.5;</flowSpan></flowDiv>
+   <flowDiv>Átlátszóság csökkentése az objektumra való rámutatáskor:</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3346.6)" r="2"/>
-  <rect id="am" x="60" y="3340.6" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(55 3329)" r="2"/>
+  <rect id="am" x="60" y="3323" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
+   </flowRegion>
+   <flowDiv>Az <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseover</flowSpan> értéke legyen: <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 0.5;</flowSpan></flowDiv>
+  </flowRoot>
+  <circle transform="translate(55 3346.6)" r="2"/>
+  <rect id="al" x="60" y="3340.6" width="260" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#al"/>
    </flowRegion>
    <flowDiv>Az <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseout</flowSpan> értéke legyen: <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 1;</flowSpan></flowDiv>
   </flowRoot>
@@ -1039,7 +1039,7 @@
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
-   <flowDiv>Somogyvári Róbert — 2008; Gyuris Gellért — 2018, 2019, 2020</flowDiv>
+   <flowDiv>Somogyvári Róbert — 2008; Gyuris Gellért — 2018</flowDiv>
   </flowRoot>
   <use x="47" y="3443.8178377" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
   <rect id="ct" x="70" y="3437.8" width="230" height="1e3px" display="none"/>

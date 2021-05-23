@@ -259,68 +259,68 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#bh"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Интерполяция</tspan></tspan></text>
-  <rect id="ae" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="ad" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
-   <flowRegion>
-    <use xlink:href="#ae"/>
-   </flowRegion>
-   <flowDiv>Этот раздел учебника описывает использование расширения Inkscape Интерполяция</flowDiv>
-  </flowRoot>
-  <rect id="ad" x="20" y="168.97" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ad"/>
    </flowRegion>
-   <flowDiv>Вступление</flowDiv>
+   <flowDiv>Этот раздел учебника описывает использование расширения Inkscape Интерполяция</flowDiv>
   </flowRoot>
-  <rect id="ac" x="20" y="181.14" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ac" x="20" y="168.97" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ac"/>
    </flowRegion>
-   <flowDiv>Интерполяция выполняет <flowSpan font-style="italic">линейную интерполяцию</flowSpan> между двумя и более выбранными оконтуренными объектами. Суть данной функции — заполнение расстояния между объектами и их трансформация в соответствии с заданным числом шагов.</flowDiv>
+   <flowDiv>Вступление</flowDiv>
   </flowRoot>
-  <rect id="ab" x="20" y="219.85" width="300" height="1e3px" display="none"/>
+  <rect id="ab" x="20" y="181.14" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ab"/>
    </flowRegion>
-   <flowDiv>To use the Interpolate extension, select the paths that you wish to transform, and choose <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Generate From Path</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Interpolate</flowSpan> from the menu.</flowDiv>
+   <flowDiv>Интерполяция выполняет <flowSpan font-style="italic">линейную интерполяцию</flowSpan> между двумя и более выбранными оконтуренными объектами. Суть данной функции — заполнение расстояния между объектами и их трансформация в соответствии с заданным числом шагов.</flowDiv>
   </flowRoot>
-  <rect id="aa" x="20" y="247.89" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="219.85" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aa"/>
    </flowRegion>
-   <flowDiv>Before invoking the extension, the objects that you are going to transform need to be <flowSpan font-style="italic">paths</flowSpan>. This is done by selecting the object and using <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Path</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object to Path</flowSpan> or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>. If your objects are not paths, the extension will do nothing.</flowDiv>
+   <flowDiv>To use the Interpolate extension, select the paths that you wish to transform, and choose <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Generate From Path</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Interpolate</flowSpan> from the menu.</flowDiv>
   </flowRoot>
-  <rect id="z" x="20" y="292.07" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="z" x="20" y="247.89" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#z"/>
    </flowRegion>
-   <flowDiv>Интерполяция между двумя идентичными объектами</flowDiv>
+   <flowDiv>Before invoking the extension, the objects that you are going to transform need to be <flowSpan font-style="italic">paths</flowSpan>. This is done by selecting the object and using <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Path</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object to Path</flowSpan> or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>. If your objects are not paths, the extension will do nothing.</flowDiv>
   </flowRoot>
-  <rect id="y" x="20" y="304.59" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="y" x="20" y="292.07" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#y"/>
    </flowRegion>
-   <flowDiv>Самым простым использованием расширения является интерполяция между двумя идентичными объектами. При применении расширения расстояние между двумя объектами заполняется дубликатами оригинальных объектов. Число шагов определяет количество этих дубликатов.</flowDiv>
+   <flowDiv>Интерполяция между двумя идентичными объектами</flowDiv>
   </flowRoot>
-  <rect id="x" x="20" y="353.54" width="300" height="1e3px" display="none"/>
+  <rect id="x" x="20" y="304.59" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#x"/>
+   </flowRegion>
+   <flowDiv>Самым простым использованием расширения является интерполяция между двумя идентичными объектами. При применении расширения расстояние между двумя объектами заполняется дубликатами оригинальных объектов. Число шагов определяет количество этих дубликатов.</flowDiv>
+  </flowRoot>
+  <rect id="w" x="20" y="353.54" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#w"/>
    </flowRegion>
    <flowDiv>Например, возьмём следующие два объекта:</flowDiv>
   </flowRoot>
   <path transform="translate(20 378.99)" d="m30.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
   <path transform="translate(20 378.99)" d="m255.44 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
-  <rect id="w" x="20" y="431.57" width="300" height="1e3px" display="none"/>
+  <rect id="v" x="20" y="431.57" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#w"/>
+    <use xlink:href="#v"/>
    </flowRegion>
    <flowDiv>Теперь выделите два объекта и запустите интерполяцию с параметрами, показанными на рисунке ниже.</flowDiv>
   </flowRoot>
@@ -337,40 +337,40 @@
    </g>
    <text x="-0.59277618" y="47.577751" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-0.59277618" y="47.577751" sodipodi:role="line">Экспонента: 0.0</tspan><tspan x="-0.59277618" y="55.077751" sodipodi:role="line">Шагов интерполяции: 6</tspan><tspan x="-0.59277618" y="62.577751" sodipodi:role="line">Способ интерполяции: 2</tspan><tspan x="-0.59277618" y="70.077751" sodipodi:role="line">Продублировать оконечные контуры: снято</tspan><tspan x="-0.59277618" y="77.577751" sodipodi:role="line">Интерполировать стиль: снято</tspan></text>
   </g>
-  <rect id="v" x="20" y="558.65" width="300" height="1e3px" display="none"/>
+  <rect id="u" x="20" y="558.65" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#v"/>
-   </flowRegion>
-   <flowDiv>Как видно из приведённого выше результата, пространство между двумя кругами было заполнено 6-ю (число шагов интерполяции) другими такими же кругами. Также заметим, что расширение сгруппировало их вместе.</flowDiv>
-  </flowRoot>
-  <rect id="u" x="20" y="602.78" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#u"/>
    </flowRegion>
-   <flowDiv>Интерполяция между двумя различными объектами</flowDiv>
+   <flowDiv>Как видно из приведённого выше результата, пространство между двумя кругами было заполнено 6-ю (число шагов интерполяции) другими такими же кругами. Также заметим, что расширение сгруппировало их вместе.</flowDiv>
   </flowRoot>
-  <rect id="t" x="20" y="615.31" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="t" x="20" y="602.78" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#t"/>
    </flowRegion>
-   <flowDiv>При интерполяции двух различных объектов программа изменяет форму контура одного объекта в форму контура другого. В результате этого вы получаете промежуточные изменения между объектами, регулярность которых определяется значением шагов интерполяции.</flowDiv>
+   <flowDiv>Интерполяция между двумя различными объектами</flowDiv>
   </flowRoot>
-  <rect id="s" x="20" y="664.66" width="300" height="1e3px" display="none"/>
+  <rect id="s" x="20" y="615.31" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#s"/>
+   </flowRegion>
+   <flowDiv>При интерполяции двух различных объектов программа изменяет форму контура одного объекта в форму контура другого. В результате этого вы получаете промежуточные изменения между объектами, регулярность которых определяется значением шагов интерполяции.</flowDiv>
+  </flowRoot>
+  <rect id="r" x="20" y="664.66" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#r"/>
    </flowRegion>
    <flowDiv>Например, возьмём следующие два объекта:</flowDiv>
   </flowRoot>
   <path transform="translate(20 690.11)" d="m30.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.265-18.266 18.265c-10.119 0-18.266-8.1464-18.266-18.265s8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
   <path transform="translate(20 690.11)" d="m273.71 9.3303-18.266 29.225-18.266-29.225z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" sodipodi:nodetypes="cccc"/>
-  <rect id="r" x="20" y="742.69" width="300" height="1e3px" display="none"/>
+  <rect id="q" x="20" y="742.69" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#r"/>
+    <use xlink:href="#q"/>
    </flowRegion>
    <flowDiv>Теперь выделите два объекта и запустите интерполяцию. Результат должен быть примерно такой:</flowDiv>
   </flowRoot>
@@ -387,24 +387,24 @@
    <path id="bq" d="m20.29 2.4488c10.119 0 18.266 8.1464 18.266 18.266 0 3.0665-0.74811 5.9518-2.0725 8.4842-3.046 5.8241-9.1404 9.7813-16.193 9.7813-6.2444 0-11.738-3.1022-15.029-7.8559-2.0422-2.9496-3.2366-6.535-3.2366-10.41 0-10.119 8.1464-18.266 18.266-18.266" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
    <text id="bp" x="-0.59277618" y="47.882343" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan id="by" x="-0.59277618" y="47.882343" sodipodi:role="line">Экспонента: 0.0</tspan><tspan id="bx" x="-0.59277618" y="55.382343" sodipodi:role="line">Шагов интерполяции: 6</tspan><tspan id="bz" x="-0.59277618" y="62.882343" sodipodi:role="line">Способ интерполяции: 2</tspan><tspan id="ca" x="-0.59277618" y="70.382339" sodipodi:role="line">Продублировать оконечные контуры: снято</tspan><tspan id="bw" x="-0.59277618" y="77.882339" sodipodi:role="line">Интерполировать стиль: снято</tspan></text>
   </g>
-  <rect id="q" x="20" y="869.61" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#q"/>
-   </flowRegion>
-   <flowDiv>Как видно из приведённого выше результата, пространство между кругом и треугольником заполнено 6-ю объектами, приближающими форму одного контура к другому.</flowDiv>
-  </flowRoot>
-  <rect id="p" x="20" y="907.85" width="300" height="1e3px" display="none"/>
+  <rect id="p" x="20" y="869.61" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#p"/>
    </flowRegion>
-   <flowDiv>Когда расширение Интерполяция используется для двух различных объектов, важно <flowSpan font-style="italic">положение</flowSpan> начального узла каждого объекта. Чтобы найти начальный узел для объекта, выделите объект, затем выберите инструмент Узлы так, чтобы узлы появились и нажмите <flowSpan font-weight="bold">TAB</flowSpan>. Первый выделенный узел является начальным узлом этого объекта.</flowDiv>
+   <flowDiv>Как видно из приведённого выше результата, пространство между кругом и треугольником заполнено 6-ю объектами, приближающими форму одного контура к другому.</flowDiv>
   </flowRoot>
-  <rect id="o" x="20" y="957.23" width="300" height="1e3px" display="none"/>
+  <rect id="o" x="20" y="907.85" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#o"/>
+   </flowRegion>
+   <flowDiv>Когда расширение Интерполяция используется для двух различных объектов, важно <flowSpan font-style="italic">положение</flowSpan> начального узла каждого объекта. Чтобы найти начальный узел для объекта, выделите объект, затем выберите инструмент Узлы так, чтобы узлы появились и нажмите <flowSpan font-weight="bold">TAB</flowSpan>. Первый выделенный узел является начальным узлом этого объекта.</flowDiv>
+  </flowRoot>
+  <rect id="n" x="20" y="957.23" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#n"/>
    </flowRegion>
    <flowDiv>Посмотрите на изображение ниже. Оно идентично предыдущему примеру, за исключением отображения узловых точек. Зелёный узел на каждом объекте — начальный.</flowDiv>
   </flowRoot>
@@ -419,10 +419,10 @@
    <rect transform="rotate(135.48)" x="-181.96" y="-192.64" width="2.9821" height="2.9821" fill="#0f0"/>
    <rect transform="rotate(135.48)" x="-150.15" y="-200.55" width="2.9821" height="2.9821" fill="#ccc"/>
   </g>
-  <rect id="n" x="20" y="1055.5" width="300" height="1e3px" display="none"/>
+  <rect id="m" x="20" y="1055.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#n"/>
+    <use xlink:href="#m"/>
    </flowRegion>
    <flowDiv>Предыдущий пример (см. снова ниже) был создан, исходя из данных положений начального узла.</flowDiv>
   </flowRoot>
@@ -439,10 +439,10 @@
    <path d="m20.29 2.4488c10.119 0 18.266 8.1464 18.266 18.266 0 3.0665-0.74811 5.9518-2.0725 8.4842-3.046 5.8241-9.1404 9.7813-16.193 9.7813-6.2444 0-11.738-3.1022-15.029-7.8559-2.0422-2.9496-3.2366-6.535-3.2366-10.41 0-10.119 8.1464-18.266 18.266-18.266" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
    <text x="-0.59277618" y="47.882343" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-0.59277618" y="47.882343" sodipodi:role="line">Экспонента: 0.0</tspan><tspan x="-0.59277618" y="55.382343" sodipodi:role="line">Шагов интерполяции: 6</tspan><tspan x="-0.59277618" y="62.882343" sodipodi:role="line">Способ интерполяции: 2</tspan><tspan x="-0.59277618" y="70.382339" sodipodi:role="line">Продублировать оконечные контуры: снято</tspan><tspan x="-0.59277618" y="77.882339" sodipodi:role="line">Интерполировать стиль: снято</tspan></text>
   </g>
-  <rect id="m" x="20" y="1182.4" width="300" height="1e3px" display="none"/>
+  <rect id="bd" x="20" y="1182.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#m"/>
+    <use xlink:href="#bd"/>
    </flowRegion>
    <flowDiv>Теперь обратите внимание на изменение результата интерполяции, если начальный узел контура треугольника находится в другой позиции:</flowDiv>
   </flowRoot>
@@ -471,24 +471,24 @@
     <path d="m450.42 525.98s16.429 26.286 26.775 42.84c4.755 7.6081 8.2253 13.16 8.2253 13.16s9.4647-15.144 18.55-29.681c8.3862-13.418 16.45-26.319 16.45-26.319h-19.481-50.519" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="bd" x="20" y="1337.6" width="300" height="1e3px" display="none"/>
+  <rect id="bc" x="20" y="1337.6" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#bd"/>
-   </flowRegion>
-   <flowDiv>Способ интерполяции</flowDiv>
-  </flowRoot>
-  <rect id="bc" x="20" y="1350.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
-   <flowDiv>Одним из параметров расширения Интерполяция является Cпособ интерполяции. Есть 2 реализованных способа интерполяции и их различие в том, как они вычисляют кривые для новых объектов. Для использования вы можете выбрать способ интерполяции 1 или 2.</flowDiv>
+   <flowDiv>Способ интерполяции</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="1399.5" width="300" height="1e3px" display="none"/>
+  <rect id="bb" x="20" y="1350.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bb"/>
+   </flowRegion>
+   <flowDiv>Одним из параметров расширения Интерполяция является Cпособ интерполяции. Есть 2 реализованных способа интерполяции и их различие в том, как они вычисляют кривые для новых объектов. Для использования вы можете выбрать способ интерполяции 1 или 2.</flowDiv>
+  </flowRoot>
+  <rect id="ba" x="20" y="1399.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ba"/>
    </flowRegion>
    <flowDiv>In the examples above, we used Interpolation Method 2, and the result was: </flowDiv>
   </flowRoot>
@@ -504,10 +504,10 @@
    </g>
    <path d="m20.29 2.0284c10.119 0 18.266 8.1464 18.266 18.266 0 3.0665-0.74811 5.9518-2.0725 8.4842-3.046 5.8241-9.1404 9.7813-16.193 9.7813-6.2444 0-11.738-3.1022-15.029-7.8559-2.0422-2.9496-3.2366-6.535-3.2366-10.41 0-10.119 8.1464-18.266 18.266-18.266" stroke-width="4.0482" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="ba" x="20" y="1477.3" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="1477.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ba"/>
+    <use xlink:href="#az"/>
    </flowRegion>
    <flowDiv>Now compare this to Interpolation Method 1: </flowDiv>
   </flowRoot>
@@ -523,31 +523,31 @@
     <path d="m454.8 394.51c2.77 0-25 50.23-25 53s-32.23-43-35-43 10-2.23 25-5 32.23-5 35-5" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="az" x="20" y="1555.1" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="1555.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#az"/>
-   </flowRegion>
-   <flowDiv>Описание различия способов вычисления данного параметра выходит за границы этого документа, так что проще просто попробовать оба способа и использовать тот, который даёт результат, близкий к необходимому.</flowDiv>
-  </flowRoot>
-  <rect id="ay" x="20" y="1599.3" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv>Экспонента</flowDiv>
+   <flowDiv>Описание различия способов вычисления данного параметра выходит за границы этого документа, так что проще просто попробовать оба способа и использовать тот, который даёт результат, близкий к необходимому.</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="1609.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ax" x="20" y="1599.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Параметр экcпонента</flowSpan> контролирует расстояние между шагами интерполяции. Экспонента 0 делает расстояние между копиями объектов равным.</flowDiv>
+   <flowDiv>Экспонента</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="1637.5" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="1609.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aw"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-style="italic">Параметр экcпонента</flowSpan> контролирует расстояние между шагами интерполяции. Экспонента 0 делает расстояние между копиями объектов равным.</flowDiv>
+  </flowRoot>
+  <rect id="av" x="20" y="1637.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#av"/>
    </flowRegion>
    <flowDiv>Здесь приведён результат другого простого примера с экспонентой 0.</flowDiv>
   </flowRoot>
@@ -564,10 +564,10 @@
    </g>
    <text x="-0.59277618" y="36.282593" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-0.59277618" y="36.282593" sodipodi:role="line">Экспонента: 0.0</tspan><tspan x="-0.59277618" y="43.782593" sodipodi:role="line">Шагов интерполяции: 6</tspan><tspan x="-0.59277618" y="51.282593" sodipodi:role="line">Способ интерполяции: 2</tspan><tspan x="-0.59277618" y="58.782593" sodipodi:role="line">Продублировать оконечные контуры: снято</tspan><tspan x="-0.59277618" y="66.282593" sodipodi:role="line">Интерполировать стиль: снято</tspan></text>
   </g>
-  <rect id="av" x="20" y="1742.4" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="1742.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#av"/>
+    <use xlink:href="#au"/>
    </flowRegion>
    <flowDiv>The same example with an exponent of 1: </flowDiv>
   </flowRoot>
@@ -583,10 +583,10 @@
     <path d="m176.92 1239s-5.2366-4.6098-5.9092-4.6098c-0.33079 0-1.6286 6.799-2.043 6.799-0.37214 0-3.8992-5.8646-4.2984-5.8646-0.39927 0-3.771 6.1843-4.1586 6.1843-0.39135 0-1.9331-6.5454-2.2732-6.5454-0.50547 0-5.65 4.9644-5.8768 4.9644-0.32432 0-0.21313-2.4502 0.0129-4.4206 0.14751-1.286 0.2054-2.4594 0.0779-2.6803-0.14369-0.2489-6.3755 2.6715-6.6001 2.2826-0.18096-0.3135 2.5241-6.6385 2.3188-6.9942-0.19521-0.3381-7.1442 0.5474-7.3411 0.2064-0.19226-0.3331 4.2294-5.4498 4.0543-5.753-0.24097-0.4174-7.2429-1.681-7.3689-1.8992-0.17173-0.2975 5.6114-3.783 5.6103-4.1041-0.0586-0.1584-0.87408-0.6422-1.8712-1.1611-1.7926-0.9331-4.2005-2.4111-3.9875-2.78 0.13949-0.2417 6.8513-1.6961 7.0332-2.0111 0.15773-0.2732-4.6378-5.2999-4.4651-5.5991 0.16119-0.2792 6.9111 0.3494 7.0734 0.068 0.17103-0.2963-2.9187-6.625-2.7593-6.9011 0.20169-0.3494 6.3704 2.229 6.5324 1.9482 0.33482-0.5799-0.5192-6.8687-0.65194-7.6477-9e-3 -0.054-0.0108-0.083-4e-3 -0.083 0.0581 0 5.281 4.6098 5.909 4.6098 0.33116 0 1.6289-6.799 2.0428-6.799 0.3723 0 3.8993 5.8646 4.2984 5.8646 0.39945 0 3.7712-6.1843 4.1587-6.1843 0.39164 0 1.9335 6.5453 2.2734 6.5453 0.50605 0 5.6506-4.9643 5.8766-4.9643 0.3186 0 0.21215 2.3815-0.013 4.3369-0.15226 1.3224-0.21385 2.5452-0.0824 2.7728 0.14447 0.2502 6.3762-2.6704 6.6-2.2827 0.18113 0.3138-2.5239 6.6387-2.3186 6.9943 0.16331 0.2828 7.0803-0.6581 7.2484-0.3669 0.16394 0.284-4.2826 5.3574-4.1257 5.6292 0.2064 0.3575 7.2007 1.6079 7.3728 1.906 0.25447 0.4407-5.4121 3.9156-5.3186 4.0776 0.0855 0.148 1.0529 0.6946 2.1726 1.2689 1.7721 0.9088 3.9462 2.2803 3.7235 2.666-0.15692 0.2718-6.8948 1.7714-7.1073 2.1394-0.15596 0.2702 4.6406 5.295 4.4682 5.5936-0.16062 0.2782-6.9106-0.3502-7.0736-0.068-0.20423 0.3538 2.8517 6.7411 2.6615 7.0706-0.20157 0.3491-6.3703-2.2291-6.5326-1.948-0.34357 0.5951 0.66112 7.7393 0.66112 7.7393" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="au" x="20" y="1810.5" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="1810.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#au"/>
+    <use xlink:href="#at"/>
    </flowRegion>
    <flowDiv>with an exponent of 2: </flowDiv>
   </flowRoot>
@@ -602,10 +602,10 @@
     <path d="m222.09 1317.5s-4.6625-3.9513-5.502-3.9513c-0.41207 0-1.6743 5.8277-2.1906 5.8277-0.45737 0-3.6273-5.0268-4.1183-5.0268-0.49111 0-3.5321 5.3008-4.0111 5.3008-0.48418 0-1.9501-5.6102-2.3751-5.6102-0.60626 0-5.1705 4.2551-5.4872 4.2551-0.45262 0-0.46546-2.1001-0.27172-3.7891 0.12644-1.1022 0.14752-2.1574-0.0109-2.4318-0.17573-0.3044-5.5934 2.0669-5.8758 1.5778-0.22155-0.3837 2.0231-5.9333 1.7696-6.3724-0.23937-0.4146-6.2708 0.2142-6.5146-0.208-0.23733-0.4111 3.4802-4.9223 3.2607-5.3026-0.28671-0.4965-6.3646-1.7116-6.5404-2.0162-0.23967-0.4151 4.6404-3.536 4.5892-3.8981-0.0906-0.2058-0.8127-0.6605-1.6674-1.1053-1.5365-0.7997-3.541-2.1694-3.2637-2.6498 0.17918-0.3104 6.0058-1.6846 6.2433-2.096 0.20385-0.3531-3.8323-4.7904-3.6077-5.1794 0.20841-0.361 6.0661 0.053 6.2764-0.3112 0.22242-0.3853-2.3512-5.9394-2.1441-6.298 0.25048-0.4338 5.6102 1.651 5.8116 1.3022 0.42091-0.729-0.2222-6.2735-0.33597-6.9412-8e-3 -0.046-7e-3 -0.071 2e-3 -0.071 0.0811 0 4.7245 3.9512 5.5018 3.9512 0.41258 0 1.6746-5.8277 2.1903-5.8277 0.45759 0 3.6275 5.0268 4.1183 5.0268 0.49136 0 3.5324-5.3008 4.0112-5.3008 0.48458 0 1.9506 5.6103 2.3755 5.6103 0.60706 0 5.1714-4.2551 5.4868-4.2551 0.44463 0 0.45937 2.0412 0.26638 3.7173-0.13052 1.1335-0.15371 2.2328 0.01 2.5158 0.17683 0.3063 5.5943-2.0654 5.8757-1.578 0.22178 0.3842-2.0229 5.9337-1.7694 6.3727 0.21138 0.3661 6.2146-0.3116 6.433 0.067 0.21252 0.3681-3.5269 4.8413-3.3235 5.1938 0.25707 0.4452 6.3284 1.649 6.5438 2.0221 0.30555 0.5292-4.4779 3.6351-4.3474 3.8611 0.11929 0.2067 0.97512 0.7213 1.9349 1.2135 1.519 0.779 3.3268 2.0509 3.0464 2.5365-0.1942 0.3364-6.0443 1.7513-6.3098 2.2112-0.20216 0.3502 3.8349 4.7859 3.6106 5.1744-0.20789 0.3601-6.0657-0.054-6.2766 0.3116-0.25196 0.4365 2.2915 6.0428 2.057 6.449-0.25032 0.4335-5.6101-1.6512-5.8118-1.3018-0.4299 0.7446 0.34116 7.0243 0.34116 7.0243" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="at" x="20" y="1878.7" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="1878.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#at"/>
+    <use xlink:href="#as"/>
    </flowRegion>
    <flowDiv>and with an exponent of -1: </flowDiv>
   </flowRoot>
@@ -621,17 +621,17 @@
     <path d="m94.667 1400s-6.282-5.8091-6.6507-5.8091c-0.1828 0-1.5455 8.5677-1.7742 8.5677-0.21694 0-4.3942-7.3902-4.6263-7.3902-0.23205 0-4.206 7.793-4.4273 7.793-0.2223 0-1.9022-8.248-2.0876-8.248-0.32194 0-6.523 6.2558-6.5864 6.2558-0.09068 0 0.24636-3.0876 0.53119-5.5706 0.18588-1.6205 0.31079-3.0092 0.23947-3.1327-0.08532-0.1478-7.7997 3.7724-7.9189 3.5659-0.10704-0.1854 3.4364-7.9225 3.3188-8.1262-0.11479-0.1989-8.7348 1.1539-8.8463 0.9608-0.1102-0.1909 5.5936-6.4102 5.4995-6.5733-0.15768-0.2731-8.8423-1.6251-8.8776-1.6861-0.04802-0.083 7.3797-4.2328 7.4697-4.479-2.34e-4 -0.072-0.98583-0.609-2.2423-1.2629-2.2589-1.1758-5.4013-2.8511-5.3055-3.0171 0.06722-0.1164 8.391-1.717 8.4715-1.8564 0.07373-0.1277-6.1047-6.2275-6.0263-6.3633 0.07517-0.1303 8.4498 0.8891 8.5248 0.7593 0.07745-0.1342-3.9522-7.8735-3.8794-7.9995 0.11283-0.1955 7.7546 3.2815 7.8451 3.1248 0.17806-0.3084-1.0601-7.9527-1.2273-8.9344-0.01162-0.068-0.01691-0.1046-0.01507-0.1046 0.01625 0 6.2944 5.809 6.6507 5.809 0.1829 0 1.5456-8.5677 1.7742-8.5677 0.21698 0 4.3943 7.3903 4.6263 7.3903 0.2321 0 4.2061-7.7931 4.4273-7.7931 0.22239 0 1.9023 8.248 2.0876 8.248 0.3221 0 6.5232-6.2557 6.5864-6.2557 0.08908 0-0.23805 3.0009-0.52178 5.4651-0.19188 1.6664-0.32337 3.1139-0.25019 3.2407 0.08555 0.1482 7.7998-3.7722 7.9189-3.5661 0.10708 0.1856-3.4364 7.9226-3.3188 8.1264 0.07576 0.1311 8.6567-1.2892 8.7333-1.1565 0.0755 0.1308-5.6588 6.2973-5.5867 6.4222 0.11415 0.1977 8.7891 1.533 8.8824 1.6945 0.16145 0.2797-7.1132 4.4263-7.0871 4.4716 0.0239 0.041 1.1945 0.6463 2.6056 1.37 2.2331 1.1452 5.0741 2.698 4.9565 2.9017-0.089 0.1542-8.4436 1.8082-8.5595 2.0088-0.07182 0.1245 6.1079 6.2222 6.03 6.3569-0.0745 0.1292-8.4491-0.8902-8.5248-0.7592-0.11731 0.2033 3.8719 8.0127 3.7623 8.2026-0.11281 0.1953-7.7546-3.2816-7.8452-3.1249-0.18637 0.3229 1.2438 9.0415 1.2438 9.0415" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="as" x="20" y="1946.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#as"/>
-   </flowRegion>
-   <flowDiv>Когда имеешь дело с экспонентой в расширении Интерполяция, очень важен <flowSpan font-style="italic">порядок</flowSpan> выбора объектов. В приведённых выше примерах, звезда слева была выбрана первой, а шестиугольник справа был выбран вторым.</flowDiv>
-  </flowRoot>
-  <rect id="ar" x="20" y="1985.4" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="1946.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
+   </flowRegion>
+   <flowDiv>Когда имеешь дело с экспонентой в расширении Интерполяция, очень важен <flowSpan font-style="italic">порядок</flowSpan> выбора объектов. В приведённых выше примерах, звезда слева была выбрана первой, а шестиугольник справа был выбран вторым.</flowDiv>
+  </flowRoot>
+  <rect id="aq" x="20" y="1985.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#aq"/>
    </flowRegion>
    <flowDiv>View the result when the path on the right was selected first. The exponent in this example was set to 1: </flowDiv>
   </flowRoot>
@@ -647,38 +647,38 @@
     <path d="m377.93 1476.3s-2.6691-1.6647-4.0882-1.6647c-0.69426 0-1.8328 2.4552-2.703 2.4552-0.75331 0-2.6833-2.1178-3.493-2.1178-0.80998 0-2.7026 2.2332-3.4988 2.2332-0.80651 0-2.009-2.3635-2.729-2.3635-0.9562 0-3.5058 1.7926-4.1342 1.7926-0.89811 0-1.3416-0.8847-1.26-1.5963 0.0533-0.4644-0.0534-1.1091-0.31903-1.5691-0.287-0.4971-2.8779-0.032-3.3611-0.8693-0.3625-0.6279 0.28355-3.4849-0.13731-4.2138-0.39271-0.6802-3.238-0.9423-3.6446-1.6466-0.39381-0.6821 0.87895-3.0909 0.50506-3.7385-0.44551-0.7716-3.3148-1.8182-3.6637-2.4225-0.47557-0.8238 1.2688-2.6783 1.0438-3.1832-0.20178-0.3701-0.5996-0.7238-0.95967-0.9112-0.64732-0.3369-1.2513-1.3305-0.75053-2.1979 0.31697-0.549 3.0699-1.6445 3.5008-2.3909 0.36401-0.6305-1.0352-3.0215-0.63079-3.7221 0.37243-0.645 3.1322-0.9763 3.509-1.6288 0.40084-0.6943-0.38058-3.5588-8e-3 -4.2036 0.4199-0.7273 2.9707-0.356 3.3086-0.9413 0.71981-1.2468 0.80906-4.2065 0.76113-4.4878-3e-3 -0.019 4e-3 -0.03 0.0223-0.03 0.16096 0 2.7921 1.6647 4.0877 1.6647 0.69528 0 1.8335-2.4552 2.7025-2.4552 0.75376 0 2.6837 2.1178 3.493 2.1178 0.81046 0 2.7032-2.2332 3.4991-2.2332 0.8073 0 2.0102 2.3636 2.7297 2.3636 0.95781 0 3.5075-1.7927 4.1335-1.7927 0.88226 0 1.3178 0.86 1.2365 1.5661-0.055 0.4775 0.0551 1.1483 0.32953 1.6236 0.28917 0.5009 2.8797 0.035 3.361 0.869 0.36295 0.6287-0.28305 3.4857 0.13755 4.2142 0.37832 0.6552 3.2088 0.8916 3.6016 1.5721 0.38122 0.6603-0.90293 3.0493-0.53774 3.6819 0.43297 0.7499 3.2995 1.7918 3.6652 2.4252 0.48289 0.8364-1.2342 2.6614-0.97523 3.1099 0.2367 0.41 0.70504 0.8135 1.1094 1.0209 0.63993 0.3282 1.1763 1.2543 0.6955 2.087-0.32365 0.5605-3.0912 1.6813-3.5409 2.4602-0.36257 0.628 1.0372 3.0181 0.63266 3.7188-0.37201 0.6444-3.132 0.976-3.5095 1.6298-0.41771 0.7235 0.34634 3.618-0.0419 4.2905-0.41959 0.7267-2.9705 0.3556-3.3091 0.9421-0.72965 1.2638-0.7698 4.5416-0.7698 4.5416" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="aq" x="20" y="2068" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="2068" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#aq"/>
-   </flowRegion>
-   <flowDiv>Продублировать оконечные контуры</flowDiv>
-  </flowRoot>
-  <rect id="ap" x="20" y="2080.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
-   <flowDiv>Этот параметр определяет, будет ли группа сгенерированных расширением объектов <flowSpan font-style="italic">содержать копию</flowSpan> оригинального контура, к которому применялась интерполяция.</flowDiv>
+   <flowDiv>Продублировать оконечные контуры</flowDiv>
   </flowRoot>
-  <rect id="ao" x="20" y="2114" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ao" x="20" y="2080.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
    </flowRegion>
-   <flowDiv>Интерполировать стиль</flowDiv>
+   <flowDiv>Этот параметр определяет, будет ли группа сгенерированных расширением объектов <flowSpan font-style="italic">содержать копию</flowSpan> оригинального контура, к которому применялась интерполяция.</flowDiv>
   </flowRoot>
-  <rect id="an" x="20" y="2126.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="an" x="20" y="2114" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#an"/>
    </flowRegion>
-   <flowDiv>Этот параметр является одной из приятных функций эффекта интерполяции. Он предоставляет расширению возможность изменения стиля объектов на каждом шаге. Так что, если начальный и конечный объекты разных цветов, генерируемые объекты будут постепенно меняться.</flowDiv>
+   <flowDiv>Интерполировать стиль</flowDiv>
   </flowRoot>
-  <rect id="am" x="20" y="2175.3" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="2126.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
+   </flowRegion>
+   <flowDiv>Этот параметр является одной из приятных функций эффекта интерполяции. Он предоставляет расширению возможность изменения стиля объектов на каждом шаге. Так что, если начальный и конечный объекты разных цветов, генерируемые объекты будут постепенно меняться.</flowDiv>
+  </flowRoot>
+  <rect id="al" x="20" y="2175.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#al"/>
    </flowRegion>
    <flowDiv>Вот пример, в котором функция Интерполировать стиль была применена по отношению к заливке объекта:</flowDiv>
   </flowRoot>
@@ -694,10 +694,10 @@
     <path d="m130.16 1623.8c-5.744 5.566-6.7202-10.399-13.644-6.1173-3e-5 1e-4 -6e-5 1e-4 -9e-5 1e-4 -7.0608 4.3663 2.1703 15.217-6.1847 16.229-2.2e-4 1e-4 -4.3e-4 1e-4 -6.4e-4 1e-4 -8.192 0.9918 2.9592-13.337-5.1303-14.428h-1e-4c-8.2493-1.113-7.3409 13.935-15.153 10.904-2.01e-4 0-4.01e-4 -1e-4 -6.01e-4 -2e-4 -7.6593-2.9727 8.6962-10.953 3.1232-16.998-1.48e-4 -1e-4 -2.97e-4 -3e-4 -4.46e-4 -4e-4 -5.683-6.1639-11.905 10.966-16.216 3.7596-1.11e-4 -1e-4 -2.21e-4 -3e-4 -3.32e-4 -5e-4 -4.2261-7.066 10.67-4.8943 9.5022-12.81l-9.3e-5 -6e-4c-1.1913-8.0717-16.101-0.3904-15.387-8.5151 1.8e-5 -2e-4 3.6e-5 -4e-4 5.5e-5 -6e-4 0.70076-7.9663 15.359 5.2649 18.971-2.0352 9.6e-5 -2e-4 1.92e-4 -3e-4 2.89e-4 -5e-4 3.6827-7.4438-13.324-8.9527-8.1952-15.132 1.32e-4 -1e-4 2.63e-4 -3e-4 3.95e-4 -4e-4 5.0292-6.0589 8.9498 8.7734 16.04 4.5308l5.67e-4 -3e-4c7.2286-4.3266-5.1869-14.252 2.7936-16.146 2e-4 0 4.1e-4 -1e-4 6.1e-4 -1e-4 7.8252-1.8563 0.35155 14.951 8.3349 15.877 2.1e-4 1e-4 4.2e-4 1e-4 6.4e-4 1e-4 8.1404 0.9434 5.4122-16.243 12.76-12.786 1.9e-4 1e-4 3.7e-4 2e-4 5.6e-4 3e-4 7.2047 3.3898-6.9237 12.418-1.5984 18.452 1.5e-4 2e-4 2.9e-4 4e-4 4.3e-4 5e-4 5.4305 6.1527 10.706-11.168 14.874-4.0255 2e-5 1e-4 4e-5 1e-4 6e-5 1e-4 4.0869 7.0046-10.568 6.1985-9.3193 14.374 1e-5 1e-4 2e-5 1e-4 2e-5 2e-4 1.2737 8.337 17.012 0.4298 15.384 8.5978-1e-5 1e-4 -1e-5 1e-4 -2e-5 1e-4 -1.597 8.0099-16.043-7.1973-19.15 0.3899-1e-5 1e-4 -3e-5 1e-4 -4e-5 1e-4 -3.169 7.7372 14.052 10.207 8.1951 15.883" fill="#f8ae00" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="al" x="20" y="2258.3" width="300" height="1e3px" display="none"/>
+  <rect id="ak" x="20" y="2258.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#al"/>
+    <use xlink:href="#ak"/>
    </flowRegion>
    <flowDiv>Параметр Интерполировать стиль также влияет на обводку объекта:</flowDiv>
   </flowRoot>
@@ -713,10 +713,10 @@
     <path d="m438.02 1706.9c-5.744 5.566-6.7202-10.399-13.644-6.1173h-9e-5c-7.0608 4.3664 2.1703 15.217-6.1847 16.229h-6.5e-4c-8.192 0.9918 2.9592-13.337-5.1303-14.428-2.2e-4 -1e-4 -4.3e-4 -1e-4 -6.5e-4 -1e-4 -8.2487-1.1124-7.3405 13.935-15.152 10.904l-6e-4 -3e-4c-7.6593-2.9727 8.6962-10.953 3.1232-16.998-3e-5 -1e-4 -5e-5 -1e-4 -8e-5 -1e-4 -5.6831-6.165-11.906 10.965-16.216 3.7593-2e-5 -1e-4 -4e-5 -1e-4 -6e-5 -1e-4 -4.227-7.0666 10.669-4.8946 9.5019-12.811-1e-5 -1e-4 -1e-5 -1e-4 -2e-5 -1e-4 -1.1907-8.0726-16.101-0.3908-15.388-8.5156 0-1e-4 0-1e-4 1e-5 -1e-4 0.70017-7.9674 15.359 5.2644 18.971-2.0357 1e-5 -1e-4 3e-5 -1e-4 5e-5 -1e-4 3.6836-7.4443-13.324-8.9531-8.195-15.133 2e-5 -1e-4 4e-5 -1e-4 6e-5 -1e-4 5.0294-6.0599 8.95 8.7731 16.04 4.5305 3e-5 -1e-4 6e-5 -1e-4 9e-5 -1e-4 7.2296-4.3264-5.1866-14.253 2.7941-16.146 3e-5 -1e-4 7e-5 -1e-4 1e-4 -1e-4 7.8261-1.8571 0.35188 14.951 8.3354 15.877h1e-4c8.141 0.9442 5.4125-16.243 12.761-12.786h9e-5c7.2058 3.3896-6.9234 12.418-1.5979 18.453h7e-5c5.4306 6.1539 10.706-11.168 14.874-4.025h5e-5c4.0869 7.0047-10.568 6.1985-9.3193 14.374 3e-5 2e-4 6e-5 4e-4 1e-4 6e-4 1.2743 8.3361 17.012 0.4295 15.384 8.5974-1e-5 0-2e-5 0-2e-5 1e-4 -1.597 8.0098-16.043-7.1974-19.15 0.3899-2e-5 0-3e-5 0-4e-5 1e-4 -3.169 7.7371 14.052 10.207 8.1951 15.883" fill="#da1d00" stroke="#cbcbcb" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="ak" x="20" y="2334.5" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="2334.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ak"/>
+    <use xlink:href="#aj"/>
    </flowRegion>
    <flowDiv>Разумеется, начальный и конечный объекты не обязательно должны быть одинаковыми:</flowDiv>
   </flowRoot>
@@ -742,17 +742,17 @@
     <path d="m123.62 1733.5c-1.8896 1.831-2.7623 0.9437-3.9672-0.6377-1.0107-1.3265-1.5484-3.1414-2.7492-4.2498-1.0976-1.0131-2.1619-1.4358-3.7936-0.3559-0.18945 0.1394-0.37187 0.2864-0.55999 0.4404-1.5329 1.2552-1.4651 2.974-1.4372 4.7657 0.0284 1.8258 0.86111 3.7273 0.81014 5.2912-0.0577 1.7714-0.34926 3.1096-2.8142 3.4134-0.0145 0-0.0301 0-0.047 0.01-2.6163 0.2965-2.474-1.2639-2.1733-3.3707 0.23092-1.618 1.2148-3.5582 1.3199-5.2272 0.12035-1.9102-7e-3 -3.4652-2.2544-3.7751-0.0197 0-0.041-0.01-0.0641-0.01-2.0838-0.2563-3.0654 0.6998-4.1755 2.1003-1.0561 1.3323-1.438 3.067-2.3209 4.5426-1.0337 1.7279-1.7704 3.1007-3.5941 3.0574-0.47825-0.011-0.94649-0.1202-1.4561-0.3455-1.6022-0.669-1.7414-1.6339-1.3399-2.7871 0.4449-1.2777 2.1719-2.7865 3.3813-4.3798 1.1601-1.5282 2.6406-3.1342 2.7559-4.6887 0.06922-0.9327-0.082-1.8469-0.77027-2.7145-0.55548-0.7051-1.1264-1.0547-1.7878-1.1458-1.5344-0.2114-3.0862 1.3832-4.5932 2.7434-1.4296 1.2903-2.8187 3.1578-4.1143 3.7393-1.1624 0.5217-2.2494 0.5232-3.2228-0.981-0.28617-0.4153-0.47008-0.7965-0.56661-1.1842-0.47077-1.8912 1.137-2.3866 3.0997-3.2629 1.6065-0.7172 3.4508-0.9967 4.5876-2.1875 0.79534-0.833 1.2445-1.7423 1.0237-3.1169-0.08882-0.5317-0.26673-0.976-0.51714-1.3915-0.89105-1.4785-2.7002-1.4726-4.6801-1.6158-1.8125-0.1311-3.7681 0.3754-5.2937 0.073-1.7205-0.3408-2.8941-0.8958-2.6984-3.0258 0.01245-0.122 0.03006-0.244 0.05262-0.3704 0.37123-2.0794 2.0851-1.7124 4.2889-1.1523 1.5455 0.3928 3.332 1.4995 5.0651 1.9995 1.9378 0.559 3.809 1.293 5.2025 0.6861 0.68056-0.2964 1.2472-0.7242 1.652-1.4464 0.53307-0.9666 0.56066-1.7798 0.2594-2.6108-0.53158-1.4663-2.087-2.2024-3.696-3.2784-1.6532-1.1057-3.3629-1.7174-4.0763-2.9255-0.5295-0.8967-0.51012-1.7482 0.48863-2.8329 0.51729-0.5415 1.0209-0.8378 1.5172-1.0046 1.5052-0.5058 2.5278 0.816 4.0745 2.3138 1.2934 1.2525 2.2482 2.628 3.7975 3.161 1.0779 0.3709 2.0772 0.3339 3.2419-0.4361 0.4562-0.3155 0.80532-0.6658 1.1099-1.0436 1.1503-1.4268 0.44861-3.2465-0.13664-5.0715-0.58099-1.8117-1.871-3.6287-1.9263-5.0716-0.0476-1.2423 0.32673-2.2074 2.0824-2.6532 0.4657-0.125 0.86596-0.1514 1.2436-0.093 1.6536 0.2533 1.5879 2.1216 1.7026 4.403 0.0856 1.7017-0.37417 3.6334-0.1054 5.2961 0.31693 1.9607 0.65513 3.5475 2.5726 3.9425 0.12199 0.025 0.23739 0.045 0.35012 0.061 1.8471 0.2254 2.7784-0.7537 3.6643-2.2201 0.84796-1.4036 0.97437-3.2539 1.5487-4.9218 0.71135-2.0658 1.0585-3.852 2.5166-4.1638 0.55281-0.1182 1.1308-0.025 1.8328 0.3461 1.2089 0.6235 1.5549 1.4696 1.5416 2.4651-0.0187 1.3921-1.4234 3.0764-2.4395 4.8531-0.90836 1.5881-2.2526 3.2501-2.5282 4.8429-0.22299 1.289-0.20162 2.5327 0.66629 3.6555 0.29336 0.4025 0.6013 0.6878 0.95453 0.8742 1.569 0.8282 3.1156-0.7095 4.608-2.1839 1.3304-1.3144 2.6178-3.3231 3.8396-4.0633 1.1432-0.6925 2.229-0.8235 3.239 0.7844 0.263 0.3901 0.43546 0.7577 0.52994 1.1391 0.46323 1.8698-0.94794 2.5641-2.7526 3.6303-1.4771 0.8728-3.2179 1.3019-4.4103 2.5108-1.0116 1.0256-1.6285 2.078-1.3549 3.7531 0.0432 0.2447 0.10574 0.4804 0.18602 0.7212 0.61157 1.8345 2.2509 2.0893 4.1714 2.3523 1.7196 0.2354 3.6648-0.2702 5.2997-0.1431 2.1555 0.1676 3.7717 0.2989 3.6206 2.4706-0.0143 0.2054-0.0444 0.405-0.0914 0.6089-0.40084 1.8992-1.7462 1.9518-3.5153 1.5396-1.4565-0.3394-3.2004-1.5791-4.9409-2.3366-1.7944-0.781-3.5854-1.9053-5.0545-1.9377-1.2855-0.028-2.3246 0.2938-2.904 1.5861-0.22316 0.4751-0.32837 0.9347-0.33628 1.4226-0.0281 1.7324 1.1706 2.7166 2.6712 3.9625 1.3931 1.1566 3.0464 1.7664 4.2199 2.8034 1.5398 1.3606 2.2536 2.3275 0.46961 4.0562" fill="#f8ae00" stroke="#212121" stroke-width="3.1036" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="aj" x="20" y="2467.4" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="2467.4" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aj"/>
+    <use xlink:href="#ai"/>
    </flowRegion>
    <flowDiv>Использование интерполяции для имитации нестандартных градиентов</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="2479.6" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="2479.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ai"/>
+    <use xlink:href="#ah"/>
    </flowRegion>
    <flowDiv>At the time when gradient meshes were not implemented in Inkscape, it was not possible to create a gradient other than linear (straight line) or radial (round). However, it could be faked using the Interpolate extension and Interpolate Style. A simple example follows — draw two lines of different strokes: </flowDiv>
   </flowRoot>
@@ -760,10 +760,10 @@
    <path d="m20 132.36 75-32.857 85.714 33.571 77.143-32.857" stroke="#35b8ff" inkscape:connector-curvature="0"/>
    <path d="m20 55.219 75-32.857 85.714 33.571 77.143-32.857" stroke="#ffed35" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="ah" x="20" y="2663.8" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="2663.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ah"/>
+    <use xlink:href="#ag"/>
    </flowRegion>
    <flowDiv>Интерполяция между двумя линиями создаёт градиент:</flowDiv>
   </flowRoot>
@@ -787,17 +787,17 @@
    <path d="m20 123.29 75-32.857 85.714 33.571 77.143-32.857" stroke="#4cbee7" inkscape:connector-curvature="0"/>
    <path d="m20 127.82 75-32.857 85.714 33.571 77.143-32.857" stroke="#40bbf3" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="ag" x="20" y="2822.8" width="300" height="1e3px" display="none"/>
+  <rect id="af" x="20" y="2822.8" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ag"/>
+    <use xlink:href="#af"/>
    </flowRegion>
    <flowDiv>Заключение</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="2833.5" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="2833.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#af"/>
+    <use xlink:href="#ae"/>
    </flowRegion>
    <flowDiv>Как показано выше, расширение Inkscape Интерполяция является мощным инструментом. Этот раздел учебника описывает лишь основы использования этого расширения. Эксперименты являются ключом к дальнейшему изучению интерполяции.</flowDiv>
   </flowRoot>

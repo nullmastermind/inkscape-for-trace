@@ -259,122 +259,122 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#cr"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Bàsic</tspan></tspan></text>
-  <rect id="ag" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="v" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
-   <flowRegion>
-    <use xlink:href="#ag"/>
-   </flowRegion>
-   <flowDiv>Aquest tutorial us mostrarà l'ús bàsic de l'Inkscape. Si l'heu obert des del menú <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ajuda</flowSpan> de l'Inkscape, aquest és un document normal i corrent que podeu visualitzar, editar o copiar. També podeu desar-ne una còpia en l'ubicació que trieu.</flowDiv>
-  </flowRoot>
-  <rect id="ac" x="40" y="183.77" width="264" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
-   <flowRegion>
-    <use xlink:href="#ac"/>
-   </flowRegion>
-   <flowDiv>El tutorial bàsic cobreix el desplaçament i l'ampliació, la gestió de documents, les eines de forma, la transformació d'objectes amb el selector, les tècniques de selecció, l'agrupació, la configuració de l'emplenat i el contorn, l'alineació i l'ordenació en z. Per a temes més avançats, consulteu els altres tutorials al menú d'<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ajuda</flowSpan>.</flowDiv>
-  </flowRoot>
-  <rect id="w" x="20" y="251.17" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#w"/>
-   </flowRegion>
-   <flowDiv>Desplaçament de l'àrea de dibuix</flowDiv>
-  </flowRoot>
-  <rect id="v" x="20" y="263.69" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#v"/>
    </flowRegion>
-   <flowDiv>Hi ha vàries maneres de desplaçar l'àrea de dibuix. Proveu-ho amb les tecles <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">fletxa</flowSpan> per a desplaçar-la amb el teclat (proveu de moure aquest document cap avall). També podeu arrossegar-la amb el botó central del ratolí. O podeu usar les barres de desplaçament (premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">B</flowSpan> per a veure-les o amagar-les). També funciona el desplaçament vertical amb <flowSpan font-weight="bold">la rodeta</flowSpan> del vostre ratolí; i si premeu <flowSpan font-weight="bold">Maj</flowSpan>, l'horitzontal.</flowDiv>
+   <flowDiv>Aquest tutorial us mostrarà l'ús bàsic de l'Inkscape. Si l'heu obert des del menú <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ajuda</flowSpan> de l'Inkscape, aquest és un document normal i corrent que podeu visualitzar, editar o copiar. També podeu desar-ne una còpia en l'ubicació que trieu.</flowDiv>
   </flowRoot>
-  <rect id="u" x="20" y="329.09" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="u" x="40" y="183.77" width="264" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
     <use xlink:href="#u"/>
    </flowRegion>
-   <flowDiv>Ampliació i reducció</flowDiv>
+   <flowDiv>El tutorial bàsic cobreix el desplaçament i l'ampliació, la gestió de documents, les eines de forma, la transformació d'objectes amb el selector, les tècniques de selecció, l'agrupació, la configuració de l'emplenat i el contorn, l'alineació i l'ordenació en z. Per a temes més avançats, consulteu els altres tutorials al menú d'<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ajuda</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="t" x="20" y="341.62" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="t" x="20" y="251.17" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#t"/>
    </flowRegion>
-   <flowDiv>La manera més fàcil d'ampliar/reduir és amb les tecles <flowSpan font-weight="bold">-</flowSpan> i <flowSpan font-weight="bold">+</flowSpan> (o <flowSpan font-weight="bold">=</flowSpan>). També podeu usar <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">botó central</flowSpan> o <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">botó dret</flowSpan> per a ampliar, <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">botó central</flowSpan> o <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">botó dret</flowSpan> per a allunyar, o girant la <flowSpan font-weight="bold">rodeta</flowSpan> del ratolí amb <flowSpan font-weight="bold">Ctrl</flowSpan>. També fent clic al camp d'entrada d'ampliació (a l'angle inferior dret de la finestra del document, amb l'etiqueta «Z»), introduïu un valor precís en %, i premeu <flowSpan font-weight="bold">Entrar</flowSpan>. També tenim l'eina d'ampliació (a la barra d'eines de l'esquerra) que us permet ampliar una zona emmarcant-la.</flowDiv>
+   <flowDiv>Desplaçament de l'àrea de dibuix</flowDiv>
   </flowRoot>
-  <rect id="s" x="20" y="412.29" width="300" height="1e3px" display="none"/>
+  <rect id="s" x="20" y="263.69" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#s"/>
    </flowRegion>
-   <flowDiv>L'Inkscape també manté un historial dels nivells d'ampliació que s'han utilitzat. Premeu la tecla <flowSpan font-weight="bold">`</flowSpan> per a anar a l'ampliació anterior, o <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">`</flowSpan> per anar a la següent.</flowDiv>
+   <flowDiv>Hi ha vàries maneres de desplaçar l'àrea de dibuix. Proveu-ho amb les tecles <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">fletxa</flowSpan> per a desplaçar-la amb el teclat (proveu de moure aquest document cap avall). També podeu arrossegar-la amb el botó central del ratolí. O podeu usar les barres de desplaçament (premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">B</flowSpan> per a veure-les o amagar-les). També funciona el desplaçament vertical amb <flowSpan font-weight="bold">la rodeta</flowSpan> del vostre ratolí; i si premeu <flowSpan font-weight="bold">Maj</flowSpan>, l'horitzontal.</flowDiv>
   </flowRoot>
-  <rect id="r" x="20" y="445.62" width="300" height="1e3px" display="none"/>
+  <rect id="r" x="20" y="329.09" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#r"/>
    </flowRegion>
-   <flowDiv>Les eines de l'Inkscape</flowDiv>
+   <flowDiv>Ampliació i reducció</flowDiv>
   </flowRoot>
-  <rect id="q" x="20" y="458.08" width="300" height="1e3px" display="none"/>
+  <rect id="q" x="20" y="341.62" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#q"/>
    </flowRegion>
-   <flowDiv>La barra d'eines vertical de l'esquerra mostra les eines de dibuix i edició de l'Inkscape. Depenent de la resolució del vostre monitor, podreu trobar la <flowSpan font-style="italic">Barra d'ordres</flowSpan> amb botons d'ordres generals, tal com «Desa» i «Imprimeix», en la part superior de la finestra, justament sota el menú, o en la part dreta de la finestra, entre la barra de desplaçament i la <flowSpan font-style="italic">barra de controls d'ajustament</flowSpan>. Damunt de l'<flowSpan font-style="italic">àrea de dibuix</flowSpan> blanca es troba la <flowSpan font-style="italic">barra de controls d'eines</flowSpan> amb controls específics per a cada eina. La <flowSpan font-style="italic">barra d'estat</flowSpan> a la part de sota de la finestra mostrarà pistes i missatges útils mentre treballeu.</flowDiv>
+   <flowDiv>La manera més fàcil d'ampliar/reduir és amb les tecles <flowSpan font-weight="bold">-</flowSpan> i <flowSpan font-weight="bold">+</flowSpan> (o <flowSpan font-weight="bold">=</flowSpan>). També podeu usar <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">botó central</flowSpan> o <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">botó dret</flowSpan> per a ampliar, <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">botó central</flowSpan> o <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">botó dret</flowSpan> per a allunyar, o girant la <flowSpan font-weight="bold">rodeta</flowSpan> del ratolí amb <flowSpan font-weight="bold">Ctrl</flowSpan>. També fent clic al camp d'entrada d'ampliació (a l'angle inferior dret de la finestra del document, amb l'etiqueta «Z»), introduïu un valor precís en %, i premeu <flowSpan font-weight="bold">Entrar</flowSpan>. També tenim l'eina d'ampliació (a la barra d'eines de l'esquerra) que us permet ampliar una zona emmarcant-la.</flowDiv>
   </flowRoot>
-  <rect id="p" x="20" y="539.22" width="300" height="1e3px" display="none"/>
+  <rect id="p" x="20" y="412.29" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#p"/>
    </flowRegion>
-   <flowDiv>Es pot accedir a moltes operacions mitjançant dreceres de teclat. Obriu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ajuda</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Referència del teclat i ratolí</flowSpan> per a veure la llista de dreceres disponibles.</flowDiv>
+   <flowDiv>L'Inkscape també manté un historial dels nivells d'ampliació que s'han utilitzat. Premeu la tecla <flowSpan font-weight="bold">`</flowSpan> per a anar a l'ampliació anterior, o <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">`</flowSpan> per anar a la següent.</flowDiv>
   </flowRoot>
-  <rect id="cn" x="20" y="572.96" width="300" height="1e3px" display="none"/>
+  <rect id="cn" x="20" y="445.62" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cn"/>
    </flowRegion>
-   <flowDiv>Creació i gestió de documents</flowDiv>
+   <flowDiv>Les eines de l'Inkscape</flowDiv>
   </flowRoot>
-  <rect id="cm" x="20" y="585.52" width="300" height="1e3px" display="none"/>
+  <rect id="cm" x="20" y="458.08" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cm"/>
    </flowRegion>
-   <flowDiv>Per a crear un document buit nou, utilitzeu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Nou</flowSpan> o premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>. Per a crear un document nou des d'una de les moltes plantilles del Inkscape, utilitzeu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Nou des d'una plantilla...</flowSpan> o premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>.</flowDiv>
+   <flowDiv>La barra d'eines vertical de l'esquerra mostra les eines de dibuix i edició de l'Inkscape. Depenent de la resolució del vostre monitor, podreu trobar la <flowSpan font-style="italic">Barra d'ordres</flowSpan> amb botons d'ordres generals, tal com «Desa» i «Imprimeix», en la part superior de la finestra, justament sota el menú, o en la part dreta de la finestra, entre la barra de desplaçament i la <flowSpan font-style="italic">barra de controls d'ajustament</flowSpan>. Damunt de l'<flowSpan font-style="italic">àrea de dibuix</flowSpan> blanca es troba la <flowSpan font-style="italic">barra de controls d'eines</flowSpan> amb controls específics per a cada eina. La <flowSpan font-style="italic">barra d'estat</flowSpan> a la part de sota de la finestra mostrarà pistes i missatges útils mentre treballeu.</flowDiv>
   </flowRoot>
-  <rect id="cl" x="20" y="624.54" width="300" height="1e3px" display="none"/>
+  <rect id="cl" x="20" y="539.22" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cl"/>
    </flowRegion>
-   <flowDiv>Per a obrir un document SVG existent, utilitzeu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Obre</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). Per a desar-lo, utilitzeu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Desa</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>), o <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Anomena i desa</flowSpan> (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>) per a desar-lo amb un nom nou (tot i que l'Inkscape s'instal·la amb el desament automàtic activat, és recomanable que seguiu la bona pràctica de «deseu aviat, deseu sovint»).</flowDiv>
+   <flowDiv>Es pot accedir a moltes operacions mitjançant dreceres de teclat. Obriu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ajuda</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Referència del teclat i ratolí</flowSpan> per a veure la llista de dreceres disponibles.</flowDiv>
   </flowRoot>
-  <rect id="ck" x="20" y="674.16" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ck" x="20" y="572.96" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ck"/>
    </flowRegion>
-   <flowDiv>L'Inkscape utilitza el format SVG (Gràfics Vectorials Escalables) per als seus fitxers. L'SVG és un estàndard obert àmpliament compatible amb el programari d'imatges. Els fitxers SVG es basen en XML i es poden editar amb qualsevol editor de text o d'XML (a banda d'amb l'Inkscape, és clar). A més de l'SVG, l'Inkscape pot importar i exportar molts altres tipus de formats. Podeu trobar la llista de formats compatibles en els diàlegs <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Desa</flowSpan> i <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Importa</flowSpan>.</flowDiv>
+   <flowDiv>Creació i gestió de documents</flowDiv>
   </flowRoot>
-  <rect id="cj" x="20" y="734.18" width="300" height="1e3px" display="none"/>
+  <rect id="cj" x="20" y="585.52" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cj"/>
    </flowRegion>
-   <flowDiv>L'Inkscape obre una finestra separada per a cada document. Podeu navegar entre elles usant el vostre gestor de finestres (per exemple, amb<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>), o podeu utilitzar la drecera de l'Inkscape, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>, que es mourà en cicle entre totes les finestres obertes (creeu un document nou i canvieu entre aquest i l'altre per a practicar). Nota: l'Inkscape tracta aquestes finestres com a pestanyes en un navegador web, el que vol dir que la drecera <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> només funciona amb documents que s'executin al mateix procés. Si obriu múltiples fitxers des d'un navegador de fitxers o llanceu Inkscape més d'un cop des d'una icona, això no funcionarà.</flowDiv>
+   <flowDiv>Per a crear un document buit nou, utilitzeu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Nou</flowSpan> o premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>. Per a crear un document nou des d'una de les moltes plantilles del Inkscape, utilitzeu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Nou des d'una plantilla...</flowSpan> o premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="ci" x="20" y="829.91" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ci" x="20" y="624.54" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ci"/>
    </flowRegion>
-   <flowDiv>Creació de formes</flowDiv>
+   <flowDiv>Per a obrir un document SVG existent, utilitzeu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Obre</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). Per a desar-lo, utilitzeu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Desa</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>), o <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fitxer</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Anomena i desa</flowSpan> (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>) per a desar-lo amb un nom nou (tot i que l'Inkscape s'instal·la amb el desament automàtic activat, és recomanable que seguiu la bona pràctica de «deseu aviat, deseu sovint»).</flowDiv>
   </flowRoot>
-  <rect id="ch" x="20" y="840.86" width="300" height="1e3px" display="none"/>
+  <rect id="ch" x="20" y="674.16" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ch"/>
+   </flowRegion>
+   <flowDiv>L'Inkscape utilitza el format SVG (Gràfics Vectorials Escalables) per als seus fitxers. L'SVG és un estàndard obert àmpliament compatible amb el programari d'imatges. Els fitxers SVG es basen en XML i es poden editar amb qualsevol editor de text o d'XML (a banda d'amb l'Inkscape, és clar). A més de l'SVG, l'Inkscape pot importar i exportar molts altres tipus de formats. Podeu trobar la llista de formats compatibles en els diàlegs <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Desa</flowSpan> i <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Importa</flowSpan>.</flowDiv>
+  </flowRoot>
+  <rect id="cg" x="20" y="734.18" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cg"/>
+   </flowRegion>
+   <flowDiv>L'Inkscape obre una finestra separada per a cada document. Podeu navegar entre elles usant el vostre gestor de finestres (per exemple, amb<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>), o podeu utilitzar la drecera de l'Inkscape, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>, que es mourà en cicle entre totes les finestres obertes (creeu un document nou i canvieu entre aquest i l'altre per a practicar). Nota: l'Inkscape tracta aquestes finestres com a pestanyes en un navegador web, el que vol dir que la drecera <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> només funciona amb documents que s'executin al mateix procés. Si obriu múltiples fitxers des d'un navegador de fitxers o llanceu Inkscape més d'un cop des d'una icona, això no funcionarà.</flowDiv>
+  </flowRoot>
+  <rect id="cf" x="20" y="829.91" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#cf"/>
+   </flowRegion>
+   <flowDiv>Creació de formes</flowDiv>
+  </flowRoot>
+  <rect id="ce" x="20" y="840.86" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ce"/>
    </flowRegion>
    <flowDiv>És hora de crear unes quantes formes! Feu clic a l'eina del rectangle en la barra d'eines (o premeu <flowSpan font-weight="bold">F4</flowSpan>) i feu clic i arrossegueu, en un document en blanc nou o bé aquí mateix:</flowDiv>
   </flowRoot>
@@ -389,10 +389,10 @@
   <rect transform="translate(20 878.09)" x="247.55" y="28.116" width="7.0564" height="4.1162" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 878.09)" x="262.25" y="20.472" width="4.1162" height="1.7641" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 878.09)" x="274.01" y="17.532" width="2.9402" height="1.1761" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="cg" x="20" y="939.83" width="300" height="1e3px" display="none"/>
+  <rect id="cd" x="20" y="939.83" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#cg"/>
+    <use xlink:href="#cd"/>
    </flowRegion>
    <flowDiv>Com podeu veure, els rectangles predefinits tenen un <flowSpan font-style="italic">emplenament</flowSpan> blau i un <flowSpan font-style="italic">traç</flowSpan> (contorn) negre, i completament opacs. Tot seguit veurem com canviar això. Amb les altres eines també podeu crear el·lipsis, estreles i espirals:</flowDiv>
   </flowRoot>
@@ -412,189 +412,189 @@
   <path transform="translate(20 986.44)" d="m166.79 26.291-10.51 1.7486-4.5176 9.6488-4.9106-9.4548-10.573-1.3148 7.4746-7.592-2.0166-10.461 9.5302 4.7627 9.3262-5.1507-1.5846 10.536z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.29358899" sodipodi:arg2="0.92190752" sodipodi:cx="151.42822" sodipodi:cy="21.647896" sodipodi:r1="16.043627" sodipodi:r2="8.0218134" sodipodi:sides="5" sodipodi:type="star"/>
   <path transform="translate(20 986.44)" d="m184.64 21.648-5.3031-0.02752-3.0291 4.353-1.6126-5.0521-5.076-1.5357 4.3065-3.0948-0.10804-5.3021 4.2742 3.1394 5.0092-1.7412-1.6649 5.0351z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.46364761" sodipodi:arg2="1.0919661" sodipodi:cx="177.49966" sodipodi:cy="18.076466" sodipodi:r1="7.9859571" sodipodi:r2="3.9929783" sodipodi:sides="5" sodipodi:type="star"/>
   <path transform="translate(20 986.44)" d="m202.14 24.505-3.7067-1.0799-2.991 2.4413-0.11839-3.859-3.246-2.0902 3.6335-1.3051 0.9848-3.7331 2.364 3.0524 3.8547-0.21699-2.1725 3.1916z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.74194727" sodipodi:arg2="1.3702658" sodipodi:cx="197.85681" sodipodi:cy="20.576469" sodipodi:r1="5.8138647" sodipodi:r2="2.9069321" sodipodi:sides="5" sodipodi:type="star"/>
-  <rect id="cf" x="20" y="1059" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cf"/>
-   </flowRegion>
-   <flowDiv>Aquestes eines es coneixen col·lectivament com a <flowSpan font-style="italic">eines de forma</flowSpan>. Cada forma que creeu mostra una o més <flowSpan font-style="italic">nanses</flowSpan>. Proveu d'arrossegar-les per a veure com respon la forma. La barra de controls d'eines d'una eina de forma és una altra manera de transformar-ne una; aquests controls afecten les formes seleccionades (p. ex., aquelles que mostren les nanses) <flowSpan font-style="italic">i tanbé</flowSpan> estableixen els paràmetres que s'aplicaran a les formes noves que hi creeu.</flowDiv>
-  </flowRoot>
-  <rect id="ce" x="20" y="1118.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ce"/>
-   </flowRegion>
-   <flowDiv>Per a <flowSpan font-style="italic">desfer</flowSpan> la vostra última acció, premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan> (o si torneu a canviar d'idea, podeu <flowSpan font-style="italic">tornar-la a fer</flowSpan> amb <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan>).</flowDiv>
-  </flowRoot>
-  <rect id="cd" x="20" y="1152.3" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#cd"/>
-   </flowRegion>
-   <flowDiv>Moviment, escalat, gir</flowDiv>
-  </flowRoot>
-  <rect id="cc" x="20" y="1164.8" width="300" height="1e3px" display="none"/>
+  <rect id="cc" x="20" y="1059" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cc"/>
    </flowRegion>
-   <flowDiv>L'eina més usada de l'Inkscape és el <flowSpan font-style="italic">Selector</flowSpan>. Feu clic en el botó que hi ha a dalt de tot de la barra d'eines (el de la fletxa), o premeu <flowSpan font-weight="bold">s</flowSpan>, <flowSpan font-weight="bold">F1</flowSpan> o canvieu entre eines amb l'<flowSpan font-weight="bold">Espai</flowSpan>. Ara podeu seleccionar qualsevol objecte de l'àrea de dibuix. Feu clic sobre el rectangle de sota.</flowDiv>
+   <flowDiv>Aquestes eines es coneixen col·lectivament com a <flowSpan font-style="italic">eines de forma</flowSpan>. Cada forma que creeu mostra una o més <flowSpan font-style="italic">nanses</flowSpan>. Proveu d'arrossegar-les per a veure com respon la forma. La barra de controls d'eines d'una eina de forma és una altra manera de transformar-ne una; aquests controls afecten les formes seleccionades (p. ex., aquelles que mostren les nanses) <flowSpan font-style="italic">i tanbé</flowSpan> estableixen els paràmetres que s'aplicaran a les formes noves que hi creeu.</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 1211.4)" x="129.71" y=".66667" width="40.574" height="38.81" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="cb" x="20" y="1263.6" width="300" height="1e3px" display="none"/>
+  <rect id="cb" x="20" y="1118.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv>Veureu com apareixen vuit nanses en forma de fletxa al voltant de l'objecte. Ara podeu:</flowDiv>
+   <flowDiv>Per a <flowSpan font-style="italic">desfer</flowSpan> la vostra última acció, premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan> (o si torneu a canviar d'idea, podeu <flowSpan font-style="italic">tornar-la a fer</flowSpan> amb <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan>).</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1286.9)" r="2"/>
-  <rect id="ca" x="40" y="1280.9" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ca" x="20" y="1152.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ca"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Moure</flowSpan> l'objecte arrossegant-lo (premeu <flowSpan font-weight="bold">Ctrl</flowSpan> per limitar el moviment a horitzontal i vertical).</flowDiv>
+   <flowDiv>Moviment, escalat, gir</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1314.8)" r="2"/>
-  <rect id="bz" x="40" y="1308.8" width="280" height="1e3px" display="none"/>
+  <rect id="bz" x="20" y="1164.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bz"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Escalar</flowSpan> l'objecte arrossegant qualsevol nansa (premeu <flowSpan font-weight="bold">Ctrl</flowSpan> per conservar la relació alçada/amplada original).</flowDiv>
+   <flowDiv>L'eina més usada de l'Inkscape és el <flowSpan font-style="italic">Selector</flowSpan>. Feu clic en el botó que hi ha a dalt de tot de la barra d'eines (el de la fletxa), o premeu <flowSpan font-weight="bold">s</flowSpan>, <flowSpan font-weight="bold">F1</flowSpan> o canvieu entre eines amb l'<flowSpan font-weight="bold">Espai</flowSpan>. Ara podeu seleccionar qualsevol objecte de l'àrea de dibuix. Feu clic sobre el rectangle de sota.</flowDiv>
   </flowRoot>
-  <rect id="by" x="20" y="1336.8" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 1211.4)" x="129.71" y=".66667" width="40.574" height="38.81" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect id="by" x="20" y="1263.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#by"/>
    </flowRegion>
-   <flowDiv>Ara torneu a fer clic en el rectangle. Les nanses canvien. Ara podeu:</flowDiv>
+   <flowDiv>Veureu com apareixen vuit nanses en forma de fletxa al voltant de l'objecte. Ara podeu:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1360.1)" r="2"/>
-  <rect id="bx" x="40" y="1354.1" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1286.9)" r="2"/>
+  <rect id="bx" x="40" y="1280.9" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bx"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Girar</flowSpan> l'objecte arrossegant les nanses dels cantons (amb <flowSpan font-weight="bold">Ctrl</flowSpan> limiteu la rotació a passos de 15 graus. Arrossegueu la creu per a posicionar el centre de rotació).</flowDiv>
+   <flowDiv><flowSpan font-style="italic">Moure</flowSpan> l'objecte arrossegant-lo (premeu <flowSpan font-weight="bold">Ctrl</flowSpan> per limitar el moviment a horitzontal i vertical).</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1388.1)" r="2"/>
-  <rect id="bw" x="40" y="1382.1" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1314.8)" r="2"/>
+  <rect id="bw" x="40" y="1308.8" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Esbiaixar</flowSpan> (cisallar) l'objecte arrossegant les nanses dels costats (amb <flowSpan font-weight="bold">Ctrl</flowSpan> limiteu l'esbiaixat a passos de 15 graus).</flowDiv>
+   <flowDiv><flowSpan font-style="italic">Escalar</flowSpan> l'objecte arrossegant qualsevol nansa (premeu <flowSpan font-weight="bold">Ctrl</flowSpan> per conservar la relació alçada/amplada original).</flowDiv>
   </flowRoot>
-  <rect id="bv" x="20" y="1410.1" width="300" height="1e3px" display="none"/>
+  <rect id="bv" x="20" y="1336.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bv"/>
    </flowRegion>
-   <flowDiv>Mentre treballeu amb el Selector, també podeu utilitzar els camps d'entrada numèrica de la barra de controls d'eines (a la part superior del dibuix) per a introduir valors exactes per a les coordenades (X i Y) i la mida (alçada i amplada) de la selecció.</flowDiv>
+   <flowDiv>Ara torneu a fer clic en el rectangle. Les nanses canvien. Ara podeu:</flowDiv>
   </flowRoot>
-  <rect id="bu" x="20" y="1454" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <circle transform="translate(35 1360.1)" r="2"/>
+  <rect id="bu" x="40" y="1354.1" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bu"/>
    </flowRegion>
-   <flowDiv>Transformació mitjançant tecles</flowDiv>
+   <flowDiv><flowSpan font-style="italic">Girar</flowSpan> l'objecte arrossegant les nanses dels cantons (amb <flowSpan font-weight="bold">Ctrl</flowSpan> limiteu la rotació a passos de 15 graus. Arrossegueu la creu per a posicionar el centre de rotació).</flowDiv>
   </flowRoot>
-  <rect id="bt" x="20" y="1466.5" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1388.1)" r="2"/>
+  <rect id="bt" x="40" y="1382.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bt"/>
    </flowRegion>
-   <flowDiv>Una de les característiques de l'Inkscape que el fa diferent de la majoria d'editors vectorials és l'èmfasi en l'accessibilitat pel teclat. Difícilment trobarem cap ordre o acció que no es pugui fer des del teclat, i la transformació d'objectes no és cap excepció.</flowDiv>
+   <flowDiv><flowSpan font-style="italic">Esbiaixar</flowSpan> (cisallar) l'objecte arrossegant les nanses dels costats (amb <flowSpan font-weight="bold">Ctrl</flowSpan> limiteu l'esbiaixat a passos de 15 graus).</flowDiv>
   </flowRoot>
-  <rect id="bs" x="20" y="1505.2" width="300" height="1e3px" display="none"/>
+  <rect id="bs" x="20" y="1410.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bs"/>
    </flowRegion>
-   <flowDiv>Podeu usar el teclat per a moure (tecles de <flowSpan font-weight="bold">fletxa</flowSpan>), escalar (tecles <flowSpan font-weight="bold">&lt;</flowSpan> i <flowSpan font-weight="bold">&gt;</flowSpan>), i girar (tecles <flowSpan font-weight="bold">[</flowSpan> i <flowSpan font-weight="bold">]</flowSpan>) objectes. Els moviments i les escales predefinits són per 2 px; amb <flowSpan font-weight="bold">Maj.</flowSpan>, moveu 10 vegades més. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> i <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> amplien o redueixen al 200% o al 50% de l'original, respectivament. Els girs predefinits són de 15º, i amb <flowSpan font-weight="bold">Ctrl</flowSpan>, de 90º.</flowDiv>
+   <flowDiv>Mentre treballeu amb el Selector, també podeu utilitzar els camps d'entrada numèrica de la barra de controls d'eines (a la part superior del dibuix) per a introduir valors exactes per a les coordenades (X i Y) i la mida (alçada i amplada) de la selecció.</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="1554.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="br" x="20" y="1454" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>Però potser les més útils són les <flowSpan font-style="italic">transformacions a escala de píxel</flowSpan>, que s'invoquen prement <flowSpan font-weight="bold">Alt</flowSpan> amb les tecles de transformació. Per exemple, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">fletxes</flowSpan> mourà la selecció 1 <flowSpan font-style="italic">píxel de pantalla</flowSpan> (per exemple, 1 píxel del vostre monitor). Això significa que si amplieu, podeu moure objectes amb una precisió molt gran, si utilitzeu <flowSpan font-weight="bold">Alt</flowSpan> amb la drecera de teclat. Al contrari, si reduïu, la precisió serà menor quan utilitzeu la tecla <flowSpan font-weight="bold">Alt</flowSpan>. Podeu variar quina precisió necessiteu per a la tasca que esteu fent utilitzant nivells diferents d'ampliació o reducció.</flowDiv>
+   <flowDiv>Transformació mitjançant tecles</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="1634.3" width="300" height="1e3px" display="none"/>
+  <rect id="bq" x="20" y="1466.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>De manera similar, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> i <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> escalen la selecció de tal manera que la seva mida visible varia un píxel, i <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> i <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> la giren de tal manera que el seu punt més allunyat del centre es mou un píxel.</flowDiv>
+   <flowDiv>Una de les característiques de l'Inkscape que el fa diferent de la majoria d'editors vectorials és l'èmfasi en l'accessibilitat pel teclat. Difícilment trobarem cap ordre o acció que no es pugui fer des del teclat, i la transformació d'objectes no és cap excepció.</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="1672.9" width="300" height="1e3px" display="none"/>
+  <rect id="bp" x="20" y="1505.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bp"/>
    </flowRegion>
-   <flowDiv>Nota: els usuaris de Linux podrien no obtenir els resultats esperats amb <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">fletxa</flowSpan> i algunes altres combinacions de tecles si el gestor de finestres captura aquests esdeveniments abans que arribin a l'Inkscape (i els utilitza per a fer coses com canviar d'espai de treball). Una solució seria canviar la configuració del gestor de finestres.</flowDiv>
+   <flowDiv>Podeu usar el teclat per a moure (tecles de <flowSpan font-weight="bold">fletxa</flowSpan>), escalar (tecles <flowSpan font-weight="bold">&lt;</flowSpan> i <flowSpan font-weight="bold">&gt;</flowSpan>), i girar (tecles <flowSpan font-weight="bold">[</flowSpan> i <flowSpan font-weight="bold">]</flowSpan>) objectes. Els moviments i les escales predefinits són per 2 px; amb <flowSpan font-weight="bold">Maj.</flowSpan>, moveu 10 vegades més. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> i <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> amplien o redueixen al 200% o al 50% de l'original, respectivament. Els girs predefinits són de 15º, i amb <flowSpan font-weight="bold">Ctrl</flowSpan>, de 90º.</flowDiv>
   </flowRoot>
-  <rect id="bo" x="20" y="1727.6" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bo" x="20" y="1554.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bo"/>
    </flowRegion>
-   <flowDiv>Seleccions múltiples</flowDiv>
+   <flowDiv>Però potser les més útils són les <flowSpan font-style="italic">transformacions a escala de píxel</flowSpan>, que s'invoquen prement <flowSpan font-weight="bold">Alt</flowSpan> amb les tecles de transformació. Per exemple, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">fletxes</flowSpan> mourà la selecció 1 <flowSpan font-style="italic">píxel de pantalla</flowSpan> (per exemple, 1 píxel del vostre monitor). Això significa que si amplieu, podeu moure objectes amb una precisió molt gran, si utilitzeu <flowSpan font-weight="bold">Alt</flowSpan> amb la drecera de teclat. Al contrari, si reduïu, la precisió serà menor quan utilitzeu la tecla <flowSpan font-weight="bold">Alt</flowSpan>. Podeu variar quina precisió necessiteu per a la tasca que esteu fent utilitzant nivells diferents d'ampliació o reducció.</flowDiv>
   </flowRoot>
-  <rect id="bn" x="20" y="1740.1" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="1634.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bn"/>
+   </flowRegion>
+   <flowDiv>De manera similar, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> i <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> escalen la selecció de tal manera que la seva mida visible varia un píxel, i <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> i <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> la giren de tal manera que el seu punt més allunyat del centre es mou un píxel.</flowDiv>
+  </flowRoot>
+  <rect id="bm" x="20" y="1672.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bm"/>
+   </flowRegion>
+   <flowDiv>Nota: els usuaris de Linux podrien no obtenir els resultats esperats amb <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">fletxa</flowSpan> i algunes altres combinacions de tecles si el gestor de finestres captura aquests esdeveniments abans que arribin a l'Inkscape (i els utilitza per a fer coses com canviar d'espai de treball). Una solució seria canviar la configuració del gestor de finestres.</flowDiv>
+  </flowRoot>
+  <rect id="bl" x="20" y="1727.6" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#bl"/>
+   </flowRegion>
+   <flowDiv>Seleccions múltiples</flowDiv>
+  </flowRoot>
+  <rect id="bk" x="20" y="1740.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bk"/>
    </flowRegion>
    <flowDiv>Podeu seleccionar simultàniament qualsevol nombre d'objectes amb <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan>. O podeu <flowSpan font-weight="bold">arrossegar</flowSpan> al voltant dels objectes que voleu seleccionar; això es diu la <flowSpan font-style="italic">selecció de la cinta de goma</flowSpan> (el selector crea una cinta de goma en arrossegar des d'un espai buit; no obstant això, si premeu <flowSpan font-weight="bold">Maj</flowSpan> abans de començar a arrossegar, l'Inkscape crearà sempre la cinta de goma). Practiqueu-ho seleccionant les tres formes següents:</flowDiv>
   </flowRoot>
   <rect transform="translate(20 1808.1)" x="84.63" y="6.0478" width="25.253" height="26.656" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt"/>
   <path transform="translate(20 1808.1)" d="m166.54 18.915c0 7.8776-7.8516 14.264-17.537 14.264s-17.537-6.386-17.537-14.264c0-7.8775 7.8516-14.264 17.537-14.264s17.537 6.386 17.537 14.264z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1808.1)" d="m213.42 29.945-11.509-2.8097-8.8394 7.8882-0.88434-11.814-10.234-5.9692 10.963-4.4919 2.5147-11.577 7.6597 9.0381 11.788-1.186-6.2288 10.078z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
-  <rect id="bm" x="20" y="1856.2" width="300" height="1e3px" display="none"/>
+  <rect id="bj" x="20" y="1856.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bm"/>
+    <use xlink:href="#bj"/>
    </flowRegion>
    <flowDiv>Ara, useu la cinta de goma (arrossegant-hi o amb <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">arrossegar</flowSpan>) per a seleccionar les dues el·lipsis, però no el rectangle:</flowDiv>
   </flowRoot>
   <rect transform="translate(20 1892.2)" x="74.428" y="1.7363" width="151.14" height="39.698" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".93523pt"/>
   <path transform="translate(20 1892.2)" d="m141.19 16.262c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1892.2)" d="m168.87 16.619c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
-  <rect id="bl" x="20" y="1945.1" width="300" height="1e3px" display="none"/>
+  <rect id="bi" x="20" y="1945.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bl"/>
-   </flowRegion>
-   <flowDiv>Cada objecte individual dins d'una selecció mostra una <flowSpan font-style="italic">petita marca</flowSpan>; per defecte, un diamant rectangular. Aquestes marques fan que sigui fàcil veure d'una ullada què hi ha seleccionat i què no. Per exemple, si seleccioneu les dues el·lipsis i el rectangle, sense les marques de diamant us seria difícil endevinar si les el·lipsis estan seleccionades o no.</flowDiv>
-  </flowRoot>
-  <rect id="bk" x="20" y="1994.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bk"/>
-   </flowRegion>
-   <flowDiv>Fent <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> sobre un objecte seleccionat, se l'exclou de la selecció. Seleccioneu els tres objectes anteriors i després utilitzeu <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> per a excloure les dues el·lipsis de la selecció i deixar només el rectangle.</flowDiv>
-  </flowRoot>
-  <rect id="bj" x="20" y="2033" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bj"/>
-   </flowRegion>
-   <flowDiv>Prement <flowSpan font-weight="bold">Esc</flowSpan> es desfà la selecció de tots els objectes. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> selecciona tots els objectes de la capa actual (si no n'heu creada cap, és igual que tots els objectes del document). El comportament predefinit de la drecera <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> es por ajustar a la configuració.</flowDiv>
-  </flowRoot>
-  <rect id="bi" x="20" y="2077.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>Agrupació</flowDiv>
+   <flowDiv>Cada objecte individual dins d'una selecció mostra una <flowSpan font-style="italic">petita marca</flowSpan>; per defecte, un diamant rectangular. Aquestes marques fan que sigui fàcil veure d'una ullada què hi ha seleccionat i què no. Per exemple, si seleccioneu les dues el·lipsis i el rectangle, sense les marques de diamant us seria difícil endevinar si les el·lipsis estan seleccionades o no.</flowDiv>
   </flowRoot>
-  <rect id="bh" x="20" y="2089.7" width="300" height="1e3px" display="none"/>
+  <rect id="bh" x="20" y="1994.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
+   </flowRegion>
+   <flowDiv>Fent <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> sobre un objecte seleccionat, se l'exclou de la selecció. Seleccioneu els tres objectes anteriors i després utilitzeu <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> per a excloure les dues el·lipsis de la selecció i deixar només el rectangle.</flowDiv>
+  </flowRoot>
+  <rect id="bg" x="20" y="2033" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bg"/>
+   </flowRegion>
+   <flowDiv>Prement <flowSpan font-weight="bold">Esc</flowSpan> es desfà la selecció de tots els objectes. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> selecciona tots els objectes de la capa actual (si no n'heu creada cap, és igual que tots els objectes del document). El comportament predefinit de la drecera <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> es por ajustar a la configuració.</flowDiv>
+  </flowRoot>
+  <rect id="bf" x="20" y="2077.1" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#bf"/>
+   </flowRegion>
+   <flowDiv>Agrupació</flowDiv>
+  </flowRoot>
+  <rect id="be" x="20" y="2089.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#be"/>
    </flowRegion>
    <flowDiv>Poden combinar-se diversos objectes en un <flowSpan font-style="italic">grup</flowSpan>. Un grup es comporta com un únic objecte quan l'arrossegueu o el transformeu. A sota, els tres objectes de l'esquerra són independents; els mateixos tres objectes a la dreta estan agrupats. Proveu d'arrossegar el grup.</flowDiv>
   </flowRoot>
@@ -606,81 +606,81 @@
    <path transform="translate(104.03 224.65)" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" inkscape:connector-curvature="0"/>
    <path transform="translate(86.386 261.2)" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="bg" x="20" y="2214.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bg"/>
-   </flowRegion>
-   <flowDiv>Per a crear un grup, seleccioneu un o més objectes i feu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">G</flowSpan>. Per a desfer un o més grups, seleccioneu-los i premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>. També es pot accedir a aquestes accions fent <flowSpan font-weight="bold">clic dret</flowSpan>, al menú <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objecte</flowSpan> o a la barra d'ordres. Els propis grups poden agrupar-se, com qualsevol altre objecte; aquests grups recursius poden descendir fins a un nivell d'agrupació indefinit. Tot i això, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> només desfà el nivell superior d'agrupació en una selecció. Si voleu desfer completament una agrupació de grups en grups de molts nivells, haureu de fer <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> repetidament (o utilitzar <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Organitza</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Desagrupació profunda</flowSpan>).</flowDiv>
-  </flowRoot>
-  <rect id="bf" x="20" y="2296.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bf"/>
-   </flowRegion>
-   <flowDiv>Si voleu editar un objecte de dins d'un grup, no cal que desfeu el grup. Només cal que feu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> sobre aquest objecte per a seleccionar-lo i el podreu editar individualment, o feu <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> sobre diversos objectes (dins o fora de qualsevol grup) per a una selecció múltiple sense tenir en compte els grups.</flowDiv>
-  </flowRoot>
-  <rect id="be" x="20" y="2345.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#be"/>
-   </flowRegion>
-   <flowDiv>També podeu fer <flowSpan font-weight="bold">doble clic</flowSpan> en un grup, per a entrar-hi i accedir a tots els objectes de dins sense desfer el grup. Feu <flowSpan font-weight="bold">doble clic</flowSpan> en qualsevol àrea buida del dibuix per a abandonar el grup.</flowDiv>
-  </flowRoot>
-  <rect id="bd" x="20" y="2384.2" width="300" height="1e3px" display="none"/>
+  <rect id="bd" x="20" y="2214.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>Proveu de moure o transformar les formes individuals del grup (a dalt a la dreta) sense desfer el grup, després desfeu la selecció i seleccioneu el grup normalment per a veure que encara queda agrupat.</flowDiv>
+   <flowDiv>Per a crear un grup, seleccioneu un o més objectes i feu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">G</flowSpan>. Per a desfer un o més grups, seleccioneu-los i premeu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>. També es pot accedir a aquestes accions fent <flowSpan font-weight="bold">clic dret</flowSpan>, al menú <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objecte</flowSpan> o a la barra d'ordres. Els propis grups poden agrupar-se, com qualsevol altre objecte; aquests grups recursius poden descendir fins a un nivell d'agrupació indefinit. Tot i això, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> només desfà el nivell superior d'agrupació en una selecció. Si voleu desfer completament una agrupació de grups en grups de molts nivells, haureu de fer <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> repetidament (o utilitzar <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Organitza</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Desagrupació profunda</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="2428.2" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bc" x="20" y="2296.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
-   <flowDiv>Emplenament i contorn</flowDiv>
+   <flowDiv>Si voleu editar un objecte de dins d'un grup, no cal que desfeu el grup. Només cal que feu <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> sobre aquest objecte per a seleccionar-lo i el podreu editar individualment, o feu <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> sobre diversos objectes (dins o fora de qualsevol grup) per a una selecció múltiple sense tenir en compte els grups.</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="2440.7" width="300" height="1e3px" display="none"/>
+  <rect id="bb" x="20" y="2345.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv>Probablement, la manera més simple de pintar a un objecte una mica de color és seleccionar-lo i fer clic en una <flowSpan font-style="italic">mostra</flowSpan> (camp de color) en la paleta de sota el dibuix per a pintar-lo (canviar el color del seu emplenament).</flowDiv>
+   <flowDiv>També podeu fer <flowSpan font-weight="bold">doble clic</flowSpan> en un grup, per a entrar-hi i accedir a tots els objectes de dins sense desfer el grup. Feu <flowSpan font-weight="bold">doble clic</flowSpan> en qualsevol àrea buida del dibuix per a abandonar el grup.</flowDiv>
   </flowRoot>
-  <rect id="ba" x="20" y="2479.2" width="300" height="1e3px" display="none"/>
+  <rect id="ba" x="20" y="2384.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
-   <flowDiv>Altrament, podeu obrir el diàleg de Mostres des del menú <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Visualitza</flowSpan> (o prement <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">W</flowSpan>). Seleccioneu quina paleta voleu utilitzar fent clic al trianglet del cantó superior dret, seleccioneu un objecte i feu clic a qualsevol mostra per a emplenar l'objecte (canviar el color del seu emplenament).</flowDiv>
+   <flowDiv>Proveu de moure o transformar les formes individuals del grup (a dalt a la dreta) sense desfer el grup, després desfeu la selecció i seleccioneu el grup normalment per a veure que encara queda agrupat.</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2528.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="az" x="20" y="2428.2" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
-   <flowDiv>Més potent és el diàleg «Emplenament i traç» del menú <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objecte</flowSpan> (o premeu <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F</flowSpan>). Seleccioneu la forma de sota i obriu el diàleg «Emplenament i traç».</flowDiv>
+   <flowDiv>Emplenament i contorn</flowDiv>
   </flowRoot>
-  <path transform="translate(20 2564.9)" d="m216.26 17.909c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="ay" x="20" y="2610.9" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="2440.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv>Veureu que el diàleg té tres pestanyes: Emplenament, Color del contorn i Estil del contorn. La pestanya Emplenament permet editar l'emplenament (interior) dels objectes seleccionats. Utilitzant els botons de sota la pestanya podeu seleccionar els tipus d'emplenament: sense emplenat (el botó amb la X), un únic color, així com degradat lineal o radial. La forma anterior té activada el botó corresponent a un únic color.</flowDiv>
+   <flowDiv>Probablement, la manera més simple de pintar a un objecte una mica de color és seleccionar-lo i fer clic en una <flowSpan font-style="italic">mostra</flowSpan> (camp de color) en la paleta de sota el dibuix per a pintar-lo (canviar el color del seu emplenament).</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="2670.8" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="2479.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
-   <flowDiv>Més avall veureu una col·lecció de <flowSpan font-style="italic">selectors de color</flowSpan>, cadascun a la seva pròpia pestanya: RGB, HSL, HSV, CMYK, Roda o CSM. Potser el més adequat és el selector de la Roda, on podeu girar el triangle per a triar un to de la roda, i després seleccionar el color d'aquest to dins del triangle. Tots els selectors de color tenen un control anomenat «A» per a ajustar <flowSpan font-style="italic">l'alfa</flowSpan> (opacitat) del color seleccionat.</flowDiv>
+   <flowDiv>Altrament, podeu obrir el diàleg de Mostres des del menú <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Visualitza</flowSpan> (o prement <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">W</flowSpan>). Seleccioneu quina paleta voleu utilitzar fent clic al trianglet del cantó superior dret, seleccioneu un objecte i feu clic a qualsevol mostra per a emplenar l'objecte (canviar el color del seu emplenament).</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="2730.6" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="2528.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aw"/>
+   </flowRegion>
+   <flowDiv>Més potent és el diàleg «Emplenament i traç» del menú <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objecte</flowSpan> (o premeu <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F</flowSpan>). Seleccioneu la forma de sota i obriu el diàleg «Emplenament i traç».</flowDiv>
+  </flowRoot>
+  <path transform="translate(20 2564.9)" d="m216.26 17.909c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <rect id="av" x="20" y="2610.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#av"/>
+   </flowRegion>
+   <flowDiv>Veureu que el diàleg té tres pestanyes: Emplenament, Color del contorn i Estil del contorn. La pestanya Emplenament permet editar l'emplenament (interior) dels objectes seleccionats. Utilitzant els botons de sota la pestanya podeu seleccionar els tipus d'emplenament: sense emplenat (el botó amb la X), un únic color, així com degradat lineal o radial. La forma anterior té activada el botó corresponent a un únic color.</flowDiv>
+  </flowRoot>
+  <rect id="au" x="20" y="2670.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#au"/>
+   </flowRegion>
+   <flowDiv>Més avall veureu una col·lecció de <flowSpan font-style="italic">selectors de color</flowSpan>, cadascun a la seva pròpia pestanya: RGB, HSL, HSV, CMYK, Roda o CSM. Potser el més adequat és el selector de la Roda, on podeu girar el triangle per a triar un to de la roda, i després seleccionar el color d'aquest to dins del triangle. Tots els selectors de color tenen un control anomenat «A» per a ajustar <flowSpan font-style="italic">l'alfa</flowSpan> (opacitat) del color seleccionat.</flowDiv>
+  </flowRoot>
+  <rect id="at" x="20" y="2730.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#at"/>
    </flowRegion>
    <flowDiv>Quan seleccioneu un objecte, el selector de color s'actualitza amb el seu emplenament i contorn (quan se selecciona més d'un objecte, es mostra el seu color <flowSpan font-style="italic">mitjà</flowSpan>). Jugueu amb aquestes mostres o creeu la vostra pròpia:</flowDiv>
   </flowRoot>
@@ -691,10 +691,10 @@
   <path transform="translate(20 2777.1)" d="m213.78 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#3d0fa1" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2777.1)" d="m245.6 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#6fe225" fill-opacity=".74902" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2777.1)" d="m277.42 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#ff3077" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <rect id="av" x="20" y="2824.3" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="2824.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#av"/>
+    <use xlink:href="#as"/>
    </flowRegion>
    <flowDiv>Utilitzant la pestanya Color del traç podeu eliminar el <flowSpan font-style="italic">traç</flowSpan> (contorn) de l'objecte, o assignar-li qualsevol color o transparència:</flowDiv>
   </flowRoot>
@@ -706,10 +706,10 @@
   <path transform="translate(20 2860.2)" d="m222.48 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#16417c" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2860.2)" d="m252.35 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#7c7016" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2860.2)" d="m278.89 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="au" x="20" y="2906.8" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="2906.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#au"/>
+    <use xlink:href="#ar"/>
    </flowRegion>
    <flowDiv>L'última pestanya, Estil del traç, us permet definir el gruix i altres paràmetres del traç:</flowDiv>
   </flowRoot>
@@ -720,10 +720,10 @@
   <path transform="translate(20 2932.2)" d="m205.14 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 6.95506" stroke-width="1.7388" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2932.2)" d="m241.29 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 3.47753, 1.73877, 3.47753" stroke-width="1.7388" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2932.2)" d="m277.43 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.811426, 0.811426" stroke-width=".81143" inkscape:connector-curvature="0"/>
-  <rect id="at" x="20" y="2986.5" width="300" height="1e3px" display="none"/>
+  <rect id="aq" x="20" y="2986.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#at"/>
+    <use xlink:href="#aq"/>
    </flowRegion>
    <flowDiv>Finalment, en comptes d'un únic color, podeu crear <flowSpan font-style="italic">degradats</flowSpan> de color tant per als emplenaments com per als traços:</flowDiv>
   </flowRoot>
@@ -771,39 +771,39 @@
   <path transform="translate(20 3022.4)" d="m208.72 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dj)" fill-rule="evenodd" stroke="url(#dq)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3022.4)" d="m192.1 20.273c0-9.8338 13.238-17.806 29.568-17.806s29.568 7.9719 29.568 17.806-13.238 17.806-29.568 17.806-29.568-7.9719-29.568-17.806z" fill="url(#dm)" fill-rule="evenodd" stroke="url(#dn)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3022.4)" d="m286.67 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dk)" fill-rule="evenodd" stroke="url(#dl)" stroke-dasharray="3.76251, 3.76251" stroke-width="3.7625" inkscape:connector-curvature="0"/>
-  <rect id="as" x="20" y="3073.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#as"/>
-   </flowRegion>
-   <flowDiv>Quan canvieu d'un únic color a un degradat, el degradat nou utilitza l'anterior color, des de l'opac al transparent. Canvieu a l'eina de degradat (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F1</flowSpan> o <flowSpan font-weight="bold">G</flowSpan>) per a arrossegar les <flowSpan font-style="italic">nanses de degradat</flowSpan>: els controls que apareixen connectats per línies i que defineixen la direcció i la longitud del degradat. Quan alguna de les nanses de degradats se selecciona (ressaltada en blau), el diàleg d'Emplenament i traç estableix (i mostra) el color de la nansa en comptes del color de tot l'objecte seleccionat.</flowDiv>
-  </flowRoot>
-  <rect id="ar" x="20" y="3144.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ar"/>
-   </flowRegion>
-   <flowDiv>Hi ha una altra manera de canviar el color d'un objecte: fent servir l'eina Comptagotes (<flowSpan font-weight="bold">F7</flowSpan> o <flowSpan font-weight="bold">D</flowSpan>). <flowSpan font-weight="bold">Feu clic</flowSpan> en qualsevol lloc del dibuix amb aquesta eina, i el color seleccionat s'assignarà a l'emplenament de l'objecte seleccionat (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> assignarà el color al traç).</flowDiv>
-  </flowRoot>
-  <rect id="aq" x="20" y="3188.4" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#aq"/>
-   </flowRegion>
-   <flowDiv>Duplicació, alineació, distribució</flowDiv>
-  </flowRoot>
-  <rect id="ap" x="20" y="3200.9" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="3073.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
-   <flowDiv>Una de les operacions més comunes és <flowSpan font-style="italic">duplicar</flowSpan> un objecte (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>). El duplicat se situa exactament al damunt de l'original i està seleccionat, de manera que el podeu arrossegar amb el <flowSpan font-weight="bold">ratolí</flowSpan> o les tecles de <flowSpan font-weight="bold">fletxa</flowSpan>. Per a practicar, proveu d'afegir còpies d'aquest quadrat negre un al costat de l'altre en línia:</flowDiv>
+   <flowDiv>Quan canvieu d'un únic color a un degradat, el degradat nou utilitza l'anterior color, des de l'opac al transparent. Canvieu a l'eina de degradat (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F1</flowSpan> o <flowSpan font-weight="bold">G</flowSpan>) per a arrossegar les <flowSpan font-style="italic">nanses de degradat</flowSpan>: els controls que apareixen connectats per línies i que defineixen la direcció i la longitud del degradat. Quan alguna de les nanses de degradats se selecciona (ressaltada en blau), el diàleg d'Emplenament i traç estableix (i mostra) el color de la nansa en comptes del color de tot l'objecte seleccionat.</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 3256.6)" x="10" width="11.092" height="11.092" fill-rule="evenodd"/>
-  <rect id="ao" x="20" y="3279.7" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="3144.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
+   </flowRegion>
+   <flowDiv>Hi ha una altra manera de canviar el color d'un objecte: fent servir l'eina Comptagotes (<flowSpan font-weight="bold">F7</flowSpan> o <flowSpan font-weight="bold">D</flowSpan>). <flowSpan font-weight="bold">Feu clic</flowSpan> en qualsevol lloc del dibuix amb aquesta eina, i el color seleccionat s'assignarà a l'emplenament de l'objecte seleccionat (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> assignarà el color al traç).</flowDiv>
+  </flowRoot>
+  <rect id="an" x="20" y="3188.4" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#an"/>
+   </flowRegion>
+   <flowDiv>Duplicació, alineació, distribució</flowDiv>
+  </flowRoot>
+  <rect id="am" x="20" y="3200.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#am"/>
+   </flowRegion>
+   <flowDiv>Una de les operacions més comunes és <flowSpan font-style="italic">duplicar</flowSpan> un objecte (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>). El duplicat se situa exactament al damunt de l'original i està seleccionat, de manera que el podeu arrossegar amb el <flowSpan font-weight="bold">ratolí</flowSpan> o les tecles de <flowSpan font-weight="bold">fletxa</flowSpan>. Per a practicar, proveu d'afegir còpies d'aquest quadrat negre un al costat de l'altre en línia:</flowDiv>
+  </flowRoot>
+  <rect transform="translate(20 3256.6)" x="10" width="11.092" height="11.092" fill-rule="evenodd"/>
+  <rect id="al" x="20" y="3279.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#al"/>
    </flowRegion>
    <flowDiv>És probable que les còpies del quadrat s'aliniin d'una manera més o menys aleatòria. Aquí és on és d'utilitat el diàleg <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objecte</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Alinea i distribueix</flowSpan> (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>). Seleccioneu tots els quadrats (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> o arrossegant una cinta de goma), obriu el diàleg i premeu el botó «Centra en l'eix horitzontal», després el botó «Distribueix uniformement l'espaiat horitzontal entre els objectes» (llegiu els indicadors de funcions dels botons). Ara els objectes estan distribuïts de manera que els intervals horitzontals entre ells són iguals. Altres exemples d'alineació i distribució:</flowDiv>
   </flowRoot>
@@ -872,24 +872,24 @@
   <path transform="translate(20 3368.7)" d="m252.34 52.406c0 0.1579-0.21227 1.6131 0.73678 2.2376" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3368.7)" d="m256.85 52.183c1.0548 1.2333 1.1304 2.6855 6.631 3.5801" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3368.7)" d="m267.26 52.854c0 0.8403-0.10579 1.6705 0.73678 2.4614" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <rect id="an" x="20" y="3442.1" width="300" height="1e3px" display="none"/>
+  <rect id="ak" x="20" y="3442.1" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#an"/>
+    <use xlink:href="#ak"/>
    </flowRegion>
    <flowDiv>Ordenació en Z</flowDiv>
   </flowRoot>
-  <rect id="am" x="20" y="3453.1" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="3453.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#am"/>
+    <use xlink:href="#aj"/>
    </flowRegion>
    <flowDiv>El terme <flowSpan font-style="italic">ordenació en z</flowSpan> es refereix a l'ordre d'apilament dels objectes en un dibuix, és a dir, a quins objectes són a dalt i tapen d'altres, de manera que els objectes del fons no són (completament) visibles. Les dues ordres al menú <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objecte</flowSpan>, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Puja al capdamunt</flowSpan> (la tecla <flowSpan font-weight="bold">Inici</flowSpan>) i <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Baixa al capdavall</flowSpan> (la tecla <flowSpan font-weight="bold">Fi</flowSpan>), mouran els objectes seleccionats a dalt de tot o a sota de tot de l'ordenació en z de la capa actual. Dues ordres més, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Puja</flowSpan> (<flowSpan font-weight="bold">AvPg</flowSpan>) i <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Baixa</flowSpan> (<flowSpan font-weight="bold">RePg</flowSpan>), enfonsaran o aixecaran la selecció <flowSpan font-style="italic">només un pas</flowSpan>, és a dir, la mouran sobre o sota un objecte no seleccionat en l'ordenació en z (només compten els objectes amb superposició, basant-se en les seves caixes d'ancoratge respectives).</flowDiv>
   </flowRoot>
-  <rect id="al" x="20" y="3545.4" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="3545.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#al"/>
+    <use xlink:href="#ai"/>
    </flowRegion>
    <flowDiv>Practiqueu aquestes ordres invertint l'ordre en z dels objectes següents, de forma que l'el·lipsi de més a l'esquerra quedi a dalt de tot i la de més a la dreta a sota de tot:</flowDiv>
   </flowRoot>
@@ -899,69 +899,69 @@
   <path transform="translate(20 3581.3)" d="m198.09 18.86c0 5.622-5.7804 10.18-12.911 10.18-7.1304 0-12.911-4.5576-12.911-10.18 0-5.6222 5.7804-10.18 12.911-10.18 7.1304 0 12.911 4.5575 12.911 10.18z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3581.3)" d="m212.19 22.63c0 4.4296-5.2549 8.0203-11.737 8.0203-6.4822 0-11.737-3.5908-11.737-8.0203 0-4.4295 5.2549-8.0203 11.737-8.0203 6.4822 0 11.737 3.5909 11.737 8.0203z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3581.3)" d="m219.23 17.597c0 3.2369-3.2843 5.861-7.3357 5.861-4.0514 0-7.3357-2.6241-7.3357-5.861 0-3.237 3.2843-5.861 7.3357-5.861 4.0514 0 7.3357 2.624 7.3357 5.861z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
-  <rect id="ak" x="20" y="3646.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ak"/>
-   </flowRegion>
-   <flowDiv>Una drecera de selecció molt útil és la tecla <flowSpan font-weight="bold">Tab</flowSpan>. Si no hi ha res seleccionat, se selecciona l'objecte del capdavall; en cas contrari se selecciona l'objecte <flowSpan font-style="italic">per sobre de l'objecte seleccionat</flowSpan> en l'ordre z. <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> ho fa a l'inrevés, començant des del capdamunt i baixant cap avall. Ja que els objectes creats s'afegeixen al damunt de la pila, en fer <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> sense que hi hagi res seleccionat us permet seleccionar convenientment el <flowSpan font-style="italic">darrer</flowSpan> objecte creat. Practiqueu amb <flowSpan font-weight="bold">Tab</flowSpan> i <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> a la pila d'el·lipsis de dalt.</flowDiv>
-  </flowRoot>
-  <rect id="aj" x="20" y="3722.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#aj"/>
-   </flowRegion>
-   <flowDiv>Selecció per sota i arrossegar la selecció</flowDiv>
-  </flowRoot>
-  <rect id="ai" x="20" y="3734.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ai"/>
-   </flowRegion>
-   <flowDiv>Què podeu fer si l'objecte que necessiteu està amagat darrere un altre objecte? Encara podrieu veure l'objecte de sota si el de sobre és (parcialment) transparent, però en clicar al damunt seleccionareu l'objecte de sobre, no pas el que necessiteu.</flowDiv>
-  </flowRoot>
-  <rect id="ah" x="20" y="3773.2" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="3646.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
    </flowRegion>
-   <flowDiv>Per a això serveix <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan>. Primer <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> selecciona l'objecte que hi ha més amunt, com faria un clic normal. En canvi, el següent <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> en el mateix punt seleccionarà l'objecte que hi ha a <flowSpan font-style="italic">sota</flowSpan> del superior; després el següent, etc. Per tant, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> consecutius faran un bucle de dalt a baix per tot l'ordre z de la pila d'objectes del punt on feu clic. Quan s'arriba a l'objecte del capdavall, el següent <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> seleccionarà, com és natural, l'objecte del capdamunt.</flowDiv>
+   <flowDiv>Una drecera de selecció molt útil és la tecla <flowSpan font-weight="bold">Tab</flowSpan>. Si no hi ha res seleccionat, se selecciona l'objecte del capdavall; en cas contrari se selecciona l'objecte <flowSpan font-style="italic">per sobre de l'objecte seleccionat</flowSpan> en l'ordre z. <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> ho fa a l'inrevés, començant des del capdamunt i baixant cap avall. Ja que els objectes creats s'afegeixen al damunt de la pila, en fer <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> sense que hi hagi res seleccionat us permet seleccionar convenientment el <flowSpan font-style="italic">darrer</flowSpan> objecte creat. Practiqueu amb <flowSpan font-weight="bold">Tab</flowSpan> i <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> a la pila d'el·lipsis de dalt.</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="3843.8" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="3722.1" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#ag"/>
+   </flowRegion>
+   <flowDiv>Selecció per sota i arrossegar la selecció</flowDiv>
+  </flowRoot>
+  <rect id="af" x="20" y="3734.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#af"/>
    </flowRegion>
-   <flowDiv>[Si esteu en Linux, podeu trobar-vos que <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> no funciona correctament. Per contra, podria moure tota la finestra de l'Inkscape. Això ocorre perquè el gestor de finestres ha reservat la drecera <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> per a una acció diferent. La manera de solucionar-ho és trobar la configuració del comportament de la finestra al gestor de finestres, i o bé desconnectar-ho, o bé assignar-li la tecla <flowSpan font-weight="bold">Meta</flowSpan> (coneguda com a tecla del <flowSpan font-weight="bold">Windows</flowSpan>), i així l'Inkscape i altres aplicacions poden usar la tecla <flowSpan font-weight="bold">Alt</flowSpan> amb llibertat].</flowDiv>
+   <flowDiv>Què podeu fer si l'objecte que necessiteu està amagat darrere un altre objecte? Encara podrieu veure l'objecte de sota si el de sobre és (parcialment) transparent, però en clicar al damunt seleccionareu l'objecte de sobre, no pas el que necessiteu.</flowDiv>
   </flowRoot>
-  <rect id="ae" x="20" y="3914.5" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="3773.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ae"/>
    </flowRegion>
-   <flowDiv>Tot això està molt bé, però un cop seleccionat l'objecte de sota, què podem fer-li? Podem utilitzar tecles per a transformar-lo, i podem arrossegar les nanses de selecció. Però en arrossegar el propi objecte es tornarà a reiniciar la selecció a l'objecte de dalt de tot (així és com ha de funcionar la funció de fer clic i arrosegar: primer selecciona l'objecte (de dalt de tot) sota el cursor, seguidament arrossega la selecció). Per a dir-li a l'Inkscape que arrossegui <flowSpan font-style="italic">el que ja hi ha seleccionat</flowSpan> sense seleccionar res més, useu <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrossegar</flowSpan>. Això mourà la selecció actual independentment d'on arrossegueu el ratolí.</flowDiv>
+   <flowDiv>Per a això serveix <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan>. Primer <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> selecciona l'objecte que hi ha més amunt, com faria un clic normal. En canvi, el següent <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> en el mateix punt seleccionarà l'objecte que hi ha a <flowSpan font-style="italic">sota</flowSpan> del superior; després el següent, etc. Per tant, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> consecutius faran un bucle de dalt a baix per tot l'ordre z de la pila d'objectes del punt on feu clic. Quan s'arriba a l'objecte del capdavall, el següent <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> seleccionarà, com és natural, l'objecte del capdamunt.</flowDiv>
   </flowRoot>
-  <rect id="ad" x="20" y="3995.7" width="300" height="1e3px" display="none"/>
+  <rect id="ad" x="20" y="3843.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ad"/>
+   </flowRegion>
+   <flowDiv>[Si esteu en Linux, podeu trobar-vos que <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> no funciona correctament. Per contra, podria moure tota la finestra de l'Inkscape. Això ocorre perquè el gestor de finestres ha reservat la drecera <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> per a una acció diferent. La manera de solucionar-ho és trobar la configuració del comportament de la finestra al gestor de finestres, i o bé desconnectar-ho, o bé assignar-li la tecla <flowSpan font-weight="bold">Meta</flowSpan> (coneguda com a tecla del <flowSpan font-weight="bold">Windows</flowSpan>), i així l'Inkscape i altres aplicacions poden usar la tecla <flowSpan font-weight="bold">Alt</flowSpan> amb llibertat].</flowDiv>
+  </flowRoot>
+  <rect id="ac" x="20" y="3914.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ac"/>
+   </flowRegion>
+   <flowDiv>Tot això està molt bé, però un cop seleccionat l'objecte de sota, què podem fer-li? Podem utilitzar tecles per a transformar-lo, i podem arrossegar les nanses de selecció. Però en arrossegar el propi objecte es tornarà a reiniciar la selecció a l'objecte de dalt de tot (així és com ha de funcionar la funció de fer clic i arrosegar: primer selecciona l'objecte (de dalt de tot) sota el cursor, seguidament arrossega la selecció). Per a dir-li a l'Inkscape que arrossegui <flowSpan font-style="italic">el que ja hi ha seleccionat</flowSpan> sense seleccionar res més, useu <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrossegar</flowSpan>. Això mourà la selecció actual independentment d'on arrossegueu el ratolí.</flowDiv>
+  </flowRoot>
+  <rect id="ab" x="20" y="3995.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ab"/>
    </flowRegion>
    <flowDiv>Practiqueu el <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">clic</flowSpan> i el <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrossegar</flowSpan> en les dos formes marrons sota el rectangle verd transparent:</flowDiv>
   </flowRoot>
   <path transform="translate(20 4031.7) matrix(.39512 .68437 -.68437 .39512 2799.7 -1592.7)" d="m126.89 3940.5c-1.7128 2.7762-13.227-1.9871-15.92-0.2673-2.6928 1.7197-2.717 13.972-5.8567 14.525-3.1397 0.5531-6.3535-10.32-9.5433-11.1s-13.307 5.7281-15.627 3.5431c-2.3203-2.1851 6.0756-11.819 4.6565-14.776-1.4191-2.9564-12.432-3.072-12.315-6.2422s12.009-3.7964 13.505-6.565c1.4954-2.7687-2.9446-13.24-0.39835-15.118 2.5463-1.8777 10.873 5.667 14.076 5.0626 3.2032-0.6043 7.3014-9.5359 10.365-8.6831s0.25246 11.285 2.778 13.344c2.5256 2.0584 12.649-0.7081 13.802 2.2959 1.1532 3.0041-8.7265 9.769-8.7641 12.932-0.0376 3.1628 10.955 8.2731 9.2423 11.049z" color="#000000" fill="#ac7335" inkscape:flatsided="false" inkscape:randomized="0.047" inkscape:rounded="0.21" sodipodi:arg1="0.52143444" sodipodi:arg2="0.97023339" sodipodi:cx="100.73942" sodipodi:cy="3927.1016" sodipodi:r1="28.739008" sodipodi:r2="16.983238" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(20 4031.7) matrix(.8326 .4807 -.4807 .8326 1967.2 -3288.2)" d="m107.62 3941.6c-0.52759 2.111-9.0763-3.5197-10.951-2.3937-2.4976 1.5003-1.9722 11.854-4.8626 12.594-2.1693 0.5554-1.5842-8.522-3.5626-9.4629-2.6361-1.2536-11.029 4.1052-13.221 2.1498-1.6453-1.4675 6.9505-5.6944 6.8942-7.9439-0.07507-2.9973-9.6434-9.8527-9.0821-12.757 0.42125-2.18 9.4727 5.1817 11.397 4.018 2.5638-1.5505 2.3375-12.598 5.2294-13.243 2.1704-0.4837 1.6931 9.0878 3.6599 10.096 2.6207 1.3439 12.061-3.374 14.214-1.3192 1.6159 1.5422-7.3719 4.7859-7.261 6.987 0.14775 2.9328 8.2486 8.462 7.5456 11.275z" color="#000000" fill="#ff9400" inkscape:flatsided="false" inkscape:randomized="0.047" inkscape:rounded="0.21" sodipodi:arg1="0.48833395" sodipodi:arg2="0.77161843" sodipodi:cx="90.665482" sodipodi:cy="3933.4641" sodipodi:r1="19.21225" sodipodi:r2="9.3934679" sodipodi:sides="6" sodipodi:type="star"/>
   <rect transform="translate(20 4031.7)" x="64.106" width="171.79" height="56.564" rx="10.424" ry="10.424" color="#000000" fill="#2dd268" fill-opacity=".29609"/>
-  <rect id="ab" x="20" y="4105.7" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="4105.7" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ab"/>
+    <use xlink:href="#aa"/>
    </flowRegion>
    <flowDiv>Selecció d'objectes similars</flowDiv>
   </flowRoot>
-  <rect id="aa" x="20" y="4118.2" width="300" height="1e3px" display="none"/>
+  <rect id="z" x="20" y="4118.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#aa"/>
+    <use xlink:href="#z"/>
    </flowRegion>
    <flowDiv>L'Inkscape pot seleccionar altres objectes similars a l'objecte seleccionat actualment. Per exemple, si voleu seleccionar tots els quadrats blaus de sota, seleccioneu primer un dels quadrats blaus i useu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Edita</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Selecciona el mateix</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Color de l'emplenament</flowSpan> des del menú (<flowSpan font-weight="bold">clic dret</flowSpan> en l'àrea de dibuix). Se seleccionaran tots els objectes amb el mateix color d'emplenat blau.</flowDiv>
   </flowRoot>
@@ -1004,24 +1004,24 @@
   <rect transform="translate(20 4186.2)" x="254.55" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
   <rect transform="translate(20 4186.2)" x="49.49" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
   <rect transform="translate(20 4186.2)" x="254.55" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect id="z" x="20" y="4247.2" width="300" height="1e3px" display="none"/>
+  <rect id="y" x="20" y="4247.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#z"/>
-   </flowRegion>
-   <flowDiv>A més de poder seleccionar pel color d'emplenament, podeu seleccionar objectes similars pel color del traç, l'estil del traç, emplenament i traç, o bé tipus d'objecte. Si no sou prou opcions per al vostre cas d'ús, proveu d'utilitzar el diàleg <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Edita</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Cerca i reemplaça</flowSpan>.</flowDiv>
-  </flowRoot>
-  <rect id="y" x="20" y="4291.3" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#y"/>
    </flowRegion>
-   <flowDiv>Conclusió</flowDiv>
+   <flowDiv>A més de poder seleccionar pel color d'emplenament, podeu seleccionar objectes similars pel color del traç, l'estil del traç, emplenament i traç, o bé tipus d'objecte. Si no sou prou opcions per al vostre cas d'ús, proveu d'utilitzar el diàleg <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Edita</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Cerca i reemplaça</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="x" x="20" y="4302.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="x" x="20" y="4291.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#x"/>
+   </flowRegion>
+   <flowDiv>Conclusió</flowDiv>
+  </flowRoot>
+  <rect id="w" x="20" y="4302.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#w"/>
    </flowRegion>
    <flowDiv>Amb això s'acaba el tutorial bàsic. Hi ha encara molt més sobre l'Inkscape, però amb les tècniques descrites aquí podreu crear gràfics simples i útils. Per a aprendre'n més, us recomanem que feu el Tutorial Avançat i els altres tutorials que trobareu en <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ajuda</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Tutorials</flowSpan>.</flowDiv>
   </flowRoot>
@@ -1039,7 +1039,7 @@
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
-   <flowDiv>Francesc Dorca — 2003, 2005; Jordi Mas — 2015, 2017; Artur V. — 2020</flowDiv>
+   <flowDiv>Francesc Dorca — 2003; Jordi Mas — 2015; Artur V. — 2020</flowDiv>
   </flowRoot>
   <use x="47" y="4436.7151141" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
   <rect id="ct" x="70" y="4430.7" width="230" height="1e3px" display="none"/>

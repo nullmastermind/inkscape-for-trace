@@ -259,154 +259,154 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#ee"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Formas</tspan></tspan></text>
-  <rect id="cc" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="bi" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#cc"/>
+    <use xlink:href="#bi"/>
    </flowRegion>
    <flowDiv>Este tutorial aborda as 4 ferramentas de formas geométricas: Retângulo, Círculo, Estrela e Polígono, Espiral. Veremos as capacidades das formas geométricas do Inkscape e sugerir exemplos de como e quando podem ser usados.</flowDiv>
   </flowRoot>
-  <rect id="bx" x="40" y="174.4" width="264" height="1e3px" display="none"/>
+  <rect id="be" x="40" y="174.4" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#bx"/>
+    <use xlink:href="#be"/>
    </flowRegion>
    <flowDiv>Use <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Arrows</flowSpan>, <flowSpan font-weight="bold">mousewheel</flowSpan>, or <flowSpan font-weight="bold">middle button drag</flowSpan> to scroll the page down. For basics of object creation, selection, and transformation, see the Basic tutorial in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Tutorials</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="214.72" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bb"/>
-   </flowRegion>
-   <flowDiv>O Inkscape tem 4 <flowSpan font-style="italic">ferramentas de formas geométricas</flowSpan> versáteis, cada uma delas permite criar e editar os seus próprios tipos de formas. Uma forma geométrica é um objeto que pode ser alterado de formas únicas dependendo do tipo, usando as <flowSpan font-style="italic">alças</flowSpan> e <flowSpan font-style="italic">parâmetros</flowSpan> numéricos que determinam a sua aparência.</flowDiv>
-  </flowRoot>
-  <rect id="av" x="20" y="263.98" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#av"/>
-   </flowRegion>
-   <flowDiv>For example, with a star you can alter the number of tips, their length, angle, rounding, etc. — but a star remains a star. A shape is “less free” than a simple path, but it's often more interesting and useful. You can always convert a shape to a path (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), but the reverse conversion is not possible.</flowDiv>
-  </flowRoot>
-  <rect id="au" x="20" y="313.27" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="214.72" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#au"/>
    </flowRegion>
-   <flowDiv>As ferramentas de forma são <flowSpan font-style="italic">Retângulo</flowSpan>, <flowSpan font-style="italic">Círculo</flowSpan>, <flowSpan font-style="italic">Estrela e Polígono</flowSpan>, e <flowSpan font-style="italic">Espiral</flowSpan>. Primeiro vamos ver como funcionam as ferramentas de formas geométricas; depois exploraremos cada uma delas em pormenor.</flowDiv>
+   <flowDiv>O Inkscape tem 4 <flowSpan font-style="italic">ferramentas de formas geométricas</flowSpan> versáteis, cada uma delas permite criar e editar os seus próprios tipos de formas. Uma forma geométrica é um objeto que pode ser alterado de formas únicas dependendo do tipo, usando as <flowSpan font-style="italic">alças</flowSpan> e <flowSpan font-style="italic">parâmetros</flowSpan> numéricos que determinam a sua aparência.</flowDiv>
   </flowRoot>
-  <rect id="at" x="20" y="357.29" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="at" x="20" y="263.98" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
-   <flowDiv>Dicas gerais</flowDiv>
+   <flowDiv>For example, with a star you can alter the number of tips, their length, angle, rounding, etc. — but a star remains a star. A shape is “less free” than a simple path, but it's often more interesting and useful. You can always convert a shape to a path (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), but the reverse conversion is not possible.</flowDiv>
   </flowRoot>
-  <rect id="as" x="20" y="369.78" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="313.27" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv>A new shape is created by <flowSpan font-weight="bold">drag</flowSpan>ging on canvas with the corresponding tool. Once the shape is created (and so long as it is selected), it displays its handles as white diamond, square or round marks (depending on the tools), so you can immediately edit what you created by dragging these handles.</flowDiv>
+   <flowDiv>As ferramentas de forma são <flowSpan font-style="italic">Retângulo</flowSpan>, <flowSpan font-style="italic">Círculo</flowSpan>, <flowSpan font-style="italic">Estrela e Polígono</flowSpan>, e <flowSpan font-style="italic">Espiral</flowSpan>. Primeiro vamos ver como funcionam as ferramentas de formas geométricas; depois exploraremos cada uma delas em pormenor.</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="419.01" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ar" x="20" y="357.29" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv>All four kinds of shapes display their handles in all four shape tools as well as in the Node tool (<flowSpan font-weight="bold">F2</flowSpan>). When you hover your <flowSpan font-weight="bold">mouse</flowSpan> over a handle, it tells you in the statusbar what this handle will do when dragged or clicked with different modifiers.</flowDiv>
+   <flowDiv>Dicas gerais</flowDiv>
   </flowRoot>
-  <rect id="aq" x="20" y="457.69" width="300" height="1e3px" display="none"/>
+  <rect id="aq" x="20" y="369.78" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
-   <flowDiv>Além disso, cada ferramenta de forma geométrica mostra os seus parâmetros na barra<flowSpan font-style="italic">Controlos da Ferramenta</flowSpan> (logo acima da área de desenho). Geralmente esta barra tem alguns campos numéricos e um botão para repor os valores padrão, além de outros). Quando é selecionada a forma do tipo nativo da ferramenta atual, ao editar os seus valores na barra de Controlos de Ferramenta a forma é alterada.</flowDiv>
+   <flowDiv>A new shape is created by <flowSpan font-weight="bold">drag</flowSpan>ging on canvas with the corresponding tool. Once the shape is created (and so long as it is selected), it displays its handles as white diamond, square or round marks (depending on the tools), so you can immediately edit what you created by dragging these handles.</flowDiv>
   </flowRoot>
-  <rect id="ap" x="20" y="515.99" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="419.01" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
-   <flowDiv>Qualquer alteração feita na barra Controlos da Ferramenta será gravada e utilizada no próximo objeto que for criado com a mesma ferramenta. Por exemplo, depois de alterar o número de pontas de uma estrela, as novas estrelas criadas terão o mesmo número de pontas. Além disso, mesmo selecionando simplesmente uma forma geométrica, os seus parâmetros são enviados para a barra de Controlos da Ferramenta e por isso, define por si só os parâmetros para novas forma geométricas criadas.</flowDiv>
+   <flowDiv>All four kinds of shapes display their handles in all four shape tools as well as in the Node tool (<flowSpan font-weight="bold">F2</flowSpan>). When you hover your <flowSpan font-weight="bold">mouse</flowSpan> over a handle, it tells you in the statusbar what this handle will do when dragged or clicked with different modifiers.</flowDiv>
   </flowRoot>
-  <rect id="ao" x="20" y="586.55" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="457.69" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
    </flowRegion>
-   <flowDiv>When in a shape tool, selecting an object can be done by <flowSpan font-weight="bold">click</flowSpan>ing on it. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> (select in group) and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> (select under) also work as they do in Selector tool. <flowSpan font-weight="bold">Esc</flowSpan> deselects.</flowDiv>
+   <flowDiv>Além disso, cada ferramenta de forma geométrica mostra os seus parâmetros na barra<flowSpan font-style="italic">Controlos da Ferramenta</flowSpan> (logo acima da área de desenho). Geralmente esta barra tem alguns campos numéricos e um botão para repor os valores padrão, além de outros). Quando é selecionada a forma do tipo nativo da ferramenta atual, ao editar os seus valores na barra de Controlos de Ferramenta a forma é alterada.</flowDiv>
   </flowRoot>
-  <rect id="an" x="20" y="619.91" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="an" x="20" y="515.99" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#an"/>
    </flowRegion>
-   <flowDiv>Retângulos</flowDiv>
+   <flowDiv>Qualquer alteração feita na barra Controlos da Ferramenta será gravada e utilizada no próximo objeto que for criado com a mesma ferramenta. Por exemplo, depois de alterar o número de pontas de uma estrela, as novas estrelas criadas terão o mesmo número de pontas. Além disso, mesmo selecionando simplesmente uma forma geométrica, os seus parâmetros são enviados para a barra de Controlos da Ferramenta e por isso, define por si só os parâmetros para novas forma geométricas criadas.</flowDiv>
   </flowRoot>
-  <rect id="am" x="20" y="632.57" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="586.55" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
    </flowRegion>
-   <flowDiv>Um <flowSpan font-style="italic">retângulo</flowSpan> é a mais simples e talvez a forma mais comum em design e ilustração. O Inkscape tenta tornar o processo de criação e edição de retângulos o mais fácil e prático possível.</flowDiv>
+   <flowDiv>When in a shape tool, selecting an object can be done by <flowSpan font-weight="bold">click</flowSpan>ing on it. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> (select in group) and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> (select under) also work as they do in Selector tool. <flowSpan font-weight="bold">Esc</flowSpan> deselects.</flowDiv>
   </flowRoot>
-  <rect id="al" x="20" y="671.19" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="al" x="20" y="619.91" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#al"/>
+   </flowRegion>
+   <flowDiv>Retângulos</flowDiv>
+  </flowRoot>
+  <rect id="ak" x="20" y="632.57" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ak"/>
+   </flowRegion>
+   <flowDiv>Um <flowSpan font-style="italic">retângulo</flowSpan> é a mais simples e talvez a forma mais comum em design e ilustração. O Inkscape tenta tornar o processo de criação e edição de retângulos o mais fácil e prático possível.</flowDiv>
+  </flowRoot>
+  <rect id="aj" x="20" y="671.19" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#aj"/>
    </flowRegion>
    <flowDiv>Mude para a ferramenta Retângulo com a tecla <flowSpan font-weight="bold">F4</flowSpan> ou clicando no botão correspondente na Caixa de Ferramentas. Desenhe um novo retângulo ao lado deste azul:</flowDiv>
   </flowRoot>
   <text transform="translate(20 707.22)" x="40.248711" y="26.427183" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" opacity=".065574" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan x="40.248711" y="26.427183" font-size="16.8px" style="line-height:1.25" sodipodi:role="line">desenhe aqui</tspan></text>
   <rect transform="translate(20 707.22)" x="180.93" y=".625" width="77.318" height="53.706" color="#000000" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="ak" x="20" y="774.26" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ak"/>
-   </flowRegion>
-   <flowDiv>Depois, sem sair da ferramenta Retângulo, mude a seleção de um retângulo para a seleção de outro clicando sobre eles.</flowDiv>
-  </flowRoot>
-  <rect id="aj" x="20" y="800.65" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#aj"/>
-   </flowRegion>
-   <flowDiv>Teclas de atalho para desenho de retângulos:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 823.94)" r="2"/>
-  <rect id="ai" x="40" y="817.94" width="280" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="774.26" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, draw a square or an integer-ratio (2:1, 3:1, etc) rectangle.</flowDiv>
+   <flowDiv>Depois, sem sair da ferramenta Retângulo, mude a seleção de um retângulo para a seleção de outro clicando sobre eles.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 841.22)" r="2"/>
-  <rect id="ah" x="40" y="835.22" width="280" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="800.65" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
    </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Shift</flowSpan>, draw around the starting point as center.</flowDiv>
+   <flowDiv>Teclas de atalho para desenho de retângulos:</flowDiv>
   </flowRoot>
-  <rect id="ag" x="20" y="852.58" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 823.94)" r="2"/>
+  <rect id="ag" x="40" y="817.94" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ag"/>
    </flowRegion>
-   <flowDiv>Como se pode ver, o retângulo selecionado (o retângulo acabado de criar é selecionado automaticamente) mostra 3 alças em 3 dos seus cantos. Na verdade são 4 alças, mas 2 delas (no canto superior direito) sobrepõem-se caso o retângulo não tenha cantos arredondados. Estas 2 alças são as <flowSpan font-style="italic">alças de arredondamento</flowSpan>; as outras 2 (acima à esquerda e abaixo à direita) são as <flowSpan font-style="italic">alças de redimensionamento</flowSpan>.</flowDiv>
+   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, draw a square or an integer-ratio (2:1, 3:1, etc) rectangle.</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="912.41" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 841.22)" r="2"/>
+  <rect id="af" x="40" y="835.22" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#af"/>
    </flowRegion>
-   <flowDiv>Vamos dar uma olhada nas alças de arredondamento primeiro. Agarre uma delas e arraste para baixo. Todos os 4 cantos do retângulo ficam arredondados e vê-se a segunda alça de arredondamento — ela permanece na posição original, no canto. Caso se queira os cantos arredondados simetricamente, é tudo o que se necessita de fazer. Para fazer cantos não simétricos, move-se a outra alça do canto.</flowDiv>
+   <flowDiv>With <flowSpan font-weight="bold">Shift</flowSpan>, draw around the starting point as center.</flowDiv>
   </flowRoot>
-  <rect id="ae" x="20" y="972.23" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="852.58" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ae"/>
+   </flowRegion>
+   <flowDiv>Como se pode ver, o retângulo selecionado (o retângulo acabado de criar é selecionado automaticamente) mostra 3 alças em 3 dos seus cantos. Na verdade são 4 alças, mas 2 delas (no canto superior direito) sobrepõem-se caso o retângulo não tenha cantos arredondados. Estas 2 alças são as <flowSpan font-style="italic">alças de arredondamento</flowSpan>; as outras 2 (acima à esquerda e abaixo à direita) são as <flowSpan font-style="italic">alças de redimensionamento</flowSpan>.</flowDiv>
+  </flowRoot>
+  <rect id="ea" x="20" y="912.41" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ea"/>
+   </flowRegion>
+   <flowDiv>Vamos dar uma olhada nas alças de arredondamento primeiro. Agarre uma delas e arraste para baixo. Todos os 4 cantos do retângulo ficam arredondados e vê-se a segunda alça de arredondamento — ela permanece na posição original, no canto. Caso se queira os cantos arredondados simetricamente, é tudo o que se necessita de fazer. Para fazer cantos não simétricos, move-se a outra alça do canto.</flowDiv>
+  </flowRoot>
+  <rect id="dz" x="20" y="972.23" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dz"/>
    </flowRegion>
    <flowDiv>Aqui os 2 primeiros retângulos têm cantos arredondados circulares e os outros dois têm cantos arredondados elípticos:</flowDiv>
   </flowRoot>
@@ -416,24 +416,24 @@
   <rect transform="translate(20 1008.1)" x="83.596" y="11.833" width="56.849" height="33.94" ry="16.97" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 1008.1)" x="159.72" y="11.833" width="56.849" height="33.94" rx="6.6372" ry="16.97" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 1008.1)" x="234.28" y="11.833" width="56.849" height="33.94" rx="24.046" ry="5.9394" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="ea" x="20" y="1065" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ea"/>
-   </flowRegion>
-   <flowDiv>Ainda na ferramenta Retângulo, clique nestes retângulos para selecioná-los e repare nas alças de arredondamento.</flowDiv>
-  </flowRoot>
-  <rect id="dz" x="20" y="1091.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#dz"/>
-   </flowRegion>
-   <flowDiv>Na maioria das vezes, o raio e forma dos cantos arredondados têm de ser constantes dentro de toda a composição, mesmo que os tamanhos dos retângulos sejam diferentes (imagine como se fossem diagramas com caixas arredondadas de vários tamanhos). O Inkscape torna esta operação fácil. Mude para a ferramenta de Selecionar; na barra de Controlos da Ferramenta, existe um grupo de 4 botões do lado direito, o segundo a contar da esquerda, mostra 2 linhas arredondadas. Com este botão ativado, o tamanho do raio dos cantos é proporcional ao tamanho do retângulo caso se altere o tamanho do retângulo.</flowDiv>
-  </flowRoot>
-  <rect id="dy" x="20" y="1172.6" width="300" height="1e3px" display="none"/>
+  <rect id="dy" x="20" y="1065" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dy"/>
+   </flowRegion>
+   <flowDiv>Ainda na ferramenta Retângulo, clique nestes retângulos para selecioná-los e repare nas alças de arredondamento.</flowDiv>
+  </flowRoot>
+  <rect id="dx" x="20" y="1091.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dx"/>
+   </flowRegion>
+   <flowDiv>Na maioria das vezes, o raio e forma dos cantos arredondados têm de ser constantes dentro de toda a composição, mesmo que os tamanhos dos retângulos sejam diferentes (imagine como se fossem diagramas com caixas arredondadas de vários tamanhos). O Inkscape torna esta operação fácil. Mude para a ferramenta de Selecionar; na barra de Controlos da Ferramenta, existe um grupo de 4 botões do lado direito, o segundo a contar da esquerda, mostra 2 linhas arredondadas. Com este botão ativado, o tamanho do raio dos cantos é proporcional ao tamanho do retângulo caso se altere o tamanho do retângulo.</flowDiv>
+  </flowRoot>
+  <rect id="dw" x="20" y="1172.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dw"/>
    </flowRegion>
    <flowDiv>For example, here the original red rectangle is duplicated and scaled several times, up and down, to different proportions, with the “<flowSpan font-family="Liberation Sans,Arial,sans-serif">Scale rounded corners</flowSpan>” button <flowSpan font-style="italic">off</flowSpan>:</flowDiv>
   </flowRoot>
@@ -446,17 +446,17 @@
   <rect transform="translate(20 1208.6)" x="218.34" y=".33081" width="47.954" height="149.52" rx="6.6372" ry="16.97" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1208.6)" x="227.64" y=".31225" width="38.352" height="28.79" rx="6.6371" ry="16.97" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1208.6)" x="36.352" y=".35815" width="229.82" height="41.087" rx="6.6371" ry="16.97" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
-  <rect id="dx" x="20" y="1375.4" width="300" height="1e3px" display="none"/>
+  <rect id="dv" x="20" y="1375.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dx"/>
+    <use xlink:href="#dv"/>
    </flowRegion>
    <flowDiv>Repare como o tamanho e a forma dos cantos arredondados são os mesmos em todos os retângulos, de tal maneira que os arredondamentos alinham-se exatamente no canto superior direito onde todos eles se encontram. Todos os retângulos azuis pontilhados foram obtidos a partir do retângulo vermelho original, apenas ampliando-o com a ferramenta de Selecionar, sem qualquer alteração manual das alças de arredondamento.</flowDiv>
   </flowRoot>
-  <rect id="dw" x="20" y="1435.3" width="300" height="1e3px" display="none"/>
+  <rect id="du" x="20" y="1435.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dw"/>
+    <use xlink:href="#du"/>
    </flowRegion>
    <flowDiv>For a comparison, here is the same composition but now created with the “<flowSpan font-family="Liberation Sans,Arial,sans-serif">Scale rounded corners</flowSpan>” button <flowSpan font-style="italic">on</flowSpan>:</flowDiv>
   </flowRoot>
@@ -469,99 +469,99 @@
   <rect transform="translate(20 1470)" x="205.74" y=".38217" width="60.456" height="55.042" rx="4.8444" ry="14.801" color="#000000" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1470)" x="227.86" y=".31296" width="38.454" height="29.249" rx="3.0813" ry="7.8653" color="#000000" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1470)" x="38.124" y=".31247" width="227.21" height="42.865" rx="18.207" ry="11.527" color="#000000" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
-  <rect id="dv" x="20" y="1636.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#dv"/>
-   </flowRegion>
-   <flowDiv>Now the rounded corners are as different as the rectangles they belong to, and there isn't a slightest agreement in the top right corner (zoom in to see). This is the same (visible) result as you would get by converting the original rectangle to a path (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>) and scaling it as path.</flowDiv>
-  </flowRoot>
-  <rect id="du" x="20" y="1686.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#du"/>
-   </flowRegion>
-   <flowDiv>As teclas de atalho para as alças de arredondamento de um retângulo são:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 1709.4)" r="2"/>
-  <rect id="dt" x="40" y="1703.4" width="280" height="1e3px" display="none"/>
+  <rect id="dt" x="20" y="1636.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dt"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to make the other radius the same (circular rounding).</flowDiv>
+   <flowDiv>Now the rounded corners are as different as the rectangles they belong to, and there isn't a slightest agreement in the top right corner (zoom in to see). This is the same (visible) result as you would get by converting the original rectangle to a path (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>) and scaling it as path.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1726.7)" r="2"/>
-  <rect id="ds" x="40" y="1720.7" width="280" height="1e3px" display="none"/>
+  <rect id="ds" x="20" y="1686.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ds"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make the other radius the same without dragging.</flowDiv>
+   <flowDiv>As teclas de atalho para as alças de arredondamento de um retângulo são:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1744)" r="2"/>
-  <rect id="dr" x="40" y="1738" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1709.4)" r="2"/>
+  <rect id="dr" x="40" y="1703.4" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dr"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to remove rounding.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to make the other radius the same (circular rounding).</flowDiv>
   </flowRoot>
-  <rect id="dq" x="20" y="1755.4" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1726.7)" r="2"/>
+  <rect id="dq" x="40" y="1720.7" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dq"/>
    </flowRegion>
-   <flowDiv>You may have noticed that the Rectangle tool's Controls bar shows the horizontal (<flowSpan font-style="italic">Rx</flowSpan>) and vertical (<flowSpan font-style="italic">Ry</flowSpan>) rounding radii for the selected rectangle and lets you set them precisely using any length units. The <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Not rounded</flowSpan> button does what is says — removes rounding from the selected rectangle(s).</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make the other radius the same without dragging.</flowDiv>
   </flowRoot>
-  <rect id="dp" x="20" y="1804.7" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1744)" r="2"/>
+  <rect id="dp" x="40" y="1738" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dp"/>
    </flowRegion>
-   <flowDiv>An important advantage of these controls is that they can affect many rectangles at once. For example, if you want to change all rectangles in the layer, just do <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Select All</flowSpan>) and set the parameters you need in the Controls bar. If any non-rectangles are selected, they will be ignored — only rectangles will be changed.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to remove rounding.</flowDiv>
   </flowRoot>
-  <rect id="do" x="20" y="1854.1" width="300" height="1e3px" display="none"/>
+  <rect id="do" x="20" y="1755.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#do"/>
    </flowRegion>
-   <flowDiv>Agora vamos ver as alças de redimensionamento de um retângulo. Podemos colocar a questão: qual a necessidade, se podemos simplesmente redimensionar o retângulo com a ferramenta de Selecionar?</flowDiv>
+   <flowDiv>You may have noticed that the Rectangle tool's Controls bar shows the horizontal (<flowSpan font-style="italic">Rx</flowSpan>) and vertical (<flowSpan font-style="italic">Ry</flowSpan>) rounding radii for the selected rectangle and lets you set them precisely using any length units. The <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Not rounded</flowSpan> button does what is says — removes rounding from the selected rectangle(s).</flowDiv>
   </flowRoot>
-  <rect id="dn" x="20" y="1891" width="300" height="1e3px" display="none"/>
+  <rect id="dn" x="20" y="1804.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dn"/>
    </flowRegion>
-   <flowDiv>O problema com a ferramenta de Selecionar é que a sua noção de horizontal e vertical é sempre a mesma da página do documento. De forma diferente, uma alça de redimensionamento de um retângulo aumenta-o <flowSpan font-style="italic">ao longo dos seus lados</flowSpan>, mesmo que o retângulo seja rodado ou distorcido. Por exemplo, tente redimensionar este retângulo primeiro com a ferramenta de Selecionar e depois com as alças de redimensionamento da ferramenta Retângulo:</flowDiv>
+   <flowDiv>An important advantage of these controls is that they can affect many rectangles at once. For example, if you want to change all rectangles in the layer, just do <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Select All</flowSpan>) and set the parameters you need in the Controls bar. If any non-rectangles are selected, they will be ignored — only rectangles will be changed.</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 1969.6) matrix(.69601 -.71803 -.95272 -.30385 0 0)" x="7.7759" y="-179.49" width="41.625" height="64.103" rx="5.8251" ry="3.8355" color="#000000" fill="#00f" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="dm" x="20" y="2030" width="300" height="1e3px" display="none"/>
+  <rect id="dm" x="20" y="1854.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dm"/>
    </flowRegion>
-   <flowDiv>Uma vez que as alças de redimensionamento são 2, pode-se redimensionar o retângulo em qualquer direção ou mesmo movê-lo ao longo dos seus lados. Estas alças preservam sempre os raios de arredondamento.</flowDiv>
+   <flowDiv>Agora vamos ver as alças de redimensionamento de um retângulo. Podemos colocar a questão: qual a necessidade, se podemos simplesmente redimensionar o retângulo com a ferramenta de Selecionar?</flowDiv>
   </flowRoot>
-  <rect id="dl" x="20" y="2067" width="300" height="1e3px" display="none"/>
+  <rect id="dl" x="20" y="1891" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dl"/>
    </flowRegion>
-   <flowDiv>As teclas de atalho para as alças de redimensionamento são:</flowDiv>
+   <flowDiv>O problema com a ferramenta de Selecionar é que a sua noção de horizontal e vertical é sempre a mesma da página do documento. De forma diferente, uma alça de redimensionamento de um retângulo aumenta-o <flowSpan font-style="italic">ao longo dos seus lados</flowSpan>, mesmo que o retângulo seja rodado ou distorcido. Por exemplo, tente redimensionar este retângulo primeiro com a ferramenta de Selecionar e depois com as alças de redimensionamento da ferramenta Retângulo:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2090.2)" r="2"/>
-  <rect id="dk" x="40" y="2084.2" width="280" height="1e3px" display="none"/>
+  <rect transform="translate(20 1969.6) matrix(.69601 -.71803 -.95272 -.30385 0 0)" x="7.7759" y="-179.49" width="41.625" height="64.103" rx="5.8251" ry="3.8355" color="#000000" fill="#00f" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect id="dk" x="20" y="2030" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dk"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to snap to the sides or the diagonal of the rectangle. In other words, <flowSpan font-weight="bold">Ctrl</flowSpan> preserves either width, or height, or the width/height ratio of the rectangle (again, in its own coordinate system which may be rotated or skewed).</flowDiv>
+   <flowDiv>Uma vez que as alças de redimensionamento são 2, pode-se redimensionar o retângulo em qualquer direção ou mesmo movê-lo ao longo dos seus lados. Estas alças preservam sempre os raios de arredondamento.</flowDiv>
   </flowRoot>
-  <rect id="dj" x="20" y="2122.9" width="300" height="1e3px" display="none"/>
+  <rect id="dj" x="20" y="2067" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dj"/>
+   </flowRegion>
+   <flowDiv>As teclas de atalho para as alças de redimensionamento são:</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 2090.2)" r="2"/>
+  <rect id="di" x="40" y="2084.2" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#di"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to snap to the sides or the diagonal of the rectangle. In other words, <flowSpan font-weight="bold">Ctrl</flowSpan> preserves either width, or height, or the width/height ratio of the rectangle (again, in its own coordinate system which may be rotated or skewed).</flowDiv>
+  </flowRoot>
+  <rect id="dh" x="20" y="2122.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dh"/>
    </flowRegion>
    <flowDiv>Here is the same rectangle, with the gray dotted lines showing the directions to which the resize handles stick when dragged with <flowSpan font-weight="bold">Ctrl</flowSpan> (try it):</flowDiv>
   </flowRoot>
@@ -574,10 +574,10 @@
   </g>
   <rect transform="translate(20 2158.8) matrix(.69601 -.71803 -.95272 -.30385 0 0)" x="-35.379" y="-211.02" width="41.625" height="64.103" rx="5.825" ry="3.8355" color="#000000" fill="#00f" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <text transform="translate(20 2158.8)" x="78.675034" y="126.24259" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="78.675034" y="126.24259" sodipodi:role="line">Snapping of rectangle </tspan><tspan x="78.675034" y="133.7426" sodipodi:role="line">- resize handles with Ctrl</tspan></text>
-  <rect id="di" x="20" y="2304.3" width="300" height="1e3px" display="none"/>
+  <rect id="dg" x="20" y="2304.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#di"/>
+    <use xlink:href="#dg"/>
    </flowRegion>
    <flowDiv>Inclinando e rodando um retângulo, depois duplicando-o e redimensionando-o com as alças de redimensionamento, podem ser criadas facilmente composições 3D:</flowDiv>
   </flowRoot>
@@ -603,10 +603,10 @@
   <rect transform="translate(20 2340.2) matrix(.91237 -.40937 0 1 0 0)" x="242.25" y="127.05" width="31.198" height="20.233" color="#000000" fill="#ff6300" fill-rule="evenodd" stroke="#fff" stroke-width=".39259"/>
   <text transform="translate(20 2340.2)" x="44.409821" y="4.5585938" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="44.409821" y="4.5585938" sodipodi:role="line">3 retângulos originais</tspan></text>
   <text transform="translate(20 2340.2)" x="196.02606" y="4.5585938" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="196.02606" y="4.5585938" sodipodi:role="line">Several rectangles copied and resized by handles</tspan><tspan x="196.02606" y="12.058594" sodipodi:role="line">(mostly with Ctrl)</tspan></text>
-  <rect id="dh" x="20" y="2477.9" width="300" height="1e3px" display="none"/>
+  <rect id="df" x="20" y="2477.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dh"/>
+    <use xlink:href="#df"/>
    </flowRegion>
    <flowDiv>Aqui estão alguns exemplos adicionais de composições de retângulos, incluindo arredondamentos e preenchimento com gradientes:</flowDiv>
   </flowRoot>
@@ -696,48 +696,48 @@
   <rect transform="translate(20 2513.9) matrix(.99447 .10503 -.99521 .097739 0 0)" x="368.67" y="210.65" width="21.022" height="15.702" rx="10.937" ry="7.8879" color="#000000" fill="url(#ab)" fill-rule="evenodd" stroke="#000" stroke-width=".97176"/>
   <rect transform="translate(20 2513.9) matrix(.99447 .10503 -.99521 .097739 0 0)" x="437.19" y="274.21" width="52.249" height="47.25" rx="13.386" ry="7.8879" color="#000000" fill="url(#ac)" fill-rule="evenodd" stroke="#000" stroke-width=".97176"/>
   <rect transform="translate(20 2513.9) matrix(.99447 .10503 -.99521 .097739 0 0)" x="350.07" y="174.4" width="9.8364" height="11.479" rx="4.8633" ry="5.0297" color="#000000" fill="url(#ad)" fill-rule="evenodd" stroke="#000" stroke-width=".97176"/>
-  <rect id="dg" x="20" y="2645.2" width="300" height="1e3px" display="none"/>
+  <rect id="de" x="20" y="2645.2" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#dg"/>
-   </flowRegion>
-   <flowDiv>Círculos e Elipses</flowDiv>
-  </flowRoot>
-  <rect id="df" x="20" y="2657.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#df"/>
-   </flowRegion>
-   <flowDiv>A ferramenta Círculo (<flowSpan font-weight="bold">F5</flowSpan>) permite criar elipses e círculos, os quais se podem transformar em segmentos ou arcos destes. As teclas de atalho de desenho de círculos são as mesmas que as da ferramenta Retângulo:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 2702.4)" r="2"/>
-  <rect id="de" x="40" y="2696.4" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#de"/>
    </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, draw a circle or an integer-ratio (2:1, 3:1, etc.) ellipse.</flowDiv>
+   <flowDiv>Círculos e Elipses</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2719.6)" r="2"/>
-  <rect id="dd" x="40" y="2713.6" width="280" height="1e3px" display="none"/>
+  <rect id="dd" x="20" y="2657.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dd"/>
    </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Shift</flowSpan>, draw around the starting point as center.</flowDiv>
+   <flowDiv>A ferramenta Círculo (<flowSpan font-weight="bold">F5</flowSpan>) permite criar elipses e círculos, os quais se podem transformar em segmentos ou arcos destes. As teclas de atalho de desenho de círculos são as mesmas que as da ferramenta Retângulo:</flowDiv>
   </flowRoot>
-  <rect id="dc" x="20" y="2731" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2702.4)" r="2"/>
+  <rect id="dc" x="40" y="2696.4" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dc"/>
    </flowRegion>
-   <flowDiv>Vamos explorar agora as alças de uma elipse. Selecione a seguinte:</flowDiv>
+   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, draw a circle or an integer-ratio (2:1, 3:1, etc.) ellipse.</flowDiv>
   </flowRoot>
-  <ellipse transform="translate(20 2756.3)" cx="150" cy="30.874" rx="54.032" ry="30.249" color="#000000" fill="#ff000b" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect id="db" x="20" y="2830" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2719.6)" r="2"/>
+  <rect id="db" x="40" y="2713.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#db"/>
+   </flowRegion>
+   <flowDiv>With <flowSpan font-weight="bold">Shift</flowSpan>, draw around the starting point as center.</flowDiv>
+  </flowRoot>
+  <rect id="da" x="20" y="2731" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#da"/>
+   </flowRegion>
+   <flowDiv>Vamos explorar agora as alças de uma elipse. Selecione a seguinte:</flowDiv>
+  </flowRoot>
+  <ellipse transform="translate(20 2756.3)" cx="150" cy="30.874" rx="54.032" ry="30.249" color="#000000" fill="#ff000b" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect id="cz" x="20" y="2830" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cz"/>
    </flowRegion>
    <flowDiv>Once again, you see three handles initially, but in fact they are four. The rightmost handle is two overlapping handles that let you “open” the ellipse. <flowSpan font-weight="bold">Drag</flowSpan> that rightmost handle, then drag the other handle which becomes visible under it, to get a variety of pie-chart segments or arcs:</flowDiv>
   </flowRoot>
@@ -748,10 +748,10 @@
   <path transform="translate(20 2885.7)" d="m98.591 5.8998a24.91 17.693 0 0 1 9.3502-4.3583l8.6431 16.594z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".70293pt" sodipodi:arc-type="slice" sodipodi:cx="116.58386" sodipodi:cy="18.135038" sodipodi:end="4.3580459" sodipodi:rx="24.909876" sodipodi:ry="17.692751" sodipodi:start="3.9052122" sodipodi:type="arc"/>
   <path transform="translate(20 2885.7)" d="m224.71 10.505a24.91 17.693 0 0 1 24.35-10.012 24.91 17.693 0 0 1 21.957 12.496" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".70293pt" sodipodi:arc-type="arc" sodipodi:cx="247.18883" sodipodi:cy="18.135038" sodipodi:end="5.9880333" sodipodi:open="true" sodipodi:rx="24.909876" sodipodi:ry="17.692751" sodipodi:start="3.5874838" sodipodi:type="arc"/>
   <path transform="translate(20 2885.7)" d="m114.9 0.48277a24.91 17.693 0 0 1 24.972 11.372l-23.288 6.2801z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".70293pt" sodipodi:arc-type="slice" sodipodi:cx="116.58386" sodipodi:cy="18.135038" sodipodi:end="5.9203236" sodipodi:rx="24.909876" sodipodi:ry="17.692751" sodipodi:start="4.6447262" sodipodi:type="arc"/>
-  <rect id="da" x="20" y="2934.1" width="300" height="1e3px" display="none"/>
+  <rect id="cy" x="20" y="2934.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#da"/>
+    <use xlink:href="#cy"/>
    </flowRegion>
    <flowDiv>Para obter um <flowSpan font-style="italic">segmento</flowSpan> (um arco fechado com 2 raios), arraste <flowSpan font-style="italic">para fora</flowSpan> da elipse; para criar apenas um <flowSpan font-style="italic">arco</flowSpan>, arraste <flowSpan font-style="italic">para dentro</flowSpan> dela. Acima, existem 4 segmentos à esquerda e 3 arcos à direita. Notar que os arcos são formas abertas, ou seja, o traço apenas avança através da elipse mas não liga as extremidades do arco. Pode-se tornar isto óbvio removendo-se o preenchimento, deixando apenas o traço:</flowDiv>
   </flowRoot>
@@ -783,63 +783,63 @@
   <path transform="translate(20 3002)" d="m221.79 123.7a15.141 58.56 0 0 1-4.9811-49.685 15.141 58.56 0 0 1 7.4912-44.724" color="#000000" fill="none" stroke="#000" stroke-width=".75" sodipodi:arc-type="arc" sodipodi:cx="231.87538" sodipodi:cy="80.004387" sodipodi:end="4.1887902" sodipodi:open="true" sodipodi:rx="15.141271" sodipodi:ry="58.560177" sodipodi:start="2.2993372" sodipodi:type="arc"/>
   <path transform="translate(20 3002)" d="m181.84 88.102a75.148 10.853 0 0 1-23.24-10.507 75.148 10.853 0 0 1 52.45-8.0181 75.148 10.853 0 0 1 73.959 2.7537" color="#000000" fill="none" stroke="#000" stroke-width=".75" sodipodi:arc-type="arc" sodipodi:cx="231.87538" sodipodi:cy="80.004387" sodipodi:end="5.4977871" sodipodi:open="true" sodipodi:rx="75.147621" sodipodi:ry="10.852578" sodipodi:start="2.2993372" sodipodi:type="arc"/>
   <path transform="translate(20 3002)" d="m50.789 123.7a59.578 58.56 0 0 1-17.882-58.851l57.548 15.156z" color="#000000" fill="none" stroke="#000" stroke-width=".75" sodipodi:arc-type="slice" sodipodi:cx="90.455017" sodipodi:cy="80.004387" sodipodi:end="3.403392" sodipodi:rx="59.578407" sodipodi:ry="58.560177" sodipodi:start="2.2993372" sodipodi:type="arc"/>
-  <rect id="cz" x="20" y="3137.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cz"/>
-   </flowRegion>
-   <flowDiv>Note the fan-like group of narrow segments on the left. It was easy to create using <flowSpan font-style="italic">angle snapping</flowSpan> of the handle with <flowSpan font-weight="bold">Ctrl</flowSpan>. Here are the arc/segment handle shortcuts:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 3171.3)" r="2"/>
-  <rect id="cy" x="40" y="3165.3" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cy"/>
-   </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, snap the handle every 15 degrees when dragging.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 3188.6)" r="2"/>
-  <rect id="cx" x="40" y="3182.6" width="280" height="1e3px" display="none"/>
+  <rect id="cx" x="20" y="3137.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cx"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make the ellipse whole (not arc or segment).</flowDiv>
+   <flowDiv>Note the fan-like group of narrow segments on the left. It was easy to create using <flowSpan font-style="italic">angle snapping</flowSpan> of the handle with <flowSpan font-weight="bold">Ctrl</flowSpan>. Here are the arc/segment handle shortcuts:</flowDiv>
   </flowRoot>
-  <rect id="cw" x="20" y="3200" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 3171.3)" r="2"/>
+  <rect id="cw" x="40" y="3165.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cw"/>
    </flowRegion>
-   <flowDiv>The snap angle can be changed in Inkscape Preferences (in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Behavior</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Steps</flowSpan>).</flowDiv>
+   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, snap the handle every 15 degrees when dragging.</flowDiv>
   </flowRoot>
-  <rect id="cv" x="20" y="3217.5" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 3188.6)" r="2"/>
+  <rect id="cv" x="40" y="3182.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cv"/>
    </flowRegion>
-   <flowDiv>As outras 2 alças da elipse são usadas para redimensioná-la ao redor do centro. As teclas de atalho são similares às das alças de arredondamento de um retângulo:</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make the ellipse whole (not arc or segment).</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3251.4)" r="2"/>
-  <rect id="cu" x="40" y="3245.4" width="280" height="1e3px" display="none"/>
+  <rect id="cu" x="20" y="3200" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cu"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to make a circle (make the other radius the same).</flowDiv>
+   <flowDiv>The snap angle can be changed in Inkscape Preferences (in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Behavior</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Steps</flowSpan>).</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3268.7)" r="2"/>
-  <rect id="ct" x="40" y="3262.7" width="280" height="1e3px" display="none"/>
+  <rect id="ct" x="20" y="3217.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ct"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make a circle without dragging.</flowDiv>
+   <flowDiv>As outras 2 alças da elipse são usadas para redimensioná-la ao redor do centro. As teclas de atalho são similares às das alças de arredondamento de um retângulo:</flowDiv>
   </flowRoot>
-  <rect id="cs" x="20" y="3280" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 3251.4)" r="2"/>
+  <rect id="cs" x="40" y="3245.4" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cs"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to make a circle (make the other radius the same).</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 3268.7)" r="2"/>
+  <rect id="cr" x="40" y="3262.7" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cr"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make a circle without dragging.</flowDiv>
+  </flowRoot>
+  <rect id="cq" x="20" y="3280" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cq"/>
    </flowRegion>
    <flowDiv>E tal como as alças de redimensionamento do retângulo, estas alças da elipse ajustam a altura e largura da elipse nas <flowSpan font-style="italic">suas próprias coordenadas</flowSpan>. Isto significa que uma elipse rodada ou distorcida pode ser facilmente esticada ou comprimida ao longo de seus eixos originais enquanto permanece rodada ou distorcida. Tente redimensionar qualquer uma destas elipses através das alças de redimensionamento:</flowDiv>
   </flowRoot>
@@ -849,24 +849,24 @@
   <ellipse transform="translate(20 3347.9) matrix(.91395 .40583 -.87516 .48384 0 0)" cx="129.13" cy="-36.549" rx="32.589" ry="22.827" color="#000000" fill="#ffd300" fill-opacity=".14716" fill-rule="evenodd" stroke="#000" stroke-width=".83991"/>
   <ellipse transform="translate(20 3347.9) matrix(.91395 .40583 -.87516 .48384 0 0)" cx="129.13" cy="-36.549" rx="6.8571" ry="42.356" color="#000000" fill="#ffd300" fill-opacity=".14716" fill-rule="evenodd" stroke="#000" stroke-width=".83991"/>
   <ellipse transform="translate(20 3347.9) matrix(.91395 .40583 -.87516 .48384 0 0)" cx="129.13" cy="-36.549" rx="32.589" ry="6.6323" color="#000000" fill="#ffd300" fill-opacity=".14716" fill-rule="evenodd" stroke="#000" stroke-width=".83991"/>
-  <rect id="cr" x="20" y="3434.5" width="300" height="1e3px" display="none"/>
+  <rect id="cp" x="20" y="3434.5" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#cr"/>
+    <use xlink:href="#cp"/>
    </flowRegion>
    <flowDiv>Polígonos e Estrelas</flowDiv>
   </flowRoot>
-  <rect id="cq" x="20" y="3447" width="300" height="1e3px" display="none"/>
+  <rect id="co" x="20" y="3447" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#cq"/>
+    <use xlink:href="#co"/>
    </flowRegion>
    <flowDiv>OS polígonos e as estrelas são as formas geométricas mais complexas do Inkscape. Se quiser impressionar seus amigos com o Inkscape, deixe-os brincar com esta ferramenta. É divertido — na verdade é viciante!</flowDiv>
   </flowRoot>
-  <rect id="cp" x="20" y="3484.1" width="300" height="1e3px" display="none"/>
+  <rect id="cn" x="20" y="3484.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#cp"/>
+    <use xlink:href="#cn"/>
    </flowRegion>
    <flowDiv>A ferramenta Polígonos pode criar 2 objetos similares mas de diferentes tipos: polígonos e estrelas. Uma estrela tem 2 alças cujas posições definem a extensão e forma das suas pontas; um polígono tem apenas 1 alça que simplesmente roda e redimensiona-o quando é arrastada:</flowDiv>
   </flowRoot>
@@ -876,39 +876,39 @@
    <path transform="matrix(.67263 .35535 -.35535 .67263 1513.8 -2577.2)" d="m107.3 3871.6-39.426 21.029-32.183-30.998 19.535-40.187 44.257 6.1608z" color="#000000" fill="#fff100" fill-rule="evenodd" stroke="#000" stroke-width=".98589" inkscape:flatsided="true" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.45247489" sodipodi:arg2="1.0807934" sodipodi:cx="73.11795" sodipodi:cy="3855.0315" sodipodi:r1="38.010052" sodipodi:r2="19.005026" sodipodi:sides="5" sodipodi:type="star"/>
    <text x="193.02451" y="6" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="193.02451" y="6" text-align="center" text-anchor="middle" sodipodi:role="line">Polígono</tspan></text>
   </g>
-  <rect id="co" x="20" y="3607.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#co"/>
-   </flowRegion>
-   <flowDiv>Na barra de Controlos da ferramenta Polígonos, primeiro aparecem 2 botões para transformar uma estrela num polígono e vice-versa. Depois, um campo numérico onde se configura o <flowSpan font-style="italic">número de cantos</flowSpan> de uma estrela ou polígono. Este parâmetro é apenas editável através da barra de Controlos da Ferramenta e pode variar de 3 a 1024, mas não se deve aplicar um número alto (por exemplo, acima de 200) se o computador for lento.</flowDiv>
-  </flowRoot>
-  <rect id="cn" x="20" y="3667" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cn"/>
-   </flowRegion>
-   <flowDiv>Ao desenhar uma nova estrela ou polígono,</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 3690.3)" r="2"/>
-  <rect id="cm" x="40" y="3684.3" width="280" height="1e3px" display="none"/>
+  <rect id="cm" x="20" y="3607.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cm"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to snap the angle to 15 degree increments.</flowDiv>
+   <flowDiv>Na barra de Controlos da ferramenta Polígonos, primeiro aparecem 2 botões para transformar uma estrela num polígono e vice-versa. Depois, um campo numérico onde se configura o <flowSpan font-style="italic">número de cantos</flowSpan> de uma estrela ou polígono. Este parâmetro é apenas editável através da barra de Controlos da Ferramenta e pode variar de 3 a 1024, mas não se deve aplicar um número alto (por exemplo, acima de 200) se o computador for lento.</flowDiv>
   </flowRoot>
-  <rect id="cl" x="20" y="3701.6" width="300" height="1e3px" display="none"/>
+  <rect id="cl" x="20" y="3667" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cl"/>
    </flowRegion>
-   <flowDiv>Naturalmente, uma estrela é uma forma muito mais interessante (embora os polígonos sejam mais úteis na prática). As 2 alças de uma estrela têm funções ligeiramente diferentes. A primeira alça (inicialmente localizada em 1 vértice, ou seja, num canto <flowSpan font-style="italic">convexo</flowSpan> da estrela) diminui ou aumenta os raios da estrela, mas quando se roda com esta alça (relativamente ao centro da forma), a outra alça roda em conformidade com esta. Isto significa que não se pode distorcer os raios da estrela com esta alça.</flowDiv>
+   <flowDiv>Ao desenhar uma nova estrela ou polígono,</flowDiv>
   </flowRoot>
-  <rect id="ck" x="20" y="3772.2" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 3690.3)" r="2"/>
+  <rect id="ck" x="40" y="3684.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ck"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to snap the angle to 15 degree increments.</flowDiv>
+  </flowRoot>
+  <rect id="cj" x="20" y="3701.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cj"/>
+   </flowRegion>
+   <flowDiv>Naturalmente, uma estrela é uma forma muito mais interessante (embora os polígonos sejam mais úteis na prática). As 2 alças de uma estrela têm funções ligeiramente diferentes. A primeira alça (inicialmente localizada em 1 vértice, ou seja, num canto <flowSpan font-style="italic">convexo</flowSpan> da estrela) diminui ou aumenta os raios da estrela, mas quando se roda com esta alça (relativamente ao centro da forma), a outra alça roda em conformidade com esta. Isto significa que não se pode distorcer os raios da estrela com esta alça.</flowDiv>
+  </flowRoot>
+  <rect id="ci" x="20" y="3772.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ci"/>
    </flowRegion>
    <flowDiv>A outra alça (inicialmente localizada num canto <flowSpan font-style="italic">côncavo</flowSpan> entre 2 cantos) é, por outro lado, livre para se mover tanto radialmente quanto tangencialmente, sem afetar a alça do canto. Na verdade, esta alça pode se tornar por si própria um canto movendo-a para mais longe do centro que a outra alça. Esta sim é a alça que pode distorcer as pontas das estrelas para obter todos os tipos de formas que se assemelham a cristais, mandalas, flocos de neve e porcos-espinho:</flowDiv>
   </flowRoot>
@@ -921,70 +921,70 @@
   <path transform="translate(20 3850.6) rotate(.0019184 1.2489e8 0)" d="m307.95 4272-41.28 0.6425 33.556 17.416-29.644-28.735 11.412 36.043-0.64253-41.28-17.416 33.556 28.735-29.644-36.043 11.412 41.28-0.6425-33.556-17.416 29.644 28.735-11.412-36.043 0.64253 41.28 17.416-33.556-28.735 29.644z" color="#000000" fill="#520100" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.011487387" sodipodi:arg2="3.0816518" sodipodi:cx="282.28931" sodipodi:cy="4271.7378" sodipodi:r1="25.662985" sodipodi:r2="15.646836" sodipodi:sides="8" sodipodi:type="star"/>
   <path transform="translate(20 3850.6)" d="m92.431 52.264-14.034-33.728 0.070659 27.944 13.926-33.773-19.71 19.81 33.728-14.034-27.944 0.070659 33.773 13.926-19.81-19.71 14.034 33.728-0.07066-27.944-13.926 33.773 19.71-19.81-33.728 14.034 27.944-0.070659-33.773-13.926z" color="#000000" fill="none" stroke="#000" stroke-width=".25" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="1.5707963" sodipodi:arg2="-2.3580603" sodipodi:cx="92.431129" sodipodi:cy="32.516994" sodipodi:r1="19.746624" sodipodi:r2="19.809624" sodipodi:sides="8" sodipodi:type="star"/>
   <path transform="translate(20 3850.6)" d="m102.43 123.68-54.979-38.435 42.246 53.111-37.383-55.7 20.208 64.785-14.737-65.443-4.56 67.71 9.8988-66.347-28.712 61.491 33.198-58.291-48.986 46.967 52.013-42.363-62.645 26.099 63.804-20.713-67.842 1.7069 66.978 3.7348-63.878-22.916 61.106 27.678-51.286-44.444 46.981 47.883-31.768-59.969 26.511 61.621-7.9594-67.395 2.461 67.037 16.924-65.72-21.922 63.399 39.522-55.168-43.344 51.199 56.782-37.166-58.912 32.084 66.374-14.144-66.524 8.6359 67.001 10.788-65.151-15.978z" color="#000000" fill="#520100" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.52982957" sodipodi:arg2="-2.2448164" sodipodi:cx="56.805591" sodipodi:cy="96.95668" sodipodi:r1="52.870548" sodipodi:r2="14.99335" sodipodi:sides="17" sodipodi:type="star"/>
-  <rect id="cj" x="20" y="4012.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cj"/>
-   </flowRegion>
-   <flowDiv>Se pretender apenas uma estrela simples sem qualquer decoração, é possível fazer com que a alça que distorce a estrela se comporte como a outra, que não distorce:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 4046.3)" r="2"/>
-  <rect id="ci" x="40" y="4040.3" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ci"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to keep the star rays strictly radial (no skew).</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 4063.6)" r="2"/>
-  <rect id="ch" x="40" y="4057.6" width="280" height="1e3px" display="none"/>
+  <rect id="ch" x="20" y="4012.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ch"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to remove the skew without dragging.</flowDiv>
+   <flowDiv>Se pretender apenas uma estrela simples sem qualquer decoração, é possível fazer com que a alça que distorce a estrela se comporte como a outra, que não distorce:</flowDiv>
   </flowRoot>
-  <rect id="cg" x="20" y="4074.9" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 4046.3)" r="2"/>
+  <rect id="cg" x="40" y="4040.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cg"/>
    </flowRegion>
-   <flowDiv>As a useful complement for the on-canvas handle dragging, the Controls bar has the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Spoke ratio</flowSpan> field which defines the ratio of the two handles' distances to the center.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to keep the star rays strictly radial (no skew).</flowDiv>
   </flowRoot>
-  <rect id="cf" x="20" y="4101.5" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 4063.6)" r="2"/>
+  <rect id="cf" x="40" y="4057.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cf"/>
    </flowRegion>
-   <flowDiv>As estrelas no Inkscape têm mais dois truques na manga. Em geometria, um polígono é uma forma com bordas em linha reta e cantos pontiagudos. No mundo real, no entanto, estão normalmente presentes vários níveis de curvatura e arredondamento — e o Inkscape pode fazer isso também. Arredondar uma estrela ou polígono funciona de forma um pouco diferente de arredondar um retângulo. Não se usa uma alça dedicada para isto, mas sim:</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to remove the skew without dragging.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 4167.4)" r="2"/>
-  <rect id="ce" x="40" y="4161.4" width="280" height="1e3px" display="none"/>
+  <rect id="ce" x="20" y="4074.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ce"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> a handle tangentially to round the star or polygon.</flowDiv>
+   <flowDiv>As a useful complement for the on-canvas handle dragging, the Controls bar has the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Spoke ratio</flowSpan> field which defines the ratio of the two handles' distances to the center.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 4184.8)" r="2"/>
-  <rect id="cd" x="40" y="4178.8" width="280" height="1e3px" display="none"/>
+  <rect id="cd" x="20" y="4101.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> a handle to remove rounding.</flowDiv>
+   <flowDiv>As estrelas no Inkscape têm mais dois truques na manga. Em geometria, um polígono é uma forma com bordas em linha reta e cantos pontiagudos. No mundo real, no entanto, estão normalmente presentes vários níveis de curvatura e arredondamento — e o Inkscape pode fazer isso também. Arredondar uma estrela ou polígono funciona de forma um pouco diferente de arredondar um retângulo. Não se usa uma alça dedicada para isto, mas sim:</flowDiv>
   </flowRoot>
-  <rect id="cb" x="20" y="4196.2" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 4167.4)" r="2"/>
+  <rect id="cc" x="40" y="4161.4" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cc"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> a handle tangentially to round the star or polygon.</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 4184.8)" r="2"/>
+  <rect id="cb" x="40" y="4178.8" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv>"Tangencialmente" significa numa direção perpendicular à direção do centro. Se "rodar" uma alça com Shift no sentido anti-horário ao redor do centro, obterá arredondamento positivo; se rodar no sentido horário, obterá um arredondamento negativo (ver exemplos a seguir de arredondamento negativo).</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> a handle to remove rounding.</flowDiv>
   </flowRoot>
-  <rect id="ca" x="20" y="4245.4" width="300" height="1e3px" display="none"/>
+  <rect id="ca" x="20" y="4196.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ca"/>
+   </flowRegion>
+   <flowDiv>"Tangencialmente" significa numa direção perpendicular à direção do centro. Se "rodar" uma alça com Shift no sentido anti-horário ao redor do centro, obterá arredondamento positivo; se rodar no sentido horário, obterá um arredondamento negativo (ver exemplos a seguir de arredondamento negativo).</flowDiv>
+  </flowRoot>
+  <rect id="bz" x="20" y="4245.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bz"/>
    </flowRegion>
    <flowDiv>Aqui está uma comparação de um quadrado arredondado (ferramenta Retângulo) com um polígono de 4 cantos arredondados (ferramenta Polígono):</flowDiv>
   </flowRoot>
@@ -994,17 +994,17 @@
    <rect x="56.117" y="1.8127" width="87.192" height="87.192" rx="18.04" ry="18.04" color="#000000" fill-rule="evenodd"/>
    <text x="99.512451" y="41.917397" fill="#ffffff" font-family="'Liberation Sans',Arial,sans-serif" font-size="10px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="99.512451" y="41.917397" sodipodi:role="line">Rounded</tspan><tspan x="99.512451" y="54.417397" sodipodi:role="line">Retângulo</tspan></text>
   </g>
-  <rect id="bz" x="20" y="4384.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bz"/>
-   </flowRegion>
-   <flowDiv>Como se pode ver, enquanto um retângulo arredondado tem segmentos de linha reta nos seus lados e nos arredondamentos circulares (geralmente elípticos), um polígono ou estrela arredondada não tem nenhuma linha reta; a sua curvatura varia suavemente entre um máximo (nos cantos) e um mínimo (na metade da distância entre os cantos). O Inkscape faz isto simplesmente adicionando tangentes Bézier colineares em cada nó da forma (pode-se observá-los convertendo a forma geométrica num caminho e examinar com a ferramenta Nó).</flowDiv>
-  </flowRoot>
-  <rect id="by" x="20" y="4465.3" width="300" height="1e3px" display="none"/>
+  <rect id="by" x="20" y="4384.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#by"/>
+   </flowRegion>
+   <flowDiv>Como se pode ver, enquanto um retângulo arredondado tem segmentos de linha reta nos seus lados e nos arredondamentos circulares (geralmente elípticos), um polígono ou estrela arredondada não tem nenhuma linha reta; a sua curvatura varia suavemente entre um máximo (nos cantos) e um mínimo (na metade da distância entre os cantos). O Inkscape faz isto simplesmente adicionando tangentes Bézier colineares em cada nó da forma (pode-se observá-los convertendo a forma geométrica num caminho e examinar com a ferramenta Nó).</flowDiv>
+  </flowRoot>
+  <rect id="bx" x="20" y="4465.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bx"/>
    </flowRegion>
    <flowDiv>The <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Rounded</flowSpan> parameter which you can adjust in the Controls bar is the ratio of the length of these tangents to the length of the polygon/star sides to which they are adjacent. This parameter can be negative, which reverses the direction of tangents. The values of about 0.2 to 0.4 give “normal” rounding of the kind you would expect; other values tend to produce beautiful, intricate, and totally unpredictable patterns. A star with a large roundedness value may reach far beyond the positions of its handles. Here are a few examples, each indicating its roundedness value:</flowDiv>
   </flowRoot>
@@ -1173,56 +1173,56 @@
    <flowDiv>Na alça externa:</flowDiv>
   </flowRoot>
   <circle transform="translate(35 5598)" r="2"/>
-  <rect id="bi" x="40" y="5592" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bi"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to scale/rotate around center (no rolling/unrolling).</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 5615.4)" r="2"/>
-  <rect id="bh" x="40" y="5609.4" width="280" height="1e3px" display="none"/>
+  <rect id="bh" x="40" y="5592" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to lock radius while rolling/unrolling.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to scale/rotate around center (no rolling/unrolling).</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="5626.7" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 5615.4)" r="2"/>
+  <rect id="bg" x="40" y="5609.4" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>Na alça interna:</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to lock radius while rolling/unrolling.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5650)" r="2"/>
-  <rect id="bf" x="40" y="5644" width="280" height="1e3px" display="none"/>
+  <rect id="bf" x="20" y="5626.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> vertically to converge/diverge.</flowDiv>
+   <flowDiv>Na alça interna:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5667.3)" r="2"/>
-  <rect id="be" x="40" y="5661.3" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#be"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to reset divergence.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 5684.6)" r="2"/>
-  <rect id="bd" x="40" y="5678.6" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 5650)" r="2"/>
+  <rect id="bd" x="40" y="5644" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to move the inner handle to the center.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> vertically to converge/diverge.</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="5694.3" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 5667.3)" r="2"/>
+  <rect id="bc" x="40" y="5661.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to reset divergence.</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 5684.6)" r="2"/>
+  <rect id="bb" x="40" y="5678.6" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bb"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to move the inner handle to the center.</flowDiv>
+  </flowRoot>
+  <rect id="ba" x="20" y="5694.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ba"/>
    </flowRegion>
    <flowDiv>The <flowSpan font-style="italic">divergence</flowSpan> of a spiral is the measure of nonlinearity of its winds. When it is equal to 1, the spiral is uniform; when it is less than 1 (<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> upwards), the spiral is denser on the periphery; when it is greater than 1 (<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> downwards), the spiral is denser towards the center:</flowDiv>
   </flowRoot>
@@ -1236,17 +1236,17 @@
   <path transform="translate(20 5750.1) scale(-1 1)" d="m-277.29 29.463c-1e-5 2e-6 -1e-5 -6e-6 -1e-5 -7e-6 0-4.3e-5 7e-5 -5.7e-5 9e-5 -5.6e-5 2.6e-4 9e-6 3.1e-4 3.7e-4 2.7e-4 5.53e-4 -1.7e-4 9.61e-4 -1e-3 0.0011-2e-3 8.71e-4 -3e-3 -8.42e-4 -3e-3 -0.0046-2e-3 -0.0069 3e-3 -0.0071 0.0122-0.0075 0.0181-0.0047 0.0155 0.0073 0.0159 0.0283 9e-3 0.04156-0.0167 0.03097-0.0593 0.03114-0.0863 0.01497-0.0575-0.03443-0.0567-0.11483-0.0236-0.16574 0.0654-0.10069 0.20849-0.09745 0.29871-0.03485 0.16791 0.1165 0.1599 0.35897 0.0485 0.51097-0.19708 0.26884-0.59116 0.25228-0.83663 0.06374-0.41576-0.31934-0.38497-0.9374-0.0793-1.3198 0.4989-0.62405 1.4388-0.57081 2.0164-0.09271 0.91266 0.75542 0.82547 2.1468 0.10067 2.9961-1.1132 1.3046-3.1245 1.1678-4.3445 0.09832-1.8275-1.602-1.6202-4.4489-0.0792-6.1651 2.2575-2.5142 6.2121-2.2092 8.582-0.0349 3.4033 3.1224 2.9657 8.5236-0.0453 11.742-4.2468 4.54-11.512 3.9256-15.819-0.17464-5.9764-5.6898-5.1302-15.329 0.36947-21.013 7.5195-7.7726 20.147-6.6268 27.558 0.64943 9.9973 9.8149 8.4692 26.167-1.038 35.721" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-36.75835" sodipodi:cx="-277.28845" sodipodi:cy="29.462816" sodipodi:expansion="6" sodipodi:radius="28.251171" sodipodi:revolution="6" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 5750.1) scale(-1 1)" d="m-96.58 37.072c2.6555 3.6418-2.0606 5.3029-4.6596 3.3976-3.2858-2.4088-2.798-7.3215-0.14538-9.9872 3.591-3.6087 9.5797-2.9358 12.876 0.70479 4.0049 4.4238 3.1466 11.407-1.2754 15.204-5.1117 4.3887-12.983 3.3679-17.214-1.7219-4.7502-5.7134-3.5854-14.387 2.0967-19.011 6.2556-5.0901 15.667-3.7952 20.65 2.4243 5.4109 6.7534 3.9968 16.851-2.7182 22.168-7.2164 5.7149-17.956 4.1904-23.589-2.9864-6.0043-7.651-4.3765-18.998 3.2345-24.928 8.0621-6.281 19.986-4.5557 26.198 3.4663 6.5464 8.4529 4.7287 20.927-3.6844 27.41-8.8264 6.8016-21.827 4.896-28.57-3.891-7.0479-9.1846-5.058-22.692 4.0876-29.685 9.5293-7.2859 23.525-5.2152 30.759 4.2756 7.5166 9.8619 5.3679 24.33-4.456 31.797-10.184 7.7404-25.109 5.5166-32.802-4.6296-7.9581-10.495-5.6615-25.865 4.7971-33.778 10.798-8.17 26.599-5.8028 34.725 4.959 8.3766 11.093 5.9409 27.313-5.116 35.648-11.38 8.5782-28.009 6.0759-36.547-5.2684-8.7753-11.659-6.208-28.688 5.4166-37.425 11.933-8.9681 29.352-6.3373 38.283 5.561 9.1568 12.2 6.4642 30.001-5.7017 39.122" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-36.75835" sodipodi:cx="-96.57975" sodipodi:cy="37.071815" sodipodi:expansion="0.5" sodipodi:radius="28.251171" sodipodi:revolution="6" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 5750.1) scale(-1 1)" d="m-36.343 37.072c9.9592 13.658-4.981 16.344-12.09 8.8153-6.1702-6.5352-4.7374-17.131 1.9634-22.703 7.5862-6.3074 19.127-4.7041 25.186 2.9057 6.5555 8.2329 4.7964 20.526-3.4284 26.934-8.7186 6.7925-21.622 4.9108-28.312-3.7895-7.0074-9.1134-5.0257-22.533 4.0659-29.462 9.449-7.2018 23.317-5.1357 30.456 4.2904 7.3788 9.7422 5.2394 24.007-4.4799 31.334-10.004 7.5411-24.626 5.3369-32.123-4.6443-7.691-10.24-5.4286-25.189 4.7898-32.841 10.457-7.8305 25.705-5.5151 33.501 4.9204 7.9608 10.656 5.5968 26.183-5.0392 34.112-10.842 8.0833-26.628 5.6744-34.683-5.1482-8.199-11.016-5.7481-27.045 5.249-35.218 11.179-8.3085 27.439-5.8183 35.723 5.3429 8.4126 11.334 5.8855 27.81-5.4308 36.201-11.48 8.5118-28.163 5.9498-36.654-5.5135-8.6067-11.62-6.0115-28.499 5.5917-37.086 11.752-8.6975 28.82-6.0708 37.499 5.6658 8.7848 11.88 6.1279 29.128-5.7363 37.895-12.002 8.8687-29.422 6.1831-38.274-5.8036-8.9496-12.119-6.2363-29.706 5.8679-38.64 12.232-9.0277 29.979-6.2878 38.991 5.9296 9.1032 12.34 6.3377 30.242-5.9888 39.331" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-36.75835" sodipodi:cx="-36.343452" sodipodi:cy="37.071815" sodipodi:expansion="0.2" sodipodi:radius="28.251171" sodipodi:revolution="6" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <rect id="ba" x="20" y="5825.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ba"/>
-   </flowRegion>
-   <flowDiv>O número máximo de revoluções, ou seja voltas, para uma espiral é 1024.</flowDiv>
-  </flowRoot>
-  <rect id="az" x="20" y="5842.5" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="5825.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#az"/>
+   </flowRegion>
+   <flowDiv>O número máximo de revoluções, ou seja voltas, para uma espiral é 1024.</flowDiv>
+  </flowRoot>
+  <rect id="ay" x="20" y="5842.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ay"/>
    </flowRegion>
    <flowDiv>Assim como a ferramenta Círculo é adequada não apenas para círculos e elipses mas também para arcos (linhas de curvatura constante), a ferramenta Espiral é útil para fazer linhas com curvatura que <flowSpan font-style="italic">varia suavemente</flowSpan>. Comparada a uma curva Bézier comum, um arco ou uma espiral é geralmente mais prática porque se pode diminuí-la ou aumentá-la arrastando uma alça ao longo da curva sem afetar a sua forma. Para além disso, enquanto uma espiral é normalmente criada sem preenchimento, pode-se adicionar preenchimento e remover o traço para criar efeitos interessantes.</flowDiv>
   </flowRoot>
@@ -1270,27 +1270,27 @@
   <path transform="translate(20 5931.7) matrix(-.4889 -.4889 .4889 -.4889 -2793.2 3319.2)" d="m241.32 6459.8c0.70485-3.0046 4.8734-3.2812 7.2313-2.5958 10.574 3.0737 11.298 17.568 8.3935 26.061-1.9033 5.5648-5.2933 10.55-9.4538 14.676" color="#000000" fill="none" stroke="#000" stroke-width="1.4463pt" sodipodi:argument="-16.24534" sodipodi:cx="242.34204" sodipodi:cy="6461.3071" sodipodi:expansion="13.200652" sodipodi:radius="36.96331" sodipodi:revolution="2.8132913" sodipodi:t0="0.79694211" sodipodi:type="spiral"/>
   <path transform="translate(20 5931.7) scale(-1)" d="m-257.87-57.577c0.48734-2.0774 3.3695-2.2686 4.9998-1.7947 7.3107 2.1251 7.8118 12.146 5.8033 18.019-1.3017 3.8058-3.6095 7.2203-6.4432 10.054" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-16.24534" sodipodi:cx="-257.16202" sodipodi:cy="-56.513443" sodipodi:expansion="13.200652" sodipodi:radius="25.47789" sodipodi:revolution="2.8126345" sodipodi:t0="0.7971282" sodipodi:type="spiral"/>
   <path transform="translate(20 5931.7) matrix(-.3457 .59877 -.59877 -.3457 4234.6 2172)" d="m241.32 6459.8c0.70484-3.0046 4.8734-3.2812 7.2313-2.5958 10.574 3.0736 11.298 17.568 8.3936 26.061-5.8132 16.996-23.616 26.861-40.458 29.582" color="#000000" fill="none" stroke="#000" stroke-width="1.4463pt" sodipodi:argument="-16.24534" sodipodi:cx="242.34204" sodipodi:cy="6461.3071" sodipodi:expansion="13.200652" sodipodi:radius="57.635422" sodipodi:revolution="2.9095716" sodipodi:t0="0.7705704" sodipodi:type="spiral"/>
-  <rect id="ay" x="20" y="6043.6" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="6043.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ay"/>
+    <use xlink:href="#ax"/>
    </flowRegion>
    <flowDiv>Especialmente interessantes são as espirais com traço pontilhado — elas combinam a concentração suave da forma com espaçamento regular de pontos ou pequenos traços criando belos efeitos moiré:</flowDiv>
   </flowRoot>
   <path transform="translate(20 6088.5) matrix(-.17215 .64245 -.64245 -.17215 4253.6 1103.7)" d="m103.2 6518.4c0.36965 0.459-0.43058 0.7245-0.75891 0.6112-0.87059-0.3005-0.88847-1.4597-0.45146-2.1142 0.77579-1.1617 2.4473-1.1256 3.4519-0.3021 1.4666 1.2021 1.3714 3.4426 0.15551 4.7817-1.6141 1.7777-4.4386 1.6205-6.106 0.01-2.0915-2.0198-1.8712-5.4337 0.13398-7.4261 2.422-2.4066 6.4275-2.1227 8.7428 0.2775 2.7221 2.822 2.3744 7.42-0.42059 10.057-3.2204 3.038-8.411 2.6263-11.368-0.5632-3.3538-3.6174-2.8781-9.4007 0.70542-12.677 4.0136-3.6696 10.389-3.1299 13.984 0.8473 3.9852 4.4089 3.3816 11.377-0.98896 15.29-4.8035 4.3007-12.363 3.6331-16.594-1.1304-4.616-5.1975-3.8845-13.348 1.2715-17.896 5.5909-4.9311 14.333-4.1359 19.197 1.4124 5.246 5.9839 4.387 15.316-1.5533 20.497-6.3764 5.5608-16.299 4.638-21.795-1.6939-5.8753-6.7685-4.8888-17.281 1.8344-23.092 7.1602-6.1896 18.262-5.1395 24.389 1.9747 6.5038 7.5516 5.39 19.242-2.1149 25.684-7.9426 6.8178-20.222 5.6404-26.979-2.255-7.1316-8.3333-5.8908-21.201 2.3949-28.272 8.7238-7.4453 22.179-6.1409 29.565 2.5347 7.7588 9.114 6.3909 23.157-2.6744 30.857-9.5039 8.0721-24.134 6.6409-32.148-2.814-8.3853-9.8936-6.8906-25.111 2.9536-33.438 10.283-8.6983 26.087-7.1404 34.728 3.093 9.0112 10.672 7.3899 27.063-3.2324 36.017-11.061 9.3239-28.038 7.6393-37.305-3.3716-9.6365-11.45-7.8887-29.013 3.5108-38.593 11.839-9.9489 29.987-8.1379 39.88 3.6499 10.261 12.227 8.387 30.961-3.7889 41.166-12.615 10.574-31.934 8.6361-42.452-3.9279-10.886-13.003-8.885-32.907 4.0668-43.737 13.391-11.198 33.88-9.1339 45.022 4.2056 11.509 13.779 9.3826 34.852-4.3444 46.306-14.166 11.821-35.824 9.6313-47.59-4.483-12.133-14.554-9.8798-36.795 4.6217-48.873 14.941-12.444 37.766-10.128 50.156 4.7603 12.756 15.328 10.377 38.737-4.8988 51.438-15.715 13.067-39.707 10.625-52.72-5.0372-13.378-16.102-10.873-40.677 5.1757-54.002 16.488-13.689 41.647-11.122 55.282 5.314 14 16.875 11.37 42.616-5.4523 56.563-17.261 14.311-43.585 11.618-57.843-5.5906-14.622-17.647-11.866-44.554 5.7288-59.123 18.033-14.933 45.522-12.113 60.402 5.8669 15.243 18.419 12.361 46.49-6.005 61.681-18.805 15.554-47.458 12.609-62.959-6.1431-15.864-19.191-12.857-48.426 6.2811-64.237 19.577-16.174 49.393-13.104 65.515 6.4191 16.485 19.962 13.352 50.36-6.5571 66.793-20.348 16.795-51.327 13.599-68.07-6.695-17.105-20.733-13.847-52.293 6.8328-69.346 21.118-17.415 53.259-14.094 70.623 6.9706 17.725 21.503 14.341 54.225-7.1084 71.899-21.888 18.035-55.191 14.588-73.174-7.2461-18.345-22.273-14.836-56.156 7.3839-74.45 22.658-18.654 57.122-15.083 75.725 7.5215 18.964 23.043 15.33 58.087-7.6592 77-23.427 19.274-59.051 15.577-78.274-7.7967-19.583-23.812-15.824-60.016 7.9343-79.548 24.196-19.893 60.98-16.07 80.822 8.0719 20.202 24.581 16.317 61.944-8.2093 82.096-24.965 20.511-62.908 16.564-83.369-8.3468-20.821-25.349-16.811-63.872 8.4842-84.642 25.733-21.13 64.836-17.058 85.915 8.6216 21.439 26.117 17.304 65.799-8.759 87.187-26.501 21.748-66.762 17.551-88.459-8.8963-22.057-26.885-17.797-67.725 9.0336-89.731 27.269-22.366 68.687-18.044 91.003 9.1709 22.675 27.653 18.29 69.65-9.3081 92.274-28.036 22.984-70.612 18.536-93.546-9.4454-23.292-28.42-18.783-71.574 9.5825-94.816 28.803-23.601 72.536-19.029 96.087 9.7196 6.5075 7.9438 11.19 17.336 13.625 27.312" color="#000000" fill="none" stroke="#000" stroke-dasharray="1.875, 1.875" stroke-width="3.75" sodipodi:argument="-36.806286" sodipodi:cx="103.19778" sodipodi:cy="6518.4199" sodipodi:expansion="0.98582262" sodipodi:radius="68.998032" sodipodi:revolution="18.821123" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 6088.5) matrix(-.17929 .65451 -.66912 -.17538 4627.6 1123.6)" d="m103.2 6518.4c0.36965 0.459-0.43058 0.7245-0.75891 0.6112-0.87059-0.3005-0.88847-1.4597-0.45146-2.1142 0.77579-1.1617 2.4473-1.1256 3.4519-0.3021 1.4666 1.2021 1.3714 3.4426 0.15551 4.7817-1.6141 1.7777-4.4386 1.6205-6.106 0.01-2.0915-2.0198-1.8712-5.4337 0.13398-7.4261 2.422-2.4066 6.4275-2.1227 8.7428 0.2775 2.7221 2.822 2.3744 7.42-0.42059 10.057-3.2204 3.038-8.411 2.6263-11.368-0.5632-3.3538-3.6174-2.8781-9.4007 0.70542-12.677 4.0136-3.6696 10.389-3.1299 13.984 0.8473 3.9852 4.4089 3.3816 11.377-0.98896 15.29-4.8035 4.3007-12.363 3.6331-16.594-1.1304-4.616-5.1975-3.8845-13.348 1.2715-17.896 5.5909-4.9311 14.333-4.1359 19.197 1.4124 5.246 5.9839 4.387 15.316-1.5533 20.497-6.3764 5.5608-16.299 4.638-21.795-1.6939-5.8753-6.7685-4.8888-17.281 1.8344-23.092 7.1602-6.1896 18.262-5.1395 24.389 1.9747 6.5038 7.5516 5.39 19.242-2.1149 25.684-7.9426 6.8178-20.222 5.6404-26.979-2.255-7.1316-8.3333-5.8908-21.201 2.3949-28.272 8.7238-7.4453 22.179-6.1409 29.565 2.5347 7.7588 9.114 6.3909 23.157-2.6744 30.857-9.5039 8.0721-24.134 6.6409-32.148-2.814-8.3853-9.8936-6.8906-25.111 2.9536-33.438 10.283-8.6983 26.087-7.1404 34.728 3.093 9.0112 10.672 7.3899 27.063-3.2324 36.017-11.061 9.3239-28.038 7.6393-37.305-3.3716-9.6365-11.45-7.8887-29.013 3.5108-38.593 11.839-9.9489 29.987-8.1379 39.88 3.6499 10.261 12.227 8.387 30.961-3.7889 41.166-12.615 10.574-31.934 8.6361-42.452-3.9279-10.886-13.003-8.885-32.907 4.0668-43.737 13.391-11.198 33.88-9.1339 45.022 4.2056 11.509 13.779 9.3826 34.852-4.3444 46.306-14.166 11.821-35.824 9.6313-47.59-4.483-12.133-14.554-9.8798-36.795 4.6217-48.873 14.941-12.444 37.766-10.128 50.156 4.7603 12.756 15.328 10.377 38.737-4.8988 51.438-15.715 13.067-39.707 10.625-52.72-5.0372-13.378-16.102-10.873-40.677 5.1757-54.002 16.488-13.689 41.647-11.122 55.282 5.314 14 16.875 11.37 42.616-5.4523 56.563-17.261 14.311-43.585 11.618-57.843-5.5906-14.622-17.647-11.866-44.554 5.7288-59.123 18.033-14.933 45.522-12.113 60.402 5.8669 15.243 18.419 12.361 46.49-6.005 61.681-18.805 15.554-47.458 12.609-62.959-6.1431-15.864-19.191-12.857-48.426 6.2811-64.237 19.577-16.174 49.393-13.104 65.515 6.4191 16.485 19.962 13.352 50.36-6.5571 66.793-20.348 16.795-51.327 13.599-68.07-6.695-17.105-20.733-13.847-52.293 6.8328-69.346 21.118-17.415 53.259-14.094 70.623 6.9706 17.725 21.503 14.341 54.225-7.1084 71.899-21.888 18.035-55.191 14.588-73.174-7.2461-18.345-22.273-14.836-56.156 7.3839-74.45 22.658-18.654 57.122-15.083 75.725 7.5215 18.964 23.043 15.33 58.087-7.6592 77-23.427 19.274-59.051 15.577-78.274-7.7967-19.583-23.812-15.824-60.016 7.9343-79.548 24.196-19.893 60.98-16.07 80.822 8.0719 20.202 24.581 16.317 61.944-8.2093 82.096-24.965 20.511-62.908 16.564-83.369-8.3468-20.821-25.349-16.811-63.872 8.4842-84.642 25.733-21.13 64.836-17.058 85.915 8.6216 21.439 26.117 17.304 65.799-8.759 87.187-26.501 21.748-66.762 17.551-88.459-8.8963-22.057-26.885-17.797-67.725 9.0336-89.731 27.269-22.366 68.687-18.044 91.003 9.1709 22.675 27.653 18.29 69.65-9.3081 92.274-28.036 22.984-70.612 18.536-93.546-9.4454-23.292-28.42-18.783-71.574 9.5825-94.816 28.803-23.601 72.536-19.029 96.087 9.7196 6.5075 7.9438 11.19 17.336 13.625 27.312" color="#000000" fill="none" stroke="#000" stroke-dasharray="3.75, 3.75" stroke-width="7.5" sodipodi:argument="-36.806286" sodipodi:cx="103.19778" sodipodi:cy="6518.4199" sodipodi:expansion="0.98582262" sodipodi:radius="68.998032" sodipodi:revolution="18.821123" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 6088.5) matrix(-.17929 .65451 -.66912 -.17538 4526.2 1123.2)" d="m103.2 6518.4c0.36965 0.459-0.43058 0.7245-0.75891 0.6112-0.87059-0.3005-0.88847-1.4597-0.45146-2.1142 0.77579-1.1617 2.4473-1.1256 3.4519-0.3021 1.4666 1.2021 1.3714 3.4426 0.15551 4.7817-1.6141 1.7777-4.4386 1.6205-6.106 0.01-2.0915-2.0198-1.8712-5.4337 0.13398-7.4261 2.422-2.4066 6.4275-2.1227 8.7428 0.2775 2.7221 2.822 2.3744 7.42-0.42059 10.057-3.2204 3.038-8.411 2.6263-11.368-0.5632-3.3538-3.6174-2.8781-9.4007 0.70542-12.677 4.0136-3.6696 10.389-3.1299 13.984 0.8473 3.9852 4.4089 3.3816 11.377-0.98896 15.29-4.8035 4.3007-12.363 3.6331-16.594-1.1304-4.616-5.1975-3.8845-13.348 1.2715-17.896 5.5909-4.9311 14.333-4.1359 19.197 1.4124 5.246 5.9839 4.387 15.316-1.5533 20.497-6.3764 5.5608-16.299 4.638-21.795-1.6939-5.8753-6.7685-4.8888-17.281 1.8344-23.092 7.1602-6.1896 18.262-5.1395 24.389 1.9747 6.5038 7.5516 5.39 19.242-2.1149 25.684-7.9426 6.8178-20.222 5.6404-26.979-2.255-7.1316-8.3333-5.8908-21.201 2.3949-28.272 8.7238-7.4453 22.179-6.1409 29.565 2.5347 7.7588 9.114 6.3909 23.157-2.6744 30.857-9.5039 8.0721-24.134 6.6409-32.148-2.814-8.3853-9.8936-6.8906-25.111 2.9536-33.438 10.283-8.6983 26.087-7.1404 34.728 3.093 9.0112 10.672 7.3899 27.063-3.2324 36.017-11.061 9.3239-28.038 7.6393-37.305-3.3716-9.6365-11.45-7.8887-29.013 3.5108-38.593 11.839-9.9489 29.987-8.1379 39.88 3.6499 10.261 12.227 8.387 30.961-3.7889 41.166-12.615 10.574-31.934 8.6361-42.452-3.9279-10.886-13.003-8.885-32.907 4.0668-43.737 13.391-11.198 33.88-9.1339 45.022 4.2056 11.509 13.779 9.3826 34.852-4.3444 46.306-14.166 11.821-35.824 9.6313-47.59-4.483-12.133-14.554-9.8798-36.795 4.6217-48.873 14.941-12.444 37.766-10.128 50.156 4.7603 12.756 15.328 10.377 38.737-4.8988 51.438-15.715 13.067-39.707 10.625-52.72-5.0372-13.378-16.102-10.873-40.677 5.1757-54.002 16.488-13.689 41.647-11.122 55.282 5.314 14 16.875 11.37 42.616-5.4523 56.563-17.261 14.311-43.585 11.618-57.843-5.5906-14.622-17.647-11.866-44.554 5.7288-59.123 18.033-14.933 45.522-12.113 60.402 5.8669 15.243 18.419 12.361 46.49-6.005 61.681-18.805 15.554-47.458 12.609-62.959-6.1431-15.864-19.191-12.857-48.426 6.2811-64.237 19.577-16.174 49.393-13.104 65.515 6.4191 16.485 19.962 13.352 50.36-6.5571 66.793-20.348 16.795-51.327 13.599-68.07-6.695-17.105-20.733-13.847-52.293 6.8328-69.346 21.118-17.415 53.259-14.094 70.623 6.9706 17.725 21.503 14.341 54.225-7.1084 71.899-21.888 18.035-55.191 14.588-73.174-7.2461-18.345-22.273-14.836-56.156 7.3839-74.45 22.658-18.654 57.122-15.083 75.725 7.5215 18.964 23.043 15.33 58.087-7.6592 77-23.427 19.274-59.051 15.577-78.274-7.7967-19.583-23.812-15.824-60.016 7.9343-79.548 24.196-19.893 60.98-16.07 80.822 8.0719 20.202 24.581 16.317 61.944-8.2093 82.096-24.965 20.511-62.908 16.564-83.369-8.3468-20.821-25.349-16.811-63.872 8.4842-84.642 25.733-21.13 64.836-17.058 85.915 8.6216 21.439 26.117 17.304 65.799-8.759 87.187-26.501 21.748-66.762 17.551-88.459-8.8963-22.057-26.885-17.797-67.725 9.0336-89.731 27.269-22.366 68.687-18.044 91.003 9.1709 22.675 27.653 18.29 69.65-9.3081 92.274-28.036 22.984-70.612 18.536-93.546-9.4454-23.292-28.42-18.783-71.574 9.5825-94.816 28.803-23.601 72.536-19.029 96.087 9.7196 6.5075 7.9438 11.19 17.336 13.625 27.312" color="#000000" fill="none" stroke="#000" stroke-dasharray="0.604293, 7.25151" stroke-width=".60429" sodipodi:argument="-36.806286" sodipodi:cx="103.19778" sodipodi:cy="6518.4199" sodipodi:expansion="0.98582262" sodipodi:radius="68.998032" sodipodi:revolution="18.821123" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <rect id="ax" x="20" y="6203.2" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="6203.2" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ax"/>
+    <use xlink:href="#aw"/>
    </flowRegion>
    <flowDiv>Conclusão</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="6214.1" width="300" height="1e3px" display="none"/>
+  <rect id="av" x="20" y="6214.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#aw"/>
+    <use xlink:href="#av"/>
    </flowRegion>
    <flowDiv>As ferramentas de formas geométricas do Inkscape são muito poderosas. Aprenda os seus truques e brinque com elas no seu tempo livre — isto dará resultados quando fizer os seus trabalhos gráficos, porque usar formas em vez de caminhos simples é geralmente mais rápido e fácil para alterar. Se tem ideias para melhorar as ferramentas de formas geométricas, por favor entre em contacto com os programadores.</flowDiv>
   </flowRoot>

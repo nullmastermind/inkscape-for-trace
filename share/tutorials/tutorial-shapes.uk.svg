@@ -259,154 +259,154 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#ee"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Фігури</tspan></tspan></text>
-  <rect id="cm" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="by" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#cm"/>
+    <use xlink:href="#by"/>
    </flowRegion>
    <flowDiv>В даному уроці описується чотири інструменти фігур: «Прямокутник», «Еліпс», «Зірка» та «Спіраль». Ми продемонструємо можливості фігур «Inkscape» та покажемо приклади того, як і коли їх можна використовувати.</flowDiv>
   </flowRoot>
-  <rect id="ci" x="40" y="185.11" width="264" height="1e3px" display="none"/>
+  <rect id="bw" x="40" y="185.11" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#ci"/>
+    <use xlink:href="#bw"/>
    </flowRegion>
    <flowDiv>Use <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Arrows</flowSpan>, <flowSpan font-weight="bold">mousewheel</flowSpan>, or <flowSpan font-weight="bold">middle button drag</flowSpan> to scroll the page down. For basics of object creation, selection, and transformation, see the Basic tutorial in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Tutorials</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="225.44" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bk"/>
-   </flowRegion>
-   <flowDiv>«Inkscape» має чотири гручких <flowSpan font-style="italic">інструменти фігур</flowSpan>, кожен зя ких може створювати та редагувати свій власний тип фігури. Фігура – об'єкт, який можна змінювати способом, унікальним для типу цієї фігури, використовуючи <flowSpan font-style="italic">маніпулятори</flowSpan>, які можна перетягувати та числові <flowSpan font-style="italic">параметри</flowSpan>, що визначають зовнішній вигляд фігури.</flowDiv>
-  </flowRoot>
-  <rect id="bb" x="20" y="274.65" width="300" height="1e3px" display="none"/>
+  <rect id="bb" x="20" y="225.44" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv>For example, with a star you can alter the number of tips, their length, angle, rounding, etc. — but a star remains a star. A shape is “less free” than a simple path, but it's often more interesting and useful. You can always convert a shape to a path (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), but the reverse conversion is not possible.</flowDiv>
+   <flowDiv>«Inkscape» має чотири гручких <flowSpan font-style="italic">інструменти фігур</flowSpan>, кожен зя ких може створювати та редагувати свій власний тип фігури. Фігура – об'єкт, який можна змінювати способом, унікальним для типу цієї фігури, використовуючи <flowSpan font-style="italic">маніпулятори</flowSpan>, які можна перетягувати та числові <flowSpan font-style="italic">параметри</flowSpan>, що визначають зовнішній вигляд фігури.</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="323.94" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ax"/>
-   </flowRegion>
-   <flowDiv>Інструментами створення фігур є «<flowSpan font-style="italic">Прямокутник</flowSpan>», «<flowSpan font-style="italic">Еліпс</flowSpan>», «<flowSpan font-style="italic">Зірка</flowSpan>» та «<flowSpan font-style="italic">Спіраль</flowSpan>». Спочатку, розберемося як працюють інструменти створення фігур в цілому; потім, детально розглянемо кожен тип фігури.</flowDiv>
-  </flowRoot>
-  <rect id="aw" x="20" y="367.89" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#aw"/>
-   </flowRegion>
-   <flowDiv>Загальні поради</flowDiv>
-  </flowRoot>
-  <rect id="av" x="20" y="380.35" width="300" height="1e3px" display="none"/>
+  <rect id="av" x="20" y="274.65" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#av"/>
    </flowRegion>
-   <flowDiv>A new shape is created by <flowSpan font-weight="bold">drag</flowSpan>ging on canvas with the corresponding tool. Once the shape is created (and so long as it is selected), it displays its handles as white diamond, square or round marks (depending on the tools), so you can immediately edit what you created by dragging these handles.</flowDiv>
+   <flowDiv>For example, with a star you can alter the number of tips, their length, angle, rounding, etc. — but a star remains a star. A shape is “less free” than a simple path, but it's often more interesting and useful. You can always convert a shape to a path (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), but the reverse conversion is not possible.</flowDiv>
   </flowRoot>
-  <rect id="au" x="20" y="429.58" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="323.94" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#au"/>
    </flowRegion>
-   <flowDiv>All four kinds of shapes display their handles in all four shape tools as well as in the Node tool (<flowSpan font-weight="bold">F2</flowSpan>). When you hover your <flowSpan font-weight="bold">mouse</flowSpan> over a handle, it tells you in the statusbar what this handle will do when dragged or clicked with different modifiers.</flowDiv>
+   <flowDiv>Інструментами створення фігур є «<flowSpan font-style="italic">Прямокутник</flowSpan>», «<flowSpan font-style="italic">Еліпс</flowSpan>», «<flowSpan font-style="italic">Зірка</flowSpan>» та «<flowSpan font-style="italic">Спіраль</flowSpan>». Спочатку, розберемося як працюють інструменти створення фігур в цілому; потім, детально розглянемо кожен тип фігури.</flowDiv>
   </flowRoot>
-  <rect id="at" x="20" y="468.25" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="at" x="20" y="367.89" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
-   <flowDiv>Також, кожен інструмент створення фігур відображає свої параметри на «<flowSpan font-style="italic">Панелі параметрів інструментів</flowSpan>» (горизонтальна над полотном). Зазвичай, вона містить декілька полів введення числових значень і кнопку скидання значень. Коли виділено фігуру﻿(‑и) рідного типу поточного інструменту, то редагування значень на панелі параметрів змінює виділену фігуру﻿(‑и).</flowDiv>
+   <flowDiv>Загальні поради</flowDiv>
   </flowRoot>
-  <rect id="as" x="20" y="528.27" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="380.35" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv>Будь-які зміни, зроблені за допомогою «Панелі параметрів інструментів» запам'ятовуються і використовуються при створенні нового об'єкту тим самим інструментом. Наприклад, після зміни кількості променів зірки, нові зірки будуть створені з такою ж кількістю променів. Крім тоого, навіть простий вибір фігури передає її параметри «Панелі параметрів інструментів» і, таким чином, задає ті значення для новостворених фігур того ж типу.</flowDiv>
+   <flowDiv>A new shape is created by <flowSpan font-weight="bold">drag</flowSpan>ging on canvas with the corresponding tool. Once the shape is created (and so long as it is selected), it displays its handles as white diamond, square or round marks (depending on the tools), so you can immediately edit what you created by dragging these handles.</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="598.92" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="429.58" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv>When in a shape tool, selecting an object can be done by <flowSpan font-weight="bold">click</flowSpan>ing on it. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> (select in group) and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> (select under) also work as they do in Selector tool. <flowSpan font-weight="bold">Esc</flowSpan> deselects.</flowDiv>
+   <flowDiv>All four kinds of shapes display their handles in all four shape tools as well as in the Node tool (<flowSpan font-weight="bold">F2</flowSpan>). When you hover your <flowSpan font-weight="bold">mouse</flowSpan> over a handle, it tells you in the statusbar what this handle will do when dragged or clicked with different modifiers.</flowDiv>
   </flowRoot>
-  <rect id="aq" x="20" y="632.27" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="aq" x="20" y="468.25" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
-   <flowDiv>Прямокутники</flowDiv>
+   <flowDiv>Також, кожен інструмент створення фігур відображає свої параметри на «<flowSpan font-style="italic">Панелі параметрів інструментів</flowSpan>» (горизонтальна над полотном). Зазвичай, вона містить декілька полів введення числових значень і кнопку скидання значень. Коли виділено фігуру﻿(‑и) рідного типу поточного інструменту, то редагування значень на панелі параметрів змінює виділену фігуру﻿(‑и).</flowDiv>
   </flowRoot>
-  <rect id="ap" x="20" y="644.44" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="528.27" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Прямокутник</flowSpan> – найпростіша, але, напевно, найвживаніша фігура в дизайні та ілюстраціях. «Inkscape» намагається зробити створення і редагування прямокутників якомога простішим і зручнішим.</flowDiv>
+   <flowDiv>Будь-які зміни, зроблені за допомогою «Панелі параметрів інструментів» запам'ятовуються і використовуються при створенні нового об'єкту тим самим інструментом. Наприклад, після зміни кількості променів зірки, нові зірки будуть створені з такою ж кількістю променів. Крім тоого, навіть простий вибір фігури передає її параметри «Панелі параметрів інструментів» і, таким чином, задає ті значення для новостворених фігур того ж типу.</flowDiv>
   </flowRoot>
-  <rect id="ao" x="20" y="683" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="598.92" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
+   </flowRegion>
+   <flowDiv>When in a shape tool, selecting an object can be done by <flowSpan font-weight="bold">click</flowSpan>ing on it. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> (select in group) and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> (select under) also work as they do in Selector tool. <flowSpan font-weight="bold">Esc</flowSpan> deselects.</flowDiv>
+  </flowRoot>
+  <rect id="an" x="20" y="632.27" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#an"/>
+   </flowRegion>
+   <flowDiv>Прямокутники</flowDiv>
+  </flowRoot>
+  <rect id="am" x="20" y="644.44" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#am"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-style="italic">Прямокутник</flowSpan> – найпростіша, але, напевно, найвживаніша фігура в дизайні та ілюстраціях. «Inkscape» намагається зробити створення і редагування прямокутників якомога простішим і зручнішим.</flowDiv>
+  </flowRoot>
+  <rect id="al" x="20" y="683" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#al"/>
    </flowRegion>
    <flowDiv>Активуйте інструмент «Прямокутник» натиснувши <flowSpan font-weight="bold">F4</flowSpan> або клацнувши його кнопку на панелі інструментів. Намалюйте новий прямокутник поруч з оцим синім:</flowDiv>
   </flowRoot>
   <text transform="translate(20 719.12)" x="40.248711" y="26.427183" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" opacity=".065574" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan x="40.248711" y="26.427183" font-size="16.8px" style="line-height:1.25" sodipodi:role="line">малюйте тут</tspan></text>
   <rect transform="translate(20 719.12)" x="180.93" y=".625" width="77.318" height="53.706" color="#000000" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="an" x="20" y="786.16" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#an"/>
-   </flowRegion>
-   <flowDiv>Потім, не виходячи з інструменту «Прямокутник», виділіть інший прямокутник, клацнувши по ньому.</flowDiv>
-  </flowRoot>
-  <rect id="am" x="20" y="814.01" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#am"/>
-   </flowRegion>
-   <flowDiv>Клавіатурні скорочення для малювання прямокутників:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 837.03)" r="2"/>
-  <rect id="al" x="40" y="831.03" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#al"/>
-   </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, draw a square or an integer-ratio (2:1, 3:1, etc) rectangle.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 854.31)" r="2"/>
-  <rect id="ak" x="40" y="848.31" width="280" height="1e3px" display="none"/>
+  <rect id="ak" x="20" y="786.16" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ak"/>
    </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Shift</flowSpan>, draw around the starting point as center.</flowDiv>
+   <flowDiv>Потім, не виходячи з інструменту «Прямокутник», виділіть інший прямокутник, клацнувши по ньому.</flowDiv>
   </flowRoot>
-  <rect id="aj" x="20" y="865.67" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="814.01" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aj"/>
    </flowRegion>
-   <flowDiv>Як видно, виділений прямокутник (щойно намальований прямокутник завжди виділений) відображає три маніпулятори в трьох кутах. Насправді, там чотири маніпулятри, просто два з них (в правому верхньому куті) перекриваються, якщо прямокутник без округлень. Ці обидвоє – <flowSpan font-style="italic">маніпулятори округлення</flowSpan>; інші два (верхній лівий і нижній правий) – <flowSpan font-style="italic">маніпулятори зміни розміру</flowSpan>.</flowDiv>
+   <flowDiv>Клавіатурні скорочення для малювання прямокутників:</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="925.51" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 837.03)" r="2"/>
+  <rect id="ai" x="40" y="831.03" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
-   <flowDiv>Спочатку розберемося з маніпуляторами округлення. Захопіть один з них і потягніть вниз. Всі чотири кути прямокутника округляться, і тепер можна побачити другий маніпулятор округлення – він залишається на початковій позиції в кутку. Якщо потрібні круглі округлені кути – це все, що потрібно зробити. Якщо потрібні кути які округлені з однієї сторони далі, ніж з іншої, то потягніть інший маніпулятор вліво.</flowDiv>
+   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, draw a square or an integer-ratio (2:1, 3:1, etc) rectangle.</flowDiv>
   </flowRoot>
-  <rect id="ah" x="20" y="985.52" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 854.31)" r="2"/>
+  <rect id="ah" x="40" y="848.31" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
+   </flowRegion>
+   <flowDiv>With <flowSpan font-weight="bold">Shift</flowSpan>, draw around the starting point as center.</flowDiv>
+  </flowRoot>
+  <rect id="ag" x="20" y="865.67" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ag"/>
+   </flowRegion>
+   <flowDiv>Як видно, виділений прямокутник (щойно намальований прямокутник завжди виділений) відображає три маніпулятори в трьох кутах. Насправді, там чотири маніпулятри, просто два з них (в правому верхньому куті) перекриваються, якщо прямокутник без округлень. Ці обидвоє – <flowSpan font-style="italic">маніпулятори округлення</flowSpan>; інші два (верхній лівий і нижній правий) – <flowSpan font-style="italic">маніпулятори зміни розміру</flowSpan>.</flowDiv>
+  </flowRoot>
+  <rect id="af" x="20" y="925.51" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#af"/>
+   </flowRegion>
+   <flowDiv>Спочатку розберемося з маніпуляторами округлення. Захопіть один з них і потягніть вниз. Всі чотири кути прямокутника округляться, і тепер можна побачити другий маніпулятор округлення – він залишається на початковій позиції в кутку. Якщо потрібні круглі округлені кути – це все, що потрібно зробити. Якщо потрібні кути які округлені з однієї сторони далі, ніж з іншої, то потягніть інший маніпулятор вліво.</flowDiv>
+  </flowRoot>
+  <rect id="ae" x="20" y="985.52" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ae"/>
    </flowRegion>
    <flowDiv>Ось – перші два прямокутники з круглими округленими кутами, а інші два – з еліптичними округленими кутами:</flowDiv>
   </flowRoot>
@@ -416,24 +416,24 @@
   <rect transform="translate(20 1021.2)" x="83.596" y="11.833" width="56.849" height="33.94" ry="16.97" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 1021.2)" x="159.72" y="11.833" width="56.849" height="33.94" rx="6.6372" ry="16.97" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 1021.2)" x="234.28" y="11.833" width="56.849" height="33.94" rx="24.046" ry="5.9394" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="ag" x="20" y="1078" width="300" height="1e3px" display="none"/>
+  <rect id="ea" x="20" y="1078" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ag"/>
+    <use xlink:href="#ea"/>
    </flowRegion>
    <flowDiv>Не виходячи з інструменту «Прямокутник», клацніть по них, щоб вибрати і подивитися на їхні маніпулятори округлення.</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="1106.1" width="300" height="1e3px" display="none"/>
+  <rect id="dz" x="20" y="1106.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#af"/>
+    <use xlink:href="#dz"/>
    </flowRegion>
    <flowDiv>Часто, радіус та форма округлених кутів мають бути постійними у всій композиції, навіть, якщо розміри прямокутника різні (уявіть діаграми з округленими прямокутниками різних розмірів). «Inkscape» робить це простим. Активуйте інструмент «Селектор»; на його панелі параметрів інструментів є група з чотирьох кнопок-прапорців, на другій зліва – зображено два концентричних скруглених кути. Ось так контролюється чи масштабувати округлені кути при масштабуванні прямокутника чи ні.</flowDiv>
   </flowRoot>
-  <rect id="ae" x="20" y="1187.4" width="300" height="1e3px" display="none"/>
+  <rect id="dy" x="20" y="1187.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ae"/>
+    <use xlink:href="#dy"/>
    </flowRegion>
    <flowDiv>For example, here the original red rectangle is duplicated and scaled several times, up and down, to different proportions, with the “<flowSpan font-family="Liberation Sans,Arial,sans-serif">Scale rounded corners</flowSpan>” button <flowSpan font-style="italic">off</flowSpan>:</flowDiv>
   </flowRoot>
@@ -446,17 +446,17 @@
   <rect transform="translate(20 1223.4)" x="218.34" y=".33081" width="47.954" height="149.52" rx="6.6372" ry="16.97" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1223.4)" x="227.64" y=".31225" width="38.352" height="28.79" rx="6.6371" ry="16.97" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1223.4)" x="36.352" y=".35815" width="229.82" height="41.087" rx="6.6371" ry="16.97" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
-  <rect id="ea" x="20" y="1390.2" width="300" height="1e3px" display="none"/>
+  <rect id="dx" x="20" y="1390.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ea"/>
+    <use xlink:href="#dx"/>
    </flowRegion>
    <flowDiv>Зверніть увагу, що розміри та форма округлених кутів однакові в усіх прямокутників, так, що округлення точно співпадають в правому верхньому куті, де вони всі сходяться. Всі сині прямокутники з пунктирним контуром отримано з початкового червоного прямокутника простим масштабуванням «Селектором» без жодного ручного редагування маніпуляторів округлення.</flowDiv>
   </flowRoot>
-  <rect id="dz" x="20" y="1450" width="300" height="1e3px" display="none"/>
+  <rect id="dw" x="20" y="1450" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dz"/>
+    <use xlink:href="#dw"/>
    </flowRegion>
    <flowDiv>For a comparison, here is the same composition but now created with the “<flowSpan font-family="Liberation Sans,Arial,sans-serif">Scale rounded corners</flowSpan>” button <flowSpan font-style="italic">on</flowSpan>:</flowDiv>
   </flowRoot>
@@ -469,99 +469,99 @@
   <rect transform="translate(20 1484.7)" x="205.74" y=".38217" width="60.456" height="55.042" rx="4.8444" ry="14.801" color="#000000" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1484.7)" x="227.86" y=".31296" width="38.454" height="29.249" rx="3.0813" ry="7.8653" color="#000000" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1484.7)" x="38.124" y=".31247" width="227.21" height="42.865" rx="18.207" ry="11.527" color="#000000" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
-  <rect id="dy" x="20" y="1651.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#dy"/>
-   </flowRegion>
-   <flowDiv>Now the rounded corners are as different as the rectangles they belong to, and there isn't a slightest agreement in the top right corner (zoom in to see). This is the same (visible) result as you would get by converting the original rectangle to a path (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>) and scaling it as path.</flowDiv>
-  </flowRoot>
-  <rect id="dx" x="20" y="1700.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#dx"/>
-   </flowRegion>
-   <flowDiv>Ось – клавіатурні скорочення для маніпуляторів округлення прямокутника:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 1723.9)" r="2"/>
-  <rect id="dw" x="40" y="1717.9" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#dw"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to make the other radius the same (circular rounding).</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 1741.2)" r="2"/>
-  <rect id="dv" x="40" y="1735.2" width="280" height="1e3px" display="none"/>
+  <rect id="dv" x="20" y="1651.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dv"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make the other radius the same without dragging.</flowDiv>
+   <flowDiv>Now the rounded corners are as different as the rectangles they belong to, and there isn't a slightest agreement in the top right corner (zoom in to see). This is the same (visible) result as you would get by converting the original rectangle to a path (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>) and scaling it as path.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1758.5)" r="2"/>
-  <rect id="du" x="40" y="1752.5" width="280" height="1e3px" display="none"/>
+  <rect id="du" x="20" y="1700.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#du"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to remove rounding.</flowDiv>
+   <flowDiv>Ось – клавіатурні скорочення для маніпуляторів округлення прямокутника:</flowDiv>
   </flowRoot>
-  <rect id="dt" x="20" y="1769.8" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1723.9)" r="2"/>
+  <rect id="dt" x="40" y="1717.9" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dt"/>
    </flowRegion>
-   <flowDiv>You may have noticed that the Rectangle tool's Controls bar shows the horizontal (<flowSpan font-style="italic">Rx</flowSpan>) and vertical (<flowSpan font-style="italic">Ry</flowSpan>) rounding radii for the selected rectangle and lets you set them precisely using any length units. The <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Not rounded</flowSpan> button does what is says — removes rounding from the selected rectangle(s).</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to make the other radius the same (circular rounding).</flowDiv>
   </flowRoot>
-  <rect id="ds" x="20" y="1819.1" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1741.2)" r="2"/>
+  <rect id="ds" x="40" y="1735.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ds"/>
    </flowRegion>
-   <flowDiv>An important advantage of these controls is that they can affect many rectangles at once. For example, if you want to change all rectangles in the layer, just do <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Select All</flowSpan>) and set the parameters you need in the Controls bar. If any non-rectangles are selected, they will be ignored — only rectangles will be changed.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make the other radius the same without dragging.</flowDiv>
   </flowRoot>
-  <rect id="dr" x="20" y="1868.5" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1758.5)" r="2"/>
+  <rect id="dr" x="40" y="1752.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dr"/>
    </flowRegion>
-   <flowDiv>Тепер поглянемо на маніпулятори зміни розмірів прямокутника. Ви, можливо, запитаєте: навіщо все це, якщо можна змінювати розмір прямокутники за допомогою «Селектора»?</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to remove rounding.</flowDiv>
   </flowRoot>
-  <rect id="dq" x="20" y="1906.8" width="300" height="1e3px" display="none"/>
+  <rect id="dq" x="20" y="1769.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dq"/>
    </flowRegion>
-   <flowDiv>Проблема з «Селектором» полягає в тому, що в ньому поняття горизонталі і вертикалі завжди таке ж як і в сторінки документу. А маніпулятори зміни розмірів масштабують <flowSpan font-style="italic">вздовж сторін прямокутника</flowSpan>, навіть, якщо прямокутник повернутий або нахиленй. Наприклад, спочатку спробуйте змінити цей прямокутний за допомогою «Селектора», потім – маніпуляторами зміни розмірів інструменту «Прямокутник»:</flowDiv>
+   <flowDiv>You may have noticed that the Rectangle tool's Controls bar shows the horizontal (<flowSpan font-style="italic">Rx</flowSpan>) and vertical (<flowSpan font-style="italic">Ry</flowSpan>) rounding radii for the selected rectangle and lets you set them precisely using any length units. The <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Not rounded</flowSpan> button does what is says — removes rounding from the selected rectangle(s).</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 1974.8) matrix(.69601 -.71803 -.95272 -.30385 0 0)" x="7.7759" y="-179.49" width="41.625" height="64.103" rx="5.8251" ry="3.8355" color="#000000" fill="#00f" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="dp" x="20" y="2035.2" width="300" height="1e3px" display="none"/>
+  <rect id="dp" x="20" y="1819.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dp"/>
    </flowRegion>
-   <flowDiv>Оскільки маніпуляторів зміни розмірів – 2, то можна змінювати розмір прямокутника в будь-якому напрямі або, навіть, рухати його вздовж його сторін. Маніпулятори зміни розмірів завжди зберігають радіуси округлення.</flowDiv>
+   <flowDiv>An important advantage of these controls is that they can affect many rectangles at once. For example, if you want to change all rectangles in the layer, just do <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Select All</flowSpan>) and set the parameters you need in the Controls bar. If any non-rectangles are selected, they will be ignored — only rectangles will be changed.</flowDiv>
   </flowRoot>
-  <rect id="do" x="20" y="2073.5" width="300" height="1e3px" display="none"/>
+  <rect id="do" x="20" y="1868.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#do"/>
    </flowRegion>
-   <flowDiv>Ось – клавіатурні скорочення для маніпуляторів зміни розмірів:</flowDiv>
+   <flowDiv>Тепер поглянемо на маніпулятори зміни розмірів прямокутника. Ви, можливо, запитаєте: навіщо все це, якщо можна змінювати розмір прямокутники за допомогою «Селектора»?</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2096.6)" r="2"/>
-  <rect id="dn" x="40" y="2090.6" width="280" height="1e3px" display="none"/>
+  <rect id="dn" x="20" y="1906.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dn"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to snap to the sides or the diagonal of the rectangle. In other words, <flowSpan font-weight="bold">Ctrl</flowSpan> preserves either width, or height, or the width/height ratio of the rectangle (again, in its own coordinate system which may be rotated or skewed).</flowDiv>
+   <flowDiv>Проблема з «Селектором» полягає в тому, що в ньому поняття горизонталі і вертикалі завжди таке ж як і в сторінки документу. А маніпулятори зміни розмірів масштабують <flowSpan font-style="italic">вздовж сторін прямокутника</flowSpan>, навіть, якщо прямокутник повернутий або нахиленй. Наприклад, спочатку спробуйте змінити цей прямокутний за допомогою «Селектора», потім – маніпуляторами зміни розмірів інструменту «Прямокутник»:</flowDiv>
   </flowRoot>
-  <rect id="dm" x="20" y="2129.3" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 1974.8) matrix(.69601 -.71803 -.95272 -.30385 0 0)" x="7.7759" y="-179.49" width="41.625" height="64.103" rx="5.8251" ry="3.8355" color="#000000" fill="#00f" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect id="dm" x="20" y="2035.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dm"/>
+   </flowRegion>
+   <flowDiv>Оскільки маніпуляторів зміни розмірів – 2, то можна змінювати розмір прямокутника в будь-якому напрямі або, навіть, рухати його вздовж його сторін. Маніпулятори зміни розмірів завжди зберігають радіуси округлення.</flowDiv>
+  </flowRoot>
+  <rect id="dl" x="20" y="2073.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dl"/>
+   </flowRegion>
+   <flowDiv>Ось – клавіатурні скорочення для маніпуляторів зміни розмірів:</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 2096.6)" r="2"/>
+  <rect id="dk" x="40" y="2090.6" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dk"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to snap to the sides or the diagonal of the rectangle. In other words, <flowSpan font-weight="bold">Ctrl</flowSpan> preserves either width, or height, or the width/height ratio of the rectangle (again, in its own coordinate system which may be rotated or skewed).</flowDiv>
+  </flowRoot>
+  <rect id="dj" x="20" y="2129.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dj"/>
    </flowRegion>
    <flowDiv>Here is the same rectangle, with the gray dotted lines showing the directions to which the resize handles stick when dragged with <flowSpan font-weight="bold">Ctrl</flowSpan> (try it):</flowDiv>
   </flowRoot>
@@ -574,10 +574,10 @@
   </g>
   <rect transform="translate(20 2165.2) matrix(.69601 -.71803 -.95272 -.30385 0 0)" x="-35.379" y="-211.02" width="41.625" height="64.103" rx="5.825" ry="3.8355" color="#000000" fill="#00f" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <text transform="translate(20 2165.2)" x="78.675034" y="126.24259" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="78.675034" y="126.24259" sodipodi:role="line">Snapping of rectangle </tspan><tspan x="78.675034" y="133.7426" sodipodi:role="line">- resize handles with Ctrl</tspan></text>
-  <rect id="dl" x="20" y="2310.6" width="300" height="1e3px" display="none"/>
+  <rect id="di" x="20" y="2310.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dl"/>
+    <use xlink:href="#di"/>
    </flowRegion>
    <flowDiv>Перекошуючи та повертаючи прямокутник, а потім дублюючи його і змінюючи його розміри за допомогою маніпуляторів зміни розмірів, можна легко створювати тривимірні композиції:</flowDiv>
   </flowRoot>
@@ -603,10 +603,10 @@
   <rect transform="translate(20 2357.3) matrix(.91237 -.40937 0 1 0 0)" x="242.25" y="127.05" width="31.198" height="20.233" color="#000000" fill="#ff6300" fill-rule="evenodd" stroke="#fff" stroke-width=".39259"/>
   <text transform="translate(20 2357.3)" x="44.409821" y="4.5585938" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="44.409821" y="4.5585938" sodipodi:role="line">3 початкових прямокутника</tspan></text>
   <text transform="translate(20 2357.3)" x="196.02606" y="4.5585938" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="196.02606" y="4.5585938" sodipodi:role="line">Several rectangles copied and resized by handles</tspan><tspan x="196.02606" y="12.058594" sodipodi:role="line">(mostly with Ctrl)</tspan></text>
-  <rect id="dk" x="20" y="2495.1" width="300" height="1e3px" display="none"/>
+  <rect id="dh" x="20" y="2495.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dk"/>
+    <use xlink:href="#dh"/>
    </flowRegion>
    <flowDiv>Ось – трохи більше прикладів композицій з прямокутників, включаючи округлення на градієнтне заповнення:</flowDiv>
   </flowRoot>
@@ -696,48 +696,48 @@
   <rect transform="translate(20 2531.1) matrix(.99447 .10503 -.99521 .097739 0 0)" x="368.67" y="210.65" width="21.022" height="15.702" rx="10.937" ry="7.8879" color="#000000" fill="url(#ab)" fill-rule="evenodd" stroke="#000" stroke-width=".97176"/>
   <rect transform="translate(20 2531.1) matrix(.99447 .10503 -.99521 .097739 0 0)" x="437.19" y="274.21" width="52.249" height="47.25" rx="13.386" ry="7.8879" color="#000000" fill="url(#ac)" fill-rule="evenodd" stroke="#000" stroke-width=".97176"/>
   <rect transform="translate(20 2531.1) matrix(.99447 .10503 -.99521 .097739 0 0)" x="350.07" y="174.4" width="9.8364" height="11.479" rx="4.8633" ry="5.0297" color="#000000" fill="url(#ad)" fill-rule="evenodd" stroke="#000" stroke-width=".97176"/>
-  <rect id="dj" x="20" y="2662.4" width="300" height="1e3px" display="none"/>
+  <rect id="dg" x="20" y="2662.4" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#dj"/>
-   </flowRegion>
-   <flowDiv>Еліпси</flowDiv>
-  </flowRoot>
-  <rect id="di" x="20" y="2673.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#di"/>
-   </flowRegion>
-   <flowDiv>Інструмент «Еліпс» (<flowSpan font-weight="bold">F5</flowSpan>) може створювати еліпси та кола, які можна перетворювати в сегменти чи дуги. Клавіатурні скорочення для малювання – такі ж як і для інструменту «Прямокутник»:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 2717.9)" r="2"/>
-  <rect id="dh" x="40" y="2711.9" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#dh"/>
-   </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, draw a circle or an integer-ratio (2:1, 3:1, etc.) ellipse.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 2735.2)" r="2"/>
-  <rect id="dg" x="40" y="2729.2" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dg"/>
    </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Shift</flowSpan>, draw around the starting point as center.</flowDiv>
+   <flowDiv>Еліпси</flowDiv>
   </flowRoot>
-  <rect id="df" x="20" y="2746.5" width="300" height="1e3px" display="none"/>
+  <rect id="df" x="20" y="2673.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#df"/>
    </flowRegion>
-   <flowDiv>Давайте розберемося з маніпуляторами еліпсу. Виберіть цей:</flowDiv>
+   <flowDiv>Інструмент «Еліпс» (<flowSpan font-weight="bold">F5</flowSpan>) може створювати еліпси та кола, які можна перетворювати в сегменти чи дуги. Клавіатурні скорочення для малювання – такі ж як і для інструменту «Прямокутник»:</flowDiv>
   </flowRoot>
-  <ellipse transform="translate(20 2772)" cx="150" cy="30.874" rx="54.032" ry="30.249" color="#000000" fill="#ff000b" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect id="de" x="20" y="2845.7" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2717.9)" r="2"/>
+  <rect id="de" x="40" y="2711.9" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#de"/>
+   </flowRegion>
+   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, draw a circle or an integer-ratio (2:1, 3:1, etc.) ellipse.</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 2735.2)" r="2"/>
+  <rect id="dd" x="40" y="2729.2" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dd"/>
+   </flowRegion>
+   <flowDiv>With <flowSpan font-weight="bold">Shift</flowSpan>, draw around the starting point as center.</flowDiv>
+  </flowRoot>
+  <rect id="dc" x="20" y="2746.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dc"/>
+   </flowRegion>
+   <flowDiv>Давайте розберемося з маніпуляторами еліпсу. Виберіть цей:</flowDiv>
+  </flowRoot>
+  <ellipse transform="translate(20 2772)" cx="150" cy="30.874" rx="54.032" ry="30.249" color="#000000" fill="#ff000b" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect id="db" x="20" y="2845.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#db"/>
    </flowRegion>
    <flowDiv>Once again, you see three handles initially, but in fact they are four. The rightmost handle is two overlapping handles that let you “open” the ellipse. <flowSpan font-weight="bold">Drag</flowSpan> that rightmost handle, then drag the other handle which becomes visible under it, to get a variety of pie-chart segments or arcs:</flowDiv>
   </flowRoot>
@@ -748,10 +748,10 @@
   <path transform="translate(20 2901.4)" d="m98.591 5.8998a24.91 17.693 0 0 1 9.3502-4.3583l8.6431 16.594z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".70293pt" sodipodi:arc-type="slice" sodipodi:cx="116.58386" sodipodi:cy="18.135038" sodipodi:end="4.3580459" sodipodi:rx="24.909876" sodipodi:ry="17.692751" sodipodi:start="3.9052122" sodipodi:type="arc"/>
   <path transform="translate(20 2901.4)" d="m224.71 10.505a24.91 17.693 0 0 1 24.35-10.012 24.91 17.693 0 0 1 21.957 12.496" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".70293pt" sodipodi:arc-type="arc" sodipodi:cx="247.18883" sodipodi:cy="18.135038" sodipodi:end="5.9880333" sodipodi:open="true" sodipodi:rx="24.909876" sodipodi:ry="17.692751" sodipodi:start="3.5874838" sodipodi:type="arc"/>
   <path transform="translate(20 2901.4)" d="m114.9 0.48277a24.91 17.693 0 0 1 24.972 11.372l-23.288 6.2801z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".70293pt" sodipodi:arc-type="slice" sodipodi:cx="116.58386" sodipodi:cy="18.135038" sodipodi:end="5.9203236" sodipodi:rx="24.909876" sodipodi:ry="17.692751" sodipodi:start="4.6447262" sodipodi:type="arc"/>
-  <rect id="dd" x="20" y="2949.8" width="300" height="1e3px" display="none"/>
+  <rect id="da" x="20" y="2949.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dd"/>
+    <use xlink:href="#da"/>
    </flowRegion>
    <flowDiv>Щоб отримати <flowSpan font-style="italic">сегмент</flowSpan> (дуга плюс два радіуси), перетягніть <flowSpan font-style="italic">за межі</flowSpan> еліпсу; щоб отримати <flowSpan font-style="italic">дугу</flowSpan>, перетягніть <flowSpan font-style="italic">всередину</flowSpan> нього. Вгорі – чотири сегменти зліва і три дуги справа. Зверніь увагу, що дуги – незамкнуті фігури, тобто штрих проходить вздовж еліпсу, але не з'єднує кінці дуги. Це легко можна побачити прибравши заповнення і залишивши лише штрих:</flowDiv>
   </flowRoot>
@@ -783,63 +783,63 @@
   <path transform="translate(20 3017.8)" d="m221.79 123.7a15.141 58.56 0 0 1-4.9811-49.685 15.141 58.56 0 0 1 7.4912-44.724" color="#000000" fill="none" stroke="#000" stroke-width=".75" sodipodi:arc-type="arc" sodipodi:cx="231.87538" sodipodi:cy="80.004387" sodipodi:end="4.1887902" sodipodi:open="true" sodipodi:rx="15.141271" sodipodi:ry="58.560177" sodipodi:start="2.2993372" sodipodi:type="arc"/>
   <path transform="translate(20 3017.8)" d="m181.84 88.102a75.148 10.853 0 0 1-23.24-10.507 75.148 10.853 0 0 1 52.45-8.0181 75.148 10.853 0 0 1 73.959 2.7537" color="#000000" fill="none" stroke="#000" stroke-width=".75" sodipodi:arc-type="arc" sodipodi:cx="231.87538" sodipodi:cy="80.004387" sodipodi:end="5.4977871" sodipodi:open="true" sodipodi:rx="75.147621" sodipodi:ry="10.852578" sodipodi:start="2.2993372" sodipodi:type="arc"/>
   <path transform="translate(20 3017.8)" d="m50.789 123.7a59.578 58.56 0 0 1-17.882-58.851l57.548 15.156z" color="#000000" fill="none" stroke="#000" stroke-width=".75" sodipodi:arc-type="slice" sodipodi:cx="90.455017" sodipodi:cy="80.004387" sodipodi:end="3.403392" sodipodi:rx="59.578407" sodipodi:ry="58.560177" sodipodi:start="2.2993372" sodipodi:type="arc"/>
-  <rect id="dc" x="20" y="3153.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#dc"/>
-   </flowRegion>
-   <flowDiv>Note the fan-like group of narrow segments on the left. It was easy to create using <flowSpan font-style="italic">angle snapping</flowSpan> of the handle with <flowSpan font-weight="bold">Ctrl</flowSpan>. Here are the arc/segment handle shortcuts:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 3187.1)" r="2"/>
-  <rect id="db" x="40" y="3181.1" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#db"/>
-   </flowRegion>
-   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, snap the handle every 15 degrees when dragging.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 3204.4)" r="2"/>
-  <rect id="da" x="40" y="3198.4" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#da"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make the ellipse whole (not arc or segment).</flowDiv>
-  </flowRoot>
-  <rect id="cz" x="20" y="3215.8" width="300" height="1e3px" display="none"/>
+  <rect id="cz" x="20" y="3153.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cz"/>
    </flowRegion>
-   <flowDiv>The snap angle can be changed in Inkscape Preferences (in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Behavior</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Steps</flowSpan>).</flowDiv>
+   <flowDiv>Note the fan-like group of narrow segments on the left. It was easy to create using <flowSpan font-style="italic">angle snapping</flowSpan> of the handle with <flowSpan font-weight="bold">Ctrl</flowSpan>. Here are the arc/segment handle shortcuts:</flowDiv>
   </flowRoot>
-  <rect id="cy" x="20" y="3233.3" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 3187.1)" r="2"/>
+  <rect id="cy" x="40" y="3181.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cy"/>
    </flowRegion>
-   <flowDiv>Інші два маніпулятори еліпсу використовуються дл язміни його розмірів відносно центру. Їхні клавіатурні скорочення схожі до клавіатурних скорочень маніпуляторів округлення прямокутника:</flowDiv>
+   <flowDiv>With <flowSpan font-weight="bold">Ctrl</flowSpan>, snap the handle every 15 degrees when dragging.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3277.8)" r="2"/>
-  <rect id="cx" x="40" y="3271.8" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 3204.4)" r="2"/>
+  <rect id="cx" x="40" y="3198.4" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cx"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to make a circle (make the other radius the same).</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make the ellipse whole (not arc or segment).</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3295.1)" r="2"/>
-  <rect id="cw" x="40" y="3289.1" width="280" height="1e3px" display="none"/>
+  <rect id="cw" x="20" y="3215.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cw"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make a circle without dragging.</flowDiv>
+   <flowDiv>The snap angle can be changed in Inkscape Preferences (in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Behavior</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Steps</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="cv" x="20" y="3306.4" width="300" height="1e3px" display="none"/>
+  <rect id="cv" x="20" y="3233.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cv"/>
+   </flowRegion>
+   <flowDiv>Інші два маніпулятори еліпсу використовуються дл язміни його розмірів відносно центру. Їхні клавіатурні скорочення схожі до клавіатурних скорочень маніпуляторів округлення прямокутника:</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 3277.8)" r="2"/>
+  <rect id="cu" x="40" y="3271.8" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cu"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to make a circle (make the other radius the same).</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 3295.1)" r="2"/>
+  <rect id="ct" x="40" y="3289.1" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ct"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to make a circle without dragging.</flowDiv>
+  </flowRoot>
+  <rect id="cs" x="20" y="3306.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cs"/>
    </flowRegion>
    <flowDiv>І, як і маніпулятори зміни розмірів прямокутника, ці маніпулятори еліпса підлаштовують висоту та ширину еліпса у <flowSpan font-style="italic">власній системі координат еліпса</flowSpan>. Це означає, що повернутий чи перекошений еліпс легко розтягнути чи стиснути вздовж його початкових осей, залишаючи його повернутим чи перекошеним. Спробуйте змінити розмір будь-якого з цих еліпсів, переятгуючи за їхні маніпулятори зміни розмірів:</flowDiv>
   </flowRoot>
@@ -849,24 +849,24 @@
   <ellipse transform="translate(20 3384.6) matrix(.91395 .40583 -.87516 .48384 0 0)" cx="129.13" cy="-36.549" rx="32.589" ry="22.827" color="#000000" fill="#ffd300" fill-opacity=".14716" fill-rule="evenodd" stroke="#000" stroke-width=".83991"/>
   <ellipse transform="translate(20 3384.6) matrix(.91395 .40583 -.87516 .48384 0 0)" cx="129.13" cy="-36.549" rx="6.8571" ry="42.356" color="#000000" fill="#ffd300" fill-opacity=".14716" fill-rule="evenodd" stroke="#000" stroke-width=".83991"/>
   <ellipse transform="translate(20 3384.6) matrix(.91395 .40583 -.87516 .48384 0 0)" cx="129.13" cy="-36.549" rx="32.589" ry="6.6323" color="#000000" fill="#ffd300" fill-opacity=".14716" fill-rule="evenodd" stroke="#000" stroke-width=".83991"/>
-  <rect id="cu" x="20" y="3471.2" width="300" height="1e3px" display="none"/>
+  <rect id="cr" x="20" y="3471.2" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#cu"/>
+    <use xlink:href="#cr"/>
    </flowRegion>
    <flowDiv>Зірки</flowDiv>
   </flowRoot>
-  <rect id="ct" x="20" y="3483.7" width="300" height="1e3px" display="none"/>
+  <rect id="cq" x="20" y="3483.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ct"/>
+    <use xlink:href="#cq"/>
    </flowRegion>
    <flowDiv>Зірки – найбільш складні і захоплюючі фігури в «Inkscape». Якщо хочете вразити своїх друзів «Inkscape», дайте їм погратися з інструментом «Зірка». Це нескінченно цікаво – цілком захоплююче!</flowDiv>
   </flowRoot>
-  <rect id="cs" x="20" y="3522.2" width="300" height="1e3px" display="none"/>
+  <rect id="cp" x="20" y="3522.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#cs"/>
+    <use xlink:href="#cp"/>
    </flowRegion>
    <flowDiv>Інструмент «Зірка» може створювати два схожих, але різних види об'єктів: зірки та багатокутники. Зірки мають два маніпулятори, положення яких визначає довжину та форму її променів; багатокутник має лише один маніпулятор, який, при перетягуванні, просто повертає та змінює розмір багатокутника:</flowDiv>
   </flowRoot>
@@ -876,39 +876,39 @@
    <path transform="matrix(.67263 .35535 -.35535 .67263 1513.8 -2577.2)" d="m107.3 3871.6-39.426 21.029-32.183-30.998 19.535-40.187 44.257 6.1608z" color="#000000" fill="#fff100" fill-rule="evenodd" stroke="#000" stroke-width=".98589" inkscape:flatsided="true" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.45247489" sodipodi:arg2="1.0807934" sodipodi:cx="73.11795" sodipodi:cy="3855.0315" sodipodi:r1="38.010052" sodipodi:r2="19.005026" sodipodi:sides="5" sodipodi:type="star"/>
    <text x="193.02451" y="6" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="193.02451" y="6" text-align="center" text-anchor="middle" sodipodi:role="line">Багатокутник</tspan></text>
   </g>
-  <rect id="cr" x="20" y="3655.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cr"/>
-   </flowRegion>
-   <flowDiv>На панелі параметрів інструменту «Зірка», перші дві кнопки регулюються як малюється фігура (правильний багатокутник чи зірка). Наступне – числове поле, що задає кількість вершин зірки або багатокутника. Цей параметр редагується лише через панель параметрів. Дозволений діапазон – від 3 (очевидно) до 1024, однак, не варто задавати великі значення (наприклад, більше 200), якщо у Вас повільний комп'ютер.</flowDiv>
-  </flowRoot>
-  <rect id="cq" x="20" y="3715.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cq"/>
-   </flowRegion>
-   <flowDiv>При малюванні нової зірки чи багатокутника,</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 3739)" r="2"/>
-  <rect id="cp" x="40" y="3733" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cp"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to snap the angle to 15 degree increments.</flowDiv>
-  </flowRoot>
-  <rect id="co" x="20" y="3750.3" width="300" height="1e3px" display="none"/>
+  <rect id="co" x="20" y="3655.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#co"/>
    </flowRegion>
-   <flowDiv>Зазвичай, зірка – більш цікавіша фігура (хоча багатокутники часто корисніші на практиці). Два маніпулятори зірки виконують трохи різні функції. Перший маніпулятор (спочатку він на вершині, тобто на <flowSpan font-style="italic">випуклому</flowSpan> куті зірки) подовжує або скорочує промені зірки, але при повороті (відносно центру фігури), інший маніпулятор повертається відповідно. Це означає, що цим маніпулятором неможливо нахилити промені зірки.</flowDiv>
+   <flowDiv>На панелі параметрів інструменту «Зірка», перші дві кнопки регулюються як малюється фігура (правильний багатокутник чи зірка). Наступне – числове поле, що задає кількість вершин зірки або багатокутника. Цей параметр редагується лише через панель параметрів. Дозволений діапазон – від 3 (очевидно) до 1024, однак, не варто задавати великі значення (наприклад, більше 200), якщо у Вас повільний комп'ютер.</flowDiv>
   </flowRoot>
-  <rect id="cn" x="20" y="3820.9" width="300" height="1e3px" display="none"/>
+  <rect id="cn" x="20" y="3715.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cn"/>
+   </flowRegion>
+   <flowDiv>При малюванні нової зірки чи багатокутника,</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 3739)" r="2"/>
+  <rect id="cm" x="40" y="3733" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cm"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to snap the angle to 15 degree increments.</flowDiv>
+  </flowRoot>
+  <rect id="cl" x="20" y="3750.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cl"/>
+   </flowRegion>
+   <flowDiv>Зазвичай, зірка – більш цікавіша фігура (хоча багатокутники часто корисніші на практиці). Два маніпулятори зірки виконують трохи різні функції. Перший маніпулятор (спочатку він на вершині, тобто на <flowSpan font-style="italic">випуклому</flowSpan> куті зірки) подовжує або скорочує промені зірки, але при повороті (відносно центру фігури), інший маніпулятор повертається відповідно. Це означає, що цим маніпулятором неможливо нахилити промені зірки.</flowDiv>
+  </flowRoot>
+  <rect id="ck" x="20" y="3820.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ck"/>
    </flowRegion>
    <flowDiv>Інший маніпулятор (спочатку він на <flowSpan font-style="italic">впуклому</flowSpan> куті між двома вершинами), навпаки, вільно переміщається і радіально і по дотичній, без впливу на маніпулятор вершини. (насправді, цей маніпулятор сам може стати вершиною при переміщенні його далі від центру, ніж інший маніпулятор.) Цей маніпулятор може нахиляти промені зірки для отримання всих видів кристалів, мандал, сніжинок та ножових барабанів:</flowDiv>
   </flowRoot>
@@ -921,70 +921,70 @@
   <path transform="translate(20 3888.7) rotate(.0019184 1.2489e8 0)" d="m307.95 4272-41.28 0.6425 33.556 17.416-29.644-28.735 11.412 36.043-0.64253-41.28-17.416 33.556 28.735-29.644-36.043 11.412 41.28-0.6425-33.556-17.416 29.644 28.735-11.412-36.043 0.64253 41.28 17.416-33.556-28.735 29.644z" color="#000000" fill="#520100" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.011487387" sodipodi:arg2="3.0816518" sodipodi:cx="282.28931" sodipodi:cy="4271.7378" sodipodi:r1="25.662985" sodipodi:r2="15.646836" sodipodi:sides="8" sodipodi:type="star"/>
   <path transform="translate(20 3888.7)" d="m92.431 52.264-14.034-33.728 0.070659 27.944 13.926-33.773-19.71 19.81 33.728-14.034-27.944 0.070659 33.773 13.926-19.81-19.71 14.034 33.728-0.07066-27.944-13.926 33.773 19.71-19.81-33.728 14.034 27.944-0.070659-33.773-13.926z" color="#000000" fill="none" stroke="#000" stroke-width=".25" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="1.5707963" sodipodi:arg2="-2.3580603" sodipodi:cx="92.431129" sodipodi:cy="32.516994" sodipodi:r1="19.746624" sodipodi:r2="19.809624" sodipodi:sides="8" sodipodi:type="star"/>
   <path transform="translate(20 3888.7)" d="m102.43 123.68-54.979-38.435 42.246 53.111-37.383-55.7 20.208 64.785-14.737-65.443-4.56 67.71 9.8988-66.347-28.712 61.491 33.198-58.291-48.986 46.967 52.013-42.363-62.645 26.099 63.804-20.713-67.842 1.7069 66.978 3.7348-63.878-22.916 61.106 27.678-51.286-44.444 46.981 47.883-31.768-59.969 26.511 61.621-7.9594-67.395 2.461 67.037 16.924-65.72-21.922 63.399 39.522-55.168-43.344 51.199 56.782-37.166-58.912 32.084 66.374-14.144-66.524 8.6359 67.001 10.788-65.151-15.978z" color="#000000" fill="#520100" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.52982957" sodipodi:arg2="-2.2448164" sodipodi:cx="56.805591" sodipodi:cy="96.95668" sodipodi:r1="52.870548" sodipodi:r2="14.99335" sodipodi:sides="17" sodipodi:type="star"/>
-  <rect id="cl" x="20" y="4050.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cl"/>
-   </flowRegion>
-   <flowDiv>Якщо лише потрібна правильна зірка без такого роду мережива, то можна змусити маніпулятор, що може нахилятися, поводитися як той, що не може нахилятися:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 4084.5)" r="2"/>
-  <rect id="ck" x="40" y="4078.5" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ck"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to keep the star rays strictly radial (no skew).</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 4101.8)" r="2"/>
-  <rect id="cj" x="40" y="4095.8" width="280" height="1e3px" display="none"/>
+  <rect id="cj" x="20" y="4050.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cj"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to remove the skew without dragging.</flowDiv>
+   <flowDiv>Якщо лише потрібна правильна зірка без такого роду мережива, то можна змусити маніпулятор, що може нахилятися, поводитися як той, що не може нахилятися:</flowDiv>
   </flowRoot>
-  <rect id="ch" x="20" y="4113.1" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 4084.5)" r="2"/>
+  <rect id="ci" x="40" y="4078.5" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ci"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Drag</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan> to keep the star rays strictly radial (no skew).</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 4101.8)" r="2"/>
+  <rect id="ch" x="40" y="4095.8" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ch"/>
    </flowRegion>
-   <flowDiv>As a useful complement for the on-canvas handle dragging, the Controls bar has the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Spoke ratio</flowSpan> field which defines the ratio of the two handles' distances to the center.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to remove the skew without dragging.</flowDiv>
   </flowRoot>
-  <rect id="cg" x="20" y="4139.8" width="300" height="1e3px" display="none"/>
+  <rect id="cg" x="20" y="4113.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cg"/>
    </flowRegion>
-   <flowDiv>Зірки в «Inkscape» мають ще два прийоми. В геометрії, багатокутник – фігура з прямолінійними ребрами та гострими кутами. В реальності, однак, зазвичай присутні криволінійність та округленість різного ступеню, і «Inkscape» може створювати їх також. Однак, округлення зірки або багтокутника працює трохи відмінно від округлення прямокутника. Для цього не використовується відповідний маніпулятор, але</flowDiv>
+   <flowDiv>As a useful complement for the on-canvas handle dragging, the Controls bar has the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Spoke ratio</flowSpan> field which defines the ratio of the two handles' distances to the center.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 4214.8)" r="2"/>
-  <rect id="cf" x="40" y="4208.8" width="280" height="1e3px" display="none"/>
+  <rect id="cf" x="20" y="4139.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cf"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> a handle tangentially to round the star or polygon.</flowDiv>
+   <flowDiv>Зірки в «Inkscape» мають ще два прийоми. В геометрії, багатокутник – фігура з прямолінійними ребрами та гострими кутами. В реальності, однак, зазвичай присутні криволінійність та округленість різного ступеню, і «Inkscape» може створювати їх також. Однак, округлення зірки або багтокутника працює трохи відмінно від округлення прямокутника. Для цього не використовується відповідний маніпулятор, але</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 4232.2)" r="2"/>
-  <rect id="ce" x="40" y="4226.2" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 4214.8)" r="2"/>
+  <rect id="ce" x="40" y="4208.8" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ce"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> a handle to remove rounding.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> a handle tangentially to round the star or polygon.</flowDiv>
   </flowRoot>
-  <rect id="cd" x="20" y="4243.5" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 4232.2)" r="2"/>
+  <rect id="cd" x="40" y="4226.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv>«Дотично» означає в напрямі перпендикулярному до напряму до центру. «Поворот» маніпулятора з Shift відносно центру проти годинникової стрілки дає додатну округленість, за годинниковою стрілкою – від'ємну. (Див.приклади від'ємної округленості нижче.)</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> a handle to remove rounding.</flowDiv>
   </flowRoot>
-  <rect id="cc" x="20" y="4292.5" width="300" height="1e3px" display="none"/>
+  <rect id="cc" x="20" y="4243.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cc"/>
+   </flowRegion>
+   <flowDiv>«Дотично» означає в напрямі перпендикулярному до напряму до центру. «Поворот» маніпулятора з Shift відносно центру проти годинникової стрілки дає додатну округленість, за годинниковою стрілкою – від'ємну. (Див.приклади від'ємної округленості нижче.)</flowDiv>
+  </flowRoot>
+  <rect id="cb" x="20" y="4292.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cb"/>
    </flowRegion>
    <flowDiv>Ось – порівняння округленості квадрату (інструмент «Прямокутник») з округленим 4‑стороннім багатокутником (інструмент «Зірка»):</flowDiv>
   </flowRoot>
@@ -994,17 +994,17 @@
    <rect x="56.117" y="1.8127" width="87.192" height="87.192" rx="18.04" ry="18.04" color="#000000" fill-rule="evenodd"/>
    <text x="99.512451" y="41.917397" fill="#ffffff" font-family="'Liberation Sans',Arial,sans-serif" font-size="10px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="99.512451" y="41.917397" sodipodi:role="line">Rounded</tspan><tspan x="99.512451" y="54.417397" sodipodi:role="line">rectangle</tspan></text>
   </g>
-  <rect id="cb" x="20" y="4431.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cb"/>
-   </flowRegion>
-   <flowDiv>Як можна помітити, тоді як округлений прямокутник має прямолінійні сторони і дугові (зазвичай, еліптичні) округлення, округлений багатокутник або зірка не мають прямих ліній взагалі; їхня кривизна плавно змінюється від максимальної (на кутах) до мінімальної (посередині між кутами). «Inkscape» робить це просто додаючи колінеарні дотичні Безьє до кожного вузла фігури (їх можна побачити, конвертувавши фігуру на контур і дослідивши її за допомогою інструменту «Вузли»).</flowDiv>
-  </flowRoot>
-  <rect id="ca" x="20" y="4501.6" width="300" height="1e3px" display="none"/>
+  <rect id="ca" x="20" y="4431.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ca"/>
+   </flowRegion>
+   <flowDiv>Як можна помітити, тоді як округлений прямокутник має прямолінійні сторони і дугові (зазвичай, еліптичні) округлення, округлений багатокутник або зірка не мають прямих ліній взагалі; їхня кривизна плавно змінюється від максимальної (на кутах) до мінімальної (посередині між кутами). «Inkscape» робить це просто додаючи колінеарні дотичні Безьє до кожного вузла фігури (їх можна побачити, конвертувавши фігуру на контур і дослідивши її за допомогою інструменту «Вузли»).</flowDiv>
+  </flowRoot>
+  <rect id="bz" x="20" y="4501.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bz"/>
    </flowRegion>
    <flowDiv>The <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Rounded</flowSpan> parameter which you can adjust in the Controls bar is the ratio of the length of these tangents to the length of the polygon/star sides to which they are adjacent. This parameter can be negative, which reverses the direction of tangents. The values of about 0.2 to 0.4 give “normal” rounding of the kind you would expect; other values tend to produce beautiful, intricate, and totally unpredictable patterns. A star with a large roundedness value may reach far beyond the positions of its handles. Here are a few examples, each indicating its roundedness value:</flowDiv>
   </flowRoot>
@@ -1041,10 +1041,10 @@
   <text transform="translate(20 4589.3)" x="13.713703" y="140.0249" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan x="13.713703" y="140.0249" font-size="3.979px" style="line-height:1.2" sodipodi:role="line">−8.94</tspan></text>
   <path transform="translate(20 4589.3)" d="m101.39 91.493c-4.3019 4.3019-11.298 4.3019-15.599 0s-4.3019-11.298 0-15.599 11.298-4.3019 15.599 0c4.3019 4.3019 4.3019 11.298 0 15.599z" color="#000000" fill-rule="evenodd" inkscape:flatsided="true" inkscape:randomized="0" inkscape:rounded="0.39" sodipodi:arg1="0.78539816" sodipodi:arg2="1.5707963" sodipodi:cx="93.58579" sodipodi:cy="83.69278" sodipodi:r1="11.03049" sodipodi:r2="7.7997341" sodipodi:sides="4" sodipodi:type="star"/>
   <text transform="translate(20 4589.3)" x="89.161873" y="85.14119" fill="#ffffff" font-family="'Liberation Sans',Arial,sans-serif" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan x="89.161873" y="85.14119" font-size="3.979px" style="line-height:1.2" sodipodi:role="line">0,39</tspan></text>
-  <rect id="bz" x="20" y="4749.9" width="300" height="1e3px" display="none"/>
+  <rect id="bx" x="20" y="4749.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bz"/>
+    <use xlink:href="#bx"/>
    </flowRegion>
    <flowDiv>If you want the tips of a star to be sharp but the concaves smooth or vice versa, this is easy to do by creating an <flowSpan font-style="italic">offset</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">J</flowSpan>) from the star:</flowDiv>
   </flowRoot>
@@ -1054,40 +1054,40 @@
   <text transform="translate(20 4785.9)" x="51.01371" y="6" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" text-align="center" text-anchor="middle" style="line-height:1.25" xml:space="preserve"><tspan x="51.01371" y="6" sodipodi:role="line">Початкова зірка</tspan></text>
   <text transform="translate(20 4785.9)" x="144.32384" y="6" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" text-align="center" text-anchor="middle" style="line-height:1.25" xml:space="preserve"><tspan x="144.32384" y="6" sodipodi:role="line">Пов'язане зміщення, втягування</tspan></text>
   <text transform="translate(20 4785.9)" x="246.51053" y="6" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" text-align="center" text-anchor="middle" style="line-height:1.25" xml:space="preserve"><tspan x="246.51053" y="6" sodipodi:role="line">Пов'язане зміщення, розтягування</tspan></text>
-  <rect id="by" x="20" y="4895.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#by"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan>ging star handles in Inkscape is one of the finest pursuits known to man. But it can get better still.</flowDiv>
-  </flowRoot>
-  <rect id="bx" x="20" y="4923.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bx"/>
-   </flowRegion>
-   <flowDiv>Щоб якнайкраще зімітувати реальні фігури, «Inkscape» може <flowSpan font-style="italic">надавати випадкового характеру</flowSpan> (тобто, випадково викривляти) зіркам та багатокутникам. Невелике викривлення робить зірки менш правильними, більш людськими, часто смішними; сильна рандомізація – захопливий спосіб отримати розмаїття божевільно непередбачуваних фігур. Округлена зірка залишається плавно округленою після викривлення. Ось – клавіатурні скорочення:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 5000.5)" r="2"/>
-  <rect id="bw" x="40" y="4994.5" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bw"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> a handle tangentially to randomize the star or polygon.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 5017.8)" r="2"/>
-  <rect id="bv" x="40" y="5011.8" width="280" height="1e3px" display="none"/>
+  <rect id="bv" x="20" y="4895.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bv"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> a handle to remove randomization.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan>ging star handles in Inkscape is one of the finest pursuits known to man. But it can get better still.</flowDiv>
   </flowRoot>
-  <rect id="bu" x="20" y="5027.5" width="300" height="1e3px" display="none"/>
+  <rect id="bu" x="20" y="4923.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bu"/>
+   </flowRegion>
+   <flowDiv>Щоб якнайкраще зімітувати реальні фігури, «Inkscape» може <flowSpan font-style="italic">надавати випадкового характеру</flowSpan> (тобто, випадково викривляти) зіркам та багатокутникам. Невелике викривлення робить зірки менш правильними, більш людськими, часто смішними; сильна рандомізація – захопливий спосіб отримати розмаїття божевільно непередбачуваних фігур. Округлена зірка залишається плавно округленою після викривлення. Ось – клавіатурні скорочення:</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 5000.5)" r="2"/>
+  <rect id="bt" x="40" y="4994.5" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bt"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> a handle tangentially to randomize the star or polygon.</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 5017.8)" r="2"/>
+  <rect id="bs" x="40" y="5011.8" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bs"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> a handle to remove randomization.</flowDiv>
+  </flowRoot>
+  <rect id="br" x="20" y="5027.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#br"/>
    </flowRegion>
    <flowDiv>Під час малювання або редагування перетягуванням маніпуляторів викривленої зірки, вона буде «тремтіти», тому що кожне унікальне положення її маніпуляторів відповідає її власному унікальному викривленню. Тому, переміщаючи маніпулятор без Alt, зберігає таке ж викривлення, але підлаштовує його рівень. Ось – зірки, параметри яких абсолютно однакові але кожна з них перевикривлена дуже маленьким переміщенням її маніпулятора (всюди, рівень рандомізації – 0,1):</flowDiv>
   </flowRoot>
@@ -1096,10 +1096,10 @@
   <path transform="translate(140.83 410.42)" d="m52.391 4738.4c-1.6698 3.0151-13.282-7.4782-16.028-5.6143-2.649 1.7976-0.86361 17.743-4.0031 17.888-3.2553 0.1497-2.5749-12.013-5.9559-13.19-3.2608-1.1351-14.777 6.4465-17.295 4.5531-2.6118-1.9632 7.9554-13.134 6.41-16.128-1.4905-2.8879-14.539-2.1979-14.634-5.489-0.098892-3.4124 15.238 0.055 17.443-2.6425 2.1263-2.6011-5.4766-14.427-2.52-15.702 3.0656-1.3213 6.2602 6.2503 9.4967 6.0002 3.1214-0.2412 6.2222-12.359 9.3778-11.553 3.272 0.8362 2.0281 16.248 4.6179 18.556 2.4976 2.2264 14.237-5.2851 15.746-2.3349 1.5644 3.0591-13.438 10.222-13.574 13.76-0.13163 3.4125 12.531 8.9876 10.92 11.896z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0.1" inkscape:rounded="0.22" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.807421" sodipodi:r2="12.903711" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(200.87 410.42)" d="m49.555 4735.1c-1.7693 2.9355-9.5769-0.1479-12.32 1.5699-2.6455 1.6568-2.1019 14.19-5.3105 14.184-3.3269-0.01-6.7331-17.083-9.7996-18.561-2.9575-1.4254-7.9483 11.223-9.7975 8.6727-1.9174-2.6444 5.5804-12.623 4.4055-15.802-1.1331-3.0658-14.853-5.2513-14.352-8.3855 0.51938-3.2498 12.378 3.2171 14.054 0.1922 1.6165-2.9173-2.1737-14.554 0.7361-15.865 3.017-1.3598 9.2728 11.052 12.61 10.802 3.2183-0.2408 6.234-11.819 9.2835-10.345 3.1619 1.5284-4.1862 10.493-1.9296 13.072 2.1763 2.4871 17.753-1.491 18.267 1.5856 0.53322 3.19-13.85 5.5554-14.749 8.7186-0.86715 3.0509 10.608 7.3306 8.9012 10.162z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0.1" inkscape:rounded="0.22" sodipodi:arg1="0.59796906" sodipodi:arg2="1.075916" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.69157" sodipodi:r2="12.845784" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(260.91 410.42)" d="m47.131 4741.3c-2.4289 2.4346-10.695-6.456-13.826-4.8668-3.0195 1.5327-2.6557 11.321-5.8693 11.551-3.3321 0.2388-1.9882-10.868-5.289-12.154-3.1834-1.2399-13.914 3.1779-15.416 0.459-1.5568-2.819 12.611-10.322 12.095-13.813-0.49765-3.367-17.46-5.6256-16.311-8.8056 1.1914-3.2972 13.369 4.8152 15.687 2.2743 2.236-2.4506-1.3809-12.655 1.403-14.204 2.8866-1.6067 7.9434 7.2122 11.44 6.8838 3.3721-0.3167 8.7096-9.1965 11.589-7.9401 2.9856 1.3027-4.4989 11.562-2.9394 14.445 1.5041 2.7807 16.416 2.8228 16.386 6.061-0.03077 3.3577-12.902 4.7491-14.093 8.084-1.149 3.2164 7.4856 9.6776 5.1431 12.026z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0.1" inkscape:rounded="0.22" sodipodi:arg1="0.72564034" sodipodi:arg2="1.2035873" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.504747" sodipodi:r2="12.752373" sodipodi:sides="7" sodipodi:type="star"/>
-  <rect id="bt" x="20" y="5173.3" width="300" height="1e3px" display="none"/>
+  <rect id="bq" x="20" y="5173.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bt"/>
+    <use xlink:href="#bq"/>
    </flowRegion>
    <flowDiv>А ось – середня зірка з попереднього рядка, з рівнем викривлення від –0,2 до 0,2:</flowDiv>
   </flowRoot>
@@ -1113,17 +1113,17 @@
   <path transform="translate(262.78 511.77)" d="m53.698 4740.7c-1.4934 3.1399-14.05-10.809-16.693-8.9665-2.5495 1.7773-1.6909 21.214-4.6814 21.172-3.1008-0.043-0.59275-11.654-4.1017-12.959-3.3842-1.2582-18.458 4.0355-21.101 2.601-2.7408-1.4874 9.055-15.027 7.1961-17.781-1.7928-2.6563-15.193-1.2481-15.771-4.487-0.59958-3.3583 17.437 1.7332 20.063-0.6573 2.532-2.3055-4.7386-15.998-1.6996-16.804 3.151-0.8362 3.0578 3.3563 6.1332 3.2967 2.966-0.058 6.2446-11.895 9.4242-11.391 3.2968 0.5229 5.3135 19.38 8.0225 21.631 2.6127 2.171 14.591-7.3828 16.515-4.6617 1.9946 2.8215-15.847 13.254-15.802 16.92 0.04407 3.535 13.937 9.0588 12.496 12.087z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0.2" inkscape:rounded="0.22" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.807421" sodipodi:r2="12.903711" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(68.894 511.77)" d="m49.776 4734c-1.9929 2.7374-11.742-0.8088-14.698 1.0901-2.8507 1.8315 0.75324 10.751-2.6466 11.318-3.5252 0.5884-6.5503-12.714-9.6643-13.653-3.0033-0.906-7.6544 11.233-9.6844 8.4573-2.1048-2.8777 5.6678-9.4591 4.8379-12.821-0.80038-3.2425-13.228-4.312-12.36-7.4928 0.90013-3.2982 10.925-3.5171 12.203-6.6129 1.2324-2.9857-6.734-11.321-4.1607-13.497 2.6682-2.2566 12.703 12.094 16.224 11.407 3.395-0.6619 6.2644-13.283 9.2852-11.876 3.1321 1.4595-4.5407 9.9996-2.1914 12.406 2.2658 2.3213 13.597-0.8997 14.207 2.319 0.63289 3.3373-8.6588 4.1823-9.1201 7.4414-0.44485 3.1433 9.6897 8.8727 7.7676 11.513z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="-0.1" inkscape:rounded="0.22" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.807421" sodipodi:r2="12.903711" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(12.201 511.77)" d="m48.469 4731.8c-2.1388 2.5856-10.971 2.5293-14.033 4.4423-2.9528 1.8449 1.5397 7.2299-1.9683 8.0333-3.6374 0.8329-8.5431-13.055-11.518-13.885-2.8696-0.8003-4.2115 13.58-5.8788 10.41-1.7288-3.2874 4.4886-7.6854 4.0519-11.168-0.42124-3.3586-12.55-5.4742-11.222-8.4948 1.3767-3.132 8.7888-5.4137 9.5835-8.5981 0.76636-3.0711-7.2562-9.807-4.9811-12.395 2.359-2.6829 15.947 15.041 19.587 14.111 3.5102-0.8972 6.3291-13.738 9.2388-12.037 3.017 1.7635-7.8247 6.8838-5.5961 9.3317 2.1494 2.3608 13.292 1.3918 13.438 4.6458 0.15112 3.3739-6.2898 1.173-6.8929 4.282-0.58167 2.9985 8.2541 8.8275 6.1914 11.321z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="-0.2" inkscape:rounded="0.22" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.807421" sodipodi:r2="12.903711" sodipodi:sides="7" sodipodi:type="star"/>
-  <rect id="bs" x="20" y="5274.8" width="300" height="1e3px" display="none"/>
+  <rect id="bp" x="20" y="5274.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bs"/>
+    <use xlink:href="#bp"/>
    </flowRegion>
    <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> a handle of the middle star in this row and observe as it morphs into its neighbors on the right and left — and beyond.</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="5302.9" width="300" height="1e3px" display="none"/>
+  <rect id="bo" x="20" y="5302.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#br"/>
+    <use xlink:href="#bo"/>
    </flowRegion>
    <flowDiv>Ви, напевно, знайдете власне застосування для викривлених зірок, але мені особливо до вподоби округлені амебоподібні плями і великі грубі планети з фантастичними краєвидами:</flowDiv>
   </flowRoot>
@@ -1136,93 +1136,93 @@
   <path transform="translate(20 5349.6) matrix(-.0059092 0 0 -.0044634 64.65 86.72)" d="m-624.47-581.43c325.22 56.055 9.0386 753.22 309.98 918.23 234.36 128.5 581.31-539.04 760.22-379.93 229.74 204.3-465.84 517.23-317.07 802.07 115.86 221.83 895.33-44.684 853.46 194.02-53.765 306.52-699.32 70.319-850.97 383.69-118.1 244.04 261.11 693.64 5.9323 752.21-327.67 75.209-268.13-428.54-571.07-381.87-235.92 36.343-425.66 907.59-636.9 739.05-271.25-216.43 198.89-667.12-80.939-853.57-217.92-145.2-642.09-86.641-720.66-317.79-100.89-296.82 544.95-125.88 616.97-441.64 56.082-245.9-582.08-516.88-375.45-681.65 265.33-211.58 294.71 291.45 603.54 157.11 240.5-104.62 149.68-933.57 402.95-889.91z" inkscape:flatsided="false" inkscape:randomized="0.14" inkscape:rounded="0.4" sodipodi:arg1="-1.6706296" sodipodi:arg2="-1.0962105" sodipodi:cx="-564.31024" sodipodi:cy="945.83423" sodipodi:r1="1395.4882" sodipodi:r2="866.36334" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(20 5349.6) matrix(.9375 0 0 .9375 221.35 74.908)" d="m7.5344 13.786c-0.97597 2.7758-5.2867 0.77712-7.2988 3.1091-2.0121 2.332-0.60535 3.8413-3.4395 5.193-2.8341 1.3518-1.0092-3.7658-3.9602-4.2701-2.951-0.5043-4.6784 7.2092-7.448 6.2459s1.4076-6.6712-0.21625-9.4457c-1.6239-2.7746-3.5127 1.5343-3.5138-1.4269-0.0012-2.9613 4.3468-2.5599 5.0005-5.4526 0.6537-2.8927-5.1332-5.0283-2.9815-7.138 2.1517-2.1097 3.5647 2.7816 6.3556 2.3854 2.7909-0.3962 1.4114-8.7288 4.1531-8.0908 2.7417 0.6379 1.7223 5.5753 4.4164 6.9468 2.6941 1.3715 7.1204-1.4208 8.6496 1.0544 1.5292 2.4752-6.0994 3.2936-5.9018 6.4833 0.19761 3.1896 7.1605 1.6305 6.1845 4.4063z" stroke-width=".011048" inkscape:flatsided="false" inkscape:randomized="0.14" inkscape:rounded="0.4" sodipodi:arg1="0.32910642" sodipodi:arg2="0.77790537" sodipodi:cx="-6.2346616" sodipodi:cy="10.449848" sodipodi:r1="13.82637" sodipodi:r2="7.9316006" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(20 5349.6) matrix(.9375 0 0 .9375 161.27 90.961)" d="m-2.0772 11.911c-0.31867 1.94 3.1277 2.2745 1.8426 3.8315s-4.115-2.0037-5.936-1.245 0.93551 4.5191-1.0718 4.4922c-2.0073-0.02688 0.93611-4.3105-0.80738-5.5017-1.7435-1.1912-3.0455 3.6828-3.8641 1.6307s2.2055-2.0647 1.8843-4.1994c-0.32116-2.1347-3.8887-0.22801-3.3619-2.3396 0.52679-2.1116 3.3935 0.69879 5.0354-0.48164s-2.8928-4.444-0.91986-5.2841c1.973-0.84011 1.0145 5.2884 3.1364 5.3948 2.1219 0.10639 2.8011-4.9676 4.5781-4.0556 1.777 0.91206-3.6333 1.7285-2.7849 3.7339 0.84846 2.0054 5.9769-0.12464 5.8202 2.0387-0.15672 2.1633-3.2325 0.045389-3.5512 1.9853z" stroke-width=".011048" inkscape:flatsided="false" inkscape:randomized="0.14" inkscape:rounded="0.4" sodipodi:arg1="0.32929262" sodipodi:arg2="0.77809157" sodipodi:cx="-6.2346616" sodipodi:cy="10.449848" sodipodi:r1="3.228641" sodipodi:r2="7.9316006" sodipodi:sides="7" sodipodi:type="star"/>
-  <rect id="bq" x="20" y="5484.6" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="5484.6" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#bq"/>
-   </flowRegion>
-   <flowDiv>Спіралі</flowDiv>
-  </flowRoot>
-  <rect id="bp" x="20" y="5497.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bp"/>
-   </flowRegion>
-   <flowDiv>Спіраль в «Inkscape» – гнучка фігура, і хоча не така захоплююча як зірка, вона інколи дуже корисна. Спіраль, як і зірка, малюється від центру; під час малювання як і під час редагування,</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 5541.6)" r="2"/>
-  <rect id="bo" x="40" y="5535.6" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bo"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to snap angle to 15 degree increments.</flowDiv>
-  </flowRoot>
-  <rect id="bn" x="20" y="5552.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bn"/>
    </flowRegion>
-   <flowDiv>Щойно намальована, спіраль має два маніпулятори – на внутрішньому і зовнішньому кінцях. Обидва маніпулятори, при простому перетягуванні, згортають чи розгортають спіраль (тобто, «продовжують» її, змінюючи кількість витків). Інші клавіатурні скорочення:</flowDiv>
+   <flowDiv>Спіралі</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="5602" width="300" height="1e3px" display="none"/>
+  <rect id="bm" x="20" y="5497.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv>Зовнішній маніпулятор:</flowDiv>
+   <flowDiv>Спіраль в «Inkscape» – гнучка фігура, і хоча не така захоплююча як зірка, вона інколи дуже корисна. Спіраль, як і зірка, малюється від центру; під час малювання як і під час редагування,</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5625.2)" r="2"/>
-  <rect id="bl" x="40" y="5619.2" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 5541.6)" r="2"/>
+  <rect id="bl" x="40" y="5535.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to scale/rotate around center (no rolling/unrolling).</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to snap angle to 15 degree increments.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5642.6)" r="2"/>
-  <rect id="bj" x="40" y="5636.6" width="280" height="1e3px" display="none"/>
+  <rect id="bk" x="20" y="5552.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bk"/>
+   </flowRegion>
+   <flowDiv>Щойно намальована, спіраль має два маніпулятори – на внутрішньому і зовнішньому кінцях. Обидва маніпулятори, при простому перетягуванні, згортають чи розгортають спіраль (тобто, «продовжують» її, змінюючи кількість витків). Інші клавіатурні скорочення:</flowDiv>
+  </flowRoot>
+  <rect id="bj" x="20" y="5602" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bj"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to lock radius while rolling/unrolling.</flowDiv>
+   <flowDiv>Зовнішній маніпулятор:</flowDiv>
   </flowRoot>
-  <rect id="bi" x="20" y="5654" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 5625.2)" r="2"/>
+  <rect id="bi" x="40" y="5619.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>Внутрішній маніпулятор:</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to scale/rotate around center (no rolling/unrolling).</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5677.2)" r="2"/>
-  <rect id="bh" x="40" y="5671.2" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 5642.6)" r="2"/>
+  <rect id="bh" x="40" y="5636.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> vertically to converge/diverge.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> to lock radius while rolling/unrolling.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5694.5)" r="2"/>
-  <rect id="bg" x="40" y="5688.5" width="280" height="1e3px" display="none"/>
+  <rect id="bg" x="20" y="5654" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to reset divergence.</flowDiv>
+   <flowDiv>Внутрішній маніпулятор:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5711.8)" r="2"/>
-  <rect id="bf" x="40" y="5705.8" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 5677.2)" r="2"/>
+  <rect id="bf" x="40" y="5671.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to move the inner handle to the center.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> vertically to converge/diverge.</flowDiv>
   </flowRoot>
-  <rect id="be" x="20" y="5721.5" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 5694.5)" r="2"/>
+  <rect id="be" x="40" y="5688.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to reset divergence.</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 5711.8)" r="2"/>
+  <rect id="bd" x="40" y="5705.8" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bd"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to move the inner handle to the center.</flowDiv>
+  </flowRoot>
+  <rect id="bc" x="20" y="5721.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bc"/>
    </flowRegion>
    <flowDiv>The <flowSpan font-style="italic">divergence</flowSpan> of a spiral is the measure of nonlinearity of its winds. When it is equal to 1, the spiral is uniform; when it is less than 1 (<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> upwards), the spiral is denser on the periphery; when it is greater than 1 (<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> downwards), the spiral is denser towards the center:</flowDiv>
   </flowRoot>
@@ -1236,17 +1236,17 @@
   <path transform="translate(20 5777.2) scale(-1 1)" d="m-277.29 29.463c-1e-5 2e-6 -1e-5 -6e-6 -1e-5 -7e-6 0-4.3e-5 7e-5 -5.7e-5 9e-5 -5.6e-5 2.6e-4 9e-6 3.1e-4 3.7e-4 2.7e-4 5.53e-4 -1.7e-4 9.61e-4 -1e-3 0.0011-2e-3 8.71e-4 -3e-3 -8.42e-4 -3e-3 -0.0046-2e-3 -0.0069 3e-3 -0.0071 0.0122-0.0075 0.0181-0.0047 0.0155 0.0073 0.0159 0.0283 9e-3 0.04156-0.0167 0.03097-0.0593 0.03114-0.0863 0.01497-0.0575-0.03443-0.0567-0.11483-0.0236-0.16574 0.0654-0.10069 0.20849-0.09745 0.29871-0.03485 0.16791 0.1165 0.1599 0.35897 0.0485 0.51097-0.19708 0.26884-0.59116 0.25228-0.83663 0.06374-0.41576-0.31934-0.38497-0.9374-0.0793-1.3198 0.4989-0.62405 1.4388-0.57081 2.0164-0.09271 0.91266 0.75542 0.82547 2.1468 0.10067 2.9961-1.1132 1.3046-3.1245 1.1678-4.3445 0.09832-1.8275-1.602-1.6202-4.4489-0.0792-6.1651 2.2575-2.5142 6.2121-2.2092 8.582-0.0349 3.4033 3.1224 2.9657 8.5236-0.0453 11.742-4.2468 4.54-11.512 3.9256-15.819-0.17464-5.9764-5.6898-5.1302-15.329 0.36947-21.013 7.5195-7.7726 20.147-6.6268 27.558 0.64943 9.9973 9.8149 8.4692 26.167-1.038 35.721" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-36.75835" sodipodi:cx="-277.28845" sodipodi:cy="29.462816" sodipodi:expansion="6" sodipodi:radius="28.251171" sodipodi:revolution="6" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 5777.2) scale(-1 1)" d="m-96.58 37.072c2.6555 3.6418-2.0606 5.3029-4.6596 3.3976-3.2858-2.4088-2.798-7.3215-0.14538-9.9872 3.591-3.6087 9.5797-2.9358 12.876 0.70479 4.0049 4.4238 3.1466 11.407-1.2754 15.204-5.1117 4.3887-12.983 3.3679-17.214-1.7219-4.7502-5.7134-3.5854-14.387 2.0967-19.011 6.2556-5.0901 15.667-3.7952 20.65 2.4243 5.4109 6.7534 3.9968 16.851-2.7182 22.168-7.2164 5.7149-17.956 4.1904-23.589-2.9864-6.0043-7.651-4.3765-18.998 3.2345-24.928 8.0621-6.281 19.986-4.5557 26.198 3.4663 6.5464 8.4529 4.7287 20.927-3.6844 27.41-8.8264 6.8016-21.827 4.896-28.57-3.891-7.0479-9.1846-5.058-22.692 4.0876-29.685 9.5293-7.2859 23.525-5.2152 30.759 4.2756 7.5166 9.8619 5.3679 24.33-4.456 31.797-10.184 7.7404-25.109 5.5166-32.802-4.6296-7.9581-10.495-5.6615-25.865 4.7971-33.778 10.798-8.17 26.599-5.8028 34.725 4.959 8.3766 11.093 5.9409 27.313-5.116 35.648-11.38 8.5782-28.009 6.0759-36.547-5.2684-8.7753-11.659-6.208-28.688 5.4166-37.425 11.933-8.9681 29.352-6.3373 38.283 5.561 9.1568 12.2 6.4642 30.001-5.7017 39.122" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-36.75835" sodipodi:cx="-96.57975" sodipodi:cy="37.071815" sodipodi:expansion="0.5" sodipodi:radius="28.251171" sodipodi:revolution="6" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 5777.2) scale(-1 1)" d="m-36.343 37.072c9.9592 13.658-4.981 16.344-12.09 8.8153-6.1702-6.5352-4.7374-17.131 1.9634-22.703 7.5862-6.3074 19.127-4.7041 25.186 2.9057 6.5555 8.2329 4.7964 20.526-3.4284 26.934-8.7186 6.7925-21.622 4.9108-28.312-3.7895-7.0074-9.1134-5.0257-22.533 4.0659-29.462 9.449-7.2018 23.317-5.1357 30.456 4.2904 7.3788 9.7422 5.2394 24.007-4.4799 31.334-10.004 7.5411-24.626 5.3369-32.123-4.6443-7.691-10.24-5.4286-25.189 4.7898-32.841 10.457-7.8305 25.705-5.5151 33.501 4.9204 7.9608 10.656 5.5968 26.183-5.0392 34.112-10.842 8.0833-26.628 5.6744-34.683-5.1482-8.199-11.016-5.7481-27.045 5.249-35.218 11.179-8.3085 27.439-5.8183 35.723 5.3429 8.4126 11.334 5.8855 27.81-5.4308 36.201-11.48 8.5118-28.163 5.9498-36.654-5.5135-8.6067-11.62-6.0115-28.499 5.5917-37.086 11.752-8.6975 28.82-6.0708 37.499 5.6658 8.7848 11.88 6.1279 29.128-5.7363 37.895-12.002 8.8687-29.422 6.1831-38.274-5.8036-8.9496-12.119-6.2363-29.706 5.8679-38.64 12.232-9.0277 29.979-6.2878 38.991 5.9296 9.1032 12.34 6.3377 30.242-5.9888 39.331" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-36.75835" sodipodi:cx="-36.343452" sodipodi:cy="37.071815" sodipodi:expansion="0.2" sodipodi:radius="28.251171" sodipodi:revolution="6" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <rect id="bd" x="20" y="5852.4" width="300" height="1e3px" display="none"/>
+  <rect id="ba" x="20" y="5852.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bd"/>
+    <use xlink:href="#ba"/>
    </flowRegion>
    <flowDiv>Максимальна кількість витків спіралі – 1024.</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="5869.4" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="5869.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bc"/>
+    <use xlink:href="#az"/>
    </flowRegion>
    <flowDiv>Як і інструмент «Еліпс» підходить не лише для малювання еліпсів, але й дуг (ліній постійної кривини), так і інструмент «Спіраль» підходить для створення кривих з кривиною, що плавно змінюється. Порівняно з простою кривою Безьє, дуга чи спіраль часто більш зручні, тому що можна зробити їх коротшими чи довшими, перетягуючи маніпулятор вздовж кривої не змінюючи їх форму. Також, хоча спіраль, зазвичай, малюється без заповнення, можна додати заповнення і видалити штрих для отримання цікавих ефектів.</flowDiv>
   </flowRoot>
@@ -1270,27 +1270,27 @@
   <path transform="translate(20 5958.5) matrix(-.4889 -.4889 .4889 -.4889 -2793.2 3319.2)" d="m241.32 6459.8c0.70485-3.0046 4.8734-3.2812 7.2313-2.5958 10.574 3.0737 11.298 17.568 8.3935 26.061-1.9033 5.5648-5.2933 10.55-9.4538 14.676" color="#000000" fill="none" stroke="#000" stroke-width="1.4463pt" sodipodi:argument="-16.24534" sodipodi:cx="242.34204" sodipodi:cy="6461.3071" sodipodi:expansion="13.200652" sodipodi:radius="36.96331" sodipodi:revolution="2.8132913" sodipodi:t0="0.79694211" sodipodi:type="spiral"/>
   <path transform="translate(20 5958.5) scale(-1)" d="m-257.87-57.577c0.48734-2.0774 3.3695-2.2686 4.9998-1.7947 7.3107 2.1251 7.8118 12.146 5.8033 18.019-1.3017 3.8058-3.6095 7.2203-6.4432 10.054" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-16.24534" sodipodi:cx="-257.16202" sodipodi:cy="-56.513443" sodipodi:expansion="13.200652" sodipodi:radius="25.47789" sodipodi:revolution="2.8126345" sodipodi:t0="0.7971282" sodipodi:type="spiral"/>
   <path transform="translate(20 5958.5) matrix(-.3457 .59877 -.59877 -.3457 4234.6 2172)" d="m241.32 6459.8c0.70484-3.0046 4.8734-3.2812 7.2313-2.5958 10.574 3.0736 11.298 17.568 8.3936 26.061-5.8132 16.996-23.616 26.861-40.458 29.582" color="#000000" fill="none" stroke="#000" stroke-width="1.4463pt" sodipodi:argument="-16.24534" sodipodi:cx="242.34204" sodipodi:cy="6461.3071" sodipodi:expansion="13.200652" sodipodi:radius="57.635422" sodipodi:revolution="2.9095716" sodipodi:t0="0.7705704" sodipodi:type="spiral"/>
-  <rect id="ba" x="20" y="6070.4" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="6070.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ba"/>
+    <use xlink:href="#ay"/>
    </flowRegion>
    <flowDiv>Особливо цікавими є спіралі з пунктирним штрихом – вони поєднують плавну концентрацію фігури з рівномірно розміщеними правильними позначками (точками чи штрихами) для гарного муарового ефекту:</flowDiv>
   </flowRoot>
   <path transform="translate(20 6117.2) matrix(-.17215 .64245 -.64245 -.17215 4253.6 1103.7)" d="m103.2 6518.4c0.36965 0.459-0.43058 0.7245-0.75891 0.6112-0.87059-0.3005-0.88847-1.4597-0.45146-2.1142 0.77579-1.1617 2.4473-1.1256 3.4519-0.3021 1.4666 1.2021 1.3714 3.4426 0.15551 4.7817-1.6141 1.7777-4.4386 1.6205-6.106 0.01-2.0915-2.0198-1.8712-5.4337 0.13398-7.4261 2.422-2.4066 6.4275-2.1227 8.7428 0.2775 2.7221 2.822 2.3744 7.42-0.42059 10.057-3.2204 3.038-8.411 2.6263-11.368-0.5632-3.3538-3.6174-2.8781-9.4007 0.70542-12.677 4.0136-3.6696 10.389-3.1299 13.984 0.8473 3.9852 4.4089 3.3816 11.377-0.98896 15.29-4.8035 4.3007-12.363 3.6331-16.594-1.1304-4.616-5.1975-3.8845-13.348 1.2715-17.896 5.5909-4.9311 14.333-4.1359 19.197 1.4124 5.246 5.9839 4.387 15.316-1.5533 20.497-6.3764 5.5608-16.299 4.638-21.795-1.6939-5.8753-6.7685-4.8888-17.281 1.8344-23.092 7.1602-6.1896 18.262-5.1395 24.389 1.9747 6.5038 7.5516 5.39 19.242-2.1149 25.684-7.9426 6.8178-20.222 5.6404-26.979-2.255-7.1316-8.3333-5.8908-21.201 2.3949-28.272 8.7238-7.4453 22.179-6.1409 29.565 2.5347 7.7588 9.114 6.3909 23.157-2.6744 30.857-9.5039 8.0721-24.134 6.6409-32.148-2.814-8.3853-9.8936-6.8906-25.111 2.9536-33.438 10.283-8.6983 26.087-7.1404 34.728 3.093 9.0112 10.672 7.3899 27.063-3.2324 36.017-11.061 9.3239-28.038 7.6393-37.305-3.3716-9.6365-11.45-7.8887-29.013 3.5108-38.593 11.839-9.9489 29.987-8.1379 39.88 3.6499 10.261 12.227 8.387 30.961-3.7889 41.166-12.615 10.574-31.934 8.6361-42.452-3.9279-10.886-13.003-8.885-32.907 4.0668-43.737 13.391-11.198 33.88-9.1339 45.022 4.2056 11.509 13.779 9.3826 34.852-4.3444 46.306-14.166 11.821-35.824 9.6313-47.59-4.483-12.133-14.554-9.8798-36.795 4.6217-48.873 14.941-12.444 37.766-10.128 50.156 4.7603 12.756 15.328 10.377 38.737-4.8988 51.438-15.715 13.067-39.707 10.625-52.72-5.0372-13.378-16.102-10.873-40.677 5.1757-54.002 16.488-13.689 41.647-11.122 55.282 5.314 14 16.875 11.37 42.616-5.4523 56.563-17.261 14.311-43.585 11.618-57.843-5.5906-14.622-17.647-11.866-44.554 5.7288-59.123 18.033-14.933 45.522-12.113 60.402 5.8669 15.243 18.419 12.361 46.49-6.005 61.681-18.805 15.554-47.458 12.609-62.959-6.1431-15.864-19.191-12.857-48.426 6.2811-64.237 19.577-16.174 49.393-13.104 65.515 6.4191 16.485 19.962 13.352 50.36-6.5571 66.793-20.348 16.795-51.327 13.599-68.07-6.695-17.105-20.733-13.847-52.293 6.8328-69.346 21.118-17.415 53.259-14.094 70.623 6.9706 17.725 21.503 14.341 54.225-7.1084 71.899-21.888 18.035-55.191 14.588-73.174-7.2461-18.345-22.273-14.836-56.156 7.3839-74.45 22.658-18.654 57.122-15.083 75.725 7.5215 18.964 23.043 15.33 58.087-7.6592 77-23.427 19.274-59.051 15.577-78.274-7.7967-19.583-23.812-15.824-60.016 7.9343-79.548 24.196-19.893 60.98-16.07 80.822 8.0719 20.202 24.581 16.317 61.944-8.2093 82.096-24.965 20.511-62.908 16.564-83.369-8.3468-20.821-25.349-16.811-63.872 8.4842-84.642 25.733-21.13 64.836-17.058 85.915 8.6216 21.439 26.117 17.304 65.799-8.759 87.187-26.501 21.748-66.762 17.551-88.459-8.8963-22.057-26.885-17.797-67.725 9.0336-89.731 27.269-22.366 68.687-18.044 91.003 9.1709 22.675 27.653 18.29 69.65-9.3081 92.274-28.036 22.984-70.612 18.536-93.546-9.4454-23.292-28.42-18.783-71.574 9.5825-94.816 28.803-23.601 72.536-19.029 96.087 9.7196 6.5075 7.9438 11.19 17.336 13.625 27.312" color="#000000" fill="none" stroke="#000" stroke-dasharray="1.875, 1.875" stroke-width="3.75" sodipodi:argument="-36.806286" sodipodi:cx="103.19778" sodipodi:cy="6518.4199" sodipodi:expansion="0.98582262" sodipodi:radius="68.998032" sodipodi:revolution="18.821123" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 6117.2) matrix(-.17929 .65451 -.66912 -.17538 4627.6 1123.6)" d="m103.2 6518.4c0.36965 0.459-0.43058 0.7245-0.75891 0.6112-0.87059-0.3005-0.88847-1.4597-0.45146-2.1142 0.77579-1.1617 2.4473-1.1256 3.4519-0.3021 1.4666 1.2021 1.3714 3.4426 0.15551 4.7817-1.6141 1.7777-4.4386 1.6205-6.106 0.01-2.0915-2.0198-1.8712-5.4337 0.13398-7.4261 2.422-2.4066 6.4275-2.1227 8.7428 0.2775 2.7221 2.822 2.3744 7.42-0.42059 10.057-3.2204 3.038-8.411 2.6263-11.368-0.5632-3.3538-3.6174-2.8781-9.4007 0.70542-12.677 4.0136-3.6696 10.389-3.1299 13.984 0.8473 3.9852 4.4089 3.3816 11.377-0.98896 15.29-4.8035 4.3007-12.363 3.6331-16.594-1.1304-4.616-5.1975-3.8845-13.348 1.2715-17.896 5.5909-4.9311 14.333-4.1359 19.197 1.4124 5.246 5.9839 4.387 15.316-1.5533 20.497-6.3764 5.5608-16.299 4.638-21.795-1.6939-5.8753-6.7685-4.8888-17.281 1.8344-23.092 7.1602-6.1896 18.262-5.1395 24.389 1.9747 6.5038 7.5516 5.39 19.242-2.1149 25.684-7.9426 6.8178-20.222 5.6404-26.979-2.255-7.1316-8.3333-5.8908-21.201 2.3949-28.272 8.7238-7.4453 22.179-6.1409 29.565 2.5347 7.7588 9.114 6.3909 23.157-2.6744 30.857-9.5039 8.0721-24.134 6.6409-32.148-2.814-8.3853-9.8936-6.8906-25.111 2.9536-33.438 10.283-8.6983 26.087-7.1404 34.728 3.093 9.0112 10.672 7.3899 27.063-3.2324 36.017-11.061 9.3239-28.038 7.6393-37.305-3.3716-9.6365-11.45-7.8887-29.013 3.5108-38.593 11.839-9.9489 29.987-8.1379 39.88 3.6499 10.261 12.227 8.387 30.961-3.7889 41.166-12.615 10.574-31.934 8.6361-42.452-3.9279-10.886-13.003-8.885-32.907 4.0668-43.737 13.391-11.198 33.88-9.1339 45.022 4.2056 11.509 13.779 9.3826 34.852-4.3444 46.306-14.166 11.821-35.824 9.6313-47.59-4.483-12.133-14.554-9.8798-36.795 4.6217-48.873 14.941-12.444 37.766-10.128 50.156 4.7603 12.756 15.328 10.377 38.737-4.8988 51.438-15.715 13.067-39.707 10.625-52.72-5.0372-13.378-16.102-10.873-40.677 5.1757-54.002 16.488-13.689 41.647-11.122 55.282 5.314 14 16.875 11.37 42.616-5.4523 56.563-17.261 14.311-43.585 11.618-57.843-5.5906-14.622-17.647-11.866-44.554 5.7288-59.123 18.033-14.933 45.522-12.113 60.402 5.8669 15.243 18.419 12.361 46.49-6.005 61.681-18.805 15.554-47.458 12.609-62.959-6.1431-15.864-19.191-12.857-48.426 6.2811-64.237 19.577-16.174 49.393-13.104 65.515 6.4191 16.485 19.962 13.352 50.36-6.5571 66.793-20.348 16.795-51.327 13.599-68.07-6.695-17.105-20.733-13.847-52.293 6.8328-69.346 21.118-17.415 53.259-14.094 70.623 6.9706 17.725 21.503 14.341 54.225-7.1084 71.899-21.888 18.035-55.191 14.588-73.174-7.2461-18.345-22.273-14.836-56.156 7.3839-74.45 22.658-18.654 57.122-15.083 75.725 7.5215 18.964 23.043 15.33 58.087-7.6592 77-23.427 19.274-59.051 15.577-78.274-7.7967-19.583-23.812-15.824-60.016 7.9343-79.548 24.196-19.893 60.98-16.07 80.822 8.0719 20.202 24.581 16.317 61.944-8.2093 82.096-24.965 20.511-62.908 16.564-83.369-8.3468-20.821-25.349-16.811-63.872 8.4842-84.642 25.733-21.13 64.836-17.058 85.915 8.6216 21.439 26.117 17.304 65.799-8.759 87.187-26.501 21.748-66.762 17.551-88.459-8.8963-22.057-26.885-17.797-67.725 9.0336-89.731 27.269-22.366 68.687-18.044 91.003 9.1709 22.675 27.653 18.29 69.65-9.3081 92.274-28.036 22.984-70.612 18.536-93.546-9.4454-23.292-28.42-18.783-71.574 9.5825-94.816 28.803-23.601 72.536-19.029 96.087 9.7196 6.5075 7.9438 11.19 17.336 13.625 27.312" color="#000000" fill="none" stroke="#000" stroke-dasharray="3.75, 3.75" stroke-width="7.5" sodipodi:argument="-36.806286" sodipodi:cx="103.19778" sodipodi:cy="6518.4199" sodipodi:expansion="0.98582262" sodipodi:radius="68.998032" sodipodi:revolution="18.821123" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 6117.2) matrix(-.17929 .65451 -.66912 -.17538 4526.2 1123.2)" d="m103.2 6518.4c0.36965 0.459-0.43058 0.7245-0.75891 0.6112-0.87059-0.3005-0.88847-1.4597-0.45146-2.1142 0.77579-1.1617 2.4473-1.1256 3.4519-0.3021 1.4666 1.2021 1.3714 3.4426 0.15551 4.7817-1.6141 1.7777-4.4386 1.6205-6.106 0.01-2.0915-2.0198-1.8712-5.4337 0.13398-7.4261 2.422-2.4066 6.4275-2.1227 8.7428 0.2775 2.7221 2.822 2.3744 7.42-0.42059 10.057-3.2204 3.038-8.411 2.6263-11.368-0.5632-3.3538-3.6174-2.8781-9.4007 0.70542-12.677 4.0136-3.6696 10.389-3.1299 13.984 0.8473 3.9852 4.4089 3.3816 11.377-0.98896 15.29-4.8035 4.3007-12.363 3.6331-16.594-1.1304-4.616-5.1975-3.8845-13.348 1.2715-17.896 5.5909-4.9311 14.333-4.1359 19.197 1.4124 5.246 5.9839 4.387 15.316-1.5533 20.497-6.3764 5.5608-16.299 4.638-21.795-1.6939-5.8753-6.7685-4.8888-17.281 1.8344-23.092 7.1602-6.1896 18.262-5.1395 24.389 1.9747 6.5038 7.5516 5.39 19.242-2.1149 25.684-7.9426 6.8178-20.222 5.6404-26.979-2.255-7.1316-8.3333-5.8908-21.201 2.3949-28.272 8.7238-7.4453 22.179-6.1409 29.565 2.5347 7.7588 9.114 6.3909 23.157-2.6744 30.857-9.5039 8.0721-24.134 6.6409-32.148-2.814-8.3853-9.8936-6.8906-25.111 2.9536-33.438 10.283-8.6983 26.087-7.1404 34.728 3.093 9.0112 10.672 7.3899 27.063-3.2324 36.017-11.061 9.3239-28.038 7.6393-37.305-3.3716-9.6365-11.45-7.8887-29.013 3.5108-38.593 11.839-9.9489 29.987-8.1379 39.88 3.6499 10.261 12.227 8.387 30.961-3.7889 41.166-12.615 10.574-31.934 8.6361-42.452-3.9279-10.886-13.003-8.885-32.907 4.0668-43.737 13.391-11.198 33.88-9.1339 45.022 4.2056 11.509 13.779 9.3826 34.852-4.3444 46.306-14.166 11.821-35.824 9.6313-47.59-4.483-12.133-14.554-9.8798-36.795 4.6217-48.873 14.941-12.444 37.766-10.128 50.156 4.7603 12.756 15.328 10.377 38.737-4.8988 51.438-15.715 13.067-39.707 10.625-52.72-5.0372-13.378-16.102-10.873-40.677 5.1757-54.002 16.488-13.689 41.647-11.122 55.282 5.314 14 16.875 11.37 42.616-5.4523 56.563-17.261 14.311-43.585 11.618-57.843-5.5906-14.622-17.647-11.866-44.554 5.7288-59.123 18.033-14.933 45.522-12.113 60.402 5.8669 15.243 18.419 12.361 46.49-6.005 61.681-18.805 15.554-47.458 12.609-62.959-6.1431-15.864-19.191-12.857-48.426 6.2811-64.237 19.577-16.174 49.393-13.104 65.515 6.4191 16.485 19.962 13.352 50.36-6.5571 66.793-20.348 16.795-51.327 13.599-68.07-6.695-17.105-20.733-13.847-52.293 6.8328-69.346 21.118-17.415 53.259-14.094 70.623 6.9706 17.725 21.503 14.341 54.225-7.1084 71.899-21.888 18.035-55.191 14.588-73.174-7.2461-18.345-22.273-14.836-56.156 7.3839-74.45 22.658-18.654 57.122-15.083 75.725 7.5215 18.964 23.043 15.33 58.087-7.6592 77-23.427 19.274-59.051 15.577-78.274-7.7967-19.583-23.812-15.824-60.016 7.9343-79.548 24.196-19.893 60.98-16.07 80.822 8.0719 20.202 24.581 16.317 61.944-8.2093 82.096-24.965 20.511-62.908 16.564-83.369-8.3468-20.821-25.349-16.811-63.872 8.4842-84.642 25.733-21.13 64.836-17.058 85.915 8.6216 21.439 26.117 17.304 65.799-8.759 87.187-26.501 21.748-66.762 17.551-88.459-8.8963-22.057-26.885-17.797-67.725 9.0336-89.731 27.269-22.366 68.687-18.044 91.003 9.1709 22.675 27.653 18.29 69.65-9.3081 92.274-28.036 22.984-70.612 18.536-93.546-9.4454-23.292-28.42-18.783-71.574 9.5825-94.816 28.803-23.601 72.536-19.029 96.087 9.7196 6.5075 7.9438 11.19 17.336 13.625 27.312" color="#000000" fill="none" stroke="#000" stroke-dasharray="0.604293, 7.25151" stroke-width=".60429" sodipodi:argument="-36.806286" sodipodi:cx="103.19778" sodipodi:cy="6518.4199" sodipodi:expansion="0.98582262" sodipodi:radius="68.998032" sodipodi:revolution="18.821123" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <rect id="az" x="20" y="6231.8" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="6231.8" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#az"/>
+    <use xlink:href="#ax"/>
    </flowRegion>
    <flowDiv>Заключення</flowDiv>
   </flowRoot>
-  <rect id="ay" x="20" y="6242.5" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="6242.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ay"/>
+    <use xlink:href="#aw"/>
    </flowRegion>
    <flowDiv>Інструменти фігур «Inkscape» – дуже потужні. Вивчайте їхні прийоми і грайтеся з ними на дозвіллі – це окупиться під час дизайнерської роботи, оскільки, використання фігур замість простих контурів часто робить векторне мистецтво швидшим для створення і легшим для модифікування. Якщо у Вас є будь-які ідеї для подальшого вдосконалення фігур, будь ласка, зв'яжіться з розробниками.</flowDiv>
   </flowRoot>

@@ -862,7 +862,7 @@
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>Ou, você pode rodar pelo teclado ao pressionar <flowSpan font-weight="bold">[</flowSpan> e <flowSpan font-weight="bold">]</flowSpan> (por 15 graus) ou <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> e <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> (por 90 graus). As mesmas <flowSpan font-weight="bold">[</flowSpan><flowSpan font-weight="bold">]</flowSpan> teclas com <flowSpan font-weight="bold">Alt</flowSpan> realizam uma rotação lenta em tamanho-de-pixel.</flowDiv>
+   <flowDiv>Or, you can rotate from keyboard by pressing <flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">]</flowSpan> (by 15 degrees) or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> (by 90 degrees). The same <flowSpan font-weight="bold">[</flowSpan> <flowSpan font-weight="bold">]</flowSpan> keys with <flowSpan font-weight="bold">Alt</flowSpan> perform slow pixel-size rotation.</flowDiv>
   </flowRoot>
   <rect id="bh" x="20" y="2564.6" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
@@ -871,7 +871,7 @@
    </flowRegion>
    <flowDiv>Sombras de fundo em bitmaps</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="2577" width="300" height="1e3px" display="none"/>
+  <rect id="bg" x="20" y="2577.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
@@ -892,7 +892,7 @@
    </flowRegion>
    <flowDiv>Posicionando texto em um caminho</flowDiv>
   </flowRoot>
-  <rect id="bd" x="20" y="2679.7" width="300" height="1e3px" display="none"/>
+  <rect id="bd" x="20" y="2679.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
@@ -920,7 +920,7 @@
    </flowRegion>
    <flowDiv>Recuperação de janelas fora da tela</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2825" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="2825.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#az"/>
@@ -934,14 +934,14 @@
    </flowRegion>
    <flowDiv>Exportação de transparência, gradientes e PostScript</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="2913.8" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="2913.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
    <flowDiv>Os formatos PostScript ou EPS não são compatíveis com <flowSpan font-style="italic">transparência</flowSpan>, então você não deve usá-los se for exportá-los para PS/EPS. No caso de transparência que sobrepõe a cor lisa, é fácil consertar isso: Selecione um dos objetos transparentes; mude para a ferramenta Conta-gotas (<flowSpan font-weight="bold">F7</flowSpan> ou <flowSpan font-weight="bold">d</flowSpan>); certifique-se que o botão <flowSpan font-family="Liberation Sans,Arial,sans-serif">Opacidade: Escolher</flowSpan> na barra de ferramentas da ferramenta Conta gotas está desativado; clique no mesmo objeto. Isto vai pegar a cor visível e atribuí-la de volta ao objeto, mas desta vez sem transparência. Repita para todos os objetos transparentes. Se seu objeto transparente sobrepor várias áreas de cor lisa, você vai ter que quebrá-lo em pedaços e aplicar este procedimento para cada pedaço.</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="3011.2" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="3011.3" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aw"/>
@@ -955,7 +955,7 @@
    </flowRegion>
    <flowDiv>A maioria dos elementos SVG podem ser editados para reagir à entrada do usuário (geralmente isso só vai funcionar se o SVG for exibido em um navegador).</flowDiv>
   </flowRoot>
-  <rect id="au" x="20" y="3050" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="3050.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#au"/>
@@ -977,16 +977,16 @@
    </flowRegion>
    <flowDiv>Abra outro arquivo na janela atual quando clicar no objeto:</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3159.7)" r="2"/>
-  <rect id="ar" x="60" y="3153.7" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(55 3159.8)" r="2"/>
+  <rect id="ar" x="60" y="3153.8" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
    <flowDiv>Defina <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> para <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.location='file2.svg';</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3177.2)" r="2"/>
-  <rect id="aq" x="40" y="3171.2" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 3177.3)" r="2"/>
+  <rect id="aq" x="40" y="3171.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aq"/>
@@ -1001,8 +1001,8 @@
    </flowRegion>
    <flowDiv>Defina <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> em <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.open("https://inkscape.org","_blank");</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3222.6)" r="2"/>
-  <rect id="ao" x="40" y="3216.6" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 3222.7)" r="2"/>
+  <rect id="ao" x="40" y="3216.7" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
@@ -1017,15 +1017,15 @@
    </flowRegion>
    <flowDiv>Defina <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseover</flowSpan> em <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 0.5;</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3257.3)" r="2"/>
-  <rect id="am" x="60" y="3251.3" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(55 3257.4)" r="2"/>
+  <rect id="am" x="60" y="3251.4" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
    </flowRegion>
    <flowDiv>Defina <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseout</flowSpan> em <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 1;</flowSpan></flowDiv>
   </flowRoot>
-  <use x="47" y="3304.7751961" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
+  <use x="47" y="3304.8416021" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
   <rect id="cu" x="70" y="3298.8" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
@@ -1033,16 +1033,16 @@
    </flowRegion>
    <flowDiv>Bulia Byak; Alexandre Prokoudine; Colin Marquardt; Ivan Masár; Kris De Gussem; Nicolas Dufour; Maren Hachmann; Roland Alton; Patrick Storz; Guillaume Audirac; Gellért Gyuris</flowDiv>
   </flowRoot>
-  <use x="47" y="3336.8382831" inkscape:label="icon-credits-translators" xlink:href="#co"/>
-  <rect id="cs" x="70" y="3330.8" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3336.9046891" inkscape:label="icon-credits-translators" xlink:href="#co"/>
+  <rect id="cs" x="70" y="3330.9" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
    <flowDiv>Thiago Pimentel — 2006; Victor Westmann — 2019</flowDiv>
   </flowRoot>
-  <use x="47" y="3354.4310565" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
-  <rect id="ct" x="70" y="3348.4" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3354.4974625" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
+  <rect id="ct" x="70" y="3348.5" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#ct"/>
@@ -1051,7 +1051,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="cr" transform="translate(0 3196)">
+  <g id="cr" transform="translate(0 3196.1)">
    <defs>
     <filter id="m" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

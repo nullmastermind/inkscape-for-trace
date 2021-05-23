@@ -259,38 +259,38 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#cr"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Didacticiel<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Trucs et astuces</tspan></tspan></text>
-  <rect id="al" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="ah" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#al"/>
+    <use xlink:href="#ah"/>
    </flowRegion>
    <flowDiv>Ce didacticiel présente divers trucs et astuces trouvés par des utilisateurs au cours de leur utilisation d'Inkscape, ainsi que quelques fonctionnalités cachées qui peuvent vous aider à accélérer votre production.</flowDiv>
   </flowRoot>
-  <rect id="ak" x="20" y="179.8" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="179.8" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ak"/>
+    <use xlink:href="#ag"/>
    </flowRegion>
    <flowDiv>Disposition radiale avec un pavage de clones</flowDiv>
   </flowRoot>
-  <rect id="aj" x="20" y="192.29" width="300" height="1e3px" display="none"/>
+  <rect id="af" x="20" y="192.29" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#aj"/>
+    <use xlink:href="#af"/>
    </flowRegion>
    <flowDiv>Il est facile de comprendre comment se servir de la boîte de dialogue <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Créer un pavage de clones</flowSpan> pour créer des motifs ou des grilles rectangulaires. Mais comment créer une disposition <flowSpan font-style="italic">radiale</flowSpan>, où les objets partagent un même centre de rotation ? C'est possible aussi !</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="231.29" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="231.29" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ai"/>
+    <use xlink:href="#ae"/>
    </flowRegion>
    <flowDiv>Si votre motif radial ne doit comporter que 3, 4, 6, 8 ou 12 éléments, vous pouvez alors essayer les symétries P3, P31M, P3M1, P4, P4M, P6 ou P6M. Celles-ci fonctionnent bien pour obtenir des flocons ou des formes similaires. Voici toutefois une méthode plus générale.</flowDiv>
   </flowRoot>
-  <rect id="ah" x="20" y="269.93" width="300" height="1e3px" display="none"/>
+  <rect id="ad" x="20" y="269.93" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ah"/>
+    <use xlink:href="#ad"/>
    </flowRegion>
    <flowDiv>Choisissez la symétrie P1 (translation simple) puis <flowSpan font-style="italic">compensez</flowSpan> cette translation en allant dans l'onglet <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Translation</flowSpan> et en définissant <flowSpan font-family="Liberation Sans,Arial,sans-serif">Par ligne/Translation Y</flowSpan> et <flowSpan font-family="Liberation Sans,Arial,sans-serif">Par colonne/Translation X</flowSpan> à -100 %. Les clones seront alors empilés juste au-dessus de l'original. Tout ce qu'il reste à faire est d'aller dans l'onglet <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Rotation</flowSpan> et de définir un angle par colonne, puis de créer le motif avec une ligne et plusieurs colonnes. Par exemple, voici un motif fait d'une ligne horizontale et de 30 colonnes, chacune de ces colonnes étant tournée de 6 degrés :</flowDiv>
   </flowRoot>
@@ -324,17 +324,17 @@
   <use transform="translate(20 348.74) rotate(162 150 58.9) translate(-20 -348.74)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
   <use transform="translate(20 348.74) rotate(168 150 58.9) translate(-20 -348.74)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
   <use transform="translate(20 348.74) rotate(174 150 58.9) translate(-20 -348.74)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <rect id="ag" x="20" y="478.24" width="300" height="1e3px" display="none"/>
+  <rect id="ac" x="20" y="478.24" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ag"/>
+    <use xlink:href="#ac"/>
    </flowRegion>
    <flowDiv>Pour en faire un cadran, il suffit de découper ce motif ou recouvrir sa partie par un disque blanc (pour effectuer des opérations booléennes sur des clones, déliez-les d'abord).</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="506.21" width="300" height="1e3px" display="none"/>
+  <rect id="ab" x="20" y="506.21" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#af"/>
+    <use xlink:href="#ab"/>
    </flowRegion>
    <flowDiv>Des effets plus intéressants peuvent être créés en utilisant à la fois les lignes et les colonnes. Voici un motif de 10 colonnes et 8 lignes, avec une rotation de 2 degrés par lignes et 18 par colonne. Chaque groupe de segments ici est « une colonne », donc les groupes sont séparés entre eux de 18 degrés ; en sein de chaque « colonne », les segments sont séparés de 2 degrés :</flowDiv>
   </flowRoot>
@@ -418,10 +418,10 @@
   <use transform="translate(20 574.13) rotate(169.5 150 71.649) translate(-20 -574.13)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
   <use transform="translate(20 574.13) rotate(171 150 71.65) translate(-20 -574.13)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
   <use transform="translate(20 574.13) rotate(172.5 150 71.651) translate(-20 -574.13)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <rect id="ae" x="20" y="729.13" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="729.13" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ae"/>
+    <use xlink:href="#aa"/>
    </flowRegion>
    <flowDiv>Dans les exemples ci-dessus, le segment a été tourné autour de son centre. Mais comment faire si vous voulez que le centre soit en dehors de votre forme ? Cliquez deux fois sur l'objet avec l'outil Sélecteur pour entrer en mode rotation, puis déplacez le centre de rotation de l'objet (représenté par une petite poignée en forme de croix) vers le centre de rotation souhaité pour le pavage. Utilisez ensuite <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Créer un pavage de clones</flowSpan> sur l'objet. C'est ainsi que vous pouvez créer de belles explosions et éclaboussures avec une échelle, une rotation et éventuellement une opacité aléatoires :</flowDiv>
   </flowRoot>
@@ -500,52 +500,52 @@
   <use transform="translate(20 818.34) matrix(1.1627 -.6377 .6377 1.1627 -73.507 83.13) translate(-20 -818.34)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
   <use transform="translate(20 818.34) matrix(1.5217 -.57461 .57461 1.5217 -122.51 46.016) translate(-20 -818.34)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
   <use transform="translate(20 818.34) matrix(.54625 -.90456 .90456 .54625 -1.5938 170.63) translate(-20 -818.34)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <rect id="ad" x="20" y="989.75" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ad"/>
-   </flowRegion>
-   <flowDiv>Exporter des zones rectangulaires multiples</flowDiv>
-  </flowRoot>
-  <rect id="ac" x="20" y="1002.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ac"/>
-   </flowRegion>
-   <flowDiv>Créez un nouveau calque, et dans ce calque, créez des rectangles invisibles recouvrant des parties de votre image. Assurez-vous que votre document adopte le px comme unité (cas par défaut), affichez la grille et faites coller les rectangles à cette grille de sorte que chacun d'entre eux aient des coordonnées en px entières. Donnez des identifiants significatifs aux rectangles, et exportez chacun d'entre eux dans un fichier différent (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fichier</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exporter au format PNG</flowSpan> — <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">E</flowSpan>). Chacun des rectangles se « souviendra » ainsi de son nom de fichier d'export. Après cela, il est facile de réexporter certains de ces rectangles : passez dans le calque d'export, utilisez <flowSpan font-weight="bold">Tab</flowSpan> pour sélectionner celui dont vous avez besoin (ou faites une Recherche par identifiant), et enfin cliquez sur <flowSpan font-family="Liberation Sans,Arial,sans-serif">Exporter</flowSpan> dans la boîte de dialogue. Vous pouvez aussi écrire un script shell ou un fichier batch pour exporter ces zones avec une commande telle que :</flowDiv>
-  </flowRoot>
-  <rect id="ab" x="20" y="1126.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ab"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i area-id -t nomdefichier.svg</flowSpan></flowDiv>
-  </flowRoot>
-  <rect id="aa" x="20" y="1143.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#aa"/>
-   </flowRegion>
-   <flowDiv>pour chaque zone. L'option <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-t</flowSpan> indique à Inkscape d'utiliser le nom de fichier enregistré avec la zone ; vous pouvez aussi fournir un autre nom pour l'export avec l'option <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-e</flowSpan>. Une autre possibilité est d'utiliser les extensions <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Web</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Découpe</flowSpan>, ou <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exporter</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Guillotine</flowSpan> qui permettent d'automatiser l'export depuis des documents SVG Inkscape, en utilisant au choix des guides ou un calque de découpage.</flowDiv>
-  </flowRoot>
-  <rect id="cn" x="20" y="1209.3" width="300" height="1e3px" display="none"/>
+  <rect id="cn" x="20" y="989.75" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cn"/>
    </flowRegion>
-   <flowDiv>Dégradés non linéaires</flowDiv>
+   <flowDiv>Exporter des zones rectangulaires multiples</flowDiv>
   </flowRoot>
-  <rect id="cm" x="20" y="1221.9" width="300" height="1e3px" display="none"/>
+  <rect id="cm" x="20" y="1002.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cm"/>
    </flowRegion>
-   <flowDiv>La version 1.1 du SVG ne supporte pas les dégradés non linéaires (c'est-à-dire ayant des transitions non linéaires entre les couleurs). Vous pouvez cependant les émuler grâce à des dégradés <flowSpan font-style="italic">multi-stops</flowSpan>.</flowDiv>
+   <flowDiv>Créez un nouveau calque, et dans ce calque, créez des rectangles invisibles recouvrant des parties de votre image. Assurez-vous que votre document adopte le px comme unité (cas par défaut), affichez la grille et faites coller les rectangles à cette grille de sorte que chacun d'entre eux aient des coordonnées en px entières. Donnez des identifiants significatifs aux rectangles, et exportez chacun d'entre eux dans un fichier différent (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fichier</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exporter au format PNG</flowSpan> — <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">E</flowSpan>). Chacun des rectangles se « souviendra » ainsi de son nom de fichier d'export. Après cela, il est facile de réexporter certains de ces rectangles : passez dans le calque d'export, utilisez <flowSpan font-weight="bold">Tab</flowSpan> pour sélectionner celui dont vous avez besoin (ou faites une Recherche par identifiant), et enfin cliquez sur <flowSpan font-family="Liberation Sans,Arial,sans-serif">Exporter</flowSpan> dans la boîte de dialogue. Vous pouvez aussi écrire un script shell ou un fichier batch pour exporter ces zones avec une commande telle que :</flowDiv>
   </flowRoot>
-  <rect id="cl" x="20" y="1260.4" width="300" height="1e3px" display="none"/>
+  <rect id="cl" x="20" y="1126.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cl"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i area-id -t filename.svg</flowSpan></flowDiv>
+  </flowRoot>
+  <rect id="ck" x="20" y="1143.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ck"/>
+   </flowRegion>
+   <flowDiv>pour chaque zone. L'option <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-t</flowSpan> indique à Inkscape d'utiliser le nom de fichier enregistré avec la zone ; vous pouvez aussi fournir un autre nom pour l'export avec l'option <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-e</flowSpan>. Une autre possibilité est d'utiliser les extensions <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Web</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Découpe</flowSpan>, ou <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exporter</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Guillotine</flowSpan> qui permettent d'automatiser l'export depuis des documents SVG Inkscape, en utilisant au choix des guides ou un calque de découpage.</flowDiv>
+  </flowRoot>
+  <rect id="cj" x="20" y="1209.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#cj"/>
+   </flowRegion>
+   <flowDiv>Dégradés non linéaires</flowDiv>
+  </flowRoot>
+  <rect id="ci" x="20" y="1221.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ci"/>
+   </flowRegion>
+   <flowDiv>La version 1.1 du SVG ne supporte pas les dégradés non linéaires (c'est-à-dire ayant des transitions non linéaires entre les couleurs). Vous pouvez cependant les émuler grâce à des dégradés <flowSpan font-style="italic">multi-stops</flowSpan>.</flowDiv>
+  </flowRoot>
+  <rect id="ch" x="20" y="1260.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ch"/>
    </flowRegion>
    <flowDiv>Commencez par créer un dégradé avec deux stops (vous pouvez le définir dans la boîte de dialogue Fond et contour ou utiliser l'outil Dégradé). À présent, avec l'outil Dégradé, ajoutez un nouveau stop au milieu du dégradé, soit en double-cliquant sur la ligne du dégradé, soit en sélectionnant le stop de forme carrée et en cliquant sur le bouton <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Insérer un stop</flowSpan> dans la barre de contrôle de l'outil Dégradé ; puis déplacez légèrement ce nouveau stop. Ensuite, ajoutez d'autres stops de part et d'autre de celui du milieu et déplacez-les aussi de sorte que le dégradé ait l'air lisse. Plus vous ajoutez de stops, plus vous pouvez rendre le dégradé résultant soyeux. Voici le dégradé initial avec deux stops (noir et blanc) :</flowDiv>
   </flowRoot>
@@ -556,10 +556,10 @@
    </linearGradient>
   </defs>
   <rect transform="translate(20 1360.4) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#z)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="ck" x="20" y="1388.5" width="300" height="1e3px" display="none"/>
+  <rect id="cg" x="20" y="1388.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ck"/>
+    <use xlink:href="#cg"/>
    </flowRegion>
    <flowDiv>Et voici quelques dégradés multi-stops non linéaires (examinez-les dans l'éditeur de dégradés) :</flowDiv>
   </flowRoot>
@@ -652,17 +652,17 @@
   <rect transform="translate(20 1424.4) matrix(0 -1 -1 0 0 0)" x="-32.181" y="-293.2" width="16.125" height="286.4" fill="url(#w)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1424.4) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#x)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1424.4) matrix(0 -1 -1 0 0 0)" x="-128.52" y="-293.2" width="16.125" height="286.4" fill="url(#y)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="cj" x="20" y="1570.4" width="300" height="1e3px" display="none"/>
+  <rect id="cf" x="20" y="1570.4" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#cj"/>
+    <use xlink:href="#cf"/>
    </flowRegion>
    <flowDiv>Dégradés radiaux excentriques</flowDiv>
   </flowRoot>
-  <rect id="ci" x="20" y="1582.9" width="300" height="1e3px" display="none"/>
+  <rect id="ce" x="20" y="1582.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ci"/>
+    <use xlink:href="#ce"/>
    </flowRegion>
    <flowDiv>Les dégradés radiaux ne sont pas nécessairement symétriques. Dans l'outil Dégradé, déplacez la poignée centrale d'un dégradé elliptique tout en appuyant sur <flowSpan font-weight="bold">Maj</flowSpan>. Cela vous permettra de déplacer la <flowSpan font-style="italic">poignée du foyer</flowSpan> (en forme de « X ») du dégradé en la séparant du centre. Si vous n'en avez plus besoin, vous pouvez replacer la poignée de foyer au centre.</flowDiv>
   </flowRoot>
@@ -678,371 +678,371 @@
   </defs>
   <rect transform="translate(20 1640.2)" x="71.384" y=".59618" width="74.385" height="68.187" fill="url(#p)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
   <rect transform="translate(20 1640.2)" x="154.23" y=".59618" width="74.385" height="68.187" fill="url(#q)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
-  <rect id="ch" x="20" y="1726.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ch"/>
-   </flowRegion>
-   <flowDiv>Alignement au centre de la page</flowDiv>
-  </flowRoot>
-  <rect id="cg" x="20" y="1739.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cg"/>
-   </flowRegion>
-   <flowDiv>Pour aligner quelque chose au centre ou le long d'un côté de la page, sélectionnez l'objet ou le groupe à aligner puis ouvrez la boîte de dialogue <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Aligner et distribuer</flowSpan> (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>). Vous pouvez alors choisir la <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> dans la liste <flowSpan font-family="Liberation Sans,Arial,sans-serif">relativement à</flowSpan> et enfin aligner votre sélection comme vous le désirez.</flowDiv>
-  </flowRoot>
-  <rect id="cf" x="20" y="1792.7" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#cf"/>
-   </flowRegion>
-   <flowDiv>Nettoyage du document</flowDiv>
-  </flowRoot>
-  <rect id="ce" x="20" y="1805.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ce"/>
-   </flowRegion>
-   <flowDiv>Quand ils ne sont plus utilisés, beaucoup de dégradés, motifs et marqueurs (plus précisément, ceux que vous avez édités manuellement) restent dans les palettes correspondantes et peuvent être utilisés dans de nouveaux objets. Cependant, si vous voulez optimiser votre document, utilisez la commande <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Nettoyer le document</flowSpan> du menu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fichier</flowSpan>. Elle supprimera tout dégradé, motif ou marqueur qui n'est plus utilisé par aucun objet du document, réduisant ainsi la taille du fichier.</flowDiv>
-  </flowRoot>
-  <rect id="cd" x="20" y="1879.6" width="300" height="1e3px" display="none"/>
+  <rect id="cd" x="20" y="1726.9" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv>Fonctionnalités cachées et éditeur XML</flowDiv>
+   <flowDiv>Alignement au centre de la page</flowDiv>
   </flowRoot>
-  <rect id="cc" x="20" y="1890.6" width="300" height="1e3px" display="none"/>
+  <rect id="cc" x="20" y="1739.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cc"/>
    </flowRegion>
-   <flowDiv>L'éditeur XML (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>) vous permet de modifier la plupart des aspects du document sans avoir à utiliser un éditeur de texte externe. De plus, Inkscape supporte souvent des fonctionnalités SVG pas encore accessibles depuis l'interface graphique. L'éditeur XML offre la possibilité d'accéder à ces fonctionnalités (à condition de connaître le SVG).</flowDiv>
+   <flowDiv>Pour aligner quelque chose au centre ou le long d'un côté de la page, sélectionnez l'objet ou le groupe à aligner puis ouvrez la boîte de dialogue <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Aligner et distribuer</flowSpan> (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>). Vous pouvez alors choisir la <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> dans la liste <flowSpan font-family="Liberation Sans,Arial,sans-serif">relativement à</flowSpan> et enfin aligner votre sélection comme vous le désirez.</flowDiv>
   </flowRoot>
-  <rect id="cb" x="20" y="1945.3" width="300" height="1e3px" display="none"/>
+  <rect id="cb" x="20" y="1792.7" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv>Changer l'unité de mesure des règles</flowDiv>
+   <flowDiv>Nettoyage du document</flowDiv>
   </flowRoot>
-  <rect id="ca" x="20" y="1957.8" width="300" height="1e3px" display="none"/>
+  <rect id="ca" x="20" y="1805.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ca"/>
    </flowRegion>
-   <flowDiv>In the default template, the unit of measure used by the rulers is mm. This is also the unit used in displaying coordinates at the lower-right corner and preselected in all units menus. (You can always hover your <flowSpan font-weight="bold">mouse</flowSpan> over a ruler to see the tooltip with the units it uses.) To change this, open <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Document Properties</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) and change the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Display units</flowSpan> on the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.</flowDiv>
+   <flowDiv>Quand ils ne sont plus utilisés, beaucoup de dégradés, motifs et marqueurs (plus précisément, ceux que vous avez édités manuellement) restent dans les palettes correspondantes et peuvent être utilisés dans de nouveaux objets. Cependant, si vous voulez optimiser votre document, utilisez la commande <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Nettoyer le document</flowSpan> du menu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fichier</flowSpan>. Elle supprimera tout dégradé, motif ou marqueur qui n'est plus utilisé par aucun objet du document, réduisant ainsi la taille du fichier.</flowDiv>
   </flowRoot>
-  <rect id="bz" x="20" y="2023.3" width="300" height="1e3px" display="none"/>
+  <rect id="bz" x="20" y="1879.6" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bz"/>
    </flowRegion>
-   <flowDiv>Appliquer des coups de tampon</flowDiv>
+   <flowDiv>Fonctionnalités cachées et éditeur XML</flowDiv>
   </flowRoot>
-  <rect id="by" x="20" y="2035.8" width="300" height="1e3px" display="none"/>
+  <rect id="by" x="20" y="1890.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#by"/>
    </flowRegion>
-   <flowDiv>Pour créer rapidement plusieurs copies d'un objet, utilisez le <flowSpan font-style="italic">coup de tampon</flowSpan>. Déplacez simplement un objet (ou redimensionnez/tournez-le) et, alors que le bouton de la <flowSpan font-weight="bold">souris</flowSpan> est toujours enfoncé, appuyez sur <flowSpan font-weight="bold">Espace</flowSpan>. Ceci appose un « tampon » de la forme de l'objet choisi. Vous pouvez répéter ce coup de tampon autant de fois que vous le voulez.</flowDiv>
+   <flowDiv>L'éditeur XML (<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>) vous permet de modifier la plupart des aspects du document sans avoir à utiliser un éditeur de texte externe. De plus, Inkscape supporte souvent des fonctionnalités SVG pas encore accessibles depuis l'interface graphique. L'éditeur XML offre la possibilité d'accéder à ces fonctionnalités (à condition de connaître le SVG).</flowDiv>
   </flowRoot>
-  <rect id="bx" x="20" y="2090.5" width="300" height="1e3px" display="none"/>
+  <rect id="bx" x="20" y="1945.3" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bx"/>
    </flowRegion>
-   <flowDiv>Astuces du stylo</flowDiv>
+   <flowDiv>Changer l'unité de mesure des règles</flowDiv>
   </flowRoot>
-  <rect id="bw" x="20" y="2102.9" width="300" height="1e3px" display="none"/>
+  <rect id="bw" x="20" y="1957.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv>Avec l'outil Stylo (courbes de Bézier), vous pouvez achever votre ligne de plusieurs façons :</flowDiv>
+   <flowDiv>In the default template, the unit of measure used by the rulers is mm. This is also the unit used in displaying coordinates at the lower-right corner and preselected in all units menus. (You can always hover your <flowSpan font-weight="bold">mouse</flowSpan> over a ruler to see the tooltip with the units it uses.) To change this, open <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Document Properties</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) and change the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Display units</flowSpan> on the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2126.3)" r="2"/>
-  <rect id="bv" x="40" y="2120.3" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bv" x="20" y="2023.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bv"/>
    </flowRegion>
-   <flowDiv>Appuyer sur <flowSpan font-weight="bold">Entrée</flowSpan></flowDiv>
+   <flowDiv>Appliquer des coups de tampon</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2143.6)" r="2"/>
-  <rect id="bu" x="40" y="2137.6" width="280" height="1e3px" display="none"/>
+  <rect id="bu" x="20" y="2035.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bu"/>
    </flowRegion>
-   <flowDiv>Effectuer un <flowSpan font-weight="bold">double-clic</flowSpan> avec le bouton gauche de la souris</flowDiv>
+   <flowDiv>Pour créer rapidement plusieurs copies d'un objet, utilisez le <flowSpan font-style="italic">coup de tampon</flowSpan>. Déplacez simplement un objet (ou redimensionnez/tournez-le) et, alors que le bouton de la <flowSpan font-weight="bold">souris</flowSpan> est toujours enfoncé, appuyez sur <flowSpan font-weight="bold">Espace</flowSpan>. Ceci appose un « tampon » de la forme de l'objet choisi. Vous pouvez répéter ce coup de tampon autant de fois que vous le voulez.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2160.9)" r="2"/>
-  <rect id="bt" x="40" y="2154.9" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bt" x="20" y="2090.5" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bt"/>
    </flowRegion>
-   <flowDiv>Cliquer avec le <flowSpan font-weight="bold">bouton droit</flowSpan></flowDiv>
+   <flowDiv>Astuces du stylo</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2178.2)" r="2"/>
-  <rect id="bs" x="40" y="2172.2" width="280" height="1e3px" display="none"/>
+  <rect id="bs" x="20" y="2102.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bs"/>
    </flowRegion>
-   <flowDiv>Sélectionner un autre outil</flowDiv>
+   <flowDiv>Avec l'outil Stylo (courbes de Bézier), vous pouvez achever votre ligne de plusieurs façons :</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="2187.8" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2126.3)" r="2"/>
+  <rect id="br" x="40" y="2120.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>Notez que tant que le chemin n'est pas terminé (c'est-à-dire qu'il est affiché en vert, avec le segment actuel en rouge), il n'existe pas encore en tant qu'objet dans le document. Pour l'annuler, vous pouvez donc utiliser les raccourcis <flowSpan font-weight="bold">Échap</flowSpan> (abandonner complètement le chemin) ou <flowSpan font-weight="bold">Retour arrière</flowSpan> (supprimer le dernier segment du chemin non terminé) à la place d'<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Annuler</flowSpan>.</flowDiv>
+   <flowDiv>Appuyer sur <flowSpan font-weight="bold">Entrée</flowSpan></flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="2246.3" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2143.6)" r="2"/>
+  <rect id="bq" x="40" y="2137.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>Pour ajouter un nouveau sous-chemin à un chemin existant, sélectionnez ce chemin et commencez à dessiner (d'où vous voulez) tout en appuyant sur <flowSpan font-weight="bold">Maj</flowSpan>. Cependant, si vous voulez simplement <flowSpan font-style="italic">prolonger</flowSpan> un chemin existant, Maj n'est pas nécessaire ; commencez simplement à dessiner depuis l'une des ancres situées aux extrémités du chemin sélectionné.</flowDiv>
+   <flowDiv>Effectuer un <flowSpan font-weight="bold">double-clic</flowSpan> avec le bouton gauche de la souris</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="2300.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <circle transform="translate(35 2160.9)" r="2"/>
+  <rect id="bp" x="40" y="2154.9" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bp"/>
    </flowRegion>
-   <flowDiv>Entrer des valeurs Unicode</flowDiv>
+   <flowDiv>Cliquer avec le <flowSpan font-weight="bold">bouton droit</flowSpan></flowDiv>
   </flowRoot>
-  <rect id="bo" x="20" y="2311.8" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2178.2)" r="2"/>
+  <rect id="bo" x="40" y="2172.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bo"/>
    </flowRegion>
-   <flowDiv>Quand vous êtes dans l'outil Texte, appuyer sur <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> permet d'alterner les modes Normal et Unicode. En mode Unicode, chaque groupe de 4 chiffres hexadécimaux que vous tapez devient un caractère Unicode, vous permettant ainsi de taper les symboles que vous voulez (si vous connaissez leur numéro Unicode, et si la police les supporte). Pour valider un caractère Unicode, appuyez sur <flowSpan font-weight="bold">Entrée</flowSpan>. Par exemple, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>+<flowSpan font-weight="bold">2</flowSpan>+<flowSpan font-weight="bold">0</flowSpan>+<flowSpan font-weight="bold">1</flowSpan>+<flowSpan font-weight="bold">4</flowSpan>+<flowSpan font-weight="bold">Entrée</flowSpan> insère un tiret long (—). Pour quitter le mode Unicode sans insérer quoi que ce soit, appuyez sur la touche <flowSpan font-weight="bold">Échap</flowSpan>.</flowDiv>
+   <flowDiv>Sélectionner un autre outil</flowDiv>
   </flowRoot>
-  <rect id="bn" x="20" y="2393" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="2187.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bn"/>
    </flowRegion>
-   <flowDiv>Vous pouvez également utiliser la boîte de dialogue <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Texte</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Caractères Unicode</flowSpan> pour rechercher et insérer des glyphes dans votre document.</flowDiv>
+   <flowDiv>Notez que tant que le chemin n'est pas terminé (c'est-à-dire qu'il est affiché en vert, avec le segment actuel en rouge), il n'existe pas encore en tant qu'objet dans le document. Pour l'annuler, vous pouvez donc utiliser les raccourcis <flowSpan font-weight="bold">Échap</flowSpan> (abandonner complètement le chemin) ou <flowSpan font-weight="bold">Retour arrière</flowSpan> (supprimer le dernier segment du chemin non terminé) à la place d'<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Annuler</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="2426.6" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bm" x="20" y="2246.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv>Utilisation de la grille pour dessiner des icônes</flowDiv>
+   <flowDiv>Pour ajouter un nouveau sous-chemin à un chemin existant, sélectionnez ce chemin et commencez à dessiner (d'où vous voulez) tout en appuyant sur <flowSpan font-weight="bold">Maj</flowSpan>. Cependant, si vous voulez simplement <flowSpan font-style="italic">prolonger</flowSpan> un chemin existant, Maj n'est pas nécessaire ; commencez simplement à dessiner depuis l'une des ancres situées aux extrémités du chemin sélectionné.</flowDiv>
   </flowRoot>
-  <rect id="bl" x="20" y="2439.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bl" x="20" y="2300.9" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv>Supposons que vous vouliez créer une icône de 24×24 pixels. Créez un canevas de 24×24 px (utilisez les <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Préférences du document</flowSpan>) et créez une grille avec un espacement de 0,5 px (48×48 lignes de grille, donc). Maintenant, si vous alignez des objets avec un fond sur les lignes <flowSpan font-style="italic">paires</flowSpan> de la grille et les contours sur les lignes <flowSpan font-style="italic">impaires</flowSpan>, avec un nombre pair (en px) comme largeur de contour, en exportant le document à la résolution par défaut de 96 ppp (de sorte qu'1 px corresponde à 1 pixel en matriciel), vous obtiendrez une icône matricielle nette ne nécessitant pas d'anticrénelage.</flowDiv>
+   <flowDiv>Entrer des valeurs Unicode</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="2525.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bk" x="20" y="2311.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
-   <flowDiv>Rotation d'objets</flowDiv>
+   <flowDiv>Quand vous êtes dans l'outil Texte, appuyer sur <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> permet d'alterner les modes Normal et Unicode. En mode Unicode, chaque groupe de 4 chiffres hexadécimaux que vous tapez devient un caractère Unicode, vous permettant ainsi de taper les symboles que vous voulez (si vous connaissez leur numéro Unicode, et si la police les supporte). Pour valider un caractère Unicode, appuyez sur <flowSpan font-weight="bold">Entrée</flowSpan>. Par exemple, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>+<flowSpan font-weight="bold">2</flowSpan>+<flowSpan font-weight="bold">0</flowSpan>+<flowSpan font-weight="bold">1</flowSpan>+<flowSpan font-weight="bold">4</flowSpan>+<flowSpan font-weight="bold">Entrée</flowSpan> insère un tiret long (—). Pour quitter le mode Unicode sans insérer quoi que ce soit, appuyez sur la touche <flowSpan font-weight="bold">Échap</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bj" x="20" y="2538.4" width="300" height="1e3px" display="none"/>
+  <rect id="bj" x="20" y="2393" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bj"/>
    </flowRegion>
-   <flowDiv>Avec l'outil Sélecteur, le <flowSpan font-weight="bold">clic</flowSpan> sur un objet permet d'afficher les flèches de redimensionnement, et un <flowSpan font-weight="bold">clic</flowSpan> de plus sur l'objet permet d'afficher les flèches d'inclinaison et de rotation. Si vous déplacez les flèches des coins, l'objet tournera autour du centre (représenté par une croix). Si vous appuyez sur <flowSpan font-weight="bold">Maj</flowSpan> pendant cette opération, la rotation se fera autour du coin opposé. Vous pouvez aussi déplacer le centre de rotation (la croix) où vous le désirez.</flowDiv>
+   <flowDiv>Vous pouvez également utiliser la boîte de dialogue <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Texte</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Caractères Unicode</flowSpan> pour rechercher et insérer des glyphes dans votre document.</flowDiv>
   </flowRoot>
-  <rect id="bi" x="20" y="2598.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bi" x="20" y="2426.6" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>Ou bien, vous pouvez effectuer une rotation en utilisant les raccourcis clavier : <flowSpan font-weight="bold">[</flowSpan> et <flowSpan font-weight="bold">]</flowSpan> (de 15 degrés) ou <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> et <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> (de 90 degrés). Ces mêmes raccourcis <flowSpan font-weight="bold">[</flowSpan><flowSpan font-weight="bold">]</flowSpan> combinés avec <flowSpan font-weight="bold">Alt</flowSpan> permettent des rotations lentes à l'échelle du pixel.</flowDiv>
+   <flowDiv>Utilisation de la grille pour dessiner des icônes</flowDiv>
   </flowRoot>
-  <rect id="bh" x="20" y="2642.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bh" x="20" y="2439.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv>Ombres portées</flowDiv>
+   <flowDiv>Supposons que vous vouliez créer une icône de 24×24 pixels. Créez un canevas de 24×24 px (utilisez les <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Préférences du document</flowSpan>) et créez une grille avec un espacement de 0,5 px (48×48 lignes de grille, donc). Maintenant, si vous alignez des objets avec un fond sur les lignes <flowSpan font-style="italic">paires</flowSpan> de la grille et les contours sur les lignes <flowSpan font-style="italic">impaires</flowSpan>, avec un nombre pair (en px) comme largeur de contour, en exportant le document à la résolution par défaut de 96 ppp (de sorte qu'1 px corresponde à 1 pixel en matriciel), vous obtiendrez une icône matricielle nette ne nécessitant pas d'anticrénelage.</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="2655" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bg" x="20" y="2525.9" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>Pour créer rapidement une ombre portée sur des objets, utilisez la fonctionnalité <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Filtres</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ombres et lueurs</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ombre portée…</flowSpan>.</flowDiv>
+   <flowDiv>Rotation d'objets</flowDiv>
   </flowRoot>
-  <rect id="bf" x="20" y="2683" width="300" height="1e3px" display="none"/>
+  <rect id="bf" x="20" y="2538.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>Vous pouvez aussi facilement créer des ombres portées manuellement avec le paramètre de flou de la boîte de dialogue Fond et contour. Sélectionnez un objet, dupliquez-le avec <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>, appuyez sur la touche <flowSpan font-weight="bold">Page suivante</flowSpan> pour déplacer le duplicata sous l'objet original, puis déplacez-le légèrement vers le bas et la droite par rapport à l'original. Ouvrez maintenant la boîte de dialogue Fond et contour et changez la valeur du flou à 5. Le tour est joué !</flowDiv>
+   <flowDiv>Avec l'outil Sélecteur, le <flowSpan font-weight="bold">clic</flowSpan> sur un objet permet d'afficher les flèches de redimensionnement, et un <flowSpan font-weight="bold">clic</flowSpan> de plus sur l'objet permet d'afficher les flèches d'inclinaison et de rotation. Si vous déplacez les flèches des coins, l'objet tournera autour du centre (représenté par une croix). Si vous appuyez sur <flowSpan font-weight="bold">Maj</flowSpan> pendant cette opération, la rotation se fera autour du coin opposé. Vous pouvez aussi déplacer le centre de rotation (la croix) où vous le désirez.</flowDiv>
   </flowRoot>
-  <rect id="be" x="20" y="2748.4" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="be" x="20" y="2598.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv>Placement d'un texte le long d'un chemin</flowDiv>
+   <flowDiv>Or, you can rotate from keyboard by pressing <flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">]</flowSpan> (by 15 degrees) or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> (by 90 degrees). The same <flowSpan font-weight="bold">[</flowSpan> <flowSpan font-weight="bold">]</flowSpan> keys with <flowSpan font-weight="bold">Alt</flowSpan> perform slow pixel-size rotation.</flowDiv>
   </flowRoot>
-  <rect id="bd" x="20" y="2760.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bd" x="20" y="2631.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>Pour placer du texte le long d'une courbe, sélectionnez le texte et la courbe puis utilisez la commande <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mettre suivant un chemin</flowSpan> du menu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Texte</flowSpan>. Le texte commencera au début du chemin. En général, il vaut mieux créer un chemin auquel vous voulez que le texte s'adapte plutôt que d'adapter ce texte à un autre élément (préexistant) du dessin — cela vous autorisera un meilleur contrôle sans avoir à « bricoler » votre dessin.</flowDiv>
+   <flowDiv>Ombres portées</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="2824.7" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bc" x="20" y="2644.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
-   <flowDiv>Sélection de l'original</flowDiv>
+   <flowDiv>Pour créer rapidement une ombre portée sur des objets, utilisez la fonctionnalité <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Filtres</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ombres et lueurs</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ombre portée…</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="2837.2" width="300" height="1e3px" display="none"/>
+  <rect id="bb" x="20" y="2672.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv>Quand vous avez affaire à un texte suivant un chemin, un décalage lié ou un clone, son objet/chemin source peut être difficile à sélectionner (caché sous d'autres objets, rendu invisible et/ou verrouillé). Le raccourci magique <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> peut alors vous aider : sélectionnez le texte, le décalage lié ou le clone et appuyez sur <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> pour sélectionner alors le chemin correspondant, la source du décalage ou du clone.</flowDiv>
+   <flowDiv>Vous pouvez aussi facilement créer des ombres portées manuellement avec le paramètre de flou de la boîte de dialogue Fond et contour. Sélectionnez un objet, dupliquez-le avec <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>, appuyez sur la touche <flowSpan font-weight="bold">Page suivante</flowSpan> pour déplacer le duplicata sous l'objet original, puis déplacez-le légèrement vers le bas et la droite par rapport à l'original. Ouvrez maintenant la boîte de dialogue Fond et contour et changez la valeur du flou à 5. Le tour est joué !</flowDiv>
   </flowRoot>
-  <rect id="ba" x="20" y="2902.6" width="300" height="1e3px" display="none"/>
+  <rect id="ba" x="20" y="2737.8" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
-   <flowDiv>Au cas où la fenêtre serait hors de l'écran</flowDiv>
+   <flowDiv>Placement d'un texte le long d'un chemin</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2913.7" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="2750.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
-   <flowDiv>Quand vous transférez des documents entre des systèmes avec des résolutions ou un nombre d'écrans différents, vous pouvez être confronté au problème suivant : Inkscape a enregistré une position de fenêtre qui fait que vous ne pouvez plus atteindre Inkscape sur votre écran. Il suffit de maximiser la fenêtre (ce qui devrait la rendre de nouveau visible à l'écran ; utilisez la barre des tâches), d'enregistrer le document et de le recharger. Vous pouvez éviter tout cela en désactivant l'option du champ « Enregistrer la géométrie de la fenêtre » (dans l'onglet <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Interface</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fenêtres</flowSpan> des <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Préférences d'Inkscape</flowSpan>).</flowDiv>
+   <flowDiv>Pour placer du texte le long d'une courbe, sélectionnez le texte et la courbe puis utilisez la commande <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mettre suivant un chemin</flowSpan> du menu <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Texte</flowSpan>. Le texte commencera au début du chemin. En général, il vaut mieux créer un chemin auquel vous voulez que le texte s'adapte plutôt que d'adapter ce texte à un autre élément (préexistant) du dessin — cela vous autorisera un meilleur contrôle sans avoir à « bricoler » votre dessin.</flowDiv>
   </flowRoot>
-  <rect id="ay" x="20" y="3000.4" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="2814" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv>Transparence, dégradés et export en Postscript</flowDiv>
+   <flowDiv>Sélection de l'original</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="3013" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="2826.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
-   <flowDiv>Les formats PostScript et EPS ne supportent pas la <flowSpan font-style="italic">transparence</flowSpan>, aussi vous ne devriez pas en utiliser si vous comptez exporter en PS/EPS. Dans le cas d'une transparence uniforme couvrant une couleur uniforme, il est facile d'y remédier : sélectionnez l'un des objets transparents, prenez l'outil Pipette (<flowSpan font-weight="bold">F7</flowSpan> ou <flowSpan font-weight="bold">d</flowSpan>), assurez-vous que le bouton <flowSpan font-family="Liberation Sans,Arial,sans-serif">Opacité : Capturer</flowSpan> est désactivé dans la barre de contrôle de la Pipette et cliquez sur ce même objet. La couleur visible sera capturée et réassignée à l'objet mais cette fois, sans transparence. Répétez cette opération pour tous les objets transparents. Si votre objet transparent chevauche plusieurs zones de différentes couleurs uniformes, vous devrez le découper en morceaux (un morceau par zone) puis appliquer cette procédure à chacun des morceaux. Notez que l'outil Pipette ne change pas la valeur d'opacité de l'objet, mais seulement la valeur alpha de sa couleur de fond ou de contour ; assurez-vous donc que tous les objets ont une opacité de 100 % avant de commencer.</flowDiv>
+   <flowDiv>Quand vous avez affaire à un texte suivant un chemin, un décalage lié ou un clone, son objet/chemin source peut être difficile à sélectionner (caché sous d'autres objets, rendu invisible et/ou verrouillé). Le raccourci magique <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> peut alors vous aider : sélectionnez le texte, le décalage lié ou le clone et appuyez sur <flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> pour sélectionner alors le chemin correspondant, la source du décalage ou du clone.</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="3151.3" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="2892" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aw"/>
    </flowRegion>
-   <flowDiv>Interactivité</flowDiv>
+   <flowDiv>Au cas où la fenêtre serait hors de l'écran</flowDiv>
   </flowRoot>
-  <rect id="av" x="20" y="3162.3" width="300" height="1e3px" display="none"/>
+  <rect id="av" x="20" y="2903" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#av"/>
    </flowRegion>
-   <flowDiv>La plupart des éléments SVG peuvent être configurés pour réagir aux actions de l'utilisateur (ceci ne fonctionne en général que si le document SVG est affiché dans un navigateur web).</flowDiv>
+   <flowDiv>Quand vous transférez des documents entre des systèmes avec des résolutions ou un nombre d'écrans différents, vous pouvez être confronté au problème suivant : Inkscape a enregistré une position de fenêtre qui fait que vous ne pouvez plus atteindre Inkscape sur votre écran. Il suffit de maximiser la fenêtre (ce qui devrait la rendre de nouveau visible à l'écran ; utilisez la barre des tâches), d'enregistrer le document et de le recharger. Vous pouvez éviter tout cela en désactivant l'option du champ « Enregistrer la géométrie de la fenêtre » (dans l'onglet <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Interface</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fenêtres</flowSpan> des <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Préférences d'Inkscape</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="au" x="20" y="3190.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="au" x="20" y="2989.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#au"/>
    </flowRegion>
-   <flowDiv>Le cas le plus simple est d'ajouter un lien cliquable aux objets. Pour cela, effectuez un <flowSpan font-weight="bold">clic-droit</flowSpan> sur un objet pour ouvrir le menu contextuel et sélectionnez <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Créer un lien</flowSpan>. La boîte de dialogue « Attributs de l'objet » s'ouvre et vous pouvez saisir la cible du lien dans le champ <flowSpan font-family="Liberation Sans,Arial,sans-serif">href</flowSpan>.</flowDiv>
+   <flowDiv>Transparence, dégradés et export en Postscript</flowDiv>
   </flowRoot>
-  <rect id="at" x="20" y="3238.3" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="3002.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
-   <flowDiv>Les attributs d'interactivité offrent des contrôles supplémentaires, à partir de la boîte de dialogue « Propriétés de l'objet » (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). Vous pouvez y définir des fonctionnalités arbitraires en JavaScript. Voici quelques exemples simples :</flowDiv>
+   <flowDiv>Les formats PostScript et EPS ne supportent pas la <flowSpan font-style="italic">transparence</flowSpan>, aussi vous ne devriez pas en utiliser si vous comptez exporter en PS/EPS. Dans le cas d'une transparence uniforme couvrant une couleur uniforme, il est facile d'y remédier : sélectionnez l'un des objets transparents, prenez l'outil Pipette (<flowSpan font-weight="bold">F7</flowSpan> ou <flowSpan font-weight="bold">d</flowSpan>), assurez-vous que le bouton <flowSpan font-family="Liberation Sans,Arial,sans-serif">Opacité : Capturer</flowSpan> est désactivé dans la barre de contrôle de la Pipette et cliquez sur ce même objet. La couleur visible sera capturée et réassignée à l'objet mais cette fois, sans transparence. Répétez cette opération pour tous les objets transparents. Si votre objet transparent chevauche plusieurs zones de différentes couleurs uniformes, vous devrez le découper en morceaux (un morceau par zone) puis appliquer cette procédure à chacun des morceaux. Notez que l'outil Pipette ne change pas la valeur d'opacité de l'objet, mais seulement la valeur alpha de sa couleur de fond ou de contour ; assurez-vous donc que tous les objets ont une opacité de 100 % avant de commencer.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3283)" r="2"/>
-  <rect id="as" x="40" y="3277" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="as" x="20" y="3140.7" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv>Ouvrir un autre fichier dans la fenêtre actuelle en cliquant sur l'objet :</flowDiv>
+   <flowDiv>Interactivité</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3300.3)" r="2"/>
-  <rect id="ar" x="60" y="3294.3" width="260" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="3151.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv>Définir <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> à <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.location='fichier2.svg';</flowSpan></flowDiv>
+   <flowDiv>La plupart des éléments SVG peuvent être configurés pour réagir aux actions de l'utilisateur (ceci ne fonctionne en général que si le document SVG est affiché dans un navigateur web).</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3317.8)" r="2"/>
-  <rect id="aq" x="40" y="3311.8" width="280" height="1e3px" display="none"/>
+  <rect id="aq" x="20" y="3179.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
-   <flowDiv>Ouvrir un lien web vers une nouvelle fenêtre en cliquant sur l'objet :</flowDiv>
+   <flowDiv>Le cas le plus simple est d'ajouter un lien cliquable aux objets. Pour cela, effectuez un <flowSpan font-weight="bold">clic-droit</flowSpan> sur un objet pour ouvrir le menu contextuel et sélectionnez <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Créer un lien</flowSpan>. La boîte de dialogue « Attributs de l'objet » s'ouvre et vous pouvez saisir la cible du lien dans le champ <flowSpan font-family="Liberation Sans,Arial,sans-serif">href</flowSpan>.</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3335.1)" r="2"/>
-  <rect id="ap" x="60" y="3329.1" width="260" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="3227.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
-   <flowDiv>Définir <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> à <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.open("https://inkscape.org","_blank");</flowSpan></flowDiv>
+   <flowDiv>Les attributs d'interactivité offrent des contrôles supplémentaires, à partir de la boîte de dialogue « Propriétés de l'objet » (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Maj</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). Vous pouvez y définir des fonctionnalités arbitraires en JavaScript. Voici quelques exemples simples :</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3363.2)" r="2"/>
-  <rect id="ao" x="40" y="3357.2" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 3272.3)" r="2"/>
+  <rect id="ao" x="40" y="3266.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
    </flowRegion>
-   <flowDiv>Réduire la transparence de l'objet lorsqu'il est survolé par le curseur de la souris :</flowDiv>
+   <flowDiv>Ouvrir un autre fichier dans la fenêtre actuelle en cliquant sur l'objet :</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3380.5)" r="2"/>
-  <rect id="an" x="60" y="3374.5" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(55 3289.7)" r="2"/>
+  <rect id="an" x="60" y="3283.7" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#an"/>
    </flowRegion>
-   <flowDiv>Définir <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseover</flowSpan> à <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 0.5;</flowSpan></flowDiv>
+   <flowDiv>Définir <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> à <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.location='fichier2.svg';</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3397.9)" r="2"/>
-  <rect id="am" x="60" y="3391.9" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(35 3307.1)" r="2"/>
+  <rect id="am" x="40" y="3301.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
    </flowRegion>
+   <flowDiv>Ouvrir un lien web vers une nouvelle fenêtre en cliquant sur l'objet :</flowDiv>
+  </flowRoot>
+  <circle transform="translate(55 3324.5)" r="2"/>
+  <rect id="al" x="60" y="3318.5" width="260" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#al"/>
+   </flowRegion>
+   <flowDiv>Définir <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> à <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.open("https://inkscape.org","_blank");</flowSpan></flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 3352.6)" r="2"/>
+  <rect id="ak" x="40" y="3346.6" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ak"/>
+   </flowRegion>
+   <flowDiv>Réduire la transparence de l'objet lorsqu'il est survolé par le curseur de la souris :</flowDiv>
+  </flowRoot>
+  <circle transform="translate(55 3369.8)" r="2"/>
+  <rect id="aj" x="60" y="3363.8" width="260" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#aj"/>
+   </flowRegion>
+   <flowDiv>Définir <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseover</flowSpan> à <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 0.5;</flowSpan></flowDiv>
+  </flowRoot>
+  <circle transform="translate(55 3387.3)" r="2"/>
+  <rect id="ai" x="60" y="3381.3" width="260" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ai"/>
+   </flowRegion>
    <flowDiv>Définir <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseout</flowSpan> à <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 1;</flowSpan></flowDiv>
   </flowRoot>
-  <use x="47" y="3445.3987029" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
-  <rect id="cu" x="70" y="3439.4" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3434.7478769" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
+  <rect id="cu" x="70" y="3428.7" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#cu"/>
    </flowRegion>
    <flowDiv>Bulia Byak; Alexandre Prokoudine; Colin Marquardt; Ivan Masár; Kris De Gussem; Nicolas Dufour; Maren Hachmann; Roland Alton; Patrick Storz; Guillaume Audirac; Gellért Gyuris</flowDiv>
   </flowRoot>
-  <use x="47" y="3477.4617899" inkscape:label="icon-credits-translators" xlink:href="#co"/>
-  <rect id="cs" x="70" y="3471.5" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3466.8109639" inkscape:label="icon-credits-translators" xlink:href="#co"/>
+  <rect id="cs" x="70" y="3460.8" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
-   <flowDiv>Matiphas — 2005, 2006; jazzynico — 2014; Frigory — 2016; gadic — 2020</flowDiv>
+   <flowDiv>Matiphas — 2005; jazzynico — 2014; Frigory — 2016; gadic — 2020</flowDiv>
   </flowRoot>
-  <use x="47" y="3495.0545633" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
-  <rect id="ct" x="70" y="3489.1" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3484.4037373" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
+  <rect id="ct" x="70" y="3478.4" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#ct"/>
@@ -1051,7 +1051,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="cr" transform="translate(0 3336.6)">
+  <g id="cr" transform="translate(0 3326)">
    <defs>
     <filter id="m" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

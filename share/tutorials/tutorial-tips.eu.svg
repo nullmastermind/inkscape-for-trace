@@ -1039,10 +1039,10 @@
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
-   <flowDiv>Ales Zabala Alava — 2009; Maider Likona Santamarina — 2009</flowDiv>
+   <flowDiv>Ales Zabala Alava (Shagi) — 2009; Maider Likona Santamarina — 2009</flowDiv>
   </flowRoot>
-  <use x="47" y="3213.2212638" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
-  <rect id="ct" x="70" y="3207.2" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3213.6988028" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
+  <rect id="ct" x="70" y="3207.7" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#ct"/>
@@ -1051,7 +1051,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="cr" transform="translate(0 3054.8)">
+  <g id="cr" transform="translate(0 3055.3)">
    <defs>
     <filter id="m" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

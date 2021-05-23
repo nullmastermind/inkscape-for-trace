@@ -258,7 +258,7 @@
  </g>
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#bh"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
-  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">內插</tspan></tspan></text>
+  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">指導手冊<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">內插</tspan></tspan></text>
   <rect id="ae" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
@@ -285,46 +285,46 @@
    <flowRegion>
     <use xlink:href="#ab"/>
    </flowRegion>
-   <flowDiv>To use the Interpolate extension, select the paths that you wish to transform, and choose <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Generate From Path</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Interpolate</flowSpan> from the menu.</flowDiv>
+   <flowDiv>開始使用內插擴充功能，選取你想要轉變的路徑，並從選單中選擇<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">擴充功能</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">從路徑產生</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">內插</flowSpan>。</flowDiv>
   </flowRoot>
-  <rect id="aa" x="20" y="227.16" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="227.33" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aa"/>
    </flowRegion>
-   <flowDiv>Before invoking the extension, the objects that you are going to transform need to be <flowSpan font-style="italic">paths</flowSpan>. This is done by selecting the object and using <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Path</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object to Path</flowSpan> or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>. If your objects are not paths, the extension will do nothing.</flowDiv>
+   <flowDiv>調用此擴充功能前，你必須先將物件轉換成<flowSpan font-style="italic">路徑</flowSpan>。選取物件然後使用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">路徑</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">物件轉成路徑</flowSpan> 或 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>。如果你的物件不是路徑，那麼執行內插不會有任何作用。</flowDiv>
   </flowRoot>
-  <rect id="z" x="20" y="271.34" width="300" height="1e3px" display="none"/>
+  <rect id="z" x="20" y="260.97" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#z"/>
    </flowRegion>
    <flowDiv>兩個相同路徑的內插</flowDiv>
   </flowRoot>
-  <rect id="y" x="20" y="283.62" width="300" height="1e3px" display="none"/>
+  <rect id="y" x="20" y="273.25" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#y"/>
    </flowRegion>
    <flowDiv>內插特效最簡單的用法是在兩個完全相同的路徑之間執行內插擴充功能。當呼叫這個特效時，其結果便是以數個原始物件的再製物件填入這兩個路徑之間的空間。階層數會決定放置多少個複製物件。</flowDiv>
   </flowRoot>
-  <rect id="x" x="20" y="322.4" width="300" height="1e3px" display="none"/>
+  <rect id="x" x="20" y="312.03" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#x"/>
    </flowRegion>
    <flowDiv>例如，下面有兩個路徑：</flowDiv>
   </flowRoot>
-  <path transform="translate(20 347.93)" d="m30.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 347.93)" d="m255.44 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
-  <rect id="w" x="20" y="400.51" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 337.56)" d="m30.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 337.56)" d="m255.44 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.266-18.266 18.266-18.266-8.1464-18.266-18.266 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
+  <rect id="w" x="20" y="390.14" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#w"/>
    </flowRegion>
    <flowDiv>現在，選取這兩個路徑，然後以下面圖片裡的設定值來執行內插擴充功能。</flowDiv>
   </flowRoot>
-  <g transform="translate(30.004 426.16)">
+  <g transform="translate(30.004 415.78)">
    <path d="m20.29 2.0037c10.119 0 18.266 8.1464 18.266 18.266 0 10.119-8.1464 18.266-18.266 18.266s-18.266-8.1464-18.266-18.266c0-10.119 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate2.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
    <path d="m245.44 2.0037c10.119 0 18.266 8.1464 18.266 18.266 0 10.119-8.1464 18.266-18.266 18.266s-18.266-8.1464-18.266-18.266c0-10.119 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate2.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
    <g transform="matrix(.52187 0 0 .52187 -12.141 -26.068)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="7.757" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate2.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997">
@@ -337,44 +337,44 @@
    </g>
    <text x="-0.59277618" y="47.577751" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-0.59277618" y="47.577751" sodipodi:role="line">指數: 0.0</tspan><tspan x="-0.59277618" y="55.077751" sodipodi:role="line">內插階層數: 6</tspan><tspan x="-0.59277618" y="62.577751" sodipodi:role="line">插入方式: 2</tspan><tspan x="-0.59277618" y="70.077751" sodipodi:role="line">再製終點路徑: 未勾選</tspan><tspan x="-0.59277618" y="77.577751" sodipodi:role="line">插入樣式: 未勾選</tspan></text>
   </g>
-  <rect id="v" x="20" y="516.64" width="300" height="1e3px" display="none"/>
+  <rect id="v" x="20" y="506.26" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#v"/>
    </flowRegion>
    <flowDiv>如同上圖中所見執行後的結果，兩的圓形路徑之間的地方被填入 6 個 (內插階層數) 其他的圓形路徑。並注意此擴充功能會把這些形狀群組在一起。</flowDiv>
   </flowRoot>
-  <rect id="u" x="20" y="550.08" width="300" height="1e3px" display="none"/>
+  <rect id="u" x="20" y="539.71" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#u"/>
    </flowRegion>
    <flowDiv>兩個相異路徑的內插</flowDiv>
   </flowRoot>
-  <rect id="t" x="20" y="562.33" width="300" height="1e3px" display="none"/>
+  <rect id="t" x="20" y="551.96" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#t"/>
    </flowRegion>
    <flowDiv>當內插用在兩個不同的路徑上時，程式所插入的路徑之形狀會從其中一個漸漸變為另一個。你會獲得路徑之間連續的形狀轉變效果，形狀轉變的數量仍是由內插階層數決定。</flowDiv>
   </flowRoot>
-  <rect id="s" x="20" y="601.11" width="300" height="1e3px" display="none"/>
+  <rect id="s" x="20" y="590.74" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#s"/>
    </flowRegion>
    <flowDiv>例如，下面有兩個路徑：</flowDiv>
   </flowRoot>
-  <path transform="translate(20 626.64)" d="m30.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.265-18.266 18.265c-10.119 0-18.266-8.1464-18.266-18.265s8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 626.64)" d="m273.71 9.3303-18.266 29.225-18.266-29.225z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" sodipodi:nodetypes="cccc"/>
-  <rect id="r" x="20" y="679.22" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 616.27)" d="m30.29 2.0241c10.119 0 18.266 8.1464 18.266 18.266s-8.1464 18.265-18.266 18.265c-10.119 0-18.266-8.1464-18.266-18.265s8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 616.27)" d="m273.71 9.3303-18.266 29.225-18.266-29.225z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" sodipodi:nodetypes="cccc"/>
+  <rect id="r" x="20" y="668.85" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#r"/>
    </flowRegion>
    <flowDiv>現在，選取這兩個路徑，並執行內插擴充功能。執行後的結果如下面所示：</flowDiv>
   </flowRoot>
-  <g id="bv" transform="translate(30.004 704.42)">
+  <g id="bv" transform="translate(30.004 694.05)">
    <path id="bz" d="m263.71 9.755s-8.5736 13.718-13.973 22.357c-2.4815 3.9705-4.2925 6.8681-4.2925 6.8681s-4.9394-7.903-9.681-15.49c-4.3765-7.0024-8.5846-13.735-8.5846-13.735h10.167 26.364" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
    <g id="bw" transform="matrix(.52187 0 0 .52187 -7.8862 -205.17)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="7.757">
     <path id="by" d="m453.79 409.84c2.77 0-9.0817 24.761-17.95 41.72-4.0758 7.3606-7.255 12.91-7.6176 13.603-0.83381 1.5943-10.615-10.303-20.333-22.763-8.8975-11.501-17.313-23.409-18.214-24.71-0.55903-0.80742 6.3583-1.7889 15.812-2.8495 17.754-2.77 45.532-5 48.302-5" inkscape:connector-curvature="0"/>
@@ -387,28 +387,28 @@
    <path id="bq" d="m20.29 2.4488c10.119 0 18.266 8.1464 18.266 18.266 0 3.0665-0.74811 5.9518-2.0725 8.4842-3.046 5.8241-9.1404 9.7813-16.193 9.7813-6.2444 0-11.738-3.1022-15.029-7.8559-2.0422-2.9496-3.2366-6.535-3.2366-10.41 0-10.119 8.1464-18.266 18.266-18.266" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
    <text id="bu" x="-0.59277618" y="47.882343" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan id="bn" x="-0.59277618" y="47.882343" sodipodi:role="line">指數: 0.0</tspan><tspan id="bm" x="-0.59277618" y="55.382343" sodipodi:role="line">內插階層數: 6</tspan><tspan id="bo" x="-0.59277618" y="62.882343" sodipodi:role="line">插入方式: 2</tspan><tspan id="bp" x="-0.59277618" y="70.382339" sodipodi:role="line">再製終點路徑: 未勾選</tspan><tspan id="bl" x="-0.59277618" y="77.882339" sodipodi:role="line">插入樣式: 未勾選</tspan></text>
   </g>
-  <rect id="q" x="20" y="795.21" width="300" height="1e3px" display="none"/>
+  <rect id="q" x="20" y="784.83" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#q"/>
    </flowRegion>
    <flowDiv>如上圖中看到的結果，圓形路徑和三角形路徑之間的地方被填入 6 個路徑，且路徑的形狀從圓形漸漸轉變成三角形。</flowDiv>
   </flowRoot>
-  <rect id="p" x="20" y="823.38" width="300" height="1e3px" display="none"/>
+  <rect id="p" x="20" y="813" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#p"/>
    </flowRegion>
    <flowDiv>當內插擴充功能用於兩個相異的路徑時，每個路徑起始節點的<flowSpan font-style="italic">位置</flowSpan>就很重要。要查詢路徑的起始節點，先選取路徑，然後選擇節點工具會出現路徑節點，再按 <flowSpan font-weight="bold">TAB</flowSpan> 鍵。第一個被選取的就是路徑的起始節點。</flowDiv>
   </flowRoot>
-  <rect id="o" x="20" y="862.16" width="300" height="1e3px" display="none"/>
+  <rect id="o" x="20" y="851.79" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#o"/>
    </flowRegion>
    <flowDiv>看下面的圖像，除了顯示節點以外其他部份和上一個範例完全相同。每個路徑上的綠色節點便是起始節點。</flowDiv>
   </flowRoot>
-  <g transform="translate(30.094 898.54)">
+  <g transform="translate(30.094 888.16)">
    <path d="m20.262 2.0739c10.119 0 18.266 8.1464 18.266 18.266 0 10.119-8.1464 18.265-18.266 18.265-10.119 0-18.266-8.1464-18.266-18.265 0-10.119 8.1464-18.266 18.266-18.266z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
    <path d="m263.68 9.3801-18.266 29.225-18.266-29.225z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997" sodipodi:nodetypes="cccc"/>
    <rect transform="rotate(135.48)" x="-14.604" y="-16.968" width="2.9821" height="2.9821" fill="#0f0"/>
@@ -419,14 +419,14 @@
    <rect transform="rotate(135.48)" x="-181.96" y="-192.64" width="2.9821" height="2.9821" fill="#0f0"/>
    <rect transform="rotate(135.48)" x="-150.15" y="-200.55" width="2.9821" height="2.9821" fill="#ccc"/>
   </g>
-  <rect id="n" x="20" y="951.39" width="300" height="1e3px" display="none"/>
+  <rect id="n" x="20" y="941.02" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#n"/>
    </flowRegion>
    <flowDiv>上一個範例 (下圖所示) 於每個路徑上標示起始節點。</flowDiv>
   </flowRoot>
-  <g transform="translate(30.004 977.2)">
+  <g transform="translate(30.004 966.82)">
    <path d="m263.71 9.755s-8.5736 13.718-13.973 22.357c-2.4815 3.9705-4.2925 6.8681-4.2925 6.8681s-4.9394-7.903-9.681-15.49c-4.3765-7.0024-8.5846-13.735-8.5846-13.735h10.167 26.364" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
    <g transform="matrix(.52187 0 0 .52187 -7.8862 -205.17)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="7.757">
     <path d="m453.79 409.84c2.77 0-9.0817 24.761-17.95 41.72-4.0758 7.3606-7.255 12.91-7.6176 13.603-0.83381 1.5943-10.615-10.303-20.333-22.763-8.8975-11.501-17.313-23.409-18.214-24.71-0.55903-0.80742 6.3583-1.7889 15.812-2.8495 17.754-2.77 45.532-5 48.302-5" inkscape:connector-curvature="0"/>
@@ -439,14 +439,14 @@
    <path d="m20.29 2.4488c10.119 0 18.266 8.1464 18.266 18.266 0 3.0665-0.74811 5.9518-2.0725 8.4842-3.046 5.8241-9.1404 9.7813-16.193 9.7813-6.2444 0-11.738-3.1022-15.029-7.8559-2.0422-2.9496-3.2366-6.535-3.2366-10.41 0-10.119 8.1464-18.266 18.266-18.266" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0"/>
    <text x="-0.59277618" y="47.882343" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-0.59277618" y="47.882343" sodipodi:role="line">指數: 0.0</tspan><tspan x="-0.59277618" y="55.382343" sodipodi:role="line">內插階層數: 6</tspan><tspan x="-0.59277618" y="62.882343" sodipodi:role="line">插入方式: 2</tspan><tspan x="-0.59277618" y="70.382339" sodipodi:role="line">再製終點路徑: 未勾選</tspan><tspan x="-0.59277618" y="77.882339" sodipodi:role="line">插入樣式: 未勾選</tspan></text>
   </g>
-  <rect id="m" x="20" y="1068" width="300" height="1e3px" display="none"/>
+  <rect id="m" x="20" y="1057.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#m"/>
    </flowRegion>
    <flowDiv>現在，翻轉三角形路徑使得起始節點位置不同，注意內插效果產生的變化：</flowDiv>
   </flowRoot>
-  <g transform="translate(30 1094)">
+  <g transform="translate(30 1083.6)">
    <g>
     <path d="m20.356 2.0242c10.119 0 18.266 8.1464 18.266 18.265 0 10.119-8.1464 18.266-18.266 18.266-10.119 0-18.266-8.1464-18.266-18.266 0-10.119 8.1464-18.265 18.266-18.265z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
     <path d="m227.24 9.3304 18.266 29.225 18.266-29.225z" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="4.0482" inkscape:connector-curvature="0" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997" sodipodi:nodetypes="cccc"/>
@@ -459,7 +459,7 @@
     <rect transform="matrix(.71298 .70119 .70119 -.71298 0 0)" x="199.83" y="143.71" width="2.9821" height="2.9821" fill="#ccc"/>
    </g>
   </g>
-  <g transform="translate(30 1154.8)">
+  <g transform="translate(30 1144.4)">
    <g transform="matrix(.52187 0 0 .52187 -7.8862 -265.18)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round" stroke-width="7.757">
     <path d="m53.99 511.98c19.39 0 35 15.61 35 35 0 5.8759-1.4335 11.405-3.9713 16.257-5.8367 11.16-17.515 18.743-31.029 18.743-11.965 0-22.492-5.9444-28.798-15.053-3.9132-5.652-6.2019-12.522-6.2019-19.947 0-19.39 15.61-35 35-35" inkscape:connector-curvature="0"/>
     <path d="m110.62 513.98c16.62 0 32.347 17.135 33.825 36.12 0.67929 6.1234-0.0537 11.656-2.229 15.815-5.0029 9.5659-13.66 13.902-23.946 11.825-9.0581-1.9168-16.929-8.8551-22.334-16.663-3.3542-4.8445-6.5233-10.733-8.099-17.097-2.959-16.62 6.1631-30 22.783-30" inkscape:connector-curvature="0"/>
@@ -471,28 +471,28 @@
     <path d="m450.42 525.98s16.429 26.286 26.775 42.84c4.755 7.6081 8.2253 13.16 8.2253 13.16s9.4647-15.144 18.55-29.681c8.3862-13.418 16.45-26.319 16.45-26.319h-19.481-50.519" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="bd" x="20" y="1212.7" width="300" height="1e3px" display="none"/>
+  <rect id="bd" x="20" y="1202.4" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
    <flowDiv>插入方式</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="1225" width="300" height="1e3px" display="none"/>
+  <rect id="bc" x="20" y="1214.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
    <flowDiv>插入方式是內插擴充功能的其中一個參數。有 2 種不同的插入方式，兩者的差別在於用不同的方式來計算新形狀的曲線。插入方式 1 或 2 只能二選一。</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="1253.1" width="300" height="1e3px" display="none"/>
+  <rect id="bb" x="20" y="1242.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
    <flowDiv>In the examples above, we used Interpolation Method 2, and the result was: </flowDiv>
   </flowRoot>
-  <g transform="translate(30 1278.4)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round">
+  <g transform="translate(30 1268)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round">
    <path d="m263.71 9.3346s-8.5736 13.718-13.973 22.357c-2.4815 3.9705-4.2925 6.8681-4.2925 6.8681s-4.9394-7.903-9.681-15.49c-4.3765-7.0024-8.5846-13.735-8.5846-13.735h10.167 26.364" stroke-width="4.0482" inkscape:connector-curvature="0"/>
    <g transform="matrix(.52187 0 0 .52187 -7.8862 -205.59)" stroke-width="7.757">
     <path d="m453.79 409.84c2.77 0-9.0817 24.761-17.95 41.72-4.0758 7.3606-7.255 12.91-7.6176 13.603-0.83381 1.5943-10.615-10.303-20.333-22.763-8.8975-11.501-17.313-23.409-18.214-24.71-0.55903-0.80742 6.3583-1.7889 15.812-2.8495 17.754-2.77 45.532-5 48.302-5" inkscape:connector-curvature="0"/>
@@ -504,14 +504,14 @@
    </g>
    <path d="m20.29 2.0284c10.119 0 18.266 8.1464 18.266 18.266 0 3.0665-0.74811 5.9518-2.0725 8.4842-3.046 5.8241-9.1404 9.7813-16.193 9.7813-6.2444 0-11.738-3.1022-15.029-7.8559-2.0422-2.9496-3.2366-6.535-3.2366-10.41 0-10.119 8.1464-18.266 18.266-18.266" stroke-width="4.0482" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="ba" x="20" y="1331" width="300" height="1e3px" display="none"/>
+  <rect id="ba" x="20" y="1320.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
    <flowDiv>Now compare this to Interpolation Method 1: </flowDiv>
   </flowRoot>
-  <g transform="translate(10.722 1339.9)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round">
+  <g transform="translate(10.722 1329.5)" fill="#0cf" stroke="#2e75ac" stroke-linejoin="round">
    <path d="m39.568 18.382c10.119 0 18.266 8.1464 18.266 18.266 0 10.119-8.1464 18.265-18.266 18.265-10.119 0-18.266-8.1464-18.266-18.265 0-10.119 8.1464-18.266 18.266-18.266z" stroke-width="4.0482" inkscape:connector-curvature="0" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997"/>
    <path d="m282.98 25.689-18.266 29.225-18.266-29.225z" stroke-width="4.0482" inkscape:connector-curvature="0" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" inkscape:export-ydpi="88.379997" sodipodi:nodetypes="cccc"/>
    <g transform="matrix(.52187 0 0 .52187 10.865 -181.24)" stroke-width="7.757">
@@ -523,35 +523,35 @@
     <path d="m454.8 394.51c2.77 0-25 50.23-25 53s-32.23-43-35-43 10-2.23 25-5 32.23-5 35-5" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="az" x="20" y="1408.8" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="1398.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
    <flowDiv>至於兩者數值計算的方式有何差別不在本文講述的範圍，所以直接試看看這兩種方式，然後選用產生效果最接近你想要的那一種。</flowDiv>
   </flowRoot>
-  <rect id="ay" x="20" y="1442.5" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="1432.1" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
    <flowDiv>指數</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="1454.7" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="1444.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
    <flowDiv><flowSpan font-style="italic">指數參數</flowSpan>可控制插入路徑之間的間隔距離。指數為 0 會使複本之間的間隔距離平均分配。</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="1482.8" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="1472.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aw"/>
    </flowRegion>
    <flowDiv>下面是另一個範例且指數為 0 的效果。</flowDiv>
   </flowRoot>
-  <g transform="translate(30.004 1508.3)">
+  <g transform="translate(30.004 1497.9)">
    <path d="m247.6 27.441h-10.653l-5.3267-9.2261 5.3267-9.2261h10.653l5.3267 9.2261z" fill="#0f0" stroke="#17a500" stroke-linejoin="round" stroke-width=".86884" inkscape:connector-curvature="0"/>
    <path d="m22.999 28.619s-3.4902-3.2745-3.621-3.2745c-0.06542 0-0.78972 4.8295-0.8715 4.8295-0.08177 0-2.3935-4.1658-2.4807-4.1658s-2.2831 4.3929-2.3649 4.3929c-0.08177 0-0.98642-4.6493-1.0518-4.6493-0.13084 0-3.581 3.5263-3.581 3.5263s0.60532-4.7533 0.5399-4.8666c-0.032709-0.0566-4.3589 2.1917-4.3998 2.1209s1.9782-4.3946 1.9346-4.4701c-0.043615-0.0756-4.8806 0.725-4.9215 0.6542s3.1954-3.5399 3.1627-3.5965c-0.065419-0.1133-4.9385-0.8368-4.9385-0.8368s4.2094-2.3001 4.2748-2.4134c0.032709-0.0567-4.322-2.2314-4.2811-2.3022 0.020444-0.0355 4.6909-0.9004 4.7124-0.9375 0.021466-0.0372-3.483-3.4379-3.4612-3.4757 0.021806-0.0378 4.7213 0.5734 4.7428 0.5362 0.021467-0.0372-2.2719-4.3618-2.2514-4.3972 0.040887-0.0708 4.3273 1.9258 4.36 1.8691 0.065418-0.1133-0.7671-4.9822-0.7671-4.9822s3.4902 3.2745 3.621 3.2745c0.06542 0 0.78972-4.8295 0.87149-4.8295 0.08178 0 2.3935 4.1658 2.4807 4.1658s2.2831-4.3929 2.3649-4.3929c0.08178 0 0.98643 4.6493 1.0518 4.6493 0.13084 0 3.581-3.5263 3.581-3.5263s-0.60532 4.7534-0.5399 4.8667c0.03271 0.0566 4.3589-2.1918 4.3998-2.121 0.04089 0.0709-1.9782 4.3946-1.9346 4.4702 0.02181 0.0377 4.837-0.8006 4.8584-0.7634 0.02146 0.0372-3.2319 3.4767-3.2115 3.5121 0.04089 0.0708 4.9086 0.7849 4.9413 0.8415 0.06542 0.1133-4.0568 2.4134-4.0568 2.4134s4.3493 2.1842 4.2839 2.2975c-0.03271 0.0567-4.7202 0.9511-4.7611 1.0219-0.02044 0.0354 3.4847 3.4349 3.4632 3.4721s-4.721-0.5739-4.7428-0.5362c-0.04361 0.0755 2.2273 4.4391 2.1864 4.5099-0.04089 0.0709-4.3273-1.9257-4.36-1.8691-0.06541 0.1134 0.76711 4.9822 0.76711 4.9822" fill="#0f0" stroke="#17a500" stroke-linejoin="round" stroke-width=".79675" inkscape:connector-curvature="0"/>
    <g transform="matrix(.52187 0 0 .52187 -9.2175 -573.47)" fill="#0f0" stroke="#17a500" stroke-linejoin="round" stroke-width="1.6649">
@@ -564,14 +564,14 @@
    </g>
    <text x="-0.59277618" y="36.282593" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="-0.59277618" y="36.282593" sodipodi:role="line">指數: 0.0</tspan><tspan x="-0.59277618" y="43.782593" sodipodi:role="line">內插階層數: 6</tspan><tspan x="-0.59277618" y="51.282593" sodipodi:role="line">插入方式: 2</tspan><tspan x="-0.59277618" y="58.782593" sodipodi:role="line">再製終點路徑: 未勾選</tspan><tspan x="-0.59277618" y="66.282593" sodipodi:role="line">插入樣式: 未勾選</tspan></text>
   </g>
-  <rect id="av" x="20" y="1587.5" width="300" height="1e3px" display="none"/>
+  <rect id="av" x="20" y="1577.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#av"/>
    </flowRegion>
    <flowDiv>The same example with an exponent of 1: </flowDiv>
   </flowRoot>
-  <g transform="translate(5.9647 1594.4)" fill="#0f0" stroke="#17a500" stroke-linejoin="round">
+  <g transform="translate(5.9647 1584)" fill="#0f0" stroke="#17a500" stroke-linejoin="round">
    <path d="m271.63 45.832h-10.653l-5.3267-9.226 5.3267-9.2261h10.653l5.3267 9.2261z" stroke-width=".86884" inkscape:connector-curvature="0"/>
    <path d="m47.033 47.01s-3.4902-3.2745-3.621-3.2745c-0.06542 0-0.78972 4.8295-0.87149 4.8295-0.08178 0-2.3935-4.1658-2.4807-4.1658-0.08723 0-2.2831 4.3929-2.3649 4.3929-0.08178 0-0.98643-4.6493-1.0518-4.6493-0.13084 0-3.581 3.5262-3.581 3.5262s0.60532-4.7532 0.5399-4.8665c-0.03271-0.0567-4.3589 2.1917-4.3998 2.1209-0.04089-0.0708 1.9782-4.3947 1.9346-4.4702-0.04361-0.0755-4.8806 0.7251-4.9215 0.6542-0.04089-0.0708 3.1954-3.5398 3.1627-3.5965-0.06542-0.1133-4.9385-0.8368-4.9385-0.8368s4.2094-2.3001 4.2748-2.4133c0.03271-0.0567-4.322-2.2315-4.2811-2.3023 0.02044-0.0354 4.6909-0.9003 4.7124-0.9375 0.02147-0.0372-3.483-3.4379-3.4612-3.4756 0.02181-0.0378 4.7213 0.5733 4.7428 0.5362 0.02147-0.0372-2.2719-4.3618-2.2514-4.3972 0.04089-0.0708 4.3273 1.9258 4.36 1.8691 0.06542-0.1133-0.7671-4.9822-0.7671-4.9822s3.4902 3.2745 3.621 3.2745c0.06542 0 0.78972-4.8295 0.87149-4.8295 0.08177 0 2.3935 4.1657 2.4807 4.1657 0.08723 0 2.2831-4.3928 2.3649-4.3928 0.08178 0 0.98643 4.6493 1.0518 4.6493 0.13084 0 3.581-3.5263 3.581-3.5263s-0.60532 4.7533-0.5399 4.8666c0.03271 0.0567 4.3589-2.1917 4.3998-2.1209 0.04089 0.0708-1.9782 4.3946-1.9346 4.4702 0.02181 0.0377 4.837-0.8006 4.8584-0.7635 0.02147 0.0372-3.2319 3.4767-3.2115 3.5122 0.04089 0.0708 4.9085 0.7849 4.9413 0.8415 0.06542 0.1133-4.0568 2.4134-4.0568 2.4134s4.3493 2.1842 4.2839 2.2975c-0.03271 0.0566-4.7202 0.951-4.7611 1.0218-0.02044 0.0355 3.4847 3.435 3.4632 3.4722-0.02147 0.0372-4.721-0.574-4.7428-0.5363-0.04361 0.0756 2.2273 4.4392 2.1864 4.51-0.04089 0.0708-4.3273-1.9258-4.36-1.8691-0.06542 0.1133 0.7671 4.9822 0.7671 4.9822" stroke-width=".79675" inkscape:connector-curvature="0"/>
    <g transform="matrix(.52187 0 0 .52187 14.289 -599.89)" stroke-width="1.6649">
@@ -583,14 +583,14 @@
     <path d="m176.92 1239s-5.2366-4.6098-5.9092-4.6098c-0.33079 0-1.6286 6.799-2.043 6.799-0.37214 0-3.8992-5.8646-4.2984-5.8646-0.39927 0-3.771 6.1843-4.1586 6.1843-0.39135 0-1.9331-6.5454-2.2732-6.5454-0.50547 0-5.65 4.9644-5.8768 4.9644-0.32432 0-0.21313-2.4502 0.0129-4.4206 0.14751-1.286 0.2054-2.4594 0.0779-2.6803-0.14369-0.2489-6.3755 2.6715-6.6001 2.2826-0.18096-0.3135 2.5241-6.6385 2.3188-6.9942-0.19521-0.3381-7.1442 0.5474-7.3411 0.2064-0.19226-0.3331 4.2294-5.4498 4.0543-5.753-0.24097-0.4174-7.2429-1.681-7.3689-1.8992-0.17173-0.2975 5.6114-3.783 5.6103-4.1041-0.0586-0.1584-0.87408-0.6422-1.8712-1.1611-1.7926-0.9331-4.2005-2.4111-3.9875-2.78 0.13949-0.2417 6.8513-1.6961 7.0332-2.0111 0.15773-0.2732-4.6378-5.2999-4.4651-5.5991 0.16119-0.2792 6.9111 0.3494 7.0734 0.068 0.17103-0.2963-2.9187-6.625-2.7593-6.9011 0.20169-0.3494 6.3704 2.229 6.5324 1.9482 0.33482-0.5799-0.5192-6.8687-0.65194-7.6477-9e-3 -0.054-0.0108-0.083-4e-3 -0.083 0.0581 0 5.281 4.6098 5.909 4.6098 0.33116 0 1.6289-6.799 2.0428-6.799 0.3723 0 3.8993 5.8646 4.2984 5.8646 0.39945 0 3.7712-6.1843 4.1587-6.1843 0.39164 0 1.9335 6.5453 2.2734 6.5453 0.50605 0 5.6506-4.9643 5.8766-4.9643 0.3186 0 0.21215 2.3815-0.013 4.3369-0.15226 1.3224-0.21385 2.5452-0.0824 2.7728 0.14447 0.2502 6.3762-2.6704 6.6-2.2827 0.18113 0.3138-2.5239 6.6387-2.3186 6.9943 0.16331 0.2828 7.0803-0.6581 7.2484-0.3669 0.16394 0.284-4.2826 5.3574-4.1257 5.6292 0.2064 0.3575 7.2007 1.6079 7.3728 1.906 0.25447 0.4407-5.4121 3.9156-5.3186 4.0776 0.0855 0.148 1.0529 0.6946 2.1726 1.2689 1.7721 0.9088 3.9462 2.2803 3.7235 2.666-0.15692 0.2718-6.8948 1.7714-7.1073 2.1394-0.15596 0.2702 4.6406 5.295 4.4682 5.5936-0.16062 0.2782-6.9106-0.3502-7.0736-0.068-0.20423 0.3538 2.8517 6.7411 2.6615 7.0706-0.20157 0.3491-6.3703-2.2291-6.5326-1.948-0.34357 0.5951 0.66112 7.7393 0.66112 7.7393" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="au" x="20" y="1655.6" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="1645.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#au"/>
    </flowRegion>
    <flowDiv>with an exponent of 2: </flowDiv>
   </flowRoot>
-  <g transform="translate(5.9647 1662.5)" fill="#0f0" stroke="#17a500" stroke-linejoin="round">
+  <g transform="translate(5.9647 1652.2)" fill="#0f0" stroke="#17a500" stroke-linejoin="round">
    <path d="m271.63 45.832h-10.653l-5.3267-9.2261 5.3267-9.2261h10.653l5.3267 9.2261z" stroke-width=".86884" inkscape:connector-curvature="0"/>
    <path d="m47.033 47.01s-3.4902-3.2745-3.621-3.2745c-0.06542 0-0.78972 4.8295-0.87149 4.8295-0.08178 0-2.3935-4.1657-2.4807-4.1657-0.08723 0-2.2831 4.3928-2.3649 4.3928-0.08178 0-0.98643-4.6493-1.0518-4.6493-0.13084 0-3.581 3.5263-3.581 3.5263s0.60532-4.7533 0.5399-4.8666c-0.03271-0.0566-4.3589 2.1917-4.3998 2.1209-0.04089-0.0708 1.9782-4.3946 1.9346-4.4701-0.04361-0.0756-4.8806 0.725-4.9215 0.6542-0.04089-0.0708 3.1954-3.5399 3.1627-3.5965-0.06542-0.1133-4.9385-0.8368-4.9385-0.8368s4.2094-2.3001 4.2748-2.4134c0.03271-0.0567-4.322-2.2314-4.2811-2.3022 0.02044-0.0355 4.6909-0.9004 4.7124-0.9375 0.02147-0.0372-3.483-3.4379-3.4612-3.4757 0.02181-0.0378 4.7213 0.5734 4.7428 0.5362 0.02147-0.0372-2.2719-4.3618-2.2514-4.3972 0.04089-0.0708 4.3273 1.9258 4.36 1.8691 0.06542-0.1133-0.7671-4.9822-0.7671-4.9822s3.4902 3.2745 3.621 3.2745c0.06542 0 0.78972-4.8295 0.87149-4.8295 0.08177 0 2.3935 4.1658 2.4807 4.1658 0.08723 0 2.2831-4.3929 2.3649-4.3929 0.08178 0 0.98643 4.6493 1.0518 4.6493 0.13084 0 3.581-3.5262 3.581-3.5262s-0.60532 4.7533-0.5399 4.8666c0.03271 0.0566 4.3589-2.1918 4.3998-2.121 0.04089 0.0709-1.9782 4.3947-1.9346 4.4702 0.02181 0.0378 4.837-0.8006 4.8584-0.7634 0.02147 0.0372-3.2319 3.4767-3.2115 3.5121 0.04089 0.0708 4.9085 0.7849 4.9413 0.8415 0.06542 0.1133-4.0568 2.4134-4.0568 2.4134s4.3493 2.1842 4.2839 2.2975c-0.03271 0.0567-4.7202 0.9511-4.7611 1.0219-0.02044 0.0354 3.4847 3.435 3.4632 3.4721-0.02147 0.0372-4.721-0.5739-4.7428-0.5362-0.04361 0.0756 2.2273 4.4391 2.1864 4.51-0.04089 0.0708-4.3273-1.9258-4.36-1.8692-0.06542 0.1134 0.7671 4.9822 0.7671 4.9822" stroke-width=".79675" inkscape:connector-curvature="0"/>
    <g transform="matrix(.52187 0 0 .52187 14.289 -641)" stroke-width="1.6649">
@@ -602,14 +602,14 @@
     <path d="m222.09 1317.5s-4.6625-3.9513-5.502-3.9513c-0.41207 0-1.6743 5.8277-2.1906 5.8277-0.45737 0-3.6273-5.0268-4.1183-5.0268-0.49111 0-3.5321 5.3008-4.0111 5.3008-0.48418 0-1.9501-5.6102-2.3751-5.6102-0.60626 0-5.1705 4.2551-5.4872 4.2551-0.45262 0-0.46546-2.1001-0.27172-3.7891 0.12644-1.1022 0.14752-2.1574-0.0109-2.4318-0.17573-0.3044-5.5934 2.0669-5.8758 1.5778-0.22155-0.3837 2.0231-5.9333 1.7696-6.3724-0.23937-0.4146-6.2708 0.2142-6.5146-0.208-0.23733-0.4111 3.4802-4.9223 3.2607-5.3026-0.28671-0.4965-6.3646-1.7116-6.5404-2.0162-0.23967-0.4151 4.6404-3.536 4.5892-3.8981-0.0906-0.2058-0.8127-0.6605-1.6674-1.1053-1.5365-0.7997-3.541-2.1694-3.2637-2.6498 0.17918-0.3104 6.0058-1.6846 6.2433-2.096 0.20385-0.3531-3.8323-4.7904-3.6077-5.1794 0.20841-0.361 6.0661 0.053 6.2764-0.3112 0.22242-0.3853-2.3512-5.9394-2.1441-6.298 0.25048-0.4338 5.6102 1.651 5.8116 1.3022 0.42091-0.729-0.2222-6.2735-0.33597-6.9412-8e-3 -0.046-7e-3 -0.071 2e-3 -0.071 0.0811 0 4.7245 3.9512 5.5018 3.9512 0.41258 0 1.6746-5.8277 2.1903-5.8277 0.45759 0 3.6275 5.0268 4.1183 5.0268 0.49136 0 3.5324-5.3008 4.0112-5.3008 0.48458 0 1.9506 5.6103 2.3755 5.6103 0.60706 0 5.1714-4.2551 5.4868-4.2551 0.44463 0 0.45937 2.0412 0.26638 3.7173-0.13052 1.1335-0.15371 2.2328 0.01 2.5158 0.17683 0.3063 5.5943-2.0654 5.8757-1.578 0.22178 0.3842-2.0229 5.9337-1.7694 6.3727 0.21138 0.3661 6.2146-0.3116 6.433 0.067 0.21252 0.3681-3.5269 4.8413-3.3235 5.1938 0.25707 0.4452 6.3284 1.649 6.5438 2.0221 0.30555 0.5292-4.4779 3.6351-4.3474 3.8611 0.11929 0.2067 0.97512 0.7213 1.9349 1.2135 1.519 0.779 3.3268 2.0509 3.0464 2.5365-0.1942 0.3364-6.0443 1.7513-6.3098 2.2112-0.20216 0.3502 3.8349 4.7859 3.6106 5.1744-0.20789 0.3601-6.0657-0.054-6.2766 0.3116-0.25196 0.4365 2.2915 6.0428 2.057 6.449-0.25032 0.4335-5.6101-1.6512-5.8118-1.3018-0.4299 0.7446 0.34116 7.0243 0.34116 7.0243" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="at" x="20" y="1723.7" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="1713.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
    <flowDiv>and with an exponent of -1: </flowDiv>
   </flowRoot>
-  <g transform="translate(5.2504 1730.7)" fill="#0f0" stroke="#17a500" stroke-linejoin="round">
+  <g transform="translate(5.2504 1720.3)" fill="#0f0" stroke="#17a500" stroke-linejoin="round">
    <path d="m272.35 45.832h-10.653l-5.3267-9.226 5.3267-9.2261h10.653l5.3267 9.2261z" stroke-width=".86884" inkscape:connector-curvature="0"/>
    <path d="m47.747 47.01s-3.4902-3.2745-3.621-3.2745c-0.06542 0-0.78972 4.8295-0.87149 4.8295-0.08178 0-2.3935-4.1658-2.4807-4.1658-0.08723 0-2.2831 4.3928-2.3649 4.3928-0.08178 0-0.98643-4.6493-1.0518-4.6493-0.13084 0-3.581 3.5263-3.581 3.5263s0.60532-4.7532 0.5399-4.8665c-0.03271-0.0567-4.3589 2.1917-4.3998 2.1209-0.04089-0.0709 1.9782-4.3947 1.9346-4.4702-0.04361-0.0756-4.8806 0.725-4.9215 0.6542-0.04089-0.0708 3.1954-3.5398 3.1627-3.5965-0.06542-0.1133-4.9385-0.8368-4.9385-0.8368s4.2094-2.3001 4.2748-2.4134c0.03271-0.0566-4.322-2.2314-4.2811-2.3022 0.02044-0.0354 4.6909-0.9003 4.7124-0.9375 0.02147-0.0372-3.483-3.4379-3.4612-3.4757 0.02181-0.0377 4.7213 0.5734 4.7428 0.5363 0.02147-0.0372-2.2719-4.3618-2.2514-4.3972 0.04089-0.0708 4.3273 1.9257 4.36 1.8691 0.06542-0.1133-0.7671-4.9822-0.7671-4.9822s3.4902 3.2744 3.621 3.2744c0.06542 0 0.78972-4.8295 0.87149-4.8295 0.08177 0 2.3935 4.1658 2.4807 4.1658 0.08723 0 2.2831-4.3928 2.3649-4.3928 0.08178 0 0.98643 4.6493 1.0518 4.6493 0.13084 0 3.581-3.5263 3.581-3.5263s-0.60532 4.7533-0.5399 4.8666c0.03271 0.0567 4.3589-2.1918 4.3998-2.1209 0.04088 0.0708-1.9782 4.3946-1.9346 4.4702 0.02181 0.0377 4.837-0.8006 4.8584-0.7635 0.02147 0.0372-3.2319 3.4767-3.2115 3.5122 0.04088 0.0708 4.9085 0.7848 4.9412 0.8415 0.06542 0.1133-4.0568 2.4134-4.0568 2.4134s4.3493 2.1842 4.2838 2.2975c-0.03271 0.0566-4.7202 0.951-4.7611 1.0218-0.02044 0.0355 3.4847 3.435 3.4632 3.4721-0.02146 0.0373-4.721-0.5739-4.7428-0.5362-0.04361 0.0756 2.2273 4.4392 2.1864 4.51s-4.3273-1.9258-4.36-1.8692c-0.06542 0.1134 0.7671 4.9823 0.7671 4.9823" stroke-width=".79675" inkscape:connector-curvature="0"/>
    <g transform="matrix(.52187 0 0 .52187 15.004 -683.71)" stroke-width="1.6649">
@@ -621,21 +621,21 @@
     <path d="m94.667 1400s-6.282-5.8091-6.6507-5.8091c-0.1828 0-1.5455 8.5677-1.7742 8.5677-0.21694 0-4.3942-7.3902-4.6263-7.3902-0.23205 0-4.206 7.793-4.4273 7.793-0.2223 0-1.9022-8.248-2.0876-8.248-0.32194 0-6.523 6.2558-6.5864 6.2558-0.09068 0 0.24636-3.0876 0.53119-5.5706 0.18588-1.6205 0.31079-3.0092 0.23947-3.1327-0.08532-0.1478-7.7997 3.7724-7.9189 3.5659-0.10704-0.1854 3.4364-7.9225 3.3188-8.1262-0.11479-0.1989-8.7348 1.1539-8.8463 0.9608-0.1102-0.1909 5.5936-6.4102 5.4995-6.5733-0.15768-0.2731-8.8423-1.6251-8.8776-1.6861-0.04802-0.083 7.3797-4.2328 7.4697-4.479-2.34e-4 -0.072-0.98583-0.609-2.2423-1.2629-2.2589-1.1758-5.4013-2.8511-5.3055-3.0171 0.06722-0.1164 8.391-1.717 8.4715-1.8564 0.07373-0.1277-6.1047-6.2275-6.0263-6.3633 0.07517-0.1303 8.4498 0.8891 8.5248 0.7593 0.07745-0.1342-3.9522-7.8735-3.8794-7.9995 0.11283-0.1955 7.7546 3.2815 7.8451 3.1248 0.17806-0.3084-1.0601-7.9527-1.2273-8.9344-0.01162-0.068-0.01691-0.1046-0.01507-0.1046 0.01625 0 6.2944 5.809 6.6507 5.809 0.1829 0 1.5456-8.5677 1.7742-8.5677 0.21698 0 4.3943 7.3903 4.6263 7.3903 0.2321 0 4.2061-7.7931 4.4273-7.7931 0.22239 0 1.9023 8.248 2.0876 8.248 0.3221 0 6.5232-6.2557 6.5864-6.2557 0.08908 0-0.23805 3.0009-0.52178 5.4651-0.19188 1.6664-0.32337 3.1139-0.25019 3.2407 0.08555 0.1482 7.7998-3.7722 7.9189-3.5661 0.10708 0.1856-3.4364 7.9226-3.3188 8.1264 0.07576 0.1311 8.6567-1.2892 8.7333-1.1565 0.0755 0.1308-5.6588 6.2973-5.5867 6.4222 0.11415 0.1977 8.7891 1.533 8.8824 1.6945 0.16145 0.2797-7.1132 4.4263-7.0871 4.4716 0.0239 0.041 1.1945 0.6463 2.6056 1.37 2.2331 1.1452 5.0741 2.698 4.9565 2.9017-0.089 0.1542-8.4436 1.8082-8.5595 2.0088-0.07182 0.1245 6.1079 6.2222 6.03 6.3569-0.0745 0.1292-8.4491-0.8902-8.5248-0.7592-0.11731 0.2033 3.8719 8.0127 3.7623 8.2026-0.11281 0.1953-7.7546-3.2816-7.8452-3.1249-0.18637 0.3229 1.2438 9.0415 1.2438 9.0415" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="as" x="20" y="1791.9" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="1781.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
    <flowDiv>當內插擴充功能處理指數時，選取物件的<flowSpan font-style="italic">順序</flowSpan>是很重要的。下面的範例中，先選取左邊的星形路徑，再選取右邊的六邊形路徑。</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="1820.1" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="1809.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
    <flowDiv>View the result when the path on the right was selected first. The exponent in this example was set to 1: </flowDiv>
   </flowRoot>
-  <g transform="translate(5.2504 1835.4)" fill="#0f0" stroke="#17a500" stroke-linejoin="round">
+  <g transform="translate(5.2504 1825)" fill="#0f0" stroke="#17a500" stroke-linejoin="round">
    <path d="m272.35 46.546h-10.653l-5.3267-9.2261 5.3267-9.2261h10.653l5.3267 9.2261z" stroke-width=".86884" inkscape:connector-curvature="0"/>
    <path d="m47.747 47.724s-3.4902-3.2745-3.621-3.2745c-0.06542 0-0.78972 4.8295-0.87149 4.8295-0.08178 0-2.3935-4.1658-2.4807-4.1658-0.08723 0-2.2831 4.3929-2.3649 4.3929-0.08177 0-0.98643-4.6493-1.0518-4.6493-0.13084 0-3.581 3.5263-3.581 3.5263s0.60532-4.7533 0.5399-4.8666c-0.03271-0.0567-4.3589 2.1917-4.3998 2.1209-0.04089-0.0708 1.9782-4.3946 1.9346-4.4702-0.04361-0.0755-4.8806 0.7251-4.9215 0.6543-0.04089-0.0709 3.1954-3.5399 3.1627-3.5966-0.06542-0.1133-4.9385-0.8367-4.9385-0.8367s4.2094-2.3001 4.2748-2.4134c0.03271-0.0567-4.322-2.2315-4.2811-2.3023 0.02044-0.0354 4.6909-0.9003 4.7124-0.9375 0.02147-0.0372-3.483-3.4378-3.4612-3.4756 0.02181-0.0378 4.7213 0.5734 4.7428 0.5362 0.02147-0.0372-2.2719-4.3618-2.2514-4.3972 0.04089-0.0708 4.3273 1.9258 4.36 1.8691 0.06542-0.1133-0.7671-4.9822-0.7671-4.9822s3.4902 3.2745 3.621 3.2745c0.06542 0 0.78972-4.8295 0.8715-4.8295 0.08177 0 2.3935 4.1658 2.4807 4.1658 0.08723 0 2.2831-4.3929 2.3649-4.3929 0.08178 0 0.98643 4.6493 1.0518 4.6493 0.13084 0 3.581-3.5263 3.581-3.5263s-0.60532 4.7533-0.5399 4.8666c0.03271 0.0567 4.3589-2.1917 4.3998-2.1209 0.04089 0.0709-1.9782 4.3946-1.9346 4.4702 0.02181 0.0377 4.837-0.8006 4.8584-0.7635 0.02147 0.0372-3.2319 3.4767-3.2115 3.5122 0.04089 0.0708 4.9085 0.7849 4.9413 0.8415 0.06542 0.1133-4.0568 2.4134-4.0568 2.4134s4.3493 2.1842 4.2839 2.2975c-0.03271 0.0567-4.7202 0.951-4.7611 1.0219-0.02044 0.0354 3.4847 3.4349 3.4632 3.4721-0.02147 0.0372-4.721-0.574-4.7428-0.5362-0.04361 0.0755 2.2273 4.4391 2.1864 4.5099-0.04089 0.0708-4.3273-1.9257-4.36-1.8691-0.06542 0.1133 0.7671 4.9822 0.7671 4.9822" stroke-width=".79675" inkscape:connector-curvature="0"/>
    <g transform="matrix(.52187 0 0 .52187 15.531 -723.58)" stroke-width="1.5267">
@@ -647,42 +647,42 @@
     <path d="m377.93 1476.3s-2.6691-1.6647-4.0882-1.6647c-0.69426 0-1.8328 2.4552-2.703 2.4552-0.75331 0-2.6833-2.1178-3.493-2.1178-0.80998 0-2.7026 2.2332-3.4988 2.2332-0.80651 0-2.009-2.3635-2.729-2.3635-0.9562 0-3.5058 1.7926-4.1342 1.7926-0.89811 0-1.3416-0.8847-1.26-1.5963 0.0533-0.4644-0.0534-1.1091-0.31903-1.5691-0.287-0.4971-2.8779-0.032-3.3611-0.8693-0.3625-0.6279 0.28355-3.4849-0.13731-4.2138-0.39271-0.6802-3.238-0.9423-3.6446-1.6466-0.39381-0.6821 0.87895-3.0909 0.50506-3.7385-0.44551-0.7716-3.3148-1.8182-3.6637-2.4225-0.47557-0.8238 1.2688-2.6783 1.0438-3.1832-0.20178-0.3701-0.5996-0.7238-0.95967-0.9112-0.64732-0.3369-1.2513-1.3305-0.75053-2.1979 0.31697-0.549 3.0699-1.6445 3.5008-2.3909 0.36401-0.6305-1.0352-3.0215-0.63079-3.7221 0.37243-0.645 3.1322-0.9763 3.509-1.6288 0.40084-0.6943-0.38058-3.5588-8e-3 -4.2036 0.4199-0.7273 2.9707-0.356 3.3086-0.9413 0.71981-1.2468 0.80906-4.2065 0.76113-4.4878-3e-3 -0.019 4e-3 -0.03 0.0223-0.03 0.16096 0 2.7921 1.6647 4.0877 1.6647 0.69528 0 1.8335-2.4552 2.7025-2.4552 0.75376 0 2.6837 2.1178 3.493 2.1178 0.81046 0 2.7032-2.2332 3.4991-2.2332 0.8073 0 2.0102 2.3636 2.7297 2.3636 0.95781 0 3.5075-1.7927 4.1335-1.7927 0.88226 0 1.3178 0.86 1.2365 1.5661-0.055 0.4775 0.0551 1.1483 0.32953 1.6236 0.28917 0.5009 2.8797 0.035 3.361 0.869 0.36295 0.6287-0.28305 3.4857 0.13755 4.2142 0.37832 0.6552 3.2088 0.8916 3.6016 1.5721 0.38122 0.6603-0.90293 3.0493-0.53774 3.6819 0.43297 0.7499 3.2995 1.7918 3.6652 2.4252 0.48289 0.8364-1.2342 2.6614-0.97523 3.1099 0.2367 0.41 0.70504 0.8135 1.1094 1.0209 0.63993 0.3282 1.1763 1.2543 0.6955 2.087-0.32365 0.5605-3.0912 1.6813-3.5409 2.4602-0.36257 0.628 1.0372 3.0181 0.63266 3.7188-0.37201 0.6444-3.132 0.976-3.5095 1.6298-0.41771 0.7235 0.34634 3.618-0.0419 4.2905-0.41959 0.7267-2.9705 0.3556-3.3091 0.9421-0.72965 1.2638-0.7698 4.5416-0.7698 4.5416" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="aq" x="20" y="1902.7" width="300" height="1e3px" display="none"/>
+  <rect id="aq" x="20" y="1892.3" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
    <flowDiv>再製終點路徑</flowDiv>
   </flowRoot>
-  <rect id="ap" x="20" y="1914.9" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="1904.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
    <flowDiv>這個參數決定內插擴充功能生成的路徑群組是否<flowSpan font-style="italic">包含原始路徑的複本</flowSpan>。</flowDiv>
   </flowRoot>
-  <rect id="ao" x="20" y="1937.8" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="1927.5" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ao"/>
    </flowRegion>
    <flowDiv>插入樣式</flowDiv>
   </flowRoot>
-  <rect id="an" x="20" y="1950.1" width="300" height="1e3px" display="none"/>
+  <rect id="an" x="20" y="1939.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#an"/>
    </flowRegion>
    <flowDiv>這個參數是內插擴充功能美妙功能的其中一項。插入樣式會使擴充功能於每階層都試著改變路徑的樣式。因此如果起點路徑的顏色和終點路徑不同，生成的路徑會逐漸變成一樣。</flowDiv>
   </flowRoot>
-  <rect id="am" x="20" y="1988.9" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="1978.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
    </flowRegion>
    <flowDiv>下面的範例中插入樣式功能被用於路徑的填色上：</flowDiv>
   </flowRoot>
-  <g transform="translate(8.1885 1997.2)">
+  <g transform="translate(8.1885 1986.9)">
    <path d="m52.663 48.163c-2.9976 2.9047-3.5071-5.427-7.1207-3.1925-3.6849 2.2787 1.1326 7.9413-3.2277 8.4695-4.2758 0.518 1.5441-6.9599-2.6777-7.5296-4.3051-0.581-3.831 7.2721-7.9079 5.6902-3.9979-1.5513 4.5381-5.7159 1.6296-8.8711-2.9659-3.2174-6.2133 5.7226-8.4629 1.9619-2.206-3.6879 5.5681-2.5544 4.9588-6.6857-0.62133-4.2129-8.4029-0.204-8.0303-4.4441 0.36534-4.1581 8.0153 2.7473 9.9006-1.0625 1.9225-3.8849-6.9532-4.6723-4.2767-7.8973 2.6247-3.1626 4.6708 4.5784 8.3708 2.3642 3.773-2.2578-2.7067-7.438 1.4582-8.4264 4.0843-0.9693 0.18368 7.8024 4.3501 8.2857 4.2486 0.4929 2.8247-8.4766 6.6595-6.6728 3.7606 1.769-3.6131 6.4805-0.83385 9.63 2.8341 3.2116 5.5873-5.8283 7.7624-2.1005 2.1329 3.6555-5.5152 3.2348-4.8635 7.5015 0.66462 4.351 8.8783 0.2244 8.0285 4.4871-0.83336 4.1802-8.3722-3.7561-9.9941 0.2035-1.6539 4.0378 7.3336 5.3268 4.2768 8.2889z" fill="#fc0" inkscape:connector-curvature="0"/>
    <path d="m276.7 46.671c-2.9976 2.9048-3.5071-5.4269-7.1207-3.1924-3.6849 2.2786 1.1326 7.9413-3.2277 8.4695-4.2758 0.518 1.5441-6.96-2.6777-7.5297-4.3052-0.5809-3.831 7.2721-7.9079 5.6902-3.9979-1.5512 4.5381-5.7159 1.6296-8.871-2.9659-3.2174-6.2133 5.7225-8.4629 1.9618-2.206-3.6879 5.568-2.5543 4.9588-6.6857-0.62133-4.2129-8.4029-0.2039-8.0303-4.4441 0.36534-4.158 8.0153 2.7474 9.9006-1.0624 1.9225-3.885-6.9532-4.6724-4.2767-7.8974 2.6247-3.1626 4.6708 4.5785 8.3708 2.3643 3.773-2.2578-2.7067-7.438 1.4582-8.4264 4.0843-0.9693 0.18367 7.8024 4.35 8.2857 4.2486 0.4928 2.8247-8.4766 6.6595-6.6728 3.7606 1.7689-3.6131 6.4805-0.83385 9.6299 2.8341 3.2117 5.5873-5.8282 7.7624-2.1005 2.133 3.6556-5.5152 3.2348-4.8635 7.5016 0.66462 4.351 8.8783 0.2244 8.0285 4.4871-0.83336 4.1802-8.3722-3.7561-9.9941 0.2035-1.6539 4.0378 7.3336 5.3268 4.2768 8.2888z" fill="#d40000" inkscape:connector-curvature="0"/>
    <g transform="matrix(.52187 0 0 .52187 16.74 -799.46)">
@@ -694,14 +694,14 @@
     <path d="m130.16 1623.8c-5.744 5.566-6.7202-10.399-13.644-6.1173-3e-5 1e-4 -6e-5 1e-4 -9e-5 1e-4 -7.0608 4.3663 2.1703 15.217-6.1847 16.229-2.2e-4 1e-4 -4.3e-4 1e-4 -6.4e-4 1e-4 -8.192 0.9918 2.9592-13.337-5.1303-14.428h-1e-4c-8.2493-1.113-7.3409 13.935-15.153 10.904-2.01e-4 0-4.01e-4 -1e-4 -6.01e-4 -2e-4 -7.6593-2.9727 8.6962-10.953 3.1232-16.998-1.48e-4 -1e-4 -2.97e-4 -3e-4 -4.46e-4 -4e-4 -5.683-6.1639-11.905 10.966-16.216 3.7596-1.11e-4 -1e-4 -2.21e-4 -3e-4 -3.32e-4 -5e-4 -4.2261-7.066 10.67-4.8943 9.5022-12.81l-9.3e-5 -6e-4c-1.1913-8.0717-16.101-0.3904-15.387-8.5151 1.8e-5 -2e-4 3.6e-5 -4e-4 5.5e-5 -6e-4 0.70076-7.9663 15.359 5.2649 18.971-2.0352 9.6e-5 -2e-4 1.92e-4 -3e-4 2.89e-4 -5e-4 3.6827-7.4438-13.324-8.9527-8.1952-15.132 1.32e-4 -1e-4 2.63e-4 -3e-4 3.95e-4 -4e-4 5.0292-6.0589 8.9498 8.7734 16.04 4.5308l5.67e-4 -3e-4c7.2286-4.3266-5.1869-14.252 2.7936-16.146 2e-4 0 4.1e-4 -1e-4 6.1e-4 -1e-4 7.8252-1.8563 0.35155 14.951 8.3349 15.877 2.1e-4 1e-4 4.2e-4 1e-4 6.4e-4 1e-4 8.1404 0.9434 5.4122-16.243 12.76-12.786 1.9e-4 1e-4 3.7e-4 2e-4 5.6e-4 3e-4 7.2047 3.3898-6.9237 12.418-1.5984 18.452 1.5e-4 2e-4 2.9e-4 4e-4 4.3e-4 5e-4 5.4305 6.1527 10.706-11.168 14.874-4.0255 2e-5 1e-4 4e-5 1e-4 6e-5 1e-4 4.0869 7.0046-10.568 6.1985-9.3193 14.374 1e-5 1e-4 2e-5 1e-4 2e-5 2e-4 1.2737 8.337 17.012 0.4298 15.384 8.5978-1e-5 1e-4 -1e-5 1e-4 -2e-5 1e-4 -1.597 8.0099-16.043-7.1973-19.15 0.3899-1e-5 1e-4 -3e-5 1e-4 -4e-5 1e-4 -3.169 7.7372 14.052 10.207 8.1951 15.883" fill="#f8ae00" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="al" x="20" y="2062.7" width="300" height="1e3px" display="none"/>
+  <rect id="al" x="20" y="2052.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#al"/>
    </flowRegion>
    <flowDiv>插入樣式對路徑的邊框顏色也有作用：</flowDiv>
   </flowRoot>
-  <g transform="translate(9.311 2073.6)" stroke-linejoin="round">
+  <g transform="translate(9.311 2063.3)" stroke-linejoin="round">
    <path d="m52.29 44.87c-2.9976 2.9047-3.5071-5.4269-7.1207-3.1924-3.6849 2.2786 1.1326 7.9413-3.2277 8.4695-4.2758 0.518 1.5441-6.96-2.6777-7.5297-4.3051-0.5809-3.831 7.2721-7.9079 5.6902-3.9979-1.5512 4.5381-5.7159 1.6296-8.871-2.9659-3.2174-6.2133 5.7225-8.4629 1.9618-2.206-3.6879 5.5681-2.5543 4.9588-6.6857-0.62133-4.2129-8.4029-0.2039-8.0303-4.4441 0.36534-4.158 8.0153 2.7474 9.9006-1.0624 1.9225-3.885-6.9532-4.6724-4.2767-7.8974 2.6247-3.1626 4.6708 4.5784 8.3708 2.3643 3.773-2.2578-2.7067-7.438 1.4582-8.4264 4.0843-0.9693 0.18368 7.8023 4.3501 8.2857 4.2486 0.4928 2.8247-8.4766 6.6595-6.6728 3.7606 1.7689-3.6131 6.4804-0.83385 9.6299 2.8341 3.2117 5.5873-5.8282 7.7624-2.1005 2.1329 3.6556-5.5152 3.2348-4.8635 7.5016 0.66462 4.3509 8.8783 0.2243 8.0285 4.487-0.83336 4.1803-8.3722-3.756-9.9941 0.2036-1.6539 4.0378 7.3336 5.3268 4.2768 8.2888z" fill="#fc0" stroke="#000" stroke-width="1.5004" inkscape:connector-curvature="0"/>
    <path d="m277.07 47.107c-2.9976 2.9047-3.5071-5.4269-7.1207-3.1924-3.6849 2.2786 1.1326 7.9413-3.2276 8.4695-4.2758 0.518 1.5441-6.96-2.6777-7.5297-4.3052-0.581-3.831 7.2721-7.9079 5.6902-3.9979-1.5512 4.5381-5.7159 1.6296-8.871-2.9659-3.2175-6.2133 5.7225-8.4629 1.9618-2.206-3.6879 5.568-2.5543 4.9588-6.6857-0.62133-4.2129-8.4029-0.2039-8.0303-4.4441 0.36534-4.1581 8.0153 2.7473 9.9006-1.0624 1.9225-3.885-6.9532-4.6724-4.2767-7.8974 2.6247-3.1626 4.6708 4.5784 8.3708 2.3643 3.773-2.2578-2.7067-7.438 1.4582-8.4265 4.0843-0.9692 0.18367 7.8024 4.35 8.2857 4.2486 0.4929 2.8247-8.4766 6.6595-6.6727 3.7606 1.7689-3.6131 6.4804-0.83385 9.6299 2.8341 3.2117 5.5873-5.8282 7.7624-2.1005 2.133 3.6555-5.5152 3.2348-4.8635 7.5016 0.66463 4.3509 8.8783 0.2243 8.0285 4.487-0.83336 4.1803-8.3722-3.756-9.9941 0.2036-1.6539 4.0378 7.3336 5.3268 4.2768 8.2888z" fill="#d40000" stroke="#ededed" stroke-width="1.5004" inkscape:connector-curvature="0"/>
    <g transform="matrix(.52187 0 0 .52187 16.367 -843.98)" stroke-width="2.875">
@@ -713,14 +713,14 @@
     <path d="m438.02 1706.9c-5.744 5.566-6.7202-10.399-13.644-6.1173h-9e-5c-7.0608 4.3664 2.1703 15.217-6.1847 16.229h-6.5e-4c-8.192 0.9918 2.9592-13.337-5.1303-14.428-2.2e-4 -1e-4 -4.3e-4 -1e-4 -6.5e-4 -1e-4 -8.2487-1.1124-7.3405 13.935-15.152 10.904l-6e-4 -3e-4c-7.6593-2.9727 8.6962-10.953 3.1232-16.998-3e-5 -1e-4 -5e-5 -1e-4 -8e-5 -1e-4 -5.6831-6.165-11.906 10.965-16.216 3.7593-2e-5 -1e-4 -4e-5 -1e-4 -6e-5 -1e-4 -4.227-7.0666 10.669-4.8946 9.5019-12.811-1e-5 -1e-4 -1e-5 -1e-4 -2e-5 -1e-4 -1.1907-8.0726-16.101-0.3908-15.388-8.5156 0-1e-4 0-1e-4 1e-5 -1e-4 0.70017-7.9674 15.359 5.2644 18.971-2.0357 1e-5 -1e-4 3e-5 -1e-4 5e-5 -1e-4 3.6836-7.4443-13.324-8.9531-8.195-15.133 2e-5 -1e-4 4e-5 -1e-4 6e-5 -1e-4 5.0294-6.0599 8.95 8.7731 16.04 4.5305 3e-5 -1e-4 6e-5 -1e-4 9e-5 -1e-4 7.2296-4.3264-5.1866-14.253 2.7941-16.146 3e-5 -1e-4 7e-5 -1e-4 1e-4 -1e-4 7.8261-1.8571 0.35188 14.951 8.3354 15.877h1e-4c8.141 0.9442 5.4125-16.243 12.761-12.786h9e-5c7.2058 3.3896-6.9234 12.418-1.5979 18.453h7e-5c5.4306 6.1539 10.706-11.168 14.874-4.025h5e-5c4.0869 7.0047-10.568 6.1985-9.3193 14.374 3e-5 2e-4 6e-5 4e-4 1e-4 6e-4 1.2743 8.3361 17.012 0.4295 15.384 8.5974-1e-5 0-2e-5 0-2e-5 1e-4 -1.597 8.0098-16.043-7.1974-19.15 0.3899-2e-5 0-3e-5 0-4e-5 1e-4 -3.169 7.7371 14.052 10.207 8.1951 15.883" fill="#da1d00" stroke="#cbcbcb" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="ak" x="20" y="2138.8" width="300" height="1e3px" display="none"/>
+  <rect id="ak" x="20" y="2128.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ak"/>
    </flowRegion>
    <flowDiv>當然，起點和終點的路徑不一定要相同：</flowDiv>
   </flowRoot>
-  <g transform="translate(9.1603 2149.7)">
+  <g transform="translate(9.1603 2139.3)">
    <path d="m52.441 44.409c-2.9976 2.9047-3.5071-5.427-7.1207-3.1925-3.6849 2.2787 1.1326 7.9414-3.2277 8.4695-4.2758 0.5181 1.5441-6.9599-2.6777-7.5296-4.3051-0.581-3.831 7.2721-7.9079 5.6902-3.9979-1.5513 4.5381-5.7159 1.6296-8.871-2.9659-3.2175-6.2133 5.7225-8.4629 1.9618-2.206-3.6879 5.5681-2.5544 4.9588-6.6857-0.62133-4.2129-8.4029-0.204-8.0303-4.4441 0.36534-4.1581 8.0153 2.7473 9.9006-1.0624 1.9225-3.885-6.9532-4.6724-4.2767-7.8974 2.6247-3.1626 4.6708 4.5784 8.3708 2.3643 3.773-2.2579-2.7067-7.4381 1.4582-8.4265 4.0843-0.9692 0.18368 7.8024 4.3501 8.2857 4.2486 0.4929 2.8247-8.4766 6.6595-6.6727 3.7606 1.7689-3.6131 6.4804-0.83386 9.6299 2.8341 3.2117 5.5873-5.8283 7.7624-2.1005 2.1329 3.6555-5.5152 3.2348-4.8635 7.5016 0.66462 4.3509 8.8783 0.2243 8.0285 4.487-0.83336 4.1803-8.3722-3.756-9.9941 0.2036-1.6539 4.0378 7.3336 5.3267 4.2768 8.2888z" fill="#fc0" inkscape:connector-curvature="0"/>
    <path d="m255.17 22.167h24.25v24.25h-24.25v-22.734z" fill="#d40000" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"/>
    <g transform="matrix(.52187 0 0 .52187 16.891 -819.61)">
@@ -742,32 +742,32 @@
     <path d="m123.62 1733.5c-1.8896 1.831-2.7623 0.9437-3.9672-0.6377-1.0107-1.3265-1.5484-3.1414-2.7492-4.2498-1.0976-1.0131-2.1619-1.4358-3.7936-0.3559-0.18945 0.1394-0.37187 0.2864-0.55999 0.4404-1.5329 1.2552-1.4651 2.974-1.4372 4.7657 0.0284 1.8258 0.86111 3.7273 0.81014 5.2912-0.0577 1.7714-0.34926 3.1096-2.8142 3.4134-0.0145 0-0.0301 0-0.047 0.01-2.6163 0.2965-2.474-1.2639-2.1733-3.3707 0.23092-1.618 1.2148-3.5582 1.3199-5.2272 0.12035-1.9102-7e-3 -3.4652-2.2544-3.7751-0.0197 0-0.041-0.01-0.0641-0.01-2.0838-0.2563-3.0654 0.6998-4.1755 2.1003-1.0561 1.3323-1.438 3.067-2.3209 4.5426-1.0337 1.7279-1.7704 3.1007-3.5941 3.0574-0.47825-0.011-0.94649-0.1202-1.4561-0.3455-1.6022-0.669-1.7414-1.6339-1.3399-2.7871 0.4449-1.2777 2.1719-2.7865 3.3813-4.3798 1.1601-1.5282 2.6406-3.1342 2.7559-4.6887 0.06922-0.9327-0.082-1.8469-0.77027-2.7145-0.55548-0.7051-1.1264-1.0547-1.7878-1.1458-1.5344-0.2114-3.0862 1.3832-4.5932 2.7434-1.4296 1.2903-2.8187 3.1578-4.1143 3.7393-1.1624 0.5217-2.2494 0.5232-3.2228-0.981-0.28617-0.4153-0.47008-0.7965-0.56661-1.1842-0.47077-1.8912 1.137-2.3866 3.0997-3.2629 1.6065-0.7172 3.4508-0.9967 4.5876-2.1875 0.79534-0.833 1.2445-1.7423 1.0237-3.1169-0.08882-0.5317-0.26673-0.976-0.51714-1.3915-0.89105-1.4785-2.7002-1.4726-4.6801-1.6158-1.8125-0.1311-3.7681 0.3754-5.2937 0.073-1.7205-0.3408-2.8941-0.8958-2.6984-3.0258 0.01245-0.122 0.03006-0.244 0.05262-0.3704 0.37123-2.0794 2.0851-1.7124 4.2889-1.1523 1.5455 0.3928 3.332 1.4995 5.0651 1.9995 1.9378 0.559 3.809 1.293 5.2025 0.6861 0.68056-0.2964 1.2472-0.7242 1.652-1.4464 0.53307-0.9666 0.56066-1.7798 0.2594-2.6108-0.53158-1.4663-2.087-2.2024-3.696-3.2784-1.6532-1.1057-3.3629-1.7174-4.0763-2.9255-0.5295-0.8967-0.51012-1.7482 0.48863-2.8329 0.51729-0.5415 1.0209-0.8378 1.5172-1.0046 1.5052-0.5058 2.5278 0.816 4.0745 2.3138 1.2934 1.2525 2.2482 2.628 3.7975 3.161 1.0779 0.3709 2.0772 0.3339 3.2419-0.4361 0.4562-0.3155 0.80532-0.6658 1.1099-1.0436 1.1503-1.4268 0.44861-3.2465-0.13664-5.0715-0.58099-1.8117-1.871-3.6287-1.9263-5.0716-0.0476-1.2423 0.32673-2.2074 2.0824-2.6532 0.4657-0.125 0.86596-0.1514 1.2436-0.093 1.6536 0.2533 1.5879 2.1216 1.7026 4.403 0.0856 1.7017-0.37417 3.6334-0.1054 5.2961 0.31693 1.9607 0.65513 3.5475 2.5726 3.9425 0.12199 0.025 0.23739 0.045 0.35012 0.061 1.8471 0.2254 2.7784-0.7537 3.6643-2.2201 0.84796-1.4036 0.97437-3.2539 1.5487-4.9218 0.71135-2.0658 1.0585-3.852 2.5166-4.1638 0.55281-0.1182 1.1308-0.025 1.8328 0.3461 1.2089 0.6235 1.5549 1.4696 1.5416 2.4651-0.0187 1.3921-1.4234 3.0764-2.4395 4.8531-0.90836 1.5881-2.2526 3.2501-2.5282 4.8429-0.22299 1.289-0.20162 2.5327 0.66629 3.6555 0.29336 0.4025 0.6013 0.6878 0.95453 0.8742 1.569 0.8282 3.1156-0.7095 4.608-2.1839 1.3304-1.3144 2.6178-3.3231 3.8396-4.0633 1.1432-0.6925 2.229-0.8235 3.239 0.7844 0.263 0.3901 0.43546 0.7577 0.52994 1.1391 0.46323 1.8698-0.94794 2.5641-2.7526 3.6303-1.4771 0.8728-3.2179 1.3019-4.4103 2.5108-1.0116 1.0256-1.6285 2.078-1.3549 3.7531 0.0432 0.2447 0.10574 0.4804 0.18602 0.7212 0.61157 1.8345 2.2509 2.0893 4.1714 2.3523 1.7196 0.2354 3.6648-0.2702 5.2997-0.1431 2.1555 0.1676 3.7717 0.2989 3.6206 2.4706-0.0143 0.2054-0.0444 0.405-0.0914 0.6089-0.40084 1.8992-1.7462 1.9518-3.5153 1.5396-1.4565-0.3394-3.2004-1.5791-4.9409-2.3366-1.7944-0.781-3.5854-1.9053-5.0545-1.9377-1.2855-0.028-2.3246 0.2938-2.904 1.5861-0.22316 0.4751-0.32837 0.9347-0.33628 1.4226-0.0281 1.7324 1.1706 2.7166 2.6712 3.9625 1.3931 1.1566 3.0464 1.7664 4.2199 2.8034 1.5398 1.3606 2.2536 2.3275 0.46961 4.0562" fill="#f8ae00" stroke="#212121" stroke-width="3.1036" inkscape:connector-curvature="0"/>
    </g>
   </g>
-  <rect id="aj" x="20" y="2261.4" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="2251" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aj"/>
    </flowRegion>
    <flowDiv>用內插仿造不規則漸層</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="2273.6" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="2263.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
    <flowDiv>At the time when gradient meshes were not implemented in Inkscape, it was not possible to create a gradient other than linear (straight line) or radial (round). However, it could be faked using the Interpolate extension and Interpolate Style. A simple example follows — draw two lines of different strokes: </flowDiv>
   </flowRoot>
-  <g transform="translate(31.084 2309.8)" fill="none" stroke-width="5.5">
+  <g transform="translate(31.084 2299.4)" fill="none" stroke-width="5.5">
    <path d="m20 132.36 75-32.857 85.714 33.571 77.143-32.857" stroke="#35b8ff" inkscape:connector-curvature="0"/>
    <path d="m20 55.219 75-32.857 85.714 33.571 77.143-32.857" stroke="#ffed35" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="ah" x="20" y="2457.8" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="2447.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
    </flowRegion>
    <flowDiv>然後對這兩條線段使用內插來建立漸層效果：</flowDiv>
   </flowRoot>
-  <g transform="translate(31.084 2463.8)" fill="none" stroke-width="5.5">
+  <g transform="translate(31.084 2453.4)" fill="none" stroke-width="5.5">
    <path d="m20 132.36 75-32.857 85.714 33.571 77.143-32.857" stroke="#35b8ff" inkscape:connector-curvature="0"/>
    <path d="m20 55.219 75-32.857 85.714 33.571 77.143-32.857" stroke="#ffed35" inkscape:connector-curvature="0"/>
    <path d="m20 59.757 75-32.857 85.714 33.571 77.143-32.857" stroke="#f3e940" inkscape:connector-curvature="0"/>
@@ -787,38 +787,38 @@
    <path d="m20 123.29 75-32.857 85.714 33.571 77.143-32.857" stroke="#4cbee7" inkscape:connector-curvature="0"/>
    <path d="m20 127.82 75-32.857 85.714 33.571 77.143-32.857" stroke="#40bbf3" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="ag" x="20" y="2617.2" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="2606.9" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ag"/>
    </flowRegion>
    <flowDiv>結論</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="2629.4" width="300" height="1e3px" display="none"/>
+  <rect id="af" x="20" y="2619.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#af"/>
    </flowRegion>
    <flowDiv>如同上面內容所呈現，Inkscape 的內插擴充功能是非常強大的工具。這篇教學講述了內插擴充功能的基本用法，但經過實驗和練習才能完全掌握內插的特性。</flowDiv>
   </flowRoot>
-  <use x="47" y="2693.6961073" inkscape:label="icon-credits-authors" xlink:href="#bg"/>
-  <rect id="bk" x="70" y="2687.7" width="230" height="1e3px" display="none"/>
+  <use x="47" y="2683.3219693" inkscape:label="icon-credits-authors" xlink:href="#bg"/>
+  <rect id="bk" x="70" y="2677.3" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
    <flowDiv>Josh Andler; Ryan Lerch; Colin Marquardt; Kris De Gussem; Nicolas Dufour; Sylvain Chiron; Gellért Gyuris</flowDiv>
   </flowRoot>
-  <use x="47" y="2718.4888813" inkscape:label="icon-credits-translators" xlink:href="#be"/>
-  <rect id="bi" x="70" y="2712.5" width="230" height="1e3px" display="none"/>
+  <use x="47" y="2708.1147433" inkscape:label="icon-credits-translators" xlink:href="#be"/>
+  <rect id="bi" x="70" y="2702.1" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>Dong-Jun Wu — 2009, 2014</flowDiv>
+   <flowDiv>dongjun wu — 2009</flowDiv>
   </flowRoot>
-  <use x="47" y="2735.9234516" inkscape:label="icon-credits-designer" xlink:href="#bf"/>
-  <rect id="bj" x="70" y="2729.9" width="230" height="1e3px" display="none"/>
+  <use x="47" y="2725.7075167" inkscape:label="icon-credits-designer" xlink:href="#bf"/>
+  <rect id="bj" x="70" y="2719.7" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#bj"/>
@@ -827,7 +827,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="bh" transform="translate(0 2577.5)">
+  <g id="bh" transform="translate(0 2567.3)">
    <defs>
     <filter id="j" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

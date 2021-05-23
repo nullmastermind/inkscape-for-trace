@@ -423,10 +423,10 @@
    <flowRegion>
     <use xlink:href="#ah"/>
    </flowRegion>
-   <flowDiv/>
+   <flowDiv>Мирослав Николић — 2021</flowDiv>
   </flowRoot>
-  <use x="47" y="1691.6327342" inkscape:label="icon-credits-designer" xlink:href="#ae"/>
-  <rect id="ai" x="70" y="1685.6" width="230" height="1e3px" display="none"/>
+  <use x="47" y="1697.2255076" inkscape:label="icon-credits-designer" xlink:href="#ae"/>
+  <rect id="ai" x="70" y="1691.2" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#ai"/>
@@ -435,7 +435,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="ag" transform="translate(0 1533.2)">
+  <g id="ag" transform="translate(0 1538.8)">
    <defs>
     <filter id="j" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

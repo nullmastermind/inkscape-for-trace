@@ -423,10 +423,10 @@
    <flowRegion>
     <use xlink:href="#ah"/>
    </flowRegion>
-   <flowDiv>GLUD-ACL — 2005</flowDiv>
+   <flowDiv>GLUD-ACL (Grupo Linux universidad Distrital - Academia y Conocimiento Libre) — 2005</flowDiv>
   </flowRoot>
-  <use x="47" y="1682.5102523" inkscape:label="icon-credits-designer" xlink:href="#ae"/>
-  <rect id="ai" x="70" y="1676.5" width="230" height="1e3px" display="none"/>
+  <use x="47" y="1689.8684554" inkscape:label="icon-credits-designer" xlink:href="#ae"/>
+  <rect id="ai" x="70" y="1683.9" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#ai"/>
@@ -435,7 +435,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="ag" transform="translate(0 1524.1)">
+  <g id="ag" transform="translate(0 1531.5)">
    <defs>
     <filter id="j" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

@@ -259,10 +259,10 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#bx"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Elements of design</tspan></tspan></text>
-  <rect id="bb" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="az" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#bb"/>
+    <use xlink:href="#az"/>
    </flowRegion>
    <flowDiv>Deze handleiding demonstreert de elementen en ontwerpbeginselen die normaal aan kunststudenten aangeleerd worden om de verschillende aspecten in kunst te begrijpen. Dit is geen exclusieve lijst, dus voeg toe, haal uit en combineer om deze handleiding meer omvattend te maken.</flowDiv>
   </flowRoot>
@@ -286,31 +286,31 @@
   <text transform="translate(20 193.11) scale(1 .99997)" x="168.14247" y="126.60123" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.772px" stroke-width="2.9431pt" style="line-height:0%" xml:space="preserve"><tspan x="168.14247" y="126.60123" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" font-size="7.8481px" stroke-width="2.9431pt" style="line-height:1" sodipodi:role="line">Gradatie</tspan></text>
   <text transform="translate(20 193.11)" x="124.19861" y="79.084373" fill="#ffffff" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.772px" font-weight="bold" stroke-width="2.9431pt" style="line-height:0%" xml:space="preserve"><tspan x="124.19861" y="79.084373" dx="0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0" fill="#ffffff" font-size="7.8483px" stroke-width="2.9431pt" style="line-height:1" sodipodi:role="line">Compositie</tspan></text>
   <text transform="translate(20 193.11)" x="5.103054" y="12.210741" fill="#000000" fill-opacity=".21476" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.772px" font-weight="bold" stroke-width="2.9431pt" style="line-height:0%" xml:space="preserve"><tspan x="5.103054" y="12.210741" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#000000" fill-opacity=".21476" font-size="9.8104px" stroke-width="2.9431pt" style="line-height:1" sodipodi:role="line">Overzicht</tspan></text>
-  <rect id="ba" x="20" y="375.41" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="375.41" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ba"/>
-   </flowRegion>
-   <flowDiv>Ontwerpbeginselen</flowDiv>
-  </flowRoot>
-  <rect id="az" x="20" y="387.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#az"/>
-   </flowRegion>
-   <flowDiv>De volgende elementen zijn de bauwstenen van een ontwerp.</flowDiv>
-  </flowRoot>
-  <rect id="ay" x="20" y="410.18" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv>Lijn</flowDiv>
+   <flowDiv>Ontwerpbeginselen</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="421.77" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="387.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
+   </flowRegion>
+   <flowDiv>De volgende elementen zijn de bauwstenen van een ontwerp.</flowDiv>
+  </flowRoot>
+  <rect id="aw" x="20" y="410.18" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#aw"/>
+   </flowRegion>
+   <flowDiv>Lijn</flowDiv>
+  </flowRoot>
+  <rect id="av" x="20" y="421.77" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#av"/>
    </flowRegion>
    <flowDiv>Een lijn is gedefinieerd als een merkteken met lengte en richting, gemaakt door een punt dat langs een oppervlak beweegt. Een lijn kan variëren in lengte, breedte, richting, kromming en kleur. Een lijn kan tweedimensionaal (een potloodlijn op papier) of impliciet 3D zijn.</flowDiv>
   </flowRoot>
@@ -326,17 +326,17 @@
    <path d="m307.64 433.78-60.474 66.219-0.10437-15.79 60.574-55.538z" fill-rule="evenodd" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
    <path d="m307.64 440.1-60.474 79.034-0.10437-15.79 60.574-68.353z" fill-rule="evenodd" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
   </g>
-  <rect id="aw" x="20" y="585" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="585" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aw"/>
+    <use xlink:href="#au"/>
    </flowRegion>
    <flowDiv>Vorm</flowDiv>
   </flowRoot>
-  <rect id="av" x="20" y="594.83" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="594.83" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#av"/>
+    <use xlink:href="#at"/>
    </flowRegion>
    <flowDiv>Een vorm wordt gemaakt wanneer lijnen elkaar snijden en een ruimte omgeven. Een verandering in kleur of schaduw kan een vorm definiëren. Vormen kunnen verdeeld worden in verschillende types: geometrisch (vierkant, driehoek, cirkel) of organisch (onregelmatig).</flowDiv>
   </flowRoot>
@@ -346,34 +346,34 @@
    <rect x="28.147" y="628.75" width="65.282" height="65.282" fill-rule="evenodd" stroke-width="1pt"/>
    <path transform="matrix(1.1957 0 0 1.1957 83.878 -215.2)" d="m175.45 733.14c0 14.808-12.004 26.812-26.812 26.812s-26.812-12.004-26.812-26.812 12.004-26.812 26.812-26.812 26.812 12.004 26.812 26.812z" fill-rule="evenodd" stroke-width="1pt" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="au" x="20" y="758" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="758" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#au"/>
+    <use xlink:href="#as"/>
    </flowRegion>
    <flowDiv>Grootte</flowDiv>
   </flowRoot>
-  <rect id="at" x="20" y="767.91" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="767.91" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#at"/>
+    <use xlink:href="#ar"/>
    </flowRegion>
    <flowDiv>Grootte refereert naar variaties in de proporties van objecten, lijnen of vormen. Er is zowel werkelijke als veronderstelde variatie in objectgrootte.</flowDiv>
   </flowRoot>
   <rect transform="translate(20 803.91)" x=".24455" y=".24454" width="299.51" height="99.125" fill="none" stroke="#000" stroke-width=".4891"/>
   <text transform="translate(20 803.91) scale(.99998 1)" x="67.585907" y="93.976639" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.778px" font-weight="bold" stroke-width="2.9445pt" style="line-height:0%" xml:space="preserve"><tspan x="67.585907" y="93.976639" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#000000" font-size="120.04px" stroke-width="2.9445pt" style="line-height:1" sodipodi:role="line">GR</tspan></text>
   <text transform="translate(20 803.91) scale(.99998 1)" x="41.980042" y="93.882477" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.778px" font-weight="bold" stroke-width="2.9445pt" style="line-height:0%" xml:space="preserve"><tspan x="41.980042" y="93.882477" dx="0 0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0 0" fill="#000000" font-size="9.8902px" stroke-width="2.9445pt" style="line-height:1" sodipodi:role="line">klein</tspan></text>
-  <rect id="as" x="20" y="920.53" width="300" height="1e3px" display="none"/>
+  <rect id="aq" x="20" y="920.53" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#as"/>
+    <use xlink:href="#aq"/>
    </flowRegion>
    <flowDiv>Ruimte</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="930.63" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="930.63" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ar"/>
+    <use xlink:href="#ap"/>
    </flowRegion>
    <flowDiv>Ruimte zijn de lege of open gebieden tussen, rond, boven, onder of in objecten. Vormen worden bepaald door de ruimte rondom en binnenin ze. Ruimte wordt vaak drie- of tweedimensionaal genoemd. Positieve ruimte wordt gevuld door een vorm. Negatieve ruimte omgeeft een vorm.</flowDiv>
   </flowRoot>
@@ -381,17 +381,17 @@
   <rect transform="translate(20 987.91)" x="28.245" y="3.8605" width="98.737" height="89.246" fill-rule="evenodd"/>
   <path transform="translate(20 987.91)" d="m265.32 47.927c0 22.433-18.186 40.619-40.619 40.619-22.433 0-40.619-18.186-40.619-40.619s18.186-40.619 40.619-40.619c22.433 0 40.619 18.186 40.619 40.619z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
   <path transform="translate(20 987.91)" d="m118.4 47.927c0 22.433-18.186 40.619-40.619 40.619-22.433 0-40.619-18.186-40.619-40.619s18.186-40.619 40.619-40.619c22.433 0 40.619 18.186 40.619 40.619z" fill="#fff" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="aq" x="20" y="1104.5" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="1104.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aq"/>
+    <use xlink:href="#ao"/>
    </flowRegion>
    <flowDiv>Kleur</flowDiv>
   </flowRoot>
-  <rect id="ap" x="20" y="1114.6" width="300" height="1e3px" display="none"/>
+  <rect id="an" x="20" y="1114.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ap"/>
+    <use xlink:href="#an"/>
    </flowRegion>
    <flowDiv>Kleur is het gepercipieerde karakter van een oppervlak overeenkomstig de golflente van het reflecterende licht. Kleur heeft drie dimensies: tint (ander woord voor kleur, aangeduid door zijn naam zoals rood of geel), verzadiging (hoeveelheid kleur) en intensiteit (helder of mat).</flowDiv>
   </flowRoot>
@@ -407,17 +407,17 @@
    </linearGradient>
   </defs>
   <rect transform="translate(20 1161.3)" x=".24455" y=".24455" width="299.51" height="99.125" fill="url(#et)" fill-rule="evenodd" stroke="#000" stroke-width=".4891"/>
-  <rect id="ao" x="20" y="1277.9" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="1277.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ao"/>
+    <use xlink:href="#am"/>
    </flowRegion>
    <flowDiv>Textuur</flowDiv>
   </flowRoot>
-  <rect id="an" x="20" y="1287.7" width="300" height="1e3px" display="none"/>
+  <rect id="al" x="20" y="1287.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#an"/>
+    <use xlink:href="#al"/>
    </flowRegion>
    <flowDiv>Textuur is hoe een oppervlak aanvoelt (actuele textuur) of eruit ziet (veronderstelde textuur). Texturen worden beschreven door woorden als ruw, zijde- of kiezelachtig.</flowDiv>
   </flowRoot>
@@ -436,17 +436,17 @@
   <rect transform="translate(20 1323.7)" x=".076369" y=".82354" width="299.19" height="53.237" fill="url(#eq)"/>
   <rect transform="translate(20 1323.7)" x=".076369" y="22.907" width="299.19" height="53.237" fill="url(#er)"/>
   <rect transform="translate(20 1323.7)" x=".076369" y="45.773" width="299.19" height="53.237" fill="url(#es)"/>
-  <rect id="am" x="20" y="1440.3" width="300" height="1e3px" display="none"/>
+  <rect id="ak" x="20" y="1440.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#am"/>
+    <use xlink:href="#ak"/>
    </flowRegion>
    <flowDiv>Helderheid</flowDiv>
   </flowRoot>
-  <rect id="al" x="20" y="1450.4" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="1450.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#al"/>
+    <use xlink:href="#aj"/>
    </flowRegion>
    <flowDiv>Helderheid is hoe donker of licht iets eruit ziet. Veranderingen in helderheid worden bereikt door zwart of wit aan de kleur toe te voegen. Clair-obscur gebruikt helderheid in afbeeldingen voor het dramatisch verhogen van contrasten in een compositie.</flowDiv>
   </flowRoot>
@@ -475,31 +475,31 @@
   <rect transform="translate(20 1497.1)" x="8.256" y="49.627" width="282.04" height="20.595" fill="url(#el)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1497.1)" x="8.256" y="29.032" width="282.04" height="20.595" fill="url(#em)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1497.1)" x="8.256" y="8.4366" width="282.04" height="20.595" fill="url(#en)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="ak" x="20" y="1614.1" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="1614.1" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ak"/>
-   </flowRegion>
-   <flowDiv>Ontwerpprincipes</flowDiv>
-  </flowRoot>
-  <rect id="aj" x="20" y="1626.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#aj"/>
-   </flowRegion>
-   <flowDiv>De principes gebruiken de ontwerpelementen om een compositie te maken.</flowDiv>
-  </flowRoot>
-  <rect id="ai" x="20" y="1648.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
-   <flowDiv>Balans</flowDiv>
+   <flowDiv>Ontwerpprincipes</flowDiv>
   </flowRoot>
-  <rect id="ah" x="20" y="1658.9" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="1626.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
+   </flowRegion>
+   <flowDiv>De principes gebruiken de ontwerpelementen om een compositie te maken.</flowDiv>
+  </flowRoot>
+  <rect id="ag" x="20" y="1648.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#ag"/>
+   </flowRegion>
+   <flowDiv>Balans</flowDiv>
+  </flowRoot>
+  <rect id="af" x="20" y="1658.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#af"/>
    </flowRegion>
    <flowDiv>Balans is het gevoel van visuele gelijkheid in vorm, helderheid, kleur, etc. Balans kan symmetrisch of asymmetrisch zijn. Objecten, helderheid, kleuren, texturen, vormen, etc. kunnen gebruikt worden voor de balans in een compositie.</flowDiv>
   </flowRoot>
@@ -509,17 +509,17 @@
   <path transform="translate(20 1705.5)" d="m69.226 34.74c0 18.928-15.344 34.272-34.271 34.272-18.928 0-34.271-15.344-34.271-34.272s15.344-34.272 34.271-34.272c18.928 0 34.271 15.344 34.271 34.272z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1705.5)" d="m273.22 74.46c0 9.2682-7.5134 16.782-16.782 16.782s-16.782-7.5134-16.782-16.782c0-9.2682 7.5134-16.782 16.782-16.782s16.782 7.5134 16.782 16.782z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1705.5)" d="m243.96 40.898c0 18.928-15.344 34.272-34.271 34.272s-34.271-15.344-34.271-34.272 15.344-34.272 34.271-34.272 34.271 15.344 34.271 34.272z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="ag" x="20" y="1822.1" width="300" height="1e3px" display="none"/>
+  <rect id="bt" x="20" y="1822.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ag"/>
+    <use xlink:href="#bt"/>
    </flowRegion>
    <flowDiv>Contrast</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="1832" width="300" height="1e3px" display="none"/>
+  <rect id="bs" x="20" y="1832" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#af"/>
+    <use xlink:href="#bs"/>
    </flowRegion>
    <flowDiv>Contrast is de nevenschikking van tegengestelde elementen.</flowDiv>
   </flowRoot>
@@ -527,17 +527,17 @@
   <rect transform="translate(20 1857.3)" x="181.39" y="21.039" width="86.96" height="57.58" fill="#fff" fill-rule="evenodd"/>
   <rect transform="translate(20 1857.3)" x=".24466" y=".24455" width="149.77" height="99.168" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".48931"/>
   <rect transform="translate(20 1857.3)" x="31.648" y="21.039" width="86.96" height="57.58" fill="#d4d4d4" fill-rule="evenodd"/>
-  <rect id="bt" x="20" y="1974" width="300" height="1e3px" display="none"/>
+  <rect id="br" x="20" y="1974" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#bt"/>
+    <use xlink:href="#br"/>
    </flowRegion>
    <flowDiv>Klemtoon</flowDiv>
   </flowRoot>
-  <rect id="bs" x="20" y="1984.1" width="300" height="1e3px" display="none"/>
+  <rect id="bq" x="20" y="1984.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bs"/>
+    <use xlink:href="#bq"/>
    </flowRegion>
    <flowDiv>Klemtoon wordt gebruikt om bepaalde delen van het kunstwerk te accentueren en je aandacht te trekken. Het middelpunt van de aandacht of focaal punt is de plaats in een werk waar je oog het eerst naar kijkt.</flowDiv>
   </flowRoot>
@@ -546,17 +546,17 @@
   <rect transform="translate(20 2030.6)" x=".24466" y=".24455" width="149.77" height="99.169" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".48931"/>
   <rect transform="translate(20 2030.6)" x="31.649" y="21.039" width="86.96" height="57.581" fill="#d4d4d4" fill-rule="evenodd"/>
   <path transform="translate(20 2030.6)" d="m267 66.642c0 6.1415-4.9786 11.12-11.12 11.12-6.1414 0-11.12-4.9786-11.12-11.12 0-6.1414 4.9786-11.12 11.12-11.12 6.1414 0 11.12 4.9786 11.12 11.12z" fill="#f00" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="br" x="20" y="2147.3" width="300" height="1e3px" display="none"/>
+  <rect id="bp" x="20" y="2147.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#br"/>
+    <use xlink:href="#bp"/>
    </flowRegion>
    <flowDiv>Proportie</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="2158.9" width="300" height="1e3px" display="none"/>
+  <rect id="bo" x="20" y="2158.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bq"/>
+    <use xlink:href="#bo"/>
    </flowRegion>
    <flowDiv>Proportie beschrijft de grootte, plaats of hoeveelheid van een ding in vergelijking met een ander.</flowDiv>
   </flowRoot>
@@ -673,17 +673,17 @@
   </g>
   <use transform="translate(20 2193.3) matrix(1.7185 0 0 1.7185 141.7 -40.576) translate(-20 -2193.3)" width="320" height="3146.25" xlink:href="#ej"/>
   <use transform="translate(20 2193.3) matrix(.25 0 0 .25 242.02 39.847) translate(-20 -2193.3)" width="320" height="3146.25" xlink:href="#ei"/>
-  <rect id="bp" x="20" y="2328.5" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="2328.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#bp"/>
+    <use xlink:href="#bn"/>
    </flowRegion>
    <flowDiv>Patroon</flowDiv>
   </flowRoot>
-  <rect id="bo" x="20" y="2338.3" width="300" height="1e3px" display="none"/>
+  <rect id="bm" x="20" y="2338.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bo"/>
+    <use xlink:href="#bm"/>
    </flowRegion>
    <flowDiv>Een patroon wordt gemaakt door het steeds herhalen van een element (lijn, vorm of kleur).</flowDiv>
   </flowRoot>
@@ -700,17 +700,17 @@
   <rect transform="translate(20 2363.7)" x=".16661" y=".3482" width="299.66" height="98.884" fill="url(#dq)"/>
   <rect transform="translate(20 2363.7)" x=".33523" y=".31848" width="299.33" height="98.745" fill="none"/>
   <rect transform="translate(20 2363.7)" x=".24455" y=".24468" width="299.51" height="99.125" fill="none" stroke="#000" stroke-width=".4891"/>
-  <rect id="bn" x="20" y="2480.3" width="300" height="1e3px" display="none"/>
+  <rect id="bl" x="20" y="2480.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#bn"/>
+    <use xlink:href="#bl"/>
    </flowRegion>
    <flowDiv>Gradatie</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="2490.4" width="300" height="1e3px" display="none"/>
+  <rect id="bk" x="20" y="2490.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bm"/>
+    <use xlink:href="#bk"/>
    </flowRegion>
    <flowDiv>Gradatie in grootte en richting zorgt voor een lineair perspectief. Gradatie in kleur van warm naar koud en toon van donker naar licht produceert een atmosferisch perspectief. Gradatie kan voor interesse in en beweging van een vorm zorgen. Een gradatie van donker naar licht laat het oog bewegen langs de vorm.</flowDiv>
   </flowRoot>
@@ -730,17 +730,17 @@
   <path transform="translate(20 2547.7)" d="m185.56 61.748v-23.735l114.02-37.608v98.952z" fill="url(#dm)" fill-rule="evenodd" stroke="#000" stroke-width=".49075" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
   <path transform="translate(20 2547.7)" d="m299.58 0.40467h-299.2l114.02 37.608h71.161z" fill="url(#dn)" fill-rule="evenodd" stroke="#000" stroke-width=".49075" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
   <path transform="translate(20 2547.7)" d="m299.58 99.357h-299.2l114.02-37.608h71.161z" fill="url(#do)" fill-rule="evenodd" stroke="#000" stroke-width=".49075" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
-  <rect id="bl" x="20" y="2664.8" width="300" height="1e3px" display="none"/>
+  <rect id="bj" x="20" y="2664.8" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#bl"/>
+    <use xlink:href="#bj"/>
    </flowRegion>
    <flowDiv>Compositie</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="2677.2" width="300" height="1e3px" display="none"/>
+  <rect id="bi" x="20" y="2677.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bk"/>
+    <use xlink:href="#bi"/>
    </flowRegion>
    <flowDiv>Compositie is de combinatie van verschillende elementen in een geheel.</flowDiv>
   </flowRoot>
@@ -854,64 +854,64 @@
    <path d="m247.23 2943.6 22.679-24.915 21.719 12.574z" fill="url(#ck)" inkscape:connector-curvature="0" sodipodi:nodetypes="cccc"/>
   </g>
   <path transform="translate(20 2702.5)" d="m183.96 67.522-6.5922 24.302 15.127 4.3247 11.686-0.83637 10.826 3.4645 15.987 0.02384 27.585-2.0178 21.478-9.3005-5.3361-3.9249-2.6681-1.5324-3.5282 0.18795-4.3884 3.1985-1.8079 1.4782-4.476 2.0963-7.9166 2.0962-7.0565-1.3444-8.7768 5.537-1.8955-4.7851-3.5021 0.0073-4.3622-1.7132-0.0614-4.2936-2.6419-4.2936-7.1269 3.4696-4.5464-2.5516-1.1058-7.7126-3.4916-1.9173-3.4916 0.66323-2.6824 3.0466-3.6446-4.2287-6.2251-1.2918z" fill="url(#cz)" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccccccccccccccccccccccc"/>
-  <rect id="bj" x="20" y="2820.4" width="300" height="1e3px" display="none"/>
+  <rect id="bh" x="20" y="2820.4" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#bj"/>
-   </flowRegion>
-   <flowDiv>Bibliografie</flowDiv>
-  </flowRoot>
-  <rect id="bi" x="20" y="2832.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bi"/>
-   </flowRegion>
-   <flowDiv>Dit is een gedeeltelijke bibliografie die gebruikt is voor het maken van dit document.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 2856.3)" r="2"/>
-  <rect id="bh" x="40" y="2850.3" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.makart.com/resources/artclass/EPlist.html</flowSpan></flowDiv>
+   <flowDiv>Bibliografie</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2873.7)" r="2"/>
-  <rect id="bg" x="40" y="2867.7" width="280" height="1e3px" display="none"/>
+  <rect id="bg" x="20" y="2832.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.princetonol.com/groups/iad/Files/elements2.htm</flowSpan></flowDiv>
+   <flowDiv>Dit is een gedeeltelijke bibliografie die gebruikt is voor het maken van dit document.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2891.2)" r="2"/>
-  <rect id="bf" x="40" y="2885.2" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2856.3)" r="2"/>
+  <rect id="bf" x="40" y="2850.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.johnlovett.com/test.htm</flowSpan></flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.makart.com/resources/artclass/EPlist.html</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2908.7)" r="2"/>
-  <rect id="be" x="40" y="2902.7" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2873.7)" r="2"/>
+  <rect id="be" x="40" y="2867.7" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/elements_of_design/</flowSpan></flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.princetonol.com/groups/iad/Files/elements2.htm</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2926.1)" r="2"/>
-  <rect id="bd" x="40" y="2920.1" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2891.2)" r="2"/>
+  <rect id="bd" x="40" y="2885.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/principles_of_design/</flowSpan></flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.johnlovett.com/test.htm</flowSpan></flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="2937.6" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2908.7)" r="2"/>
+  <rect id="bc" x="40" y="2902.7" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/elements_of_design/</flowSpan></flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 2926.1)" r="2"/>
+  <rect id="bb" x="40" y="2920.1" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bb"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/principles_of_design/</flowSpan></flowDiv>
+  </flowRoot>
+  <rect id="ba" x="20" y="2937.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ba"/>
    </flowRegion>
    <flowDiv>Special thanks to Linda Kim (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.coroflot.com/redlucite/</flowSpan>) for helping me (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.rejon.org/</flowSpan>) with this tutorial. Also, thanks to the Open Clip Art Library (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.openclipart.org/</flowSpan>) and the graphics people have submitted to that project.</flowDiv>
   </flowRoot>

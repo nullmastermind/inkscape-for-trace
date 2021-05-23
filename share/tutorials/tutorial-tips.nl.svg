@@ -519,7 +519,7 @@
    <flowRegion>
     <use xlink:href="#ab"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i rechthoek-id -t bestandsnaam.svg</flowSpan></flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i area-id -t filename.svg</flowSpan></flowDiv>
   </flowRoot>
   <rect id="aa" x="20" y="1088.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">

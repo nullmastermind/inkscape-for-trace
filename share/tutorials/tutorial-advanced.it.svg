@@ -259,73 +259,73 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#bv"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Avanzato</tspan></tspan></text>
-  <rect id="aa" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="ap" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#aa"/>
+    <use xlink:href="#ap"/>
    </flowRegion>
    <flowDiv>Questo tutorial tratterà di copia/incolla, modifica dei nodi, disegno a mano libera e con penna, manipolazione di tracciati, strumenti booleani, proiezione, semplificazione e testo.</flowDiv>
   </flowRoot>
-  <rect id="x" x="40" y="174.4" width="264" height="1e3px" display="none"/>
+  <rect id="an" x="40" y="174.4" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#x"/>
+    <use xlink:href="#an"/>
    </flowRegion>
    <flowDiv>Use <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">arrows</flowSpan>, <flowSpan font-weight="bold">mouse wheel</flowSpan>, or <flowSpan font-weight="bold">middle button drag</flowSpan> to scroll the page down. For basics of object creation, selection, and transformation, see the Basic tutorial in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Tutorials</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="w" x="20" y="220.12" width="300" height="1e3px" display="none"/>
+  <rect id="y" x="20" y="220.12" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#w"/>
+    <use xlink:href="#y"/>
    </flowRegion>
    <flowDiv>Tecniche di incollaggio</flowDiv>
   </flowRoot>
-  <rect id="v" x="20" y="232.62" width="300" height="1e3px" display="none"/>
+  <rect id="x" x="20" y="232.62" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#x"/>
+   </flowRegion>
+   <flowDiv>After you copy some object(s) by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan> or cut by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>, the regular <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste</flowSpan> command (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>) pastes the copied object(s) right under the mouse cursor or, if the cursor is outside the window, to the center of the document window. However, the object(s) in the clipboard still remember the original place from which they were copied, and you can paste back there by <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste In Place</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>).</flowDiv>
+  </flowRoot>
+  <rect id="w" x="20" y="292.71" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#w"/>
+   </flowRegion>
+   <flowDiv>Another command, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Style</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>), applies the style of the (first) object on the clipboard to the current selection. The “style” thus pasted includes all the fill, stroke, and font settings, but not the shape, size, or parameters specific to a shape type, such as the number of tips of a star.</flowDiv>
+  </flowRoot>
+  <rect id="v" x="20" y="342.16" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#v"/>
    </flowRegion>
-   <flowDiv>After you copy some object(s) by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan> or cut by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>, the regular <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste</flowSpan> command (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>) pastes the copied object(s) right under the mouse cursor or, if the cursor is outside the window, to the center of the document window. However, the object(s) in the clipboard still remember the original place from which they were copied, and you can paste back there by <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste In Place</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>).</flowDiv>
+   <flowDiv>Yet another set of paste commands, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Size</flowSpan>, scales the selection to match the desired size attribute of the clipboard object(s). There are a number of commands for pasting size and are as follows: Paste Size, Paste Width, Paste Height, Paste Size Separately, Paste Width Separately, and Paste Height Separately.</flowDiv>
   </flowRoot>
-  <rect id="u" x="20" y="292.71" width="300" height="1e3px" display="none"/>
+  <rect id="u" x="20" y="391.61" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#u"/>
    </flowRegion>
-   <flowDiv>Another command, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Style</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>), applies the style of the (first) object on the clipboard to the current selection. The “style” thus pasted includes all the fill, stroke, and font settings, but not the shape, size, or parameters specific to a shape type, such as the number of tips of a star.</flowDiv>
+   <flowDiv><flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Size</flowSpan> scales the whole selection to match the overall size of the clipboard object(s). <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Width</flowSpan>/<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Height</flowSpan> scale the whole selection horizontally/vertically so that it matches the width/height of the clipboard object(s). These commands honor the scale ratio lock on the Selector Tool controls bar (between W and H fields), so that when that lock is pressed, the other dimension of the selected object is scaled in the same proportion; otherwise the other dimension is unchanged. The commands containing “Separately” work similarly to the above described commands, except that they scale each selected object separately to make it match the size/width/height of the clipboard object(s).</flowDiv>
   </flowRoot>
-  <rect id="t" x="20" y="342.16" width="300" height="1e3px" display="none"/>
+  <rect id="t" x="20" y="483.72" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#t"/>
    </flowRegion>
-   <flowDiv>Yet another set of paste commands, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Size</flowSpan>, scales the selection to match the desired size attribute of the clipboard object(s). There are a number of commands for pasting size and are as follows: Paste Size, Paste Width, Paste Height, Paste Size Separately, Paste Width Separately, and Paste Height Separately.</flowDiv>
+   <flowDiv>La clipboard può essere usata per copiare/incollare oggetti tra varie istanze di Inkscape e altre applicazioni (che devono essere in grado di gestire i file SVG nella clipboard per usare questa funzione).</flowDiv>
   </flowRoot>
-  <rect id="s" x="20" y="391.61" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="s" x="20" y="527.66" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#s"/>
    </flowRegion>
-   <flowDiv><flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Size</flowSpan> scales the whole selection to match the overall size of the clipboard object(s). <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Width</flowSpan>/<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Height</flowSpan> scale the whole selection horizontally/vertically so that it matches the width/height of the clipboard object(s). These commands honor the scale ratio lock on the Selector Tool controls bar (between W and H fields), so that when that lock is pressed, the other dimension of the selected object is scaled in the same proportion; otherwise the other dimension is unchanged. The commands containing “Separately” work similarly to the above described commands, except that they scale each selected object separately to make it match the size/width/height of the clipboard object(s).</flowDiv>
+   <flowDiv>Disegno a mano libera e percorsi regolari</flowDiv>
   </flowRoot>
-  <rect id="r" x="20" y="483.72" width="300" height="1e3px" display="none"/>
+  <rect id="r" x="20" y="540.15" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#r"/>
-   </flowRegion>
-   <flowDiv>La clipboard può essere usata per copiare/incollare oggetti tra varie istanze di Inkscape e altre applicazioni (che devono essere in grado di gestire i file SVG nella clipboard per usare questa funzione).</flowDiv>
-  </flowRoot>
-  <rect id="q" x="20" y="527.66" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#q"/>
-   </flowRegion>
-   <flowDiv>Disegno a mano libera e percorsi regolari</flowDiv>
-  </flowRoot>
-  <rect id="p" x="20" y="540.15" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#p"/>
    </flowRegion>
    <flowDiv>Il modo più facile per creare una forma arbitraria è disegnare usando lo strumento Pastello (a mano libera, <flowSpan font-weight="bold">F6</flowSpan>):</flowDiv>
   </flowRoot>
@@ -338,10 +338,10 @@
   <path transform="translate(20 576.13)" d="m128.22 10.791c0.45322 0.67983-16.446 58.368-18.214 65-6.2285 23.357-13.256 15.48 2.8572-12.143 7.9942-13.704 20.377-26.489 12.5-2.8571-3.6409 10.923-12.324-1.9714-8.5714 9.2857 2.1318 6.3955 3.5815 10.662 10.714 9.6429" color="#000000" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cccccc"/>
   <path transform="translate(20 576.13)" d="m171.79 48.291c-0.9245 1.3868-3.4525-0.61898-5 0-15.47 6.1878-25.187 28.823-0.71428 23.929 2.5602-0.51204 4.7619-2.1428 7.1428-3.2143" color="#000000" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 576.13)" d="m233.57 51.862c-0.0235 0.04222 8.2119-2.601 14.643-5.3571 13.015-5.578 12.875-20.01-2.1428-11.429-10.41 5.9488-18.703 23.929-1.0714 23.929 9.3689 0 21.654-3.8909 28.929-10.357" color="#000000" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="o" x="20" y="700.02" width="300" height="1e3px" display="none"/>
+  <rect id="q" x="20" y="700.02" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#o"/>
+    <use xlink:href="#q"/>
    </flowRegion>
    <flowDiv>If you want more regular shapes, use the Pen (Bezier) tool (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">F6</flowSpan>):</flowDiv>
   </flowRoot>
@@ -354,81 +354,81 @@
   <path transform="translate(20 725.38)" d="m171.94 33.515h25.411s-15.372 0.2789-15.999 13.387c-0.62742 13.108 7.398 17.195 13.019 11.574 5.952-5.952 7.4291-24.649 7.4291-24.649v31.203" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cccscc"/>
   <path transform="translate(20 725.38)" d="m208.33 73.397v-40.161h13.6c14.158 0 5.224 11.84-0.83268 18.686-6.025 6.8097-8.8001 5.641-8.8001-2.2312" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cccsc"/>
   <path transform="translate(20 725.38)" d="m229.79 44.95h37.646s-0.31371-11.156-17.568-11.435c-17.254-0.2789-15.686 17.849-15.686 23.427s5.0194 15.897 17.882 15.897c12.862 0 15.372-13.666 15.372-20.081" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="n" x="20" y="810.93" width="300" height="1e3px" display="none"/>
+  <rect id="p" x="20" y="810.93" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#n"/>
+    <use xlink:href="#p"/>
    </flowRegion>
    <flowDiv>With the Pen tool, each <flowSpan font-weight="bold">click</flowSpan> creates a sharp node without any curve handles, so a series of clicks produces a sequence of straight line segments. <flowSpan font-weight="bold">click</flowSpan> and <flowSpan font-weight="bold">drag</flowSpan> creates a smooth Bezier node with two collinear opposite handles. Press <flowSpan font-weight="bold">Shift</flowSpan> while dragging out a handle to rotate only one handle and fix the other. As usual, <flowSpan font-weight="bold">Ctrl</flowSpan> limits the direction of either the current line segment or the Bezier handles to 15 degree increments. Pressing <flowSpan font-weight="bold">Enter</flowSpan> finalizes the line, <flowSpan font-weight="bold">Esc</flowSpan> cancels it. To cancel only the last segment of an unfinished line, press <flowSpan font-weight="bold">Backspace</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="881.66" width="300" height="1e3px" display="none"/>
+  <rect id="o" x="20" y="881.66" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#o"/>
+   </flowRegion>
+   <flowDiv>In entrambi gli strumenti, il tracciato attualmente selezionato mostra piccole <flowSpan font-style="italic">ancore</flowSpan> quadrate alle estremità. Queste ancore permettono di <flowSpan font-style="italic">continuare</flowSpan> questo percorso (disegnando da un ancora ad un altra) invece di crearne una nuova.</flowDiv>
+  </flowRoot>
+  <rect id="n" x="20" y="925.6" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#n"/>
+   </flowRegion>
+   <flowDiv>Modificare i tracciati</flowDiv>
+  </flowRoot>
+  <rect id="br" x="20" y="936.47" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>In entrambi gli strumenti, il tracciato attualmente selezionato mostra piccole <flowSpan font-style="italic">ancore</flowSpan> quadrate alle estremità. Queste ancore permettono di <flowSpan font-style="italic">continuare</flowSpan> questo percorso (disegnando da un ancora ad un altra) invece di crearne una nuova.</flowDiv>
+   <flowDiv>A differenza degli strumenti che creano forme, gli strumenti Penna e Pastello creano dei <flowSpan font-style="italic">tracciati</flowSpan>. Un tracciato è una sequenza di segmenti rettilinei e/o curve Bezier che, come ogni altro oggetto di Inkscape, possono avere qualunque riempimento e contorno. Ma, contrariamente alle forme, un percorso può essere modificato trascinando liberamente ognuno dei suoi nodi (non soltanto con le maniglie predefinite) o direttamente trascinando un segmento del tracciato. Seleziona questo tracciato e abilita allo strumento Nodo (<flowSpan font-weight="bold">F2</flowSpan>):</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="925.6" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <path transform="translate(20 1015)" d="m61.132 24.797c13.131-7.5023 29.978-20.055 44.278-15.242 11.145 3.7517 27.099 30.288 1.036 38.409 9.957 6.4533 24.035 1.2934 35.265-3.8125 23.27-10.38 33.246-27.439 66.295-28.884 12.583-0.7092 32.579 5.1682 30.26 17.36-1.719 9.0359-19.987 6.9789-28.851 3.3501-25.216-10.945-12.659-30.41-33.272-34.604-9.5239-2.142-21.256 1.3591-27.361 13.496" fill="none" stroke="#000" stroke-width="1.2529pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cscsscsss"/>
+  <rect id="bq" x="20" y="1078.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>Modificare i tracciati</flowDiv>
+   <flowDiv>You will see a number of gray square <flowSpan font-style="italic">nodes</flowSpan> on the path. These nodes can be <flowSpan font-style="italic">selected</flowSpan> by <flowSpan font-weight="bold">click</flowSpan>, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>, or by <flowSpan font-weight="bold">drag</flowSpan>ging a rubberband - exactly like objects are selected by the Selector tool. You can also click a path segment to automatically select the adjacent nodes. Selected nodes become highlighted and show their <flowSpan font-style="italic">node handles</flowSpan> - one or two small circles connected to each selected node by straight lines. The <flowSpan font-weight="bold">!</flowSpan> key inverts node selection in the current subpath(s) (i.e. subpaths with at least one selected node); <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">!</flowSpan> inverts in the entire path.</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="936.47" width="300" height="1e3px" display="none"/>
+  <rect id="bp" x="20" y="1160.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bp"/>
    </flowRegion>
-   <flowDiv>A differenza degli strumenti che creano forme, gli strumenti Penna e Pastello creano dei <flowSpan font-style="italic">tracciati</flowSpan>. Un tracciato è una sequenza di segmenti rettilinei e/o curve Bezier che, come ogni altro oggetto di Inkscape, possono avere qualunque riempimento e contorno. Ma, contrariamente alle forme, un percorso può essere modificato trascinando liberamente ognuno dei suoi nodi (non soltanto con le maniglie predefinite) o direttamente trascinando un segmento del tracciato. Seleziona questo tracciato e abilita allo strumento Nodo (<flowSpan font-weight="bold">F2</flowSpan>):</flowDiv>
+   <flowDiv>Paths are edited by <flowSpan font-weight="bold">drag</flowSpan>ging their nodes, node handles, or directly dragging a path segment. (Try to drag some nodes, handles, and path segments of the above path.) <flowSpan font-weight="bold">Ctrl</flowSpan> works as usual to restrict movement and rotation. The <flowSpan font-weight="bold">arrow</flowSpan> keys, <flowSpan font-weight="bold">Tab</flowSpan>, <flowSpan font-weight="bold">[</flowSpan>, <flowSpan font-weight="bold">]</flowSpan>, <flowSpan font-weight="bold">&lt;</flowSpan>, <flowSpan font-weight="bold">&gt;</flowSpan> keys with their modifiers all work just as they do in selector, but apply to nodes instead of objects. You can add nodes anywhere on a path by either double clicking or by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> at the desired location.</flowDiv>
   </flowRoot>
-  <path transform="translate(20 1015)" d="m61.132 24.797c13.131-7.5023 29.978-20.055 44.278-15.242 11.145 3.7517 27.099 30.288 1.036 38.409 9.957 6.4533 24.035 1.2934 35.265-3.8125 23.27-10.38 33.246-27.439 66.295-28.884 12.583-0.7092 32.579 5.1682 30.26 17.36-1.719 9.0359-19.987 6.9789-28.851 3.3501-25.216-10.945-12.659-30.41-33.272-34.604-9.5239-2.142-21.256 1.3591-27.361 13.496" fill="none" stroke="#000" stroke-width="1.2529pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cscsscsss"/>
-  <rect id="bo" x="20" y="1078.9" width="300" height="1e3px" display="none"/>
+  <rect id="bo" x="20" y="1220.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bo"/>
    </flowRegion>
-   <flowDiv>You will see a number of gray square <flowSpan font-style="italic">nodes</flowSpan> on the path. These nodes can be <flowSpan font-style="italic">selected</flowSpan> by <flowSpan font-weight="bold">click</flowSpan>, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>, or by <flowSpan font-weight="bold">drag</flowSpan>ging a rubberband - exactly like objects are selected by the Selector tool. You can also click a path segment to automatically select the adjacent nodes. Selected nodes become highlighted and show their <flowSpan font-style="italic">node handles</flowSpan> - one or two small circles connected to each selected node by straight lines. The <flowSpan font-weight="bold">!</flowSpan> key inverts node selection in the current subpath(s) (i.e. subpaths with at least one selected node); <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">!</flowSpan> inverts in the entire path.</flowDiv>
+   <flowDiv>You can delete nodes with <flowSpan font-weight="bold">Del</flowSpan> or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>. When deleting nodes it will try to retain the shape of the path, if you desire for the handles of the adjacent nodes to be retracted (not retaining the shape) you can delete with <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Del</flowSpan>. Additionally, you can duplicate (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) selected nodes. The path can be broken (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">B</flowSpan>) at the selected nodes, or if you select two endnodes on one path, you can join them (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">J</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="bn" x="20" y="1160.2" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="1280.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bn"/>
    </flowRegion>
-   <flowDiv>Paths are edited by <flowSpan font-weight="bold">drag</flowSpan>ging their nodes, node handles, or directly dragging a path segment. (Try to drag some nodes, handles, and path segments of the above path.) <flowSpan font-weight="bold">Ctrl</flowSpan> works as usual to restrict movement and rotation. The <flowSpan font-weight="bold">arrow</flowSpan> keys, <flowSpan font-weight="bold">Tab</flowSpan>, <flowSpan font-weight="bold">[</flowSpan>, <flowSpan font-weight="bold">]</flowSpan>, <flowSpan font-weight="bold">&lt;</flowSpan>, <flowSpan font-weight="bold">&gt;</flowSpan> keys with their modifiers all work just as they do in selector, but apply to nodes instead of objects. You can add nodes anywhere on a path by either double clicking or by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> at the desired location.</flowDiv>
+   <flowDiv>A node can be made <flowSpan font-style="italic">cusp</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), which means its two handles can move independently at any angle to each other; <flowSpan font-style="italic">smooth</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>), which means its handles are always on the same straight line (collinear); <flowSpan font-style="italic">symmetric</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Y</flowSpan>), which is the same as smooth, but the handles also have the same length; and <flowSpan font-style="italic">auto-smooth</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>), a special node that automatically adjusts the handles of the node and surrounding auto-smooth nodes to maintain a smooth curve. When you switch the type of node, you can preserve the position of one of the two handles by hovering your <flowSpan font-weight="bold">mouse</flowSpan> over it, so that only the other handle is rotated/scaled to match.</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="1220.1" width="300" height="1e3px" display="none"/>
+  <rect id="bm" x="20" y="1370.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv>You can delete nodes with <flowSpan font-weight="bold">Del</flowSpan> or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>. When deleting nodes it will try to retain the shape of the path, if you desire for the handles of the adjacent nodes to be retracted (not retaining the shape) you can delete with <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Del</flowSpan>. Additionally, you can duplicate (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) selected nodes. The path can be broken (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">B</flowSpan>) at the selected nodes, or if you select two endnodes on one path, you can join them (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">J</flowSpan>).</flowDiv>
+   <flowDiv>Also, you can <flowSpan font-style="italic">retract</flowSpan> a node's handle altogether by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>ing on it. If two adjacent nodes have their handles retracted, the path segment between them is a straight line. To pull out the retracted node, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> away from the node.</flowDiv>
   </flowRoot>
-  <rect id="bl" x="20" y="1280.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bl" x="20" y="1414.6" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv>A node can be made <flowSpan font-style="italic">cusp</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), which means its two handles can move independently at any angle to each other; <flowSpan font-style="italic">smooth</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>), which means its handles are always on the same straight line (collinear); <flowSpan font-style="italic">symmetric</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Y</flowSpan>), which is the same as smooth, but the handles also have the same length; and <flowSpan font-style="italic">auto-smooth</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>), a special node that automatically adjusts the handles of the node and surrounding auto-smooth nodes to maintain a smooth curve. When you switch the type of node, you can preserve the position of one of the two handles by hovering your <flowSpan font-weight="bold">mouse</flowSpan> over it, so that only the other handle is rotated/scaled to match.</flowDiv>
+   <flowDiv>Sottotracciati e Combinazione</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="1370.5" width="300" height="1e3px" display="none"/>
+  <rect id="bk" x="20" y="1425.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bk"/>
-   </flowRegion>
-   <flowDiv>Also, you can <flowSpan font-style="italic">retract</flowSpan> a node's handle altogether by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>ing on it. If two adjacent nodes have their handles retracted, the path segment between them is a straight line. To pull out the retracted node, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> away from the node.</flowDiv>
-  </flowRoot>
-  <rect id="bj" x="20" y="1414.6" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#bj"/>
-   </flowRegion>
-   <flowDiv>Sottotracciati e Combinazione</flowDiv>
-  </flowRoot>
-  <rect id="bi" x="20" y="1425.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bi"/>
    </flowRegion>
    <flowDiv>Un oggetto tracciato può contenere più di un <flowSpan font-style="italic">sottotracciato</flowSpan>. Un sottotracciato è una sequenza di nodi connessi tra loro. (Perciò se un tracciato ha più sottotracciati, non tutti i suoi nodi saranno connessi.) Sotto, a sinistra, ci sono tre sottotracciati che appartengono ad un unico tracciato composto; gli stessi tre sottotracciati sulla destra sono oggetti tracciati indipendenti:</flowDiv>
   </flowRoot>
@@ -436,71 +436,71 @@
   <path transform="translate(20 1482.7)" d="m219.19 6.7994c-6.51-7.5367-18.171-7.0049-26.384-2.6524-5.7006 3.0209-11.538 6.5132-15.338 11.723-5.1988 7.1283-0.61273 18.406 8.263 21.306 6.6534 1.8189 14.244-3.4636 8.9076-12.673" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cssss"/>
   <path transform="translate(20 1482.7)" d="m199.57 13.832c6.417-6.6213 17.628-1.3468 20.29 6.4263 2.2626 6.6075 2.766 14.498 9.1421 18.923 6.4116 4.4501 17.112 5.3114 21.246-2.2553 3.5305-6.4613-3.156-14.74-10.265-12.459" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cssss"/>
   <path transform="translate(20 1482.7)" d="m183.05 51.444c7.0405 4.8966 14.771-1.7301 19.71-6.7631 5.2389-5.3392 13.278-1.1573 16.921 4.3694 3.321 5.0383 11.7 8.3208 15.913 2.3237" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="csss"/>
-  <rect id="bh" x="20" y="1550" width="300" height="1e3px" display="none"/>
+  <rect id="bj" x="20" y="1550" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bj"/>
+   </flowRegion>
+   <flowDiv>Nota che un tracciato composto non è come un gruppo. Esso è un singolo oggetto che è selezionabile solo interamente. Se selezioni l'oggetto sulla sinistra e passi allo strumento Nodo, vedrai i nodi su tutti e tre i sottotracciati. Sulla sinistra, puoi vedere i nodi di un solo tracciato alla volta, non tutti assieme.</flowDiv>
+  </flowRoot>
+  <rect id="bi" x="20" y="1598.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bi"/>
+   </flowRegion>
+   <flowDiv>Inkscape can <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Combine</flowSpan> paths into a compound path (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">K</flowSpan>) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Break Apart</flowSpan> a compound path into separate paths (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">K</flowSpan>). Try these commands on the above examples. Since an object can only have one fill and stroke, a new compound path gets the style of the first (lowest in z-order) object being combined.</flowDiv>
+  </flowRoot>
+  <rect id="bh" x="20" y="1648.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv>Nota che un tracciato composto non è come un gruppo. Esso è un singolo oggetto che è selezionabile solo interamente. Se selezioni l'oggetto sulla sinistra e passi allo strumento Nodo, vedrai i nodi su tutti e tre i sottotracciati. Sulla sinistra, puoi vedere i nodi di un solo tracciato alla volta, non tutti assieme.</flowDiv>
+   <flowDiv>Quando combini tracciati con riempimento sovrapponendoli, di solito il riempimento sparirà nell'area dove i tracciati si sovrappongono:</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="1598.7" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 1684.1)" d="m162.87 61.987-26.122-11.321-3.8622 19.966-7.4357-27.481-18.018 9.4287 16.85-22.948-18.606-8.2081 28.447-1.1341-5.183-19.664 18.623 21.533 12.142-16.312-5.2243 27.986 20.324-0.6774-25.138 13.364zm29.812-9.4287c-4.7662 12.495-21.785 17.62-37.987 11.44s-25.485-21.338-20.718-33.833c4.7663-12.496 21.785-17.62 37.987-11.44s25.485 21.337 20.718 33.833z" fill="#07ba88" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <rect id="bg" x="20" y="1766.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>Inkscape can <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Combine</flowSpan> paths into a compound path (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">K</flowSpan>) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Break Apart</flowSpan> a compound path into separate paths (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">K</flowSpan>). Try these commands on the above examples. Since an object can only have one fill and stroke, a new compound path gets the style of the first (lowest in z-order) object being combined.</flowDiv>
+   <flowDiv>Questo è il modo più facile per creare oggetti con dei buchi nel loro interno. Di seguito troverai la descrizione di comandi piu potenti, le “Operazioni Booleane”.</flowDiv>
   </flowRoot>
-  <rect id="bf" x="20" y="1648.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bf" x="20" y="1800.1" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>Quando combini tracciati con riempimento sovrapponendoli, di solito il riempimento sparirà nell'area dove i tracciati si sovrappongono:</flowDiv>
+   <flowDiv>Convertire in tracciati</flowDiv>
   </flowRoot>
-  <path transform="translate(20 1684.1)" d="m162.87 61.987-26.122-11.321-3.8622 19.966-7.4357-27.481-18.018 9.4287 16.85-22.948-18.606-8.2081 28.447-1.1341-5.183-19.664 18.623 21.533 12.142-16.312-5.2243 27.986 20.324-0.6774-25.138 13.364zm29.812-9.4287c-4.7662 12.495-21.785 17.62-37.987 11.44s-25.485-21.338-20.718-33.833c4.7663-12.496 21.785-17.62 37.987-11.44s25.485 21.337 20.718 33.833z" fill="#07ba88" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="be" x="20" y="1766.8" width="300" height="1e3px" display="none"/>
+  <rect id="be" x="20" y="1811" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
-   </flowRegion>
-   <flowDiv>Questo è il modo più facile per creare oggetti con dei buchi nel loro interno. Di seguito troverai la descrizione di comandi piu potenti, le “Operazioni Booleane”.</flowDiv>
-  </flowRoot>
-  <rect id="bd" x="20" y="1800.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#bd"/>
-   </flowRegion>
-   <flowDiv>Convertire in tracciati</flowDiv>
-  </flowRoot>
-  <rect id="bc" x="20" y="1811" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bc"/>
    </flowRegion>
    <flowDiv>Any shape or text object can be <flowSpan font-style="italic">converted to path</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>). This operation does not change the appearance of the object but removes all capabilities specific to its type (e.g. you can't round the corners of a rectangle or edit the text anymore); instead, you can now edit its nodes. Here are two stars - the left one is kept a shape and the right one is converted to path. Switch to node tool and compare their editability when selected:</flowDiv>
   </flowRoot>
   <polygon transform="translate(69.934 -1935.8)" d="m 48.608655,3873.8302 -10.588534,-19.6519 -16.322272,20.7376 8.762624,-20.5312 -26.390037,0.1684 21.515348,-5.9501 -16.5855664,-20.5276 18.0665754,13.1115 5.708175,-25.7658 1.013303,22.2999 23.703543,-11.6019 -16.803007,14.696 23.849661,11.2985 -21.96631,-3.9743 z" points="48.609 3873.8 38.02 3854.2 21.698 3874.9 30.46 3854.4 4.0704 3854.6 25.586 3848.6 9.0002 3828.1 27.067 3841.2 32.775 3815.4 33.788 3837.7 57.492 3826.1 40.689 3840.8 64.538 3852.1 42.572 3848.1" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="1.0816765" sodipodi:arg2="1.0947087" sodipodi:cx="34.026058" sodipodi:cy="3846.4326" sodipodi:r1="31.036766" sodipodi:r2="8.7148495" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(20 1879)" d="m217.4 59.034-10.589-19.652-16.322 20.738 8.7626-20.531-26.39 0.1684 21.515-5.9501-16.586-20.528 18.067 13.112 5.7082-25.766 1.0133 22.3 23.704-11.602-16.803 14.696 23.85 11.298-21.966-3.9743z" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="bb" x="20" y="1951" width="300" height="1e3px" display="none"/>
+  <rect id="bd" x="20" y="1951" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bb"/>
+    <use xlink:href="#bd"/>
    </flowRegion>
    <flowDiv>Moreover, you can convert to a path (“outline”) the <flowSpan font-style="italic">stroke</flowSpan> of any object. Below, the first object is the original path (no fill, black stroke), while the second one is the result of the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Stroke to Path</flowSpan> command (black fill, no stroke):</flowDiv>
   </flowRoot>
   <path transform="translate(20 1997.8)" d="m47.663 34.708c10.658-12.173 21.176-24.395 36.677-28.281 9.2924-2.3296 11.787 2.3947 4.8609 10.164-5.1644 5.7927-10.411 10.152-12.815 16.792-2.9726 8.2119 2.8857 9.4864 11.489 7.9541 8.4682-1.5081 14.084-8.5052 19.885-15.466 4.2144-5.0566 8.7741-5.2626 10.606-0.8838 7.1048 15.93 20.13 0.9771 22.095-0.4419" fill="none" stroke="#000" stroke-width="9" inkscape:connector-curvature="0" sodipodi:nodetypes="csssssss"/>
   <path transform="translate(20 1997.8)" d="m199.68 0.0677c-1.2373 0.1038-2.5164 0.3156-3.875 0.6562-8.5973 2.1554-15.755 6.6404-22 12s-11.648 11.611-16.969 17.688l6.75 5.9375c5.3376-6.0961 10.509-12.046 16.062-16.812 5.5537-4.7663 11.439-8.3316 18.344-10.062 1.2641-0.3169 1.7958-0.2322 2.5-0.25-0.42543 0.8115-0.91325 1.7071-2.0938 3.0312-2.4516 2.7499-5.0879 5.295-7.5312 8.1563s-4.705 6.1161-6.1562 10.125c-0.91687 2.5328-1.3647 4.9227-0.84375 7.375 0.26049 1.2262 0.78386 2.4374 1.5625 3.4375s1.766 1.7724 2.7812 2.3125c2.0304 1.0801 4.1397 1.3658 6.2812 1.4063 2.1416 0.0404 4.375-0.2076 6.7188-0.625 5.2478-0.9346 9.5496-3.6005 13.125-6.75 3.5754-3.1496 6.5542-6.8218 9.4375-10.281 0.80771-0.9691 1.5646-1.5838 2.125-1.9375 0.44557-0.2813 0.62372-0.2855 0.75-0.3125 0.0444 0.0576 0.0216 0.0029 0.125 0.25v0.0313l0.0312 0.0624c1.0456 2.3445 2.2571 4.2796 3.7188 5.8438s3.2003 2.7424 5.0312 3.4062c1.831 0.6639 3.7183 0.8102 5.4375 0.625 1.7192-0.1851 3.2684-0.6904 4.6875-1.3124 2.8382-1.2442 5.1565-3.0025 6.9375-4.5 0.89048-0.7488 1.6525-1.4477 2.2188-1.9688 0.2831-0.2605 0.52513-0.4796 0.6875-0.625 0.16236-0.1454 0.28418-0.2087 0.125-0.0938l-5.2812-7.3124c-0.40478 0.2923-0.596 0.4969-0.84375 0.7187-0.24776 0.2218-0.50629 0.4345-0.78125 0.6875-0.54994 0.5061-1.1883 1.115-1.9062 1.7188-1.4359 1.2074-3.1982 2.4447-4.75 3.125-0.77591 0.3401-1.4924 0.5323-2.0625 0.5937s-0.98627 0.0273-1.4062-0.125-0.88174-0.4321-1.5-1.0937c-0.61827-0.6617-1.3632-1.7369-2.0938-3.375-0.71919-1.7196-1.8187-3.1872-3.4062-4.2813s-3.5804-1.6022-5.4375-1.4687c-1.8571 0.1334-3.5566 0.811-5.0938 1.7812s-2.9505 2.2533-4.25 3.8125c-2.9184 3.5017-5.6377 6.8149-8.4375 9.2813-2.7998 2.4663-5.5608 4.0514-8.7812 4.625-1.9581 0.3487-3.685 0.5242-4.9688 0.5-1.1377-0.0215-1.6851-0.2152-1.9375-0.3126-0.0114-0.2031-0.066-0.7652 0.4375-2.1562 0.95234-2.6308 2.4903-4.9171 4.5625-7.3438 2.0722-2.4266 4.6935-4.9572 7.4062-8 1.9716-2.2114 3.4009-4.3132 4.2812-6.5312 0.44015-1.109 0.7547-2.2601 0.8125-3.5s-0.171-2.5773-0.78125-3.8125c-0.61026-1.2352-1.6187-2.2794-2.7188-2.9687-1.1001-0.6894-2.2635-1.0873-3.4375-1.2813s-2.3565-0.1976-3.5938-0.0937z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="ba" x="20" y="2061.7" width="300" height="1e3px" display="none"/>
+  <rect id="bc" x="20" y="2061.7" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ba"/>
+    <use xlink:href="#bc"/>
    </flowRegion>
    <flowDiv>Operazioni Booleane</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2074.2" width="300" height="1e3px" display="none"/>
+  <rect id="bb" x="20" y="2074.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#az"/>
+    <use xlink:href="#bb"/>
    </flowRegion>
    <flowDiv>The commands in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Path</flowSpan> menu let you combine two or more objects using <flowSpan font-style="italic">boolean operations</flowSpan>:</flowDiv>
   </flowRoot>
@@ -521,31 +521,31 @@
   <path transform="translate(20 2110.3)" d="m168.24 182.05c-0.32932-0.2725-0.61782-0.5998-0.96875-0.8438-0.81111-0.564-1.6819-1.0404-2.5938-1.4375s-1.8516-0.6972-2.8438-0.9063c-0.99215-0.209-2.0418-0.3124-3.0938-0.3124-1.0519 0-2.0704 0.1034-3.0625 0.3124-0.99215 0.2091-1.9319 0.5092-2.8438 0.9063s-1.7826 0.8735-2.5938 1.4375c-0.81111 0.564-1.5602 1.2277-2.25 1.9375-0.68986 0.7098-1.3269 1.4779-1.875 2.3125s-1.0204 1.7179-1.4062 2.6562c-0.3859 0.9384-0.67181 1.9479-0.875 2.9688-0.13068 0.6566-0.13936 1.3477-0.1875 2.0312h24.594z" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2110.3)" d="m208.47 194.75h24.624v-11.09" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2110.3)" d="m232.03 182.24v-16.307h-37.561v27.398h12.937" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="ay" x="20" y="2333" width="300" height="1e3px" display="none"/>
+  <rect id="ba" x="20" y="2333" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ay"/>
+    <use xlink:href="#ba"/>
    </flowRegion>
    <flowDiv>The keyboard shortcuts for these commands allude to the arithmetic analogs of the boolean operations (union is addition, difference is subtraction, etc.). The <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Difference</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exclusion</flowSpan> commands can only apply to two selected objects; others may process any number of objects at once. The result always receives the style of the bottom object.</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="2382.4" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="2382.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ax"/>
+    <use xlink:href="#az"/>
    </flowRegion>
    <flowDiv>The result of the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exclusion</flowSpan> command looks similar to <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Combine</flowSpan> (see above), but it is different in that <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exclusion</flowSpan> adds extra nodes where the original paths intersect. The difference between <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Division</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Cut Path</flowSpan> is that the former cuts the entire bottom object by the path of the top object, while the latter only cuts the bottom object's stroke and removes any fill (this is convenient for cutting fill-less strokes into pieces).</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="2448.1" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="2448.1" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aw"/>
+    <use xlink:href="#ay"/>
    </flowRegion>
    <flowDiv>Intrudi e Estrudi</flowDiv>
   </flowRoot>
-  <rect id="av" x="20" y="2459" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="2459" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#av"/>
+    <use xlink:href="#ax"/>
    </flowRegion>
    <flowDiv>Inkscape can expand and contract shapes not only by scaling, but also by <flowSpan font-style="italic">offsetting</flowSpan> an object's path, i.e. by displacing it perpendicular to the path in each point. The corresponding commands are called <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Inset</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">(</flowSpan>) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Outset</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">)</flowSpan>). Shown below is the original path (red) and a number of paths inset or outset from that original:</flowDiv>
   </flowRoot>
@@ -556,32 +556,32 @@
   <path transform="translate(20 2516.4)" d="m99.543 0.2108c-17.313 5.1828-24.394 24.397-26.032 40.813-5.4969 29.384 12.02 61.126 39.907 71.937 9.9812 4.588 11.898 20.445 24.75 20.312 7.8321-0.3208 15.773-4.7118 18.875-12.125 14.367 9.2063 36.369 11.521 48.336-2.7873 13.772-14.314 10.554-40.31-5.3357-51.744 10.821-4.4843 25.057-9.1355 27.323-22.432 1.5943-12.408-11.823-19.936-22.401-21.838-14.933-3.2908-30.593-1.8182-45.359 1.3955-5.9241 5.4855-11.165-3.336-16.969-4.5937-6.5719-2.2932-13.698-3.2867-20.562-1.7813-2.55-9.8036-11.941-18.42-22.531-17.156z" fill="none" stroke="#000" stroke-width=".175" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2516.4)" d="m97.7 38.023c-4.5857 17.701-0.39592 40.201 17.089 49.215 8.2218 4.2031 18.471 6.1306 24.161 14.035 3.9589-10.467 17.834-8.9924 25.571-3.876 6.9977 3.8006 16.334 12.487 23.862 4.9891 7.3164-7.2849-1.5032-17.85-8.7477-21.066-11.117-5.697-24.487-0.993-32.373 7.9532-9.0445 6.3674-23.914 1.3981-26-9.6875-0.0135-6.3089 7.2159-7.4949 11.994-5.9339 14.442 1.7126 32.622 0.347 40.147-14.168 3.7002-5.8961 8.3419-11.596 14.516-14.992-8.5013 0.477-19.009-1.6596-25.5 5.0313-3.0589 8.1983-4.742 19.917-15.313 21.557-9.7947 3.0192-23.684 0.0034-26.968-10.776-0.93127-7.3476 5.8757-11.959 11.844-14.375-0.0215 4.9617 3.8862 14.357 10 10.812 4.9242-11.553-11.492-21.628-20.906-14.594-6.3962 3.8926-6.2125 12.384-3.9375 18.625-10.62-0.8239-19.234-10.23-18.501-20.963-0.57914-2.052 0.50275-7.6223-0.93634-1.7874z" fill="none" stroke="#000" stroke-width=".175" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2516.4)" d="m125.82 44.211c-10.253 7.0883-1.6599 2.4297 0 0zm10.531 4.5312c4.8517 10.668 0.92478-3.9624 0 0zm39.312-0.0625c-5.9943-0.4187-11.652 3.6412-12.046 9.7775 0.0298 2.4492-6.3154 10.556-1.9857 7.4725 6.8221-4.1288 9.6826-11.849 15.125-17.312-0.33279 0.019-1.062 0.0607-1.0938 0.0625zm-75.406 8.5938c1.3678 11.282 7.6652 22.743 18.469 27.344-2.9767-4.8662-0.6692-11.372 3.5938-14.094-2.9137-5.5236-8.4844-6.4922-13.906-8.0938-2.5857 0.0742-8.3962-7.927-8.1562-5.1562zm64 26.031c-2.7667 0.7464-13.161 5.4731-9.3636 6.3856 10.872 0.475 17.916 12.25 28.989 11.021 7.1396-4.9862-0.84244-14.642-7.1332-16.048-3.8781-1.725-8.3266-1.9523-12.492-1.3579z" fill="none" stroke="#000" stroke-width=".175" inkscape:connector-curvature="0"/>
-  <rect id="au" x="20" y="2661.8" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="2661.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#au"/>
+    <use xlink:href="#aw"/>
    </flowRegion>
    <flowDiv>The plain <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Inset</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Outset</flowSpan> commands produce paths (converting the original object to path if it's not a path yet). Often, more convenient is the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Dynamic Offset</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">J</flowSpan>) which creates an object with a draggable handle (similar to a shape's handle) controlling the offset distance. Select the object below, switch to the node tool, and drag its handle to get an idea:</flowDiv>
   </flowRoot>
   <path transform="translate(20 2719.1)" d="m106.27 0.45441c-0.10112 0.1152-0.14628 0.129-0.29492 0.3809-3.8807 6.5756-5.69 15.322-6.7617 23.506-2.2001 16.8 5.6253 36.574 21.996 42.703 7.9689 2.8582 13.099 5.0208 16.59 7.3613 3.1146 2.0883 4.8809 4.3803 6.1445 7.3164 0.83628-3.3298 2.1612-5.698 4.1113-7.1973 2.1712-1.6691 5.0309-2.3008 8.6074-2.3183 8.1602-0.04 14.631 4.8099 20.459 9.205 3.1146 2.349 7.2519 3.2345 11.002 2.6153 3.7501-0.6193 7.0928-2.7204 8.7109-6.336 1.6276-3.6366 1.0018-7.3141-0.78906-10.666s-4.7581-6.3445-7.7363-8.4746c-7.492-5.3587-17.331-5.609-25.744-2.1738-3.339 1.3634-6.1945 4.1375-9.0957 6.6406-2.9012 2.5031-5.8756 4.7546-9.5098 4.8887-3.8591 0.1425-8.0918-1.0526-11.383-3.666-3.291-2.6135-5.6211-6.6662-5.6211-12.137a0.39691 0.39691 0 0 1 0.39648-0.3964c3.0726 0 8.0122 0.5596 13.49 0.9355 5.478 0.376 11.484 0.5678 16.611-0.1504 8.1781-1.1457 17.345-5.8907 21.264-13.6 3.7815-7.4384 10.474-16.43 22.701-18.678-10.736-0.4389-19.366-0.4494-27.271 0.4394-3.8911 0.4375-6.5398 2.3824-8.3496 5.1133s-2.7533 6.2608-3.1133 9.7832c-0.46666 4.5663-3.4945 7.8367-7.373 9.8164-3.8785 1.9797-8.6221 2.711-12.691 2.2559-3.2374-0.362-6.9091-0.9975-9.9941-2.5391-3.085-1.5416-5.5895-4.0329-6.3516-8-0.29262-1.5232 0.12629-3.2173 0.9043-4.7988s1.9241-3.0553 3.1719-4.125 2.6009-1.764 3.8594-1.6465c0.62923 0.059 1.2247 0.3446 1.6875 0.8652 0.4628 0.5207 0.79856 1.2598 1 2.2383 0.74509 3.6194 3.4674 6.2523 6.1602 6.9883 1.3464 0.368 2.6674 0.2684 3.7637-0.377 1.0962-0.6453 1.9987-1.8478 2.457-3.8085 1.7046-7.293-3.7374-14.304-10.67-16.5-4.459-1.4122-9.9397-0.3002-14 2.3183s-6.665 6.662-5.6191 11.15c0.36975 1.5869 0.35132 2.788-2e-3 3.6758-0.35328 0.8877-1.076 1.4223-1.916 1.5879-1.68 0.3311-3.8147-0.579-5.5977-2.0547-7.0565-5.8407-7.3072-15.578-6.3906-23.664 0.10448-0.9216 0.59178-3.3392 0.91601-5.4863 0.16212-1.0735 0.28212-2.0765 0.29297-2.7344 2e-3 -0.1312-0.0143-0.158-0.0215-0.2578z" fill="none" stroke="#ff0100" stroke-width=".675" inkscape:connector-curvature="0"/>
-  <rect id="at" x="20" y="2815.6" width="300" height="1e3px" display="none"/>
+  <rect id="av" x="20" y="2815.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#at"/>
+    <use xlink:href="#av"/>
    </flowRegion>
    <flowDiv>Un <flowSpan font-style="italic">oggetto con proiezione dinamica</flowSpan> ricorda il tracciato originale, così non “degrada” quando cambi la distanza di proiezione di volta in volta. Quando non hai più bisogno che sia modificabile, puoi sempre convertire nuovamente questo tipo di oggetto in tracciato.</flowDiv>
   </flowRoot>
-  <rect id="as" x="20" y="2854.1" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="2854.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#as"/>
+    <use xlink:href="#au"/>
    </flowRegion>
    <flowDiv>Ancora più conveniente è una <flowSpan font-style="italic">proiezione collegata</flowSpan>, che è simile alla precedente ma è connessa ad un altro tracciato che rimane modificabile. Puoi avere qualunque numero di proiezioni collegate per un tracciato sorgente. Sotto, il tracciato sorgente è rosso, una proiezione collegata a quello ha il controllo nero e nessun riempimento, gli altri hanno riempimento nero e nessun contorno.</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="2914" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="2914" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ar"/>
+    <use xlink:href="#at"/>
    </flowRegion>
    <flowDiv>Select the red object and node-edit it; watch how both linked offsets respond. Now select any of the offsets and drag its handle to adjust the offset radius. Finally, notehow you can move or transform the offset objects independently without losing their connection with the source. </flowDiv>
   </flowRoot>
@@ -590,33 +590,33 @@
    <path d="m98.58 0.75391c-0.98964 0.079946-1.8669 0.3604-2.3887 0.6543-2.3892 1.3457-2.2609 2.0823-2.7207 2.8613-4.4275 7.5022-10.487 21.232-11.803 31.281-2.6109 19.937 11.658 36.604 30.057 43.492a5.5425 5.5425 0 0 0 0.0723 0.02734c7.8338 2.8097 12.635 4.9291 15.293 6.7148 2.6575 1.7858 3.3726 2.8432 4.3555 5.5098a5.5425 5.5425 0 0 0 10.631-0.81836c0.63397-3.137 1.4593-4.2111 2.2051-4.7852s2.1214-1.0757 5.0137-1.0898c5.7874-0.02835 11.028 3.6188 16.84 8.002 4.5525 3.4334 10.213 4.616 15.549 3.7383s10.655-4.142 13.172-9.7656c2.4762-5.5328 1.4079-11.441-0.97266-15.898-2.3805-4.4576-5.9259-7.9426-9.5234-10.516-3.9468-2.823-8.356-4.4351-12.875-5.123 2.0156-2.0118 3.7773-4.3239 5.1348-6.9941 3.901-7.6734 9.8815-15.982 23.371-15.982a5.5425 5.5425 0 0 0 0.28125-11.076c-13.817-0.70348-24.308-0.90494-34.197 0.20703-5.5572 0.62485-10.053 3.8357-12.637 7.7285s-3.6506 8.295-4.0762 12.459c-0.23342 2.2841-1.5174 3.7891-4.1621 5.1445-0.54205 0.2778-1.255 0.38-1.877 0.59375 2.1733-1.6455 3.7068-4.1436 4.3535-6.9102 2.5326-10.835-5.1568-20.475-14.691-23.494-6.6257-2.0983-13.56-0.52394-19.006 2.9902-4.0425 2.6087-7.5131 6.9193-8.3418 11.984-2.4311-4.0206-2.7176-9.697-2.0449-15.631-2e-3 0.01987 0.52926-2.9245 0.88086-5.2871 0.17579-1.1813 0.3338-2.2696 0.35156-3.5273 9e-3 -0.62885 0.15618-1.1682-0.39844-2.7246-0.27731-0.77819-0.83254-2.2064-2.7793-3.2188-0.9734-0.50618-2.0768-0.62682-3.0664-0.54687zm26.525 40.596c1.2077 2.3778 2.9942 4.286 5.1133 5.6543-0.81851-0.24598-1.6957-0.46762-2.3301-0.78516-1.978-0.99019-2.7826-1.7393-3.1816-3.8164 0.0664 0.3458-1e-3 -0.2433 0.39649-1.0488 6e-4 -0.0012 1e-3 -0.0027 2e-3 -0.0039zm2.5879 23.291c1.973 0.16104 3.041 0.21882 5.3418 0.37695 2.7548 0.18934 5.6754 0.33805 8.625 0.35156-2.3765 1.9783-4.1195 3.0068-5.3106 3.0508-2.4684 0.09117-5.4459-0.76672-7.4844-2.3828-0.48633-0.38556-0.77328-0.94162-1.1719-1.3965z" fill="none" stroke="#000" stroke-width=".675" inkscape:href="#advanced-f11.svgpath1987" inkscape:original="M 98.912109 6.2363281 C 98.75241 6.3262799 98.533813 6.5951 98.244141 7.0859375 C 94.312836 13.747338 88.236546 28.065031 87.162109 36.269531 C 84.941126 53.229031 97.074525 67.640916 113.66797 73.853516 C 129.59321 79.565216 134.11569 82.518206 136.64453 89.378906 C 138.22552 81.555906 142.20585 79.095047 149.26758 79.060547 C 157.26908 79.021347 163.64623 83.785488 169.47266 88.179688 C 175.89399 93.022487 186.44063 91.8116 189.79688 84.3125 C 193.16539 76.7861 187.17378 68.989222 181.13477 64.669922 C 173.51393 59.219122 163.51922 58.99015 155 62.46875 C 148.12235 65.27705 143.50925 73.702184 136.55469 73.958984 C 129.02235 74.237184 119.93945 69.270134 119.93945 58.552734 C 125.987 58.552734 139.7641 60.788791 150.12109 59.337891 C 158.40713 58.177091 167.67782 53.405103 171.67969 45.533203 C 176.00588 37.023403 184.06435 26.521484 199.99023 26.521484 C 186.26483 25.822684 176.07167 25.646672 166.69336 26.701172 C 158.68816 27.601272 155.6037 34.812959 154.875 41.943359 C 153.97293 50.770259 143.24964 54.573641 135.27344 53.681641 C 128.83546 52.961741 120.7394 51.128966 119.26367 43.447266 C 118.18911 37.853766 127.58505 28.710109 129.11914 36.162109 C 130.67039 43.697509 140.37257 47.104766 142.2793 38.947266 C 144.03908 31.418366 138.41784 24.248947 131.31055 21.998047 C 122.10286 19.082047 109.01729 26.569194 111.19922 35.933594 C 112.63428 42.092694 107.75423 41.594794 104.3125 38.746094 C 97.419952 33.041094 97.174249 23.475894 98.085938 15.433594 C 98.280327 13.718769 100.03001 5.606666 98.912109 6.2363281 z " inkscape:radius="5.5419211" sodipodi:type="inkscape:offset" xlink:href="#m"/>
    <path transform="matrix(.39324 0 0 .39324 199.77 1.5238)" d="m97.723 10.586c-3.7538 7.2006-8.5193 18.94-9.4219 25.832-2.1395 16.337 9.544 30.278 25.756 36.354 2e-3 5.79e-4 2e-3 0.0014 4e-3 2e-3 3e-3 0.0012 6e-3 0.0027 0.01 0.0039 7.9799 2.8625 13.153 5.0363 16.75 7.4531 2.6841 1.8036 4.2999 3.922 5.582 6.3027 0.8814-2.6116 2.0342-4.7878 3.7969-6.1445 2.3512-1.8096 5.3992-2.4587 9.0625-2.4766 8.4606-0.04145 15.073 4.9531 20.902 9.3496 2.9324 2.2115 6.881 3.0629 10.434 2.4785 3.5526-0.58437 6.6462-2.5356 8.1504-5.8965 1.52-3.3962 0.95032-6.7969-0.76758-10.014-1.7179-3.2168-4.614-6.1507-7.5137-8.2246-7.2465-5.1831-16.822-5.4253-25.033-2.0723-3.1497 1.2861-5.9569 3.9858-8.877 6.5078-2.92 2.522-6.0279 4.9212-9.959 5.0664-4.0353 0.14904-8.433-1.0885-11.889-3.8281-3.4557-2.7396-5.918-7.0432-5.918-12.727a1.1494 1.1494 0 0 1 1.1484-1.1484c3.1654 0 8.0881 0.56388 13.553 0.93945 5.4646 0.37557 11.44 0.55995 16.469-0.14453 7.9741-1.1171 16.931-5.7875 20.693-13.188 3.2828-6.4575 8.8361-14.155 18.217-17.686-8.208-0.21907-15.591-0.2085-22.049 0.51758-3.6802 0.4138-6.0952 2.1958-7.8086 4.7773-1.7134 2.5815-2.6444 5.9984-2.9961 9.4395-0.49616 4.855-3.7374 8.3554-7.7656 10.42-4.0282 2.0645-8.8815 2.8161-13.105 2.3438-3.2732-0.36601-7.026-1.0052-10.254-2.6211s-5.9497-4.3325-6.7578-8.5391c-0.33813-1.7601 0.14115-3.5944 0.96875-5.2715 0.82759-1.6771 2.0263-3.2126 3.3633-4.3535 1.337-1.1409 2.8246-1.9655 4.4238-1.8125 0.79959 0.07651 1.6004 0.46498 2.1797 1.1172s0.95403 1.5182 1.1738 2.5859c0.68711 3.3377 3.2411 5.7552 5.623 6.4004 1.191 0.32259 2.2876 0.22376 3.1855-0.30664 0.89793-0.5304 1.6839-1.5261 2.1074-3.3379 1.5995-6.8433-3.5933-13.5-10.197-15.592-4.1846-1.3252-9.4746-0.27198-13.355 2.2324-3.8809 2.5044-6.2494 6.2239-5.2891 10.346 0.39065 1.6766 0.40097 3.0251-0.0391 4.127-0.44004 1.1018-1.4307 1.8419-2.4727 2.0469-2.0839 0.40992-4.3255-0.64135-6.2266-2.2148-7.3683-6.0988-7.5625-16.16-6.6367-24.326 0.10076-0.88889 0.47865-2.8736 0.7793-4.7188z" fill-rule="evenodd" stroke-width=".425" inkscape:href="#advanced-f11.svgpath1987" inkscape:original="M 98.912109 6.2363281 C 98.75241 6.3262799 98.533813 6.5951 98.244141 7.0859375 C 94.312836 13.747338 88.236546 28.065031 87.162109 36.269531 C 84.941126 53.229031 97.074525 67.640916 113.66797 73.853516 C 129.59321 79.565216 134.11569 82.518206 136.64453 89.378906 C 138.22552 81.555906 142.20585 79.095047 149.26758 79.060547 C 157.26908 79.021347 163.64623 83.785488 169.47266 88.179688 C 175.89399 93.022487 186.44063 91.8116 189.79688 84.3125 C 193.16539 76.7861 187.17378 68.989222 181.13477 64.669922 C 173.51393 59.219122 163.51922 58.99015 155 62.46875 C 148.12235 65.27705 143.50925 73.702184 136.55469 73.958984 C 129.02235 74.237184 119.93945 69.270134 119.93945 58.552734 C 125.987 58.552734 139.7641 60.788791 150.12109 59.337891 C 158.40713 58.177091 167.67782 53.405103 171.67969 45.533203 C 176.00588 37.023403 184.06435 26.521484 199.99023 26.521484 C 186.26483 25.822684 176.07167 25.646672 166.69336 26.701172 C 158.68816 27.601272 155.6037 34.812959 154.875 41.943359 C 153.97293 50.770259 143.24964 54.573641 135.27344 53.681641 C 128.83546 52.961741 120.7394 51.128966 119.26367 43.447266 C 118.18911 37.853766 127.58505 28.710109 129.11914 36.162109 C 130.67039 43.697509 140.37257 47.104766 142.2793 38.947266 C 144.03908 31.418366 138.41784 24.248947 131.31055 21.998047 C 122.10286 19.082047 109.01729 26.569194 111.19922 35.933594 C 112.63428 42.092694 107.75423 41.594794 104.3125 38.746094 C 97.419952 33.041094 97.174249 23.475894 98.085938 15.433594 C 98.280327 13.718769 100.03001 5.606666 98.912109 6.2363281 z " inkscape:radius="-1.1492475" sodipodi:type="inkscape:offset" xlink:href="#m"/>
   </g>
-  <rect id="aq" x="20" y="3074.6" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="3074.6" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aq"/>
+    <use xlink:href="#as"/>
    </flowRegion>
    <flowDiv>Semplificazione</flowDiv>
   </flowRoot>
-  <rect id="ap" x="20" y="3087" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="3087" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ap"/>
+    <use xlink:href="#ar"/>
    </flowRegion>
    <flowDiv>The main use of the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Simplify</flowSpan> command (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">L</flowSpan>) is reducing the number of nodes on a path while <flowSpan font-style="italic">almost</flowSpan> preserving its shape. This may be useful for paths created by the Pencil tool, since that tool sometimes creates more nodes than necessary. Below, the left shape is as created by the freehand tool, and the right one is a copy that was simplified. The original path has 28 nodes, while the simplified one has 17 (which means it is much easier to work with in node tool) and is smoother.</flowDiv>
   </flowRoot>
   <path transform="translate(20 3165.8)" d="m67.897 41.902c-0.16654-1.3656-0.72364-7.8714-1.13-10.17 0.13455-2.9025-0.09193-6.623-0.37665-9.793-0.74347-4.0763-0.18739-7.7427 0-12.053 2.0612-4.2646 3.993-6.8304 6.7798-9.4163 4.6922 1.1534 5.8937 2.56 6.7798 7.1564 1.0873 3.7603 0.98858 7.7004 0.75331 12.053 0 4.0016-0.0053 5.616 2.2599 8.6631 5.424 0.4687 6.2942-0.011 8.2864-4.8966 1.9055-3.3123 2.5521-6.9294 3.7665-10.546 3.1668-2.2695 5.8839-3.094 9.4163-4.5198 4.767-1.225 7.699-0.0601 10.923 2.2599 1.736 4.9146 2.8524 8.223 0.37665 12.43-1.7277 2.3249-4.1847 4.0172-7.1564 5.6498-2.2199 1.4059-5.2043 2.9242-7.5331 4.5198-3.6775 0.4819-3.8613 3.5006-2.2599 6.4031 2.5469 1.4512 5.7288 0.5687 7.5331-1.8832 3.4855-1.6744 4.9982-3.1988 9.4163-3.3899 3.8053 0.5469 6.0402 1.173 8.2864 3.0133 2.3986 3.4645 3.2622 5.6753 4.1432 8.6629-1.8069 2.5195-2.944 3.8679-5.6498 5.6498-3.431 0-6.863 0.0343-10.17-0.3766-3.0962-0.3198-5.738-1.1251-8.663-1.5066-4.1553 0-8.0759 0.2078-12.053 0.7533-2.6627 0.0563-3.6157 0.3446-6.4031 0.3766-2.3716 0.1552-4.7144 0.5206-6.0265 0.7533-2.9372-0.0253-5.5423-0.5306-5.6498-0.7533-2.1192 0.0433-3.8993 0.0578-4.1432 0.3767" fill="none" stroke="#000" stroke-width=".75128pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3165.8)" d="m174.38 41.902c-0.87182-10.336-2.3797-20.745-1.3851-31.119 0.98583-3.9091 3.0172-8.0874 6.9661-9.6972 4.6871-0.4192 6.7583 4.9465 7.1422 8.7906 0.72905 5.62-0.93401 11.529 1.2794 16.937 2.7348 3.4226 8.2837 1.0433 9.5588-2.5881 1.709-4.4388 1.8405-10.153 6.203-13.01 4.7286-2.6661 11.107-4.9245 16.057-1.5362 5.7957 4.6363 3.8145 14.882-2.8275 17.711-4.0297 2.8587-9.1072 4.2674-12.62 7.7871-1.8217 4.4839 5.5913 7.2763 7.7162 3.1412 4.2577-3.7219 10.892-5.473 15.921-2.2173 3.932 2.2476 7.1114 7.4635 4.8426 11.89-2.5558 4.1052-8.09 4.2833-12.365 3.5308-6.4891-1.0027-13.049-2.3289-19.634-1.397-7.7471 0.632-15.57 2.1598-23.332 0.8446-0.6842 0.0094-1.3732 0.1076-2.0162 0.349" fill="none" stroke="#000" stroke-width=".75128pt" inkscape:connector-curvature="0"/>
-  <rect id="ao" x="20" y="3230.2" width="300" height="1e3px" display="none"/>
+  <rect id="aq" x="20" y="3230.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ao"/>
+    <use xlink:href="#aq"/>
    </flowRegion>
    <flowDiv>The amount of simplification (called the <flowSpan font-style="italic">threshold</flowSpan>) depends on the size of the selection. Therefore, if you select a path along with some larger object, it will be simplified more aggressively than if you select that path alone. Moreover, the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Simplify</flowSpan> command is <flowSpan font-style="italic">accelerated</flowSpan>. This means that if you press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">L</flowSpan> several times in quick succession (so that the calls are within 0.5 sec from each other), the threshold is increased on each call. (If you do another Simplify after a pause, the threshold is back to its default value.) By making use of the acceleration, it is easy to apply the exact amount of simplification you need for each case.</flowDiv>
   </flowRoot>
-  <rect id="an" x="20" y="3320.6" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="3320.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#an"/>
+    <use xlink:href="#ao"/>
    </flowRegion>
    <flowDiv>Besides smoothing freehand strokes, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Simplify</flowSpan> can be used for various creative effects. Often, a shape which is rigid and geometric benefits from some amount of simplification that creates cool life-like generalizations of the original form - melting sharp corners and introducing very natural distortions, sometimes stylish and sometimes plain funny. Here's an example of a clipart shape that looks much nicer after <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Simplify</flowSpan>:</flowDiv>
   </flowRoot>
@@ -717,17 +717,17 @@
    </flowRegion>
    <flowDiv>The ultimate power tool of Inkscape is the XML editor (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>). It displays the entire XML tree of the document, always reflecting its current state. You can edit your drawing and watch the corresponding changes in the XML tree. Moreover, you can edit any text, element, or attribute nodes in the XML editor and see the result on your canvas. This is the best tool imaginable for learning SVG interactively, and it allows you to do tricks that would be impossible with regular editing tools.</flowDiv>
   </flowRoot>
-  <rect id="z" x="20" y="4346.2" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="4346.2" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#z"/>
+    <use xlink:href="#aa"/>
    </flowRegion>
    <flowDiv>Conclusioni</flowDiv>
   </flowRoot>
-  <rect id="y" x="20" y="4357" width="300" height="1e3px" display="none"/>
+  <rect id="z" x="20" y="4357" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#y"/>
+    <use xlink:href="#z"/>
    </flowRegion>
    <flowDiv>Questo tutorial mostra solo una piccola parte delle capacità di Inkscape. Speriamo che ti sia divertito. Non aver timore di sperimentare e condividere ciò che crei. Ricorda di visitare <flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">www.inkscape.org</flowSpan> per avere più informazioni, ultime versioni e aiuto dalla comunità di utenti e sviluppatori.</flowDiv>
   </flowRoot>
@@ -745,10 +745,10 @@
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv>Firas Hanife — 2014, 2015, 2016; Luca Bruno — 2006, 2007; Francesco Ricci — 2006, 2007</flowDiv>
+   <flowDiv/>
   </flowRoot>
-  <use x="47" y="4491.5304909" inkscape:label="icon-credits-designer" xlink:href="#bt"/>
-  <rect id="bx" x="70" y="4485.5" width="230" height="1e3px" display="none"/>
+  <use x="47" y="4479.2152559" inkscape:label="icon-credits-designer" xlink:href="#bt"/>
+  <rect id="bx" x="70" y="4473.2" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#bx"/>
@@ -757,7 +757,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="bv" transform="translate(0 4333.1)">
+  <g id="bv" transform="translate(0 4320.8)">
    <defs>
     <filter id="j" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

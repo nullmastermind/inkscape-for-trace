@@ -258,296 +258,296 @@
  </g>
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#cr"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
-  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">技巧和秘訣</tspan></tspan></text>
-  <rect id="al" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">指導手冊<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">技巧和秘訣</tspan></tspan></text>
+  <rect id="ak" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
-   <flowRegion>
-    <use xlink:href="#al"/>
-   </flowRegion>
-   <flowDiv>這篇教學將說明各種技巧和秘訣，使用者會學到透過使用 Inkscape 和一些「隱藏」功能來幫助你快速完成任務。</flowDiv>
-  </flowRoot>
-  <rect id="ak" x="20" y="168.95" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ak"/>
    </flowRegion>
-   <flowDiv>放射狀分佈鋪排仿製</flowDiv>
+   <flowDiv>這篇教學將說明各種技巧和秘訣，使用者會學到透過使用 Inkscape 和一些「隱藏」功能來幫助你快速完成任務。</flowDiv>
   </flowRoot>
-  <rect id="aj" x="20" y="181.23" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="aj" x="20" y="168.95" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aj"/>
    </flowRegion>
-   <flowDiv>It's easy to see how to use the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Create Tiled Clones</flowSpan> dialog for rectangular grids and patterns. But what if you need <flowSpan font-style="italic">radial</flowSpan> placement, where objects share a common center of rotation? It's possible too!</flowDiv>
+   <flowDiv>放射狀分佈鋪排仿製</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="220.01" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="181.23" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
-   <flowDiv>如果你的放射狀圖案只需要 3、4、6、8 或 12 個元件，那麼你可以試試 P3、P31M、P3M1、P4、P4M、P6 或 P6M 對稱。這些對於製作雪花或類似的東西很有用。不過有一個更普遍的方法，如下。</flowDiv>
+   <flowDiv>使用者很容易就懂得如何使用一般格線和圖樣的<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">建立鋪排仿製</flowSpan>對話窗。但是如果你需要<flowSpan font-style="italic">放射狀</flowSpan>分佈，可以讓物件群共用同一個旋轉中心嗎？這也是能夠達成的！</flowDiv>
   </flowRoot>
-  <rect id="ah" x="20" y="258.82" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="209.43" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
    </flowRegion>
-   <flowDiv>Choose the P1 symmetry (simple translation) and then <flowSpan font-style="italic">compensate</flowSpan> for that translation by going to the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Shift</flowSpan> tab and setting <flowSpan font-family="Liberation Sans,Arial,sans-serif">Per row/Shift Y</flowSpan> and <flowSpan font-family="Liberation Sans,Arial,sans-serif">Per column/Shift X</flowSpan> both to -100%. Now all clones will be stacked exactly on top of the original. All that remains to do is to go to the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Rotation</flowSpan> tab and set some rotation angle per column, then create the pattern with one row and multiple columns. For example, here's a pattern made out of a horizontal line, with 30 columns, each column rotated 6 degrees:</flowDiv>
+   <flowDiv>如果你的放射狀圖案只需要 3、4、6、8 或 12 個元件，那麼你可以試試 P3、P31M、P3M1、P4、P4M、P6 或 P6M 對稱。這些對於製作雪花或類似的東西很有用。不過有一個更普遍的方法，如下。</flowDiv>
   </flowRoot>
-  <path id="e" transform="translate(20 337.59)" d="m91.25 58.9h117.5" color="#000000" fill="none" stroke="#000" stroke-width=".3" inkscape:connector-curvature="0" inkscape:tile-cx="160.25000" inkscape:tile-cy="346.50000" inkscape:tile-h="0.30000001" inkscape:tile-w="117.80000"/>
-  <use transform="translate(20 337.59) rotate(6 150 58.902) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(12 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(18 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(24 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(30 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(36 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(42 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(48 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(54 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(60 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(66 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(72 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(78 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(84 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(90 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(96 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(102 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(108 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(114 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(120 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(126 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(132 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(138 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(144 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(150 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(156 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(162 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(168 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <use transform="translate(20 337.59) rotate(174 150 58.9) translate(-20 -337.59)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <rect id="ag" x="20" y="467.09" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="248.25" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ag"/>
    </flowRegion>
-   <flowDiv>要用這個方法製作一個時鐘刻度盤，只需要用一個白色圓形切掉或覆蓋中央的部份 (要在仿製物件上進行布林運算前先將物件取消連結)。</flowDiv>
+   <flowDiv>選擇 P1 對稱 (簡單平移)，然後切換到<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">位移</flowSpan>分頁並設定<flowSpan font-family="Liberation Sans,Arial,sans-serif">每行/位移 Y</flowSpan> 和<flowSpan font-family="Liberation Sans,Arial,sans-serif">每列/位移 X</flowSpan> 皆為 -100% 以<flowSpan font-style="italic">補償</flowSpan>剛剛的平移。這時全部的仿製物件會完全重疊在原始物件的上面。繼續切換到<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">旋轉</flowSpan>分頁並設定每列旋轉一些角度，然後以單行多列建立圖案。舉例來說，下面的圖案是用 30 列且每一列旋轉 6 度製作出來的：</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="496.03" width="300" height="1e3px" display="none"/>
+  <path id="e" transform="translate(20 305.48)" d="m91.25 58.9h117.5" color="#000000" fill="none" stroke="#000" stroke-width=".3" inkscape:connector-curvature="0" inkscape:tile-cx="160.25000" inkscape:tile-cy="346.50000" inkscape:tile-h="0.30000001" inkscape:tile-w="117.80000"/>
+  <use transform="translate(20 305.48) rotate(6 150 58.902) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(12 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(18 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(24 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(30 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(36 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(42 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(48 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(54 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(60 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(66 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(72 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(78 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(84 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(90 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(96 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(102 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(108 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(114 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(120 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(126 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(132 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(138 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(144 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(150 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(156 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(162 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(168 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <use transform="translate(20 305.48) rotate(174 150 58.9) translate(-20 -305.48)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
+  <rect id="af" x="20" y="434.98" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#af"/>
    </flowRegion>
-   <flowDiv>藉由同時使用行與列可製作更多有趣的效果。下面的圖案是用 10 列和 8 行，且每行旋轉 2 度而每列旋轉 18 度。這裡每個直線群組代表一「列」，所以群組彼此之間都相距 18 度；每列裡面的單獨直線則相隔 2 度：</flowDiv>
+   <flowDiv>要用這個方法製作一個時鐘刻度盤，只需要用一個白色圓形切掉或覆蓋中央的部份 (要在仿製物件上進行布林運算前先將物件取消連結)。</flowDiv>
   </flowRoot>
-  <path id="c" transform="translate(20 542.87)" d="m78.5 71.65h143" color="#000000" fill="none" stroke="#000" stroke-width=".3" inkscape:connector-curvature="0" inkscape:tile-cx="164.00000" inkscape:tile-cy="543.50000" inkscape:tile-h="0.30000001" inkscape:tile-w="143.30000"/>
-  <use transform="translate(20 542.87) rotate(1.5 150.01 71.648) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(3 150 71.652) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(4.5 150 71.649) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(6 150 71.653) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(7.5 150 71.651) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(9 150 71.652) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(10.5 150 71.648) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(18 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(19.5 150 71.649) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(21 150 71.649) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(22.5 150 71.651) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(24 150 71.649) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(25.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(27 150 71.651) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(28.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(36 150 71.651) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) matrix(.79335 .60876 -.60876 .79335 74.615 -76.508) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(39 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(40.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(42 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(43.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(45 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(46.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(54 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(55.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(57 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(58.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(60 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(61.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(63 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(64.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(72 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(73.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(75 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(76.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(78 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(79.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(81 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(82.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(90 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(91.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(93 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(94.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(96 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(97.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(99 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(100.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(108 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(109.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(111 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(112.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(114 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(115.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(117 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(118.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(126 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) matrix(-.60876 .79335 -.79335 -.60876 298.16 -3.735) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(129 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(130.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(132 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(133.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(135 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(136.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(144 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(145.5 150 71.651) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(147 150 71.649) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(148.5 150 71.651) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(150 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(151.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(153 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(154.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(162 150 71.649) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(163.5 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(165 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(166.5 150 71.649) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(168 150 71.651) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(169.5 150 71.649) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(171 150 71.65) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <use transform="translate(20 542.87) rotate(172.5 150 71.651) translate(-20 -542.87)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <rect id="ae" x="20" y="697.87" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="463.92" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ae"/>
    </flowRegion>
-   <flowDiv>In the above examples, the line was rotated around its center. But what if you want the center to be outside of your shape? Just click on the object twice with the Selector tool to enter rotation mode. Now move the object's rotation center (represented by a small cross-shaped handle) to the point you would like to be the center of the rotation for the Tiled Clones operation. Then use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Create Tiled Clones</flowSpan> on the object. This is how you can do nice “explosions” or “starbursts” by randomizing scale, rotation, and possibly opacity:</flowDiv>
+   <flowDiv>藉由同時使用行與列可製作更多有趣的效果。下面的圖案是用 10 列和 8 行，且每行旋轉 2 度而每列旋轉 18 度。這裡每個直線群組代表一「列」，所以群組彼此之間都相距 18 度；每列裡面的單獨直線則相隔 2 度：</flowDiv>
   </flowRoot>
-  <g id="d" transform="translate(20 776.54) matrix(.63768 0 0 .63768 48.609 -470.92)" inkscape:tile-cx="158.99982" inkscape:tile-cy="859.24904" inkscape:tile-h="7.3333200" inkscape:tile-w="87.999840">
-   <path d="m210.17 859.92c4.533-2.0828 15.804-3.798 15.804-0.12252 0 3.6754-15.804 0.12252-15.804 0.12252z" color="#000000" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-   <rect x="90" y="853.5" width="138" height="11.5" color="#000000" opacity="0" stroke-width=".25px"/>
-  </g>
-  <use transform="translate(20 776.54) matrix(1.5824 -.94905 .94905 1.5824 -160.44 97.51) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.15802 -.1467 .1467 .15802 115 86.842) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.3812 -.31038 .31038 .3812 68.919 94.208) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.9161 -.77244 .77244 .9161 -46.896 122.33) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.27118 1.0204 -1.0204 .27118 187.9 -96.936) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.054495 1.1179 -1.1179 .054495 227.91 -94.879) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(1.3012 -.34248 .34248 1.3012 -71.549 28.181) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.43783 -.057061 .057061 .43783 79.931 51.849) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.30681 .099409 -.099409 .30681 111.63 38.468) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.0307 .73379 -.73379 -.0307 211.11 -30.699) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.5877 1.5039 -1.5039 .5877 177.65 -193.84) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.063589 .24175 -.24175 -.063589 178.15 45.64) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.11279 .4804 -.4804 -.11279 203.91 13.632) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.47048 .34479 -.34479 .47048 105.98 -10.941) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.90328 1.2976 -1.2976 .90328 114.43 -187.19) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(1.6387 .41348 -.41348 1.6387 -63.969 -111.21) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(1.3754 .84138 -.84138 1.3754 8.4863 -155.11) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.37243 1.258 -1.258 .37243 191.01 -140.37) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.97419 .80737 -.80737 .97419 66.043 -119.12) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.73194 1.6333 -1.6333 -.73194 385.56 -111.62) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.67313 .51862 -.51862 .67313 88.967 -52.623) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.02547 .99819 -.99819 .02547 223.05 -74.684) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.036052 .53209 -.53209 -.036052 196.38 -.031024) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.0903 .48582 -.48582 -1.0903 350.95 88.09) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.69835 .18974 -.18974 -.69835 269.36 102.32) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.058852 .81222 -.81222 .058852 203.72 -49.36) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.72687 1.5656 -1.5656 .72687 161.53 -213.81) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.93737 .98403 -.98403 -.93737 366.38 1.5841) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.744 -.33229 .33229 -1.744 386.02 261.15) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.22296 1.1443 -1.1443 .22296 204.67 -111.81) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.34393 1.1531 -1.1531 -.34393 290.38 -69.467) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.18401 .80395 -.80395 -.18401 239.51 -29.417) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.65776 .631 -.631 -.65776 297.25 33.007) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.1784 .0080053 -.0080053 -1.1784 327.38 166.55) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.1888 .96076 -.96076 -1.1888 402.3 24.434) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.58046 -.030743 .030743 -.58046 234.7 126.32) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.867 .42505 -.42505 -.867 312.78 80.012) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.70082 .10013 -.10013 -.70082 262.83 115.95) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.7631 -.2264 .2264 -1.7631 397.02 246.73) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.98245 -1.0913 1.0913 -.98245 213.33 316.36) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.1126 -.1117 .1117 -.1126 158.29 102.43) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.46512 -.23192 .23192 -.46512 201.91 147.61) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.3449 .031643 -.031643 -1.3449 354.17 175.82) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.8418 .7111 -.7111 -.8418 331.03 35.164) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.40673 -1.7162 1.7162 -.40673 78.85 365.76) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.51273 -1.1191 1.1191 -.51273 140.74 284.35) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.0098 .39705 -.39705 -1.0098 332.04 95.207) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.34237 -1.2544 1.2544 -.34237 104.76 291.53) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.3214 -.056325 .056325 -1.3214 343.87 187.21) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.081244 -1.4924 1.4924 .081244 22.892 294.61) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.73546 -.52141 .52141 -.73546 220.17 211.85) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.82671 -.39099 .39099 -.82671 243.9 199.31) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.095044 -1.2019 1.2019 .095044 43.189 249.98) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.40752 -.94837 .94837 -.40752 138.1 250.64) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.23737 -.78446 .78446 .23737 53.988 176.4) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.29723 -.3316 .3316 .29723 79.881 103.86) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.070897 -.56023 .56023 -.070897 117.49 166.5) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.0092847 -.5912 .5912 -.0092847 105.87 166.4) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.64749 -.89537 .89537 .64749 -16.071 161.45) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.20617 -.6552 .6552 .20617 68.62 159.41) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.22868 -1.0741 1.0741 -.22868 101.59 255.73) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.157 -1.3956 1.3956 -1.157 216.09 375.44) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-1.0291 -1.2779 1.2779 -1.0291 205.95 347.94) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.83814 -1.3323 1.3323 .83814 -78.313 212.31) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.097413 -1.1509 1.1509 -.097413 75.99 257.14) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(-.21499 -.73072 .73072 -.21499 125.98 203.17) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(1.6883 -.17049 .17049 1.6883 -116.37 -27.429) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.55378 -.20385 .20385 .55378 51.236 64.939) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(1.1627 -.6377 .6377 1.1627 -73.507 83.13) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(1.5217 -.57461 .57461 1.5217 -122.51 46.016) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <use transform="translate(20 776.54) matrix(.54625 -.90456 .90456 .54625 -1.5938 170.63) translate(-20 -776.54)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <rect id="ad" x="20" y="947.95" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <path id="c" transform="translate(20 510.76)" d="m78.5 71.65h143" color="#000000" fill="none" stroke="#000" stroke-width=".3" inkscape:connector-curvature="0" inkscape:tile-cx="164.00000" inkscape:tile-cy="543.50000" inkscape:tile-h="0.30000001" inkscape:tile-w="143.30000"/>
+  <use transform="translate(20 510.76) rotate(1.5 150.01 71.648) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(3 150 71.652) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(4.5 150 71.649) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(6 150 71.653) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(7.5 150 71.651) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(9 150 71.652) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(10.5 150 71.648) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(18 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(19.5 150 71.649) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(21 150 71.649) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(22.5 150 71.651) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(24 150 71.649) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(25.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(27 150 71.651) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(28.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(36 150 71.651) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) matrix(.79335 .60876 -.60876 .79335 74.615 -76.508) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(39 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(40.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(42 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(43.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(45 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(46.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(54 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(55.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(57 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(58.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(60 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(61.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(63 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(64.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(72 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(73.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(75 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(76.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(78 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(79.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(81 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(82.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(90 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(91.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(93 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(94.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(96 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(97.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(99 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(100.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(108 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(109.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(111 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(112.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(114 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(115.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(117 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(118.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(126 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) matrix(-.60876 .79335 -.79335 -.60876 298.16 -3.735) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(129 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(130.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(132 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(133.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(135 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(136.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(144 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(145.5 150 71.651) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(147 150 71.649) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(148.5 150 71.651) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(150 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(151.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(153 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(154.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(162 150 71.649) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(163.5 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(165 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(166.5 150 71.649) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(168 150 71.651) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(169.5 150 71.649) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(171 150 71.65) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <use transform="translate(20 510.76) rotate(172.5 150 71.651) translate(-20 -510.76)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
+  <rect id="ad" x="20" y="665.76" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ad"/>
    </flowRegion>
-   <flowDiv>如何將影像切片 (多個矩形輸出範圍)？</flowDiv>
+   <flowDiv>在上面的例子裡，直線繞著自己的中心旋轉。但如果你想要的旋轉中心在形狀的外面怎麼辦？只要使用選取工具在物件上點擊兩下進入旋轉模式。將物件的旋轉中心 (外觀為小叉叉形狀的控制點) 到你要鋪排的中心位置。對物件使用<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">建立鋪排仿製</flowSpan>。這就是利用隨機性的縮放、旋轉和透明來製作「爆炸」或「恆星爆裂」效果的方法：</flowDiv>
   </flowRoot>
-  <rect id="ac" x="20" y="961.17" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <g id="d" transform="translate(20 723.12) matrix(.63768 0 0 .63768 48.609 -470.92)" inkscape:tile-cx="158.99982" inkscape:tile-cy="859.24904" inkscape:tile-h="7.3333200" inkscape:tile-w="87.999840">
+   <path d="m210.17 859.92c4.533-2.0828 15.804-3.798 15.804-0.12252 0 3.6754-15.804 0.12252-15.804 0.12252z" color="#000000" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+   <rect x="90" y="853.5" width="138" height="11.5" color="#000000" opacity="0" stroke-width=".25px"/>
+  </g>
+  <use transform="translate(20 723.12) matrix(1.5824 -.94905 .94905 1.5824 -160.44 97.51) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.15802 -.1467 .1467 .15802 115 86.842) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.3812 -.31038 .31038 .3812 68.919 94.208) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.9161 -.77244 .77244 .9161 -46.896 122.33) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.27118 1.0204 -1.0204 .27118 187.9 -96.936) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.054495 1.1179 -1.1179 .054495 227.91 -94.879) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(1.3012 -.34248 .34248 1.3012 -71.549 28.181) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.43783 -.057061 .057061 .43783 79.931 51.849) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.30681 .099409 -.099409 .30681 111.63 38.468) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.0307 .73379 -.73379 -.0307 211.11 -30.699) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.5877 1.5039 -1.5039 .5877 177.65 -193.84) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.063589 .24175 -.24175 -.063589 178.15 45.64) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.11279 .4804 -.4804 -.11279 203.91 13.632) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.47048 .34479 -.34479 .47048 105.98 -10.941) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.90328 1.2976 -1.2976 .90328 114.43 -187.19) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(1.6387 .41348 -.41348 1.6387 -63.969 -111.21) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(1.3754 .84138 -.84138 1.3754 8.4863 -155.11) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.37243 1.258 -1.258 .37243 191.01 -140.37) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.97419 .80737 -.80737 .97419 66.043 -119.12) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.73194 1.6333 -1.6333 -.73194 385.56 -111.62) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.67313 .51862 -.51862 .67313 88.967 -52.623) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.02547 .99819 -.99819 .02547 223.05 -74.684) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.036052 .53209 -.53209 -.036052 196.38 -.031024) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.0903 .48582 -.48582 -1.0903 350.95 88.09) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.69835 .18974 -.18974 -.69835 269.36 102.32) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.058852 .81222 -.81222 .058852 203.72 -49.36) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.72687 1.5656 -1.5656 .72687 161.53 -213.81) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.93737 .98403 -.98403 -.93737 366.38 1.5841) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.744 -.33229 .33229 -1.744 386.02 261.15) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.22296 1.1443 -1.1443 .22296 204.67 -111.81) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.34393 1.1531 -1.1531 -.34393 290.38 -69.467) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.18401 .80395 -.80395 -.18401 239.51 -29.417) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.65776 .631 -.631 -.65776 297.25 33.007) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.1784 .0080053 -.0080053 -1.1784 327.38 166.55) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.1888 .96076 -.96076 -1.1888 402.3 24.434) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.58046 -.030743 .030743 -.58046 234.7 126.32) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.867 .42505 -.42505 -.867 312.78 80.012) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.70082 .10013 -.10013 -.70082 262.83 115.95) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.7631 -.2264 .2264 -1.7631 397.02 246.73) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.98245 -1.0913 1.0913 -.98245 213.33 316.36) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.1126 -.1117 .1117 -.1126 158.29 102.43) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.46512 -.23192 .23192 -.46512 201.91 147.61) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.3449 .031643 -.031643 -1.3449 354.17 175.82) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.8418 .7111 -.7111 -.8418 331.03 35.164) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.40673 -1.7162 1.7162 -.40673 78.85 365.76) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.51273 -1.1191 1.1191 -.51273 140.74 284.35) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.0098 .39705 -.39705 -1.0098 332.04 95.207) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.34237 -1.2544 1.2544 -.34237 104.76 291.53) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.3214 -.056325 .056325 -1.3214 343.87 187.21) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.081244 -1.4924 1.4924 .081244 22.892 294.61) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.73546 -.52141 .52141 -.73546 220.17 211.85) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.82671 -.39099 .39099 -.82671 243.9 199.31) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.095044 -1.2019 1.2019 .095044 43.189 249.98) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.40752 -.94837 .94837 -.40752 138.1 250.64) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.23737 -.78446 .78446 .23737 53.988 176.4) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.29723 -.3316 .3316 .29723 79.881 103.86) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.070897 -.56023 .56023 -.070897 117.49 166.5) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.0092847 -.5912 .5912 -.0092847 105.87 166.4) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.64749 -.89537 .89537 .64749 -16.071 161.45) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.20617 -.6552 .6552 .20617 68.62 159.41) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.22868 -1.0741 1.0741 -.22868 101.59 255.73) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.157 -1.3956 1.3956 -1.157 216.09 375.44) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-1.0291 -1.2779 1.2779 -1.0291 205.95 347.94) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.83814 -1.3323 1.3323 .83814 -78.313 212.31) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.097413 -1.1509 1.1509 -.097413 75.99 257.14) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(-.21499 -.73072 .73072 -.21499 125.98 203.17) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(1.6883 -.17049 .17049 1.6883 -116.37 -27.429) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.55378 -.20385 .20385 .55378 51.236 64.939) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(1.1627 -.6377 .6377 1.1627 -73.507 83.13) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(1.5217 -.57461 .57461 1.5217 -122.51 46.016) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <use transform="translate(20 723.12) matrix(.54625 -.90456 .90456 .54625 -1.5938 170.63) translate(-20 -723.12)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
+  <rect id="ac" x="20" y="894.53" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ac"/>
    </flowRegion>
-   <flowDiv>Create a new layer, in that layer create invisible rectangles covering parts of your image. Make sure your document uses the px unit (default), turn on grid and snap the rects to the grid so that each one spans a whole number of px units. Assign meaningful ids to the rects, and export each one to its own file (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Export PNG Image</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">E</flowSpan>)). Then the rects will remember their export filenames. After that, it's very easy to re-export some of the rects: switch to the export layer, use <flowSpan font-weight="bold">Tab</flowSpan> to select the one you need (or use Find by id), and click <flowSpan font-family="Liberation Sans,Arial,sans-serif">Export</flowSpan> in the dialog. Or, you can write a shell script or batch file to export all of your areas, with a command like:</flowDiv>
+   <flowDiv>如何將影像切片 (多個矩形輸出範圍)？</flowDiv>
   </flowRoot>
-  <rect id="ab" x="20" y="1052.8" width="300" height="1e3px" display="none"/>
+  <rect id="ab" x="20" y="907.75" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ab"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i 區域-id -t 檔名.svg</flowSpan></flowDiv>
+   <flowDiv>建立一個新圖層，在這圖層裡建立幾個隱形矩形，讓這些矩形分成幾個部份覆蓋你的影像。確認你的文件是使用 px 單位 (預設)，開啟格線顯示並把矩形都貼齊格線，使每個矩形長度都是整數 px 單位。每個矩形都給予一個有意義的識別名稱 (ID)，並且將每個矩形匯出成自己個別的檔案 (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">檔案</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">匯出 PNG 圖片</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">E</flowSpan>))。而這些矩形會記住匯出的檔名。在那之後，就可以很容易的再次匯出一些檔案：切換到匯出圖層，使用 <flowSpan font-weight="bold">Tab</flowSpan> 來選擇你要匯出的區域 (或依照 ID 來尋找)，然後點擊對話窗裡的<flowSpan font-family="Liberation Sans,Arial,sans-serif">匯出</flowSpan>按鈕。或者，你可以寫一個 shell 腳本或批次命令檔來匯出所有區域，例如下面的指令：</flowDiv>
   </flowRoot>
-  <rect id="aa" x="20" y="1070.9" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="989.39" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aa"/>
    </flowRegion>
-   <flowDiv>for each exported area. The <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-t</flowSpan> switch tells it to use the remembered filename hint, otherwise you can provide the export filename with the <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-e</flowSpan> switch. Alternatively, you can use the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Web</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Slicer</flowSpan> extensions, or <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Export</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Guillotine</flowSpan> for similar results.</flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i area-id -t filename.svg</flowSpan></flowDiv>
   </flowRoot>
-  <rect id="cn" x="20" y="1124.2" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cn" x="20" y="1006.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cn"/>
    </flowRegion>
-   <flowDiv>非線性漸層</flowDiv>
+   <flowDiv>針對每個要匯出的區域。參數 <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-t</flowSpan> 會讓程式使用已記住的檔名提示，或者你可以用參數 <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-e</flowSpan> 指定匯出的檔案名稱。另一種方式，你也可用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">擴充功能</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">網頁</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">切片器</flowSpan> 或 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">擴充功能</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">匯出</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">切片工具</flowSpan> 達成類似的效果。</flowDiv>
   </flowRoot>
-  <rect id="cm" x="20" y="1136.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cm" x="20" y="1051.2" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cm"/>
    </flowRegion>
-   <flowDiv>SVG 版本 1.1 不支援非線性漸層 (即顏色之間有非線性轉變)。不過，你可以用<flowSpan font-style="italic">多停止點</flowSpan>漸層模擬類似的效果。</flowDiv>
+   <flowDiv>非線性漸層</flowDiv>
   </flowRoot>
-  <rect id="cl" x="20" y="1164.6" width="300" height="1e3px" display="none"/>
+  <rect id="cl" x="20" y="1063.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cl"/>
    </flowRegion>
-   <flowDiv>Start with a simple two-stop gradient (you can assign that in the Fill and Stroke dialog or use the gradient tool). Now, with the gradient tool, add a new gradient stop in the middle; either by double-clicking on the gradient line, or by selecting the square-shaped gradient stop and clicking on the button <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Insert new stop</flowSpan> in the gradient tool's tool bar at the top. Drag the new stop a bit. Then add more stops before and after the middle stop and drag them too, so that the gradient looks smooth. The more stops you add, the smoother you can make the resulting gradient. Here's the initial black-white gradient with two stops:</flowDiv>
+   <flowDiv>SVG 版本 1.1 不支援非線性漸層 (即顏色之間有非線性轉變)。不過，你可以用<flowSpan font-style="italic">多停止點</flowSpan>漸層模擬類似的效果。</flowDiv>
+  </flowRoot>
+  <rect id="ck" x="20" y="1091.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ck"/>
+   </flowRegion>
+   <flowDiv>星形帶有簡單的兩點漸層 (你可以在填色和邊框對話窗或使用漸層工具指定顏色)。現在使用漸層工具在中間位置加入新的漸層停止點；可以在漸層線上點擊兩下，或選取小方塊形狀的漸層停止點並點擊在上面漸層工具列的<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">插入新停止點</flowSpan>按鈕。稍微拖動新停止點。然後在中間停止點的前後加入更多的停止點並且也拖動這些停止點，以便讓漸層呈現平滑狀態。你加入愈多停止點會讓漸層看起來更平滑。一開始帶有兩個停止點的黑白漸層：</flowDiv>
   </flowRoot>
   <defs>
    <linearGradient id="z" x1="-753.98" x2="-753.98" y1="-71.602" y2="-5.6264" gradientTransform="matrix(.23728 0 0 4.2145 178.9 12.217)" gradientUnits="userSpaceOnUse">
@@ -555,11 +555,11 @@
     <stop stop-color="#fff" offset="1"/>
    </linearGradient>
   </defs>
-  <rect transform="translate(20 1253.8) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#z)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="ck" x="20" y="1281.9" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 1170.1) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#z)" fill-opacity=".75" fill-rule="evenodd"/>
+  <rect id="cj" x="20" y="1198.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ck"/>
+    <use xlink:href="#cj"/>
    </flowRegion>
    <flowDiv>而這邊有各種樣式的「非線性」多停止點漸層 (用漸層工具查看這些圖形)：</flowDiv>
   </flowRoot>
@@ -644,27 +644,27 @@
     <stop stop-color="#fff" offset="1"/>
    </linearGradient>
   </defs>
-  <rect transform="translate(20 1308.2) matrix(0 -1 -1 0 0 0)" x="-80.351" y="-293.2" width="16.125" height="286.4" fill="url(#r)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect transform="translate(20 1308.2) matrix(0 -1 -1 0 0 0)" x="-64.294" y="-293.2" width="16.125" height="286.4" fill="url(#s)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect transform="translate(20 1308.2) matrix(0 -1 -1 0 0 0)" x="-48.238" y="-293.2" width="16.125" height="286.4" fill="url(#t)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect transform="translate(20 1308.2) matrix(0 -1 -1 0 0 0)" x="-96.408" y="-293.2" width="16.125" height="286.4" fill="url(#u)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect transform="translate(20 1308.2) matrix(0 -1 -1 0 0 0)" x="-112.46" y="-293.2" width="16.125" height="286.4" fill="url(#v)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect transform="translate(20 1308.2) matrix(0 -1 -1 0 0 0)" x="-32.181" y="-293.2" width="16.125" height="286.4" fill="url(#w)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect transform="translate(20 1308.2) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#x)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect transform="translate(20 1308.2) matrix(0 -1 -1 0 0 0)" x="-128.52" y="-293.2" width="16.125" height="286.4" fill="url(#y)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="cj" x="20" y="1454.1" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 1224.5) matrix(0 -1 -1 0 0 0)" x="-80.351" y="-293.2" width="16.125" height="286.4" fill="url(#r)" fill-opacity=".75" fill-rule="evenodd"/>
+  <rect transform="translate(20 1224.5) matrix(0 -1 -1 0 0 0)" x="-64.294" y="-293.2" width="16.125" height="286.4" fill="url(#s)" fill-opacity=".75" fill-rule="evenodd"/>
+  <rect transform="translate(20 1224.5) matrix(0 -1 -1 0 0 0)" x="-48.238" y="-293.2" width="16.125" height="286.4" fill="url(#t)" fill-opacity=".75" fill-rule="evenodd"/>
+  <rect transform="translate(20 1224.5) matrix(0 -1 -1 0 0 0)" x="-96.408" y="-293.2" width="16.125" height="286.4" fill="url(#u)" fill-opacity=".75" fill-rule="evenodd"/>
+  <rect transform="translate(20 1224.5) matrix(0 -1 -1 0 0 0)" x="-112.46" y="-293.2" width="16.125" height="286.4" fill="url(#v)" fill-opacity=".75" fill-rule="evenodd"/>
+  <rect transform="translate(20 1224.5) matrix(0 -1 -1 0 0 0)" x="-32.181" y="-293.2" width="16.125" height="286.4" fill="url(#w)" fill-opacity=".75" fill-rule="evenodd"/>
+  <rect transform="translate(20 1224.5) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#x)" fill-opacity=".75" fill-rule="evenodd"/>
+  <rect transform="translate(20 1224.5) matrix(0 -1 -1 0 0 0)" x="-128.52" y="-293.2" width="16.125" height="286.4" fill="url(#y)" fill-opacity=".75" fill-rule="evenodd"/>
+  <rect id="ci" x="20" y="1370.4" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#cj"/>
-   </flowRegion>
-   <flowDiv>離心放射狀漸層</flowDiv>
-  </flowRoot>
-  <rect id="ci" x="20" y="1466.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ci"/>
    </flowRegion>
-   <flowDiv>Radial gradients don't have to be symmetric. In Gradient tool, drag the central handle of an elliptic gradient with <flowSpan font-weight="bold">Shift</flowSpan>. This will move the x-shaped <flowSpan font-style="italic">focus handle</flowSpan> of the gradient away from its center. When you don't need it, you can snap the focus back by dragging it close to the center.</flowDiv>
+   <flowDiv>離心放射狀漸層</flowDiv>
+  </flowRoot>
+  <rect id="ch" x="20" y="1382.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ch"/>
+   </flowRegion>
+   <flowDiv>放射狀漸層不一定要對稱。用漸層工具，按著 <flowSpan font-weight="bold">Shift</flowSpan> 拖曳橢圓形漸層中央的控制點。這會使漸層中呈現 x 形狀之<flowSpan font-style="italic">作用中的控制點</flowSpan>從中心往外移動。當不需要時，你可以拖曳控制點往中心移回原本的位置。</flowDiv>
   </flowRoot>
   <defs>
    <radialGradient id="q" cx="187.87" cy="494.13" r="40.258" fx="164.26" fy="495.96" gradientTransform="matrix(.93031 0 0 .85381 16.643 -387.2)" gradientUnits="userSpaceOnUse" inkscape:collect="always">
@@ -676,373 +676,373 @@
     <stop stop-opacity="0" offset="1"/>
    </radialGradient>
   </defs>
-  <rect transform="translate(20 1522.1)" x="71.384" y=".59618" width="74.385" height="68.187" fill="url(#p)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
-  <rect transform="translate(20 1522.1)" x="154.23" y=".59618" width="74.385" height="68.187" fill="url(#q)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
-  <rect id="ch" x="20" y="1608.9" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 1429.5)" x="71.384" y=".59618" width="74.385" height="68.187" fill="url(#p)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
+  <rect transform="translate(20 1429.5)" x="154.23" y=".59618" width="74.385" height="68.187" fill="url(#q)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
+  <rect id="cg" x="20" y="1516.3" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ch"/>
-   </flowRegion>
-   <flowDiv>對齊頁面中心</flowDiv>
-  </flowRoot>
-  <rect id="cg" x="20" y="1621.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cg"/>
    </flowRegion>
-   <flowDiv>To align something to the center or side of a page, select the object or group and then choose <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> from the <flowSpan font-family="Liberation Sans,Arial,sans-serif">Relative to:</flowSpan> list in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Align and Distribute</flowSpan> dialog (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>).</flowDiv>
+   <flowDiv>對齊頁面中心</flowDiv>
   </flowRoot>
-  <rect id="cf" x="20" y="1654.7" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cf" x="20" y="1528.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cf"/>
    </flowRegion>
-   <flowDiv>清理文件</flowDiv>
+   <flowDiv>想要對齊頁面中心或邊緣，可選取物件或群組然後在 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">對齊和分佈對話窗</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>) 裡從 <flowSpan font-family="Liberation Sans,Arial,sans-serif">相對於:</flowSpan> 清單中選擇 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">頁面</flowSpan>。</flowDiv>
   </flowRoot>
-  <rect id="ce" x="20" y="1666.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ce" x="20" y="1563" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ce"/>
    </flowRegion>
-   <flowDiv>Many of the no-longer-used gradients, patterns, and markers (more precisely, those which you edited manually) remain in the corresponding palettes and can be reused for new objects. However if you want to optimize your document, use the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Clean Up Document</flowSpan> command in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan> menu. It will remove any gradients, patterns, or markers which are not used by anything in the document, making the file smaller.</flowDiv>
+   <flowDiv>清理文件</flowDiv>
   </flowRoot>
-  <rect id="cd" x="20" y="1732.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cd" x="20" y="1575.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv>隱藏特性和 XML 編輯器</flowDiv>
+   <flowDiv>許多沒用到的漸層、圖樣和標記 (更準確地說是你手動編輯的那些) 保存在對應的參數面板中並可重複使用於新物件上。但是如果你想要將你的文件最佳化，請使用<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">檔案</flowSpan>選單裡的<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">清理文件</flowSpan> 指令。它會移除文件中沒有用到的漸層、圖樣或標記，使檔案體積更小。</flowDiv>
   </flowRoot>
-  <rect id="cc" x="20" y="1744.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cc" x="20" y="1630" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cc"/>
    </flowRegion>
-   <flowDiv>The XML editor (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>) allows you to change almost all aspects of the document without using an external text editor. Also, Inkscape usually supports more SVG features than are accessible from the GUI. The XML editor is one way to get access to these features (if you know SVG).</flowDiv>
+   <flowDiv>隱藏特性和 XML 編輯器</flowDiv>
   </flowRoot>
-  <rect id="cb" x="20" y="1799.6" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cb" x="20" y="1642.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv>改變尺標的測量單位</flowDiv>
+   <flowDiv>XML 編輯器 (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>) 讓你能夠在不使用內部的編輯器情形下改變文件絕大部分的外觀。而且 Inkscape 支援的 SVG 特性通常比圖形介面上可使用的還多。舉例來說，我們現在支援顯示遮罩和裁剪路徑，雖然沒有圖形介面可建立或修改。XML 編輯器是使用這些功能的唯一方法 (如果你了解 SVG 的話)。</flowDiv>
   </flowRoot>
-  <rect id="ca" x="20" y="1811.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ca" x="20" y="1698.1" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ca"/>
    </flowRegion>
-   <flowDiv>In the default template, the unit of measure used by the rulers is mm. This is also the unit used in displaying coordinates at the lower-right corner and preselected in all units menus. (You can always hover your <flowSpan font-weight="bold">mouse</flowSpan> over a ruler to see the tooltip with the units it uses.) To change this, open <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Document Properties</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) and change the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Display units</flowSpan> on the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Page</flowSpan> tab.</flowDiv>
+   <flowDiv>改變尺標的測量單位</flowDiv>
   </flowRoot>
-  <rect id="bz" x="20" y="1877.4" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bz" x="20" y="1710.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bz"/>
    </flowRegion>
-   <flowDiv>圖章</flowDiv>
+   <flowDiv>在預設的範本裡，尺標使用的測量單位為 mm。這也是左下角的顯示坐標上使用的單位和所有選單裡預先選擇的單位。(你可以把<flowSpan font-weight="bold">滑鼠游標</flowSpan>停留在尺標上方會看見單位使用的相關工具提示。) 若要改變單位，開啟 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">文件屬性</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) 並改變在 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">頁面</flowSpan> 分頁上的<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">預設單位</flowSpan>。</flowDiv>
   </flowRoot>
-  <rect id="by" x="20" y="1889.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="by" x="20" y="1765.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#by"/>
    </flowRegion>
-   <flowDiv>To quickly create many copies of an object, use <flowSpan font-style="italic">stamping</flowSpan>. Just drag an object (or scale or rotate it), and while holding the <flowSpan font-weight="bold">mouse</flowSpan> button down, press <flowSpan font-weight="bold">Space</flowSpan>. This leaves a “stamp” of the current object shape. You can repeat it as many times as you wish.</flowDiv>
+   <flowDiv>圖章</flowDiv>
   </flowRoot>
-  <rect id="bx" x="20" y="1933.7" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bx" x="20" y="1777.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bx"/>
    </flowRegion>
-   <flowDiv>筆工具的技巧</flowDiv>
+   <flowDiv>想要快速建立許多物件的複本，就使用<flowSpan font-style="italic">圖章</flowSpan>功能。先拖動物件(或者縮放、旋轉物件)，然後當按住<flowSpan font-weight="bold">滑鼠按鈕</flowSpan>時按<flowSpan font-weight="bold">空白鍵</flowSpan>。這會留下目前物件形狀的「圖案」。你可根據需求重複這個動作好幾次。</flowDiv>
   </flowRoot>
-  <rect id="bw" x="20" y="1946" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bw" x="20" y="1821.6" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv>使用筆 (貝茲曲線) 工具，你有下列幾種方式來結束目前的線條：</flowDiv>
+   <flowDiv>筆工具的技巧</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1970.3)" r="2"/>
-  <rect id="bv" x="40" y="1964.3" width="280" height="1e3px" display="none"/>
+  <rect id="bv" x="20" y="1833.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bv"/>
    </flowRegion>
-   <flowDiv>按 <flowSpan font-weight="bold">Enter</flowSpan> 鍵</flowDiv>
+   <flowDiv>使用筆 (貝茲曲線) 工具，你有下列幾種方式來結束目前的線條：</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1987.5)" r="2"/>
-  <rect id="bu" x="40" y="1981.5" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1858.2)" r="2"/>
+  <rect id="bu" x="40" y="1852.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bu"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Double click</flowSpan> with the left mouse button</flowDiv>
+   <flowDiv>按 <flowSpan font-weight="bold">Enter</flowSpan> 鍵</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2003.2)" r="2"/>
-  <rect id="bt" x="40" y="1997.2" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1875.4)" r="2"/>
+  <rect id="bt" x="40" y="1869.4" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bt"/>
    </flowRegion>
-   <flowDiv>Click with the <flowSpan font-weight="bold">right</flowSpan> mouse button</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">點擊兩下</flowSpan>滑鼠左鍵</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2020.6)" r="2"/>
-  <rect id="bs" x="40" y="2014.6" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1892.7)" r="2"/>
+  <rect id="bs" x="40" y="1886.7" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bs"/>
    </flowRegion>
-   <flowDiv>選擇其他工具</flowDiv>
+   <flowDiv>點擊<flowSpan font-weight="bold">滑鼠右鍵</flowSpan></flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="2031.8" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1909.9)" r="2"/>
+  <rect id="br" x="40" y="1903.9" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>Note that while the path is unfinished (i.e. is shown green, with the current segment red) it does not yet exist as an object in the document. Therefore, to cancel it, use either <flowSpan font-weight="bold">Esc</flowSpan> (cancel the whole path) or <flowSpan font-weight="bold">Backspace</flowSpan> (remove the last segment of the unfinished path) instead of <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Undo</flowSpan>.</flowDiv>
+   <flowDiv>選擇其他工具</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="2079.7" width="300" height="1e3px" display="none"/>
+  <rect id="bq" x="20" y="1921.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>To add a new subpath to an existing path, select that path and start drawing with <flowSpan font-weight="bold">Shift</flowSpan> from an arbitrary point. If, however, what you want is to simply <flowSpan font-style="italic">continue</flowSpan> an existing path, Shift is not necessary; just start drawing from one of the end anchors of the selected path.</flowDiv>
+   <flowDiv>注意當路徑處於未完成狀態 (即路徑呈現綠色，目前的線段呈現紅色)，這個路徑尚未以物件形態存在文件中。因此，可用 <flowSpan font-weight="bold">Esc</flowSpan> (取消整個路徑) 或 <flowSpan font-weight="bold">Backspace</flowSpan> (移除未完成路徑的最後線段) 來取消路徑，而不用<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">復原</flowSpan>。</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="2123.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bp" x="20" y="1960.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bp"/>
    </flowRegion>
-   <flowDiv>輸入 Unicode 字元</flowDiv>
+   <flowDiv>要加入新的子路徑到現有的路徑，選取路徑並按著 <flowSpan font-weight="bold">Shift</flowSpan> 從任意一個點開始繪製。但是如果你只不過想<flowSpan font-style="italic">接續</flowSpan>現有的路徑，那麼不需要按著 Shift 鍵；僅需從選取路徑的結束錨點開始繪製。</flowDiv>
   </flowRoot>
-  <rect id="bo" x="20" y="2136.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bo" x="20" y="2005" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bo"/>
    </flowRegion>
-   <flowDiv>While in the Text tool, pressing <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> toggles between Unicode and normal mode. In Unicode mode, each group of 4 hexadecimal digits you type becomes a single Unicode character, thus allowing you to enter arbitrary symbols (as long as you know their Unicode codepoints and the font supports them). To finish the Unicode input, press <flowSpan font-weight="bold">Enter</flowSpan>. For example, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>+<flowSpan font-weight="bold">2</flowSpan>+<flowSpan font-weight="bold">0</flowSpan>+<flowSpan font-weight="bold">1</flowSpan>+<flowSpan font-weight="bold">4</flowSpan>+<flowSpan font-weight="bold">Enter</flowSpan> inserts an em-dash (—). To quit the Unicode mode without inserting anything press <flowSpan font-weight="bold">Esc</flowSpan>.</flowDiv>
+   <flowDiv>輸入 Unicode 字元</flowDiv>
   </flowRoot>
-  <rect id="bn" x="20" y="2206.7" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="2017.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bn"/>
    </flowRegion>
-   <flowDiv>You can also use the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Text</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Unicode Characters</flowSpan> dialog to search for and insert glyphs into your document.</flowDiv>
+   <flowDiv>當使用文字工具時，按 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> 可在一般模式與 Unicode 模式之間作切換。在 Unicode 模式中，你輸入的字會以 4 個十六進位數字為一組變成一個單一的 Unicode 字元，因而允許你輸入各種符號 (只要你曉得它們的 Unicode 區分碼且字型能支援)。按 <flowSpan font-weight="bold">Enter</flowSpan> 可完成 Unicode 輸入。例如，<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>+<flowSpan font-weight="bold">2</flowSpan>+<flowSpan font-weight="bold">0</flowSpan>+<flowSpan font-weight="bold">1</flowSpan>+<flowSpan font-weight="bold">4</flowSpan>+<flowSpan font-weight="bold">Enter</flowSpan> 可插入一個 em-dash (—)。按 <flowSpan font-weight="bold">Esc</flowSpan> 可不插入任何字元便離開 Unicode 模式。</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="2240.2" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bm" x="20" y="2077.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv>使用格線繪製圖示</flowDiv>
+   <flowDiv>你也可以使用<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">文字</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">萬國碼字元</flowSpan>對話窗來搜尋和插入字形到你的檔案中。</flowDiv>
   </flowRoot>
-  <rect id="bl" x="20" y="2252.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bl" x="20" y="2100.2" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv>Suppose you want to create a 24x24 pixel icon. Create a 24x24 px canvas (use the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Document Preferences</flowSpan>) and set the grid to 0.5 px (48x48 gridlines). Now, if you align filled objects to <flowSpan font-style="italic">even</flowSpan> gridlines, and stroked objects to <flowSpan font-style="italic">odd</flowSpan> gridlines with the stroke width in px being an even number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel), you get a crisp bitmap image without unneeded antialiasing.</flowDiv>
+   <flowDiv>使用格線繪製圖示</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="2317.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bk" x="20" y="2112.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
-   <flowDiv>物件旋轉</flowDiv>
+   <flowDiv>假設你想製作一個 24x24 像素的圖示。建立一幅寬高為 24x24 px 的畫布 (使用<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">文件偏好設定</flowSpan>) 並設定格線為 0.5 px (48x48 的格線數)。這時，如果你將填充物件對齊<flowSpan font-style="italic">偶數</flowSpan>格線，而邊框物件對齊到<flowSpan font-style="italic">奇數</flowSpan>格線加上 px 單位的邊框寬度就變成偶數，並於預設 90dpi (也就是 1 px 變成 1 點陣圖像素) 匯出，你會得到一個清晰的點陣圖像，而沒有不必要的平滑效果。</flowDiv>
   </flowRoot>
-  <rect id="bj" x="20" y="2330.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bj" x="20" y="2177.9" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bj"/>
    </flowRegion>
-   <flowDiv>When in the Selector tool, <flowSpan font-weight="bold">click</flowSpan> on an object to see the scaling arrows, then <flowSpan font-weight="bold">click</flowSpan> again on the object to see the rotation and skew arrows. If the arrows at the corners are clicked and dragged, the object will rotate around the center (shown as a cross mark). If you hold down the <flowSpan font-weight="bold">Shift</flowSpan> key while doing this, the rotation will occur around the opposite corner. You can also drag the rotation center to any place.</flowDiv>
+   <flowDiv>物件旋轉</flowDiv>
   </flowRoot>
-  <rect id="bi" x="20" y="2390" width="300" height="1e3px" display="none"/>
+  <rect id="bi" x="20" y="2190.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>Or, you can rotate from keyboard by pressing <flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">]</flowSpan> (by 15 degrees) or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> (by 90 degrees). The same <flowSpan font-weight="bold">[</flowSpan> <flowSpan font-weight="bold">]</flowSpan> keys with <flowSpan font-weight="bold">Alt</flowSpan> perform slow pixel-size rotation.</flowDiv>
+   <flowDiv>當使用選取工具，在物件上<flowSpan font-weight="bold">點擊</flowSpan>會看到縮放箭頭，然後在物件上再次<flowSpan font-weight="bold">點擊</flowSpan>會見到旋轉、位移的箭頭。如果點擊和拖曳四個角上的箭頭，物件會繞著中心點旋轉 (顯示為十字標誌)。如果你在做這個動作時按住 <flowSpan font-weight="bold">Shift</flowSpan> 鍵，那麼會繞著對角作旋轉。你也能將旋轉中心拖到任何地方。</flowDiv>
   </flowRoot>
-  <rect id="bh" x="20" y="2423.4" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bh" x="20" y="2239.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv>下落式陰影</flowDiv>
+   <flowDiv>或者，你可以按鍵盤上的 <flowSpan font-weight="bold">[</flowSpan> 和 <flowSpan font-weight="bold">]</flowSpan> (15 度) 或 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> 和 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> (90 度)作旋轉。按著 <flowSpan font-weight="bold">Alt</flowSpan> 並按 <flowSpan font-weight="bold">[]</flowSpan> 鍵可作緩慢的像素大小旋轉。</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="2435.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bg" x="20" y="2273.2" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>To quickly create drop shadows for objects, use the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Filters</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Shadows and Glows</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Drop Shadow</flowSpan> feature.</flowDiv>
+   <flowDiv>下落式陰影</flowDiv>
   </flowRoot>
-  <rect id="bf" x="20" y="2462.4" width="300" height="1e3px" display="none"/>
+  <rect id="bf" x="20" y="2285.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>You can also easily create blurred drop shadows for objects manually with blur in the Fill and Stroke dialog. Select an object, duplicate it by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>, press <flowSpan font-weight="bold">PgDown</flowSpan> to put it beneath original object, place it a little to the right and lower than original object. Now open Fill And Stroke dialog and change Blur value to, say, 5.0. That's it!</flowDiv>
+   <flowDiv>使用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">濾鏡</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">陰影和光暈</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">下落式陰影</flowSpan> 功能能夠快速建立物件的下落式陰影。</flowDiv>
   </flowRoot>
-  <rect id="be" x="20" y="2517.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="be" x="20" y="2302.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv>將文字放置在路徑上</flowDiv>
+   <flowDiv>你也可以藉由填充和邊框對話窗中的模糊很簡單地手動為物件加上模糊的下落式陰影。先選取物件，用 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> 再製，按 <flowSpan font-weight="bold">PgDown</flowSpan> 把再製物件放到原始物件的下方，將再製物件放置到比原始物件下面一點及右邊一點的位置。現在開啟「填充和邊框」對話窗並將模糊值改為 5.0。就是這樣！</flowDiv>
   </flowRoot>
-  <rect id="bd" x="20" y="2529.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bd" x="20" y="2357.7" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>To place text along a curve, select the text and the curve together and choose <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Put on Path</flowSpan> from the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Text</flowSpan> menu. The text will start at the beginning of the path. In general it is best to create an explicit path that you want the text to be fitted to, rather than fitting it to some other drawing element — this will give you more control without screwing over your drawing.</flowDiv>
+   <flowDiv>將文字放置在路徑上</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="2584.4" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bc" x="20" y="2370.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
-   <flowDiv>選取原始物件</flowDiv>
+   <flowDiv>要將文字沿著曲線放置，同時選取文字和路徑並從<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">文字</flowSpan>選單中選擇<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">置於路徑</flowSpan>。這串文字會從路徑起點開始。一般來說最好的方式是建立一個你想要填入的明確路徑，而不是把文字填入到其他繪圖元件 — 這會讓你更好控制且不會影響到你的繪畫。</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="2596.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bb" x="20" y="2414.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv>When you have a text on path, a linked offset, or a clone, their source object/path may be difficult to select because it may be directly underneath, or made invisible and/or locked. The magic key <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> will help you; select the text, linked offset, or clone, and press <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> to move selection to the corresponding path, offset source, or clone original.</flowDiv>
+   <flowDiv>選取原始物件</flowDiv>
   </flowRoot>
-  <rect id="ba" x="20" y="2651.3" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ba" x="20" y="2426.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
-   <flowDiv>恢復超出螢幕的視窗</flowDiv>
+   <flowDiv>當你有置於路徑上的文字、連結偏移物件或仿製物件，這些物件的來源物件/路徑可能很難選取，因為可能正好在底下或設定為隱形和/或鎖定。神奇的 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> 會幫助你；先選取文字、連結偏移物件或仿製物件，然後按 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> 可將選取移動到對應的路徑、偏移來源或仿製原始物件。</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2663.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="az" x="20" y="2481.4" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
-   <flowDiv>When moving documents between systems with different resolutions or number of displays, you may find Inkscape has saved a window position that places the window out of reach on your screen. Simply maximise the window (which will bring it back into view, use the task bar), save and reload. You can avoid this altogether by unchecking the global option to save window geometry (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Inkscape Preferences</flowSpan>, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Interface</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Windows</flowSpan> section).</flowDiv>
+   <flowDiv>恢復超出螢幕的視窗</flowDiv>
   </flowRoot>
-  <rect id="ay" x="20" y="2729.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ay" x="20" y="2493.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv>透明、漸層和 PostScript 匯出</flowDiv>
+   <flowDiv>當在不同的解析度或一些顯示模式的系統之間移動文件時，你會發現 Inkscape 已經儲存了視窗位置，程式會把視窗放置到超出螢幕的地方。直接將視窗最大化 (使用任務欄會把視窗帶回檢視區)，儲存並重新載入。你可以藉由取消勾選整體選項變成儲存視窗空間 (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Inkscape 偏好設定</flowSpan>，<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">介面</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">視窗</flowSpan>部分) 來避免這種問題。</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="2742.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ax" x="20" y="2549.5" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
-   <flowDiv>PostScript or EPS formats do not support <flowSpan font-style="italic">transparency</flowSpan>, so you should never use it if you are going to export to PS/EPS. In the case of flat transparency which overlays flat color, it's easy to fix it: Select one of the transparent objects; switch to the Dropper tool (<flowSpan font-weight="bold">F7</flowSpan> or <flowSpan font-weight="bold">d</flowSpan>); make sure that the <flowSpan font-family="Liberation Sans,Arial,sans-serif">Opacity: Pick</flowSpan> button in the dropper tool's tool bar is deactivated; click on that same object. That will pick the visible color and assign it back to the object, but this time without transparency. Repeat for all transparent objects. If your transparent object overlays several flat color areas, you will need to break it correspondingly into pieces and apply this procedure to each piece. Note that the dropper tool does not change the opacity value of the object, but only the alpha value of its fill or stroke color, so make sure that every object's opacity value is set to 100% before you start out.</flowDiv>
+   <flowDiv>透明、漸層和 PostScript 匯出</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="2860.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="aw" x="20" y="2562.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aw"/>
    </flowRegion>
-   <flowDiv>Interactivity</flowDiv>
+   <flowDiv>PostScript 或 EPS 格式不支援<flowSpan font-style="italic">透明</flowSpan>，因此如果你想要匯出成 PS/EPS 就不要使用透明。至於平面透明會覆蓋平面色彩的問題，很簡單就能解決：選取透明物件的其中一個；切換到滴管工具 (<flowSpan font-weight="bold">F7</flowSpan> 或 <flowSpan font-weight="bold">d</flowSpan>)；確認滴管工具列上<flowSpan font-family="Liberation Sans,Arial,sans-serif">不透明度：拾取</flowSpan>按鈕為停用狀態；然後在同物件上點擊。這會拾取可見顏色並指派回到物件。對全部其他透明物件重複上述的步驟。如果你的透明物件蓋住一些平面顏色範圍，你需要相對地將它打散成數個元件並對每個元件套用上述的步驟。注意滴管工具不只會改變物件的不透明度，也會變更物件的填色或邊框透明值，因此動作前先確認每個物件不透明值設定為 100%。</flowDiv>
   </flowRoot>
-  <rect id="av" x="20" y="2873.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="av" x="20" y="2649.4" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#av"/>
    </flowRegion>
-   <flowDiv>Most SVG elements can be tweaked to react to user input (usually this will only work if the SVG is displayed in a web browser). </flowDiv>
+   <flowDiv>互動性</flowDiv>
   </flowRoot>
-  <rect id="au" x="20" y="2901.3" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="2661.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#au"/>
    </flowRegion>
-   <flowDiv>The simplest possibility is to add a clickable link to objects. For this <flowSpan font-weight="bold">right-click</flowSpan> the object and select <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Create Link</flowSpan> from the context menu. The "Object attributes" dialog will open, where you can set the target of the link using the value of <flowSpan font-family="Liberation Sans,Arial,sans-serif">href</flowSpan>.</flowDiv>
+   <flowDiv>多數 SVG 元件可以調整針對使用者輸入做出反應 (通常這只在網頁瀏覽程式中顯示 SVG 時有效果)。</flowDiv>
   </flowRoot>
-  <rect id="at" x="20" y="2940.2" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="2690.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
-   <flowDiv>More control is possible using the interactivity attributes accessible from the "Object Properties" dialog (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). Here you can implement arbitrary functionality using JavaScript. Some basic examples:</flowDiv>
+   <flowDiv>最簡單的功能是加入可點擊的連結到物件中。在物件上<flowSpan font-weight="bold">點擊滑鼠右鍵</flowSpan>並從功能表選單中選擇<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">建立連結</flowSpan>。出現「物件性質」對話窗後，你能夠使用 <flowSpan font-family="Liberation Sans,Arial,sans-serif">href</flowSpan> 數值設定目標連結。</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2984.8)" r="2"/>
-  <rect id="as" x="40" y="2978.8" width="280" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="2718.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv>Open another file in the current window when clicking on the object: </flowDiv>
+   <flowDiv>更多操作可從「物件性質」對話窗 (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>) 中使用可存取的互動性屬性值。你也可以使用 JavaScript 實現任意函數功能。一些基本範例：</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3002.2)" r="2"/>
-  <rect id="ar" x="60" y="2996.2" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(35 2753.8)" r="2"/>
+  <rect id="ar" x="40" y="2747.8" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv>Set <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> to <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.location='file2.svg';</flowSpan></flowDiv>
+   <flowDiv>點擊物件時在目前視窗開啟其他檔案：</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3019.6)" r="2"/>
-  <rect id="aq" x="40" y="3013.6" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(55 2771.1)" r="2"/>
+  <rect id="aq" x="60" y="2765.1" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
-   <flowDiv>Open an arbitrary weblink in new window when clicking on the object: </flowDiv>
+   <flowDiv>將 <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> 設定為 <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.location='file2.svg';</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3036.9)" r="2"/>
-  <rect id="ap" x="60" y="3030.9" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(35 2789.3)" r="2"/>
+  <rect id="ap" x="40" y="2783.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
-   <flowDiv>Set <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> to <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.open("https://inkscape.org","_blank");</flowSpan></flowDiv>
+   <flowDiv>點擊物件時用新視窗開啟任意網頁連結：</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3065)" r="2"/>
-  <rect id="ao" x="40" y="3059" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(55 2806.6)" r="2"/>
+  <rect id="ao" x="60" y="2800.6" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
    </flowRegion>
-   <flowDiv>Reduce transparency of the object while hovering: </flowDiv>
+   <flowDiv>將 <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> 設定為 <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.open("https://inkscape.org","_blank");</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3082.4)" r="2"/>
-  <rect id="an" x="60" y="3076.4" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(35 2835.5)" r="2"/>
+  <rect id="an" x="40" y="2829.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#an"/>
    </flowRegion>
-   <flowDiv>Set <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseover</flowSpan> to <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 0.5;</flowSpan></flowDiv>
+   <flowDiv>滑鼠移到上方時減少物件透明度：</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3099.8)" r="2"/>
-  <rect id="am" x="60" y="3093.8" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(55 2852.8)" r="2"/>
+  <rect id="am" x="60" y="2846.8" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
    </flowRegion>
-   <flowDiv>Set <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseout</flowSpan> to <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 1;</flowSpan></flowDiv>
+   <flowDiv>將 <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseover</flowSpan> 設定為 <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 0.5;</flowSpan></flowDiv>
   </flowRoot>
-  <use x="47" y="3147.278121" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
-  <rect id="cu" x="70" y="3141.3" width="230" height="1e3px" display="none"/>
+  <circle transform="translate(55 2871)" r="2"/>
+  <rect id="al" x="60" y="2865" width="260" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#al"/>
+   </flowRegion>
+   <flowDiv>將 <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseout</flowSpan> 設定為 <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 1;</flowSpan></flowDiv>
+  </flowRoot>
+  <use x="47" y="2919.198562" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
+  <rect id="cu" x="70" y="2913.2" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#cu"/>
    </flowRegion>
    <flowDiv>Bulia Byak; Alexandre Prokoudine; Colin Marquardt; Ivan Masár; Kris De Gussem; Nicolas Dufour; Maren Hachmann; Roland Alton; Patrick Storz; Guillaume Audirac; Gellért Gyuris</flowDiv>
   </flowRoot>
-  <use x="47" y="3179.341208" inkscape:label="icon-credits-translators" xlink:href="#co"/>
-  <rect id="cs" x="70" y="3173.3" width="230" height="1e3px" display="none"/>
+  <use x="47" y="2951.261649" inkscape:label="icon-credits-translators" xlink:href="#co"/>
+  <rect id="cs" x="70" y="2945.3" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
-   <flowDiv>Dong-Jun Wu — 2009, 2014, 2016; — 2009</flowDiv>
+   <flowDiv>dongjun wu — 2009; 蘇秀慧 — 2009</flowDiv>
   </flowRoot>
-  <use x="47" y="3196.7757783" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
-  <rect id="ct" x="70" y="3190.8" width="230" height="1e3px" display="none"/>
+  <use x="47" y="2969.3817662" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
+  <rect id="ct" x="70" y="2963.4" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#ct"/>
@@ -1051,7 +1051,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="cr" transform="translate(0 3038.4)">
+  <g id="cr" transform="translate(0 2811)">
    <defs>
     <filter id="m" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

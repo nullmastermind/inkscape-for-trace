@@ -15793,10 +15793,10 @@
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv/>
+   <flowDiv>Ivan Masár — 2016</flowDiv>
   </flowRoot>
-  <use x="47" y="2199.9832367" inkscape:label="icon-credits-designer" xlink:href="#ao"/>
-  <rect id="as" x="70" y="2194" width="230" height="1e3px" display="none"/>
+  <use x="47" y="2204.4597992" inkscape:label="icon-credits-designer" xlink:href="#ao"/>
+  <rect id="as" x="70" y="2198.5" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#as"/>
@@ -15805,7 +15805,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="aq" transform="translate(0 2041.6)">
+  <g id="aq" transform="translate(0 2046.1)">
    <defs>
     <filter id="j" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

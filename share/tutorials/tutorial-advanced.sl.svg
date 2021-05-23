@@ -259,73 +259,73 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#bv"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Napredne tehnike</tspan></tspan></text>
-  <rect id="ae" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="x" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#ae"/>
+    <use xlink:href="#x"/>
    </flowRegion>
    <flowDiv>Ta vodič zajema urejanje oblike in vozlišč, prostoročno risanje in risanje krivulj bezier, urejanje poti, matematične operacije, zamikanje, poenostavljanje, uporabo besedil.</flowDiv>
   </flowRoot>
-  <rect id="ac" x="40" y="172.92" width="264" height="1e3px" display="none"/>
+  <rect id="w" x="40" y="172.92" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
-   <flowRegion>
-    <use xlink:href="#ac"/>
-   </flowRegion>
-   <flowDiv>Use <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">arrows</flowSpan>, <flowSpan font-weight="bold">mouse wheel</flowSpan>, or <flowSpan font-weight="bold">middle button drag</flowSpan> to scroll the page down. For basics of object creation, selection, and transformation, see the Basic tutorial in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Tutorials</flowSpan>.</flowDiv>
-  </flowRoot>
-  <rect id="w" x="20" y="218.64" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#w"/>
    </flowRegion>
-   <flowDiv>Metode lepljenja</flowDiv>
+   <flowDiv>Use <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">arrows</flowSpan>, <flowSpan font-weight="bold">mouse wheel</flowSpan>, or <flowSpan font-weight="bold">middle button drag</flowSpan> to scroll the page down. For basics of object creation, selection, and transformation, see the Basic tutorial in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Tutorials</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="v" x="20" y="231.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="v" x="20" y="218.64" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#v"/>
    </flowRegion>
-   <flowDiv>After you copy some object(s) by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan> or cut by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>, the regular <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste</flowSpan> command (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>) pastes the copied object(s) right under the mouse cursor or, if the cursor is outside the window, to the center of the document window. However, the object(s) in the clipboard still remember the original place from which they were copied, and you can paste back there by <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste In Place</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>).</flowDiv>
+   <flowDiv>Metode lepljenja</flowDiv>
   </flowRoot>
-  <rect id="u" x="20" y="291.19" width="300" height="1e3px" display="none"/>
+  <rect id="u" x="20" y="231.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#u"/>
    </flowRegion>
-   <flowDiv>Another command, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Style</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>), applies the style of the (first) object on the clipboard to the current selection. The “style” thus pasted includes all the fill, stroke, and font settings, but not the shape, size, or parameters specific to a shape type, such as the number of tips of a star.</flowDiv>
+   <flowDiv>After you copy some object(s) by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan> or cut by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>, the regular <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste</flowSpan> command (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>) pastes the copied object(s) right under the mouse cursor or, if the cursor is outside the window, to the center of the document window. However, the object(s) in the clipboard still remember the original place from which they were copied, and you can paste back there by <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste In Place</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="t" x="20" y="340.65" width="300" height="1e3px" display="none"/>
+  <rect id="t" x="20" y="291.19" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#t"/>
    </flowRegion>
-   <flowDiv>Yet another set of paste commands, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Size</flowSpan>, scales the selection to match the desired size attribute of the clipboard object(s). There are a number of commands for pasting size and are as follows: Paste Size, Paste Width, Paste Height, Paste Size Separately, Paste Width Separately, and Paste Height Separately.</flowDiv>
+   <flowDiv>Another command, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Style</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">V</flowSpan>), applies the style of the (first) object on the clipboard to the current selection. The “style” thus pasted includes all the fill, stroke, and font settings, but not the shape, size, or parameters specific to a shape type, such as the number of tips of a star.</flowDiv>
   </flowRoot>
-  <rect id="s" x="20" y="390.09" width="300" height="1e3px" display="none"/>
+  <rect id="s" x="20" y="340.65" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#s"/>
    </flowRegion>
-   <flowDiv><flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Size</flowSpan> scales the whole selection to match the overall size of the clipboard object(s). <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Width</flowSpan>/<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Height</flowSpan> scale the whole selection horizontally/vertically so that it matches the width/height of the clipboard object(s). These commands honor the scale ratio lock on the Selector Tool controls bar (between W and H fields), so that when that lock is pressed, the other dimension of the selected object is scaled in the same proportion; otherwise the other dimension is unchanged. The commands containing “Separately” work similarly to the above described commands, except that they scale each selected object separately to make it match the size/width/height of the clipboard object(s).</flowDiv>
+   <flowDiv>Yet another set of paste commands, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Size</flowSpan>, scales the selection to match the desired size attribute of the clipboard object(s). There are a number of commands for pasting size and are as follows: Paste Size, Paste Width, Paste Height, Paste Size Separately, Paste Width Separately, and Paste Height Separately.</flowDiv>
   </flowRoot>
-  <rect id="r" x="20" y="482.2" width="300" height="1e3px" display="none"/>
+  <rect id="r" x="20" y="390.09" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#r"/>
    </flowRegion>
-   <flowDiv>Clipboard is system-wide - you can copy/paste objects between different Inkscape instances as well as between Inkscape and other applications (which must be able to handle SVG on the clipboard to use this). </flowDiv>
+   <flowDiv><flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Size</flowSpan> scales the whole selection to match the overall size of the clipboard object(s). <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Width</flowSpan>/<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Paste Height</flowSpan> scale the whole selection horizontally/vertically so that it matches the width/height of the clipboard object(s). These commands honor the scale ratio lock on the Selector Tool controls bar (between W and H fields), so that when that lock is pressed, the other dimension of the selected object is scaled in the same proportion; otherwise the other dimension is unchanged. The commands containing “Separately” work similarly to the above described commands, except that they scale each selected object separately to make it match the size/width/height of the clipboard object(s).</flowDiv>
   </flowRoot>
-  <rect id="q" x="20" y="526.22" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="q" x="20" y="482.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#q"/>
    </flowRegion>
-   <flowDiv>Risanje prostoročnih in običajnih črt</flowDiv>
+   <flowDiv>Clipboard is system-wide - you can copy/paste objects between different Inkscape instances as well as between Inkscape and other applications (which must be able to handle SVG on the clipboard to use this). </flowDiv>
   </flowRoot>
-  <rect id="p" x="20" y="538.85" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="p" x="20" y="526.22" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#p"/>
+   </flowRegion>
+   <flowDiv>Risanje prostoročnih in običajnih črt</flowDiv>
+  </flowRoot>
+  <rect id="o" x="20" y="538.85" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#o"/>
    </flowRegion>
    <flowDiv>Najlažji način za stvaritev poljubne oblike je, da jo narišete z orodjem za prostoročno risanje - svinčnikom (<flowSpan font-weight="bold">F6</flowSpan>):</flowDiv>
   </flowRoot>
@@ -338,10 +338,10 @@
   <path transform="translate(20 574.76)" d="m128.22 10.791c0.45322 0.67983-16.446 58.368-18.214 65-6.2285 23.357-13.256 15.48 2.8572-12.143 7.9942-13.704 20.377-26.489 12.5-2.8571-3.6409 10.923-12.324-1.9714-8.5714 9.2857 2.1318 6.3955 3.5815 10.662 10.714 9.6429" color="#000000" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cccccc"/>
   <path transform="translate(20 574.76)" d="m171.79 48.291c-0.9245 1.3868-3.4525-0.61898-5 0-15.47 6.1878-25.187 28.823-0.71428 23.929 2.5602-0.51204 4.7619-2.1428 7.1428-3.2143" color="#000000" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 574.76)" d="m233.57 51.862c-0.0235 0.04222 8.2119-2.601 14.643-5.3571 13.015-5.578 12.875-20.01-2.1428-11.429-10.41 5.9488-18.703 23.929-1.0714 23.929 9.3689 0 21.654-3.8909 28.929-10.357" color="#000000" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="o" x="20" y="698.65" width="300" height="1e3px" display="none"/>
+  <rect id="n" x="20" y="698.65" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#o"/>
+    <use xlink:href="#n"/>
    </flowRegion>
    <flowDiv>If you want more regular shapes, use the Pen (Bezier) tool (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">F6</flowSpan>):</flowDiv>
   </flowRoot>
@@ -354,81 +354,81 @@
   <path transform="translate(20 724.01)" d="m171.94 33.515h25.411s-15.372 0.2789-15.999 13.387c-0.62742 13.108 7.398 17.195 13.019 11.574 5.952-5.952 7.4291-24.649 7.4291-24.649v31.203" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cccscc"/>
   <path transform="translate(20 724.01)" d="m208.33 73.397v-40.161h13.6c14.158 0 5.224 11.84-0.83268 18.686-6.025 6.8097-8.8001 5.641-8.8001-2.2312" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cccsc"/>
   <path transform="translate(20 724.01)" d="m229.79 44.95h37.646s-0.31371-11.156-17.568-11.435c-17.254-0.2789-15.686 17.849-15.686 23.427s5.0194 15.897 17.882 15.897c12.862 0 15.372-13.666 15.372-20.081" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="n" x="20" y="809.56" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#n"/>
-   </flowRegion>
-   <flowDiv>With the Pen tool, each <flowSpan font-weight="bold">click</flowSpan> creates a sharp node without any curve handles, so a series of clicks produces a sequence of straight line segments. <flowSpan font-weight="bold">click</flowSpan> and <flowSpan font-weight="bold">drag</flowSpan> creates a smooth Bezier node with two collinear opposite handles. Press <flowSpan font-weight="bold">Shift</flowSpan> while dragging out a handle to rotate only one handle and fix the other. As usual, <flowSpan font-weight="bold">Ctrl</flowSpan> limits the direction of either the current line segment or the Bezier handles to 15 degree increments. Pressing <flowSpan font-weight="bold">Enter</flowSpan> finalizes the line, <flowSpan font-weight="bold">Esc</flowSpan> cancels it. To cancel only the last segment of an unfinished line, press <flowSpan font-weight="bold">Backspace</flowSpan>.</flowDiv>
-  </flowRoot>
-  <rect id="br" x="20" y="880.29" width="300" height="1e3px" display="none"/>
+  <rect id="br" x="20" y="809.56" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>V obeh orodjih pritisk na "a" pokaže <flowSpan font-style="italic">sidra</flowSpan> prikaza na obeh koncih izbrane poti, tako da jo lahko <flowSpan font-style="italic">nadaljujete</flowSpan>, namesto da začenjate novo; ali pa jo <flowSpan font-style="italic">zaključite</flowSpan>, tako da povežete nasprotni sidri.</flowDiv>
+   <flowDiv>With the Pen tool, each <flowSpan font-weight="bold">click</flowSpan> creates a sharp node without any curve handles, so a series of clicks produces a sequence of straight line segments. <flowSpan font-weight="bold">click</flowSpan> and <flowSpan font-weight="bold">drag</flowSpan> creates a smooth Bezier node with two collinear opposite handles. Press <flowSpan font-weight="bold">Shift</flowSpan> while dragging out a handle to rotate only one handle and fix the other. As usual, <flowSpan font-weight="bold">Ctrl</flowSpan> limits the direction of either the current line segment or the Bezier handles to 15 degree increments. Pressing <flowSpan font-weight="bold">Enter</flowSpan> finalizes the line, <flowSpan font-weight="bold">Esc</flowSpan> cancels it. To cancel only the last segment of an unfinished line, press <flowSpan font-weight="bold">Backspace</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="922.65" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bq" x="20" y="880.29" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>Urejanje poti</flowDiv>
+   <flowDiv>V obeh orodjih pritisk na "a" pokaže <flowSpan font-style="italic">sidra</flowSpan> prikaza na obeh koncih izbrane poti, tako da jo lahko <flowSpan font-style="italic">nadaljujete</flowSpan>, namesto da začenjate novo; ali pa jo <flowSpan font-style="italic">zaključite</flowSpan>, tako da povežete nasprotni sidri.</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="935.11" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bp" x="20" y="922.65" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bp"/>
    </flowRegion>
-   <flowDiv>Za razliko od orodij, ki ustvarijo like, orodji za prostoročno risanje in risanje krivulj ustvarita tako imenovane <flowSpan font-style="italic">poti</flowSpan>. Pot je zaporedje odsekov črt ali krivulj, ki ima - kot vsak drug predmet - poljubno polnilo in obris. V nasprotju z liki lahko poti preurejamo tako, da poljubno premikamo katerakoli vozlišča, ne le vnaprej določenih ročic. Izberite naslednjo pot z izbirnikom in nato izberite orodje za urejanje vozlišč (<flowSpan font-weight="bold">F2</flowSpan>):</flowDiv>
+   <flowDiv>Urejanje poti</flowDiv>
   </flowRoot>
-  <path transform="translate(20 1002.9)" d="m61.132 24.797c13.131-7.5023 29.978-20.055 44.278-15.242 11.145 3.7517 27.099 30.288 1.036 38.409 9.957 6.4533 24.035 1.2934 35.265-3.8125 23.27-10.38 33.246-27.439 66.295-28.884 12.583-0.7092 32.579 5.1682 30.26 17.36-1.719 9.0359-19.987 6.9789-28.851 3.3501-25.216-10.945-12.659-30.41-33.272-34.604-9.5239-2.142-21.256 1.3591-27.361 13.496" fill="none" stroke="#000" stroke-width="1.2529pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cscsscsss"/>
-  <rect id="bo" x="20" y="1066.8" width="300" height="1e3px" display="none"/>
+  <rect id="bo" x="20" y="935.11" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bo"/>
    </flowRegion>
-   <flowDiv>You will see a number of gray square <flowSpan font-style="italic">nodes</flowSpan> on the path. These nodes can be <flowSpan font-style="italic">selected</flowSpan> by <flowSpan font-weight="bold">click</flowSpan>, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>, or by <flowSpan font-weight="bold">drag</flowSpan>ging a rubberband - exactly like objects are selected by the Selector tool. You can also click a path segment to automatically select the adjacent nodes. Selected nodes become highlighted and show their <flowSpan font-style="italic">node handles</flowSpan> - one or two small circles connected to each selected node by straight lines. The <flowSpan font-weight="bold">!</flowSpan> key inverts node selection in the current subpath(s) (i.e. subpaths with at least one selected node); <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">!</flowSpan> inverts in the entire path.</flowDiv>
+   <flowDiv>Za razliko od orodij, ki ustvarijo like, orodji za prostoročno risanje in risanje krivulj ustvarita tako imenovane <flowSpan font-style="italic">poti</flowSpan>. Pot je zaporedje odsekov črt ali krivulj, ki ima - kot vsak drug predmet - poljubno polnilo in obris. V nasprotju z liki lahko poti preurejamo tako, da poljubno premikamo katerakoli vozlišča, ne le vnaprej določenih ročic. Izberite naslednjo pot z izbirnikom in nato izberite orodje za urejanje vozlišč (<flowSpan font-weight="bold">F2</flowSpan>):</flowDiv>
   </flowRoot>
-  <rect id="bn" x="20" y="1148.1" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 1002.9)" d="m61.132 24.797c13.131-7.5023 29.978-20.055 44.278-15.242 11.145 3.7517 27.099 30.288 1.036 38.409 9.957 6.4533 24.035 1.2934 35.265-3.8125 23.27-10.38 33.246-27.439 66.295-28.884 12.583-0.7092 32.579 5.1682 30.26 17.36-1.719 9.0359-19.987 6.9789-28.851 3.3501-25.216-10.945-12.659-30.41-33.272-34.604-9.5239-2.142-21.256 1.3591-27.361 13.496" fill="none" stroke="#000" stroke-width="1.2529pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cscsscsss"/>
+  <rect id="bn" x="20" y="1066.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bn"/>
    </flowRegion>
-   <flowDiv>Paths are edited by <flowSpan font-weight="bold">drag</flowSpan>ging their nodes, node handles, or directly dragging a path segment. (Try to drag some nodes, handles, and path segments of the above path.) <flowSpan font-weight="bold">Ctrl</flowSpan> works as usual to restrict movement and rotation. The <flowSpan font-weight="bold">arrow</flowSpan> keys, <flowSpan font-weight="bold">Tab</flowSpan>, <flowSpan font-weight="bold">[</flowSpan>, <flowSpan font-weight="bold">]</flowSpan>, <flowSpan font-weight="bold">&lt;</flowSpan>, <flowSpan font-weight="bold">&gt;</flowSpan> keys with their modifiers all work just as they do in selector, but apply to nodes instead of objects. You can add nodes anywhere on a path by either double clicking or by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> at the desired location.</flowDiv>
+   <flowDiv>You will see a number of gray square <flowSpan font-style="italic">nodes</flowSpan> on the path. These nodes can be <flowSpan font-style="italic">selected</flowSpan> by <flowSpan font-weight="bold">click</flowSpan>, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>, or by <flowSpan font-weight="bold">drag</flowSpan>ging a rubberband - exactly like objects are selected by the Selector tool. You can also click a path segment to automatically select the adjacent nodes. Selected nodes become highlighted and show their <flowSpan font-style="italic">node handles</flowSpan> - one or two small circles connected to each selected node by straight lines. The <flowSpan font-weight="bold">!</flowSpan> key inverts node selection in the current subpath(s) (i.e. subpaths with at least one selected node); <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">!</flowSpan> inverts in the entire path.</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="1208.1" width="300" height="1e3px" display="none"/>
+  <rect id="bm" x="20" y="1148.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv>You can delete nodes with <flowSpan font-weight="bold">Del</flowSpan> or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>. When deleting nodes it will try to retain the shape of the path, if you desire for the handles of the adjacent nodes to be retracted (not retaining the shape) you can delete with <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Del</flowSpan>. Additionally, you can duplicate (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) selected nodes. The path can be broken (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">B</flowSpan>) at the selected nodes, or if you select two endnodes on one path, you can join them (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">J</flowSpan>).</flowDiv>
+   <flowDiv>Paths are edited by <flowSpan font-weight="bold">drag</flowSpan>ging their nodes, node handles, or directly dragging a path segment. (Try to drag some nodes, handles, and path segments of the above path.) <flowSpan font-weight="bold">Ctrl</flowSpan> works as usual to restrict movement and rotation. The <flowSpan font-weight="bold">arrow</flowSpan> keys, <flowSpan font-weight="bold">Tab</flowSpan>, <flowSpan font-weight="bold">[</flowSpan>, <flowSpan font-weight="bold">]</flowSpan>, <flowSpan font-weight="bold">&lt;</flowSpan>, <flowSpan font-weight="bold">&gt;</flowSpan> keys with their modifiers all work just as they do in selector, but apply to nodes instead of objects. You can add nodes anywhere on a path by either double clicking or by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> at the desired location.</flowDiv>
   </flowRoot>
-  <rect id="bl" x="20" y="1268" width="300" height="1e3px" display="none"/>
+  <rect id="bl" x="20" y="1208.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv>A node can be made <flowSpan font-style="italic">cusp</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), which means its two handles can move independently at any angle to each other; <flowSpan font-style="italic">smooth</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>), which means its handles are always on the same straight line (collinear); <flowSpan font-style="italic">symmetric</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Y</flowSpan>), which is the same as smooth, but the handles also have the same length; and <flowSpan font-style="italic">auto-smooth</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>), a special node that automatically adjusts the handles of the node and surrounding auto-smooth nodes to maintain a smooth curve. When you switch the type of node, you can preserve the position of one of the two handles by hovering your <flowSpan font-weight="bold">mouse</flowSpan> over it, so that only the other handle is rotated/scaled to match.</flowDiv>
+   <flowDiv>You can delete nodes with <flowSpan font-weight="bold">Del</flowSpan> or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>. When deleting nodes it will try to retain the shape of the path, if you desire for the handles of the adjacent nodes to be retracted (not retaining the shape) you can delete with <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Del</flowSpan>. Additionally, you can duplicate (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) selected nodes. The path can be broken (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">B</flowSpan>) at the selected nodes, or if you select two endnodes on one path, you can join them (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">J</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="1358.4" width="300" height="1e3px" display="none"/>
+  <rect id="bk" x="20" y="1268" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
-   <flowDiv>Also, you can <flowSpan font-style="italic">retract</flowSpan> a node's handle altogether by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>ing on it. If two adjacent nodes have their handles retracted, the path segment between them is a straight line. To pull out the retracted node, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> away from the node.</flowDiv>
+   <flowDiv>A node can be made <flowSpan font-style="italic">cusp</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), which means its two handles can move independently at any angle to each other; <flowSpan font-style="italic">smooth</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>), which means its handles are always on the same straight line (collinear); <flowSpan font-style="italic">symmetric</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Y</flowSpan>), which is the same as smooth, but the handles also have the same length; and <flowSpan font-style="italic">auto-smooth</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>), a special node that automatically adjusts the handles of the node and surrounding auto-smooth nodes to maintain a smooth curve. When you switch the type of node, you can preserve the position of one of the two handles by hovering your <flowSpan font-weight="bold">mouse</flowSpan> over it, so that only the other handle is rotated/scaled to match.</flowDiv>
   </flowRoot>
-  <rect id="bj" x="20" y="1402.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bj" x="20" y="1358.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bj"/>
    </flowRegion>
-   <flowDiv>Podpoti in združevanje</flowDiv>
+   <flowDiv>Also, you can <flowSpan font-style="italic">retract</flowSpan> a node's handle altogether by <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>ing on it. If two adjacent nodes have their handles retracted, the path segment between them is a straight line. To pull out the retracted node, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> away from the node.</flowDiv>
   </flowRoot>
-  <rect id="bi" x="20" y="1415.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bi" x="20" y="1402.5" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bi"/>
+   </flowRegion>
+   <flowDiv>Podpoti in združevanje</flowDiv>
+  </flowRoot>
+  <rect id="bh" x="20" y="1415.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bh"/>
    </flowRegion>
    <flowDiv>Pot lahko obsega več <flowSpan font-style="italic">podpoti</flowSpan>. Podpot je zaporedje povezanih vozlišč. Tako ni treba, da so vsa vozlišča v poti povezana. Tri podpoti spodaj levo pripadajo eni sestavljeni poti; iste tri podpoti na desni so neodvisni predmeti:</flowDiv>
   </flowRoot>
@@ -436,71 +436,71 @@
   <path transform="translate(20 1461.7)" d="m219.19 6.7994c-6.51-7.5367-18.171-7.0049-26.384-2.6524-5.7006 3.0209-11.538 6.5132-15.338 11.723-5.1988 7.1283-0.61273 18.406 8.263 21.306 6.6534 1.8189 14.244-3.4636 8.9076-12.673" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cssss"/>
   <path transform="translate(20 1461.7)" d="m199.57 13.832c6.417-6.6213 17.628-1.3468 20.29 6.4263 2.2626 6.6075 2.766 14.498 9.1421 18.923 6.4116 4.4501 17.112 5.3114 21.246-2.2553 3.5305-6.4613-3.156-14.74-10.265-12.459" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="cssss"/>
   <path transform="translate(20 1461.7)" d="m183.05 51.444c7.0405 4.8966 14.771-1.7301 19.71-6.7631 5.2389-5.3392 13.278-1.1573 16.921 4.3694 3.321 5.0383 11.7 8.3208 15.913 2.3237" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0" sodipodi:nodetypes="csss"/>
-  <rect id="bh" x="20" y="1529" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bh"/>
-   </flowRegion>
-   <flowDiv>Vendar pa sestavljena pot ni isto kot skupina. Je enoten predmet, izberemo ga lahko le v celoti. Če izberete zgornji levi predmet in preklopite na orodje za vozlišča, boste videli vozlišča po vseh treh podpoteh. Na desni lahko urejate le vsako pot posebej.</flowDiv>
-  </flowRoot>
-  <rect id="bg" x="20" y="1567.5" width="300" height="1e3px" display="none"/>
+  <rect id="bg" x="20" y="1529" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>Inkscape can <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Combine</flowSpan> paths into a compound path (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">K</flowSpan>) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Break Apart</flowSpan> a compound path into separate paths (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">K</flowSpan>). Try these commands on the above examples. Since an object can only have one fill and stroke, a new compound path gets the style of the first (lowest in z-order) object being combined.</flowDiv>
+   <flowDiv>Vendar pa sestavljena pot ni isto kot skupina. Je enoten predmet, izberemo ga lahko le v celoti. Če izberete zgornji levi predmet in preklopite na orodje za vozlišča, boste videli vozlišča po vseh treh podpoteh. Na desni lahko urejate le vsako pot posebej.</flowDiv>
   </flowRoot>
-  <rect id="bf" x="20" y="1617" width="300" height="1e3px" display="none"/>
+  <rect id="bf" x="20" y="1567.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>Če sestavljate prekrivajoče poti s polnilom, bo na mestih, kjer se poti prekrivajo, polnilo izginilo:</flowDiv>
+   <flowDiv>Inkscape can <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Combine</flowSpan> paths into a compound path (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">K</flowSpan>) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Break Apart</flowSpan> a compound path into separate paths (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">K</flowSpan>). Try these commands on the above examples. Since an object can only have one fill and stroke, a new compound path gets the style of the first (lowest in z-order) object being combined.</flowDiv>
   </flowRoot>
-  <path transform="translate(20 1654.3)" d="m162.87 61.987-26.122-11.321-3.8622 19.966-7.4357-27.481-18.018 9.4287 16.85-22.948-18.606-8.2081 28.447-1.1341-5.183-19.664 18.623 21.533 12.142-16.312-5.2243 27.986 20.324-0.6774-25.138 13.364zm29.812-9.4287c-4.7662 12.495-21.785 17.62-37.987 11.44s-25.485-21.338-20.718-33.833c4.7663-12.496 21.785-17.62 37.987-11.44s25.485 21.337 20.718 33.833z" fill="#07ba88" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="be" x="20" y="1736.9" width="300" height="1e3px" display="none"/>
+  <rect id="be" x="20" y="1617" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv>To je najlažji način za ustvarjanje objektov z luknjami. Za močnejše operacije s potmi si oglejte "Matematične operacije" spodaj.</flowDiv>
+   <flowDiv>Če sestavljate prekrivajoče poti s polnilom, bo na mestih, kjer se poti prekrivajo, polnilo izginilo:</flowDiv>
   </flowRoot>
-  <rect id="bd" x="20" y="1770.2" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <path transform="translate(20 1654.3)" d="m162.87 61.987-26.122-11.321-3.8622 19.966-7.4357-27.481-18.018 9.4287 16.85-22.948-18.606-8.2081 28.447-1.1341-5.183-19.664 18.623 21.533 12.142-16.312-5.2243 27.986 20.324-0.6774-25.138 13.364zm29.812-9.4287c-4.7662 12.495-21.785 17.62-37.987 11.44s-25.485-21.338-20.718-33.833c4.7663-12.496 21.785-17.62 37.987-11.44s25.485 21.337 20.718 33.833z" fill="#07ba88" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <rect id="bd" x="20" y="1736.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>Pretvarjanje v poti</flowDiv>
+   <flowDiv>To je najlažji način za ustvarjanje objektov z luknjami. Za močnejše operacije s potmi si oglejte "Matematične operacije" spodaj.</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="1782.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bc" x="20" y="1770.2" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bc"/>
+   </flowRegion>
+   <flowDiv>Pretvarjanje v poti</flowDiv>
+  </flowRoot>
+  <rect id="bb" x="20" y="1782.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bb"/>
    </flowRegion>
    <flowDiv>Any shape or text object can be <flowSpan font-style="italic">converted to path</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>). This operation does not change the appearance of the object but removes all capabilities specific to its type (e.g. you can't round the corners of a rectangle or edit the text anymore); instead, you can now edit its nodes. Here are two stars - the left one is kept a shape and the right one is converted to path. Switch to node tool and compare their editability when selected:</flowDiv>
   </flowRoot>
   <polygon transform="translate(69.934 -1964.2)" d="m 48.608655,3873.8302 -10.588534,-19.6519 -16.322272,20.7376 8.762624,-20.5312 -26.390037,0.1684 21.515348,-5.9501 -16.5855664,-20.5276 18.0665754,13.1115 5.708175,-25.7658 1.013303,22.2999 23.703543,-11.6019 -16.803007,14.696 23.849661,11.2985 -21.96631,-3.9743 z" points="48.609 3873.8 38.02 3854.2 21.698 3874.9 30.46 3854.4 4.0704 3854.6 25.586 3848.6 9.0002 3828.1 27.067 3841.2 32.775 3815.4 33.788 3837.7 57.492 3826.1 40.689 3840.8 64.538 3852.1 42.572 3848.1" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="1.0816765" sodipodi:arg2="1.0947087" sodipodi:cx="34.026058" sodipodi:cy="3846.4326" sodipodi:r1="31.036766" sodipodi:r2="8.7148495" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(20 1850.6)" d="m217.4 59.034-10.589-19.652-16.322 20.738 8.7626-20.531-26.39 0.1684 21.515-5.9501-16.586-20.528 18.067 13.112 5.7082-25.766 1.0133 22.3 23.704-11.602-16.803 14.696 23.85 11.298-21.966-3.9743z" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="bb" x="20" y="1922.7" width="300" height="1e3px" display="none"/>
+  <rect id="ba" x="20" y="1922.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bb"/>
+    <use xlink:href="#ba"/>
    </flowRegion>
    <flowDiv>Moreover, you can convert to a path (“outline”) the <flowSpan font-style="italic">stroke</flowSpan> of any object. Below, the first object is the original path (no fill, black stroke), while the second one is the result of the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Stroke to Path</flowSpan> command (black fill, no stroke):</flowDiv>
   </flowRoot>
   <path transform="translate(20 1969.5)" d="m47.663 34.708c10.658-12.173 21.176-24.395 36.677-28.281 9.2924-2.3296 11.787 2.3947 4.8609 10.164-5.1644 5.7927-10.411 10.152-12.815 16.792-2.9726 8.2119 2.8857 9.4864 11.489 7.9541 8.4682-1.5081 14.084-8.5052 19.885-15.466 4.2144-5.0566 8.7741-5.2626 10.606-0.8838 7.1048 15.93 20.13 0.9771 22.095-0.4419" fill="none" stroke="#000" stroke-width="9" inkscape:connector-curvature="0" sodipodi:nodetypes="csssssss"/>
   <path transform="translate(20 1969.5)" d="m199.68 0.0677c-1.2373 0.1038-2.5164 0.3156-3.875 0.6562-8.5973 2.1554-15.755 6.6404-22 12s-11.648 11.611-16.969 17.688l6.75 5.9375c5.3376-6.0961 10.509-12.046 16.062-16.812 5.5537-4.7663 11.439-8.3316 18.344-10.062 1.2641-0.3169 1.7958-0.2322 2.5-0.25-0.42543 0.8115-0.91325 1.7071-2.0938 3.0312-2.4516 2.7499-5.0879 5.295-7.5312 8.1563s-4.705 6.1161-6.1562 10.125c-0.91687 2.5328-1.3647 4.9227-0.84375 7.375 0.26049 1.2262 0.78386 2.4374 1.5625 3.4375s1.766 1.7724 2.7812 2.3125c2.0304 1.0801 4.1397 1.3658 6.2812 1.4063 2.1416 0.0404 4.375-0.2076 6.7188-0.625 5.2478-0.9346 9.5496-3.6005 13.125-6.75 3.5754-3.1496 6.5542-6.8218 9.4375-10.281 0.80771-0.9691 1.5646-1.5838 2.125-1.9375 0.44557-0.2813 0.62372-0.2855 0.75-0.3125 0.0444 0.0576 0.0216 0.0029 0.125 0.25v0.0313l0.0312 0.0624c1.0456 2.3445 2.2571 4.2796 3.7188 5.8438s3.2003 2.7424 5.0312 3.4062c1.831 0.6639 3.7183 0.8102 5.4375 0.625 1.7192-0.1851 3.2684-0.6904 4.6875-1.3124 2.8382-1.2442 5.1565-3.0025 6.9375-4.5 0.89048-0.7488 1.6525-1.4477 2.2188-1.9688 0.2831-0.2605 0.52513-0.4796 0.6875-0.625 0.16236-0.1454 0.28418-0.2087 0.125-0.0938l-5.2812-7.3124c-0.40478 0.2923-0.596 0.4969-0.84375 0.7187-0.24776 0.2218-0.50629 0.4345-0.78125 0.6875-0.54994 0.5061-1.1883 1.115-1.9062 1.7188-1.4359 1.2074-3.1982 2.4447-4.75 3.125-0.77591 0.3401-1.4924 0.5323-2.0625 0.5937s-0.98627 0.0273-1.4062-0.125-0.88174-0.4321-1.5-1.0937c-0.61827-0.6617-1.3632-1.7369-2.0938-3.375-0.71919-1.7196-1.8187-3.1872-3.4062-4.2813s-3.5804-1.6022-5.4375-1.4687c-1.8571 0.1334-3.5566 0.811-5.0938 1.7812s-2.9505 2.2533-4.25 3.8125c-2.9184 3.5017-5.6377 6.8149-8.4375 9.2813-2.7998 2.4663-5.5608 4.0514-8.7812 4.625-1.9581 0.3487-3.685 0.5242-4.9688 0.5-1.1377-0.0215-1.6851-0.2152-1.9375-0.3126-0.0114-0.2031-0.066-0.7652 0.4375-2.1562 0.95234-2.6308 2.4903-4.9171 4.5625-7.3438 2.0722-2.4266 4.6935-4.9572 7.4062-8 1.9716-2.2114 3.4009-4.3132 4.2812-6.5312 0.44015-1.109 0.7547-2.2601 0.8125-3.5s-0.171-2.5773-0.78125-3.8125c-0.61026-1.2352-1.6187-2.2794-2.7188-2.9687-1.1001-0.6894-2.2635-1.0873-3.4375-1.2813s-2.3565-0.1976-3.5938-0.0937z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="ba" x="20" y="2033.4" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="2033.4" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ba"/>
+    <use xlink:href="#az"/>
    </flowRegion>
    <flowDiv>Matematične operacije</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2046.1" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="2046.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#az"/>
+    <use xlink:href="#ay"/>
    </flowRegion>
    <flowDiv>The commands in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Path</flowSpan> menu let you combine two or more objects using <flowSpan font-style="italic">boolean operations</flowSpan>:</flowDiv>
   </flowRoot>
@@ -521,31 +521,31 @@
   <path transform="translate(20 2082.2)" d="m168.24 182.05c-0.32932-0.2725-0.61782-0.5998-0.96875-0.8438-0.81111-0.564-1.6819-1.0404-2.5938-1.4375s-1.8516-0.6972-2.8438-0.9063c-0.99215-0.209-2.0418-0.3124-3.0938-0.3124-1.0519 0-2.0704 0.1034-3.0625 0.3124-0.99215 0.2091-1.9319 0.5092-2.8438 0.9063s-1.7826 0.8735-2.5938 1.4375c-0.81111 0.564-1.5602 1.2277-2.25 1.9375-0.68986 0.7098-1.3269 1.4779-1.875 2.3125s-1.0204 1.7179-1.4062 2.6562c-0.3859 0.9384-0.67181 1.9479-0.875 2.9688-0.13068 0.6566-0.13936 1.3477-0.1875 2.0312h24.594z" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2082.2)" d="m208.47 194.75h24.624v-11.09" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2082.2)" d="m232.03 182.24v-16.307h-37.561v27.398h12.937" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="ay" x="20" y="2304.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ay"/>
-   </flowRegion>
-   <flowDiv>The keyboard shortcuts for these commands allude to the arithmetic analogs of the boolean operations (union is addition, difference is subtraction, etc.). The <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Difference</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exclusion</flowSpan> commands can only apply to two selected objects; others may process any number of objects at once. The result always receives the style of the bottom object.</flowDiv>
-  </flowRoot>
-  <rect id="ax" x="20" y="2354.3" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="2304.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
-   <flowDiv>The result of the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exclusion</flowSpan> command looks similar to <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Combine</flowSpan> (see above), but it is different in that <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exclusion</flowSpan> adds extra nodes where the original paths intersect. The difference between <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Division</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Cut Path</flowSpan> is that the former cuts the entire bottom object by the path of the top object, while the latter only cuts the bottom object's stroke and removes any fill (this is convenient for cutting fill-less strokes into pieces).</flowDiv>
+   <flowDiv>The keyboard shortcuts for these commands allude to the arithmetic analogs of the boolean operations (union is addition, difference is subtraction, etc.). The <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Difference</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exclusion</flowSpan> commands can only apply to two selected objects; others may process any number of objects at once. The result always receives the style of the bottom object.</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="2419.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="aw" x="20" y="2354.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aw"/>
    </flowRegion>
-   <flowDiv>Razširjenje in zožanje</flowDiv>
+   <flowDiv>The result of the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exclusion</flowSpan> command looks similar to <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Combine</flowSpan> (see above), but it is different in that <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Exclusion</flowSpan> adds extra nodes where the original paths intersect. The difference between <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Division</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Cut Path</flowSpan> is that the former cuts the entire bottom object by the path of the top object, while the latter only cuts the bottom object's stroke and removes any fill (this is convenient for cutting fill-less strokes into pieces).</flowDiv>
   </flowRoot>
-  <rect id="av" x="20" y="2432.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="av" x="20" y="2419.9" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#av"/>
+   </flowRegion>
+   <flowDiv>Razširjenje in zožanje</flowDiv>
+  </flowRoot>
+  <rect id="au" x="20" y="2432.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#au"/>
    </flowRegion>
    <flowDiv>Inkscape can expand and contract shapes not only by scaling, but also by <flowSpan font-style="italic">offsetting</flowSpan> an object's path, i.e. by displacing it perpendicular to the path in each point. The corresponding commands are called <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Inset</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">(</flowSpan>) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Outset</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">)</flowSpan>). Shown below is the original path (red) and a number of paths inset or outset from that original:</flowDiv>
   </flowRoot>
@@ -556,32 +556,32 @@
   <path transform="translate(20 2490)" d="m99.543 0.2108c-17.313 5.1828-24.394 24.397-26.032 40.813-5.4969 29.384 12.02 61.126 39.907 71.937 9.9812 4.588 11.898 20.445 24.75 20.312 7.8321-0.3208 15.773-4.7118 18.875-12.125 14.367 9.2063 36.369 11.521 48.336-2.7873 13.772-14.314 10.554-40.31-5.3357-51.744 10.821-4.4843 25.057-9.1355 27.323-22.432 1.5943-12.408-11.823-19.936-22.401-21.838-14.933-3.2908-30.593-1.8182-45.359 1.3955-5.9241 5.4855-11.165-3.336-16.969-4.5937-6.5719-2.2932-13.698-3.2867-20.562-1.7813-2.55-9.8036-11.941-18.42-22.531-17.156z" fill="none" stroke="#000" stroke-width=".175" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2490)" d="m97.7 38.023c-4.5857 17.701-0.39592 40.201 17.089 49.215 8.2218 4.2031 18.471 6.1306 24.161 14.035 3.9589-10.467 17.834-8.9924 25.571-3.876 6.9977 3.8006 16.334 12.487 23.862 4.9891 7.3164-7.2849-1.5032-17.85-8.7477-21.066-11.117-5.697-24.487-0.993-32.373 7.9532-9.0445 6.3674-23.914 1.3981-26-9.6875-0.0135-6.3089 7.2159-7.4949 11.994-5.9339 14.442 1.7126 32.622 0.347 40.147-14.168 3.7002-5.8961 8.3419-11.596 14.516-14.992-8.5013 0.477-19.009-1.6596-25.5 5.0313-3.0589 8.1983-4.742 19.917-15.313 21.557-9.7947 3.0192-23.684 0.0034-26.968-10.776-0.93127-7.3476 5.8757-11.959 11.844-14.375-0.0215 4.9617 3.8862 14.357 10 10.812 4.9242-11.553-11.492-21.628-20.906-14.594-6.3962 3.8926-6.2125 12.384-3.9375 18.625-10.62-0.8239-19.234-10.23-18.501-20.963-0.57914-2.052 0.50275-7.6223-0.93634-1.7874z" fill="none" stroke="#000" stroke-width=".175" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2490)" d="m125.82 44.211c-10.253 7.0883-1.6599 2.4297 0 0zm10.531 4.5312c4.8517 10.668 0.92478-3.9624 0 0zm39.312-0.0625c-5.9943-0.4187-11.652 3.6412-12.046 9.7775 0.0298 2.4492-6.3154 10.556-1.9857 7.4725 6.8221-4.1288 9.6826-11.849 15.125-17.312-0.33279 0.019-1.062 0.0607-1.0938 0.0625zm-75.406 8.5938c1.3678 11.282 7.6652 22.743 18.469 27.344-2.9767-4.8662-0.6692-11.372 3.5938-14.094-2.9137-5.5236-8.4844-6.4922-13.906-8.0938-2.5857 0.0742-8.3962-7.927-8.1562-5.1562zm64 26.031c-2.7667 0.7464-13.161 5.4731-9.3636 6.3856 10.872 0.475 17.916 12.25 28.989 11.021 7.1396-4.9862-0.84244-14.642-7.1332-16.048-3.8781-1.725-8.3266-1.9523-12.492-1.3579z" fill="none" stroke="#000" stroke-width=".175" inkscape:connector-curvature="0"/>
-  <rect id="au" x="20" y="2635.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#au"/>
-   </flowRegion>
-   <flowDiv>The plain <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Inset</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Outset</flowSpan> commands produce paths (converting the original object to path if it's not a path yet). Often, more convenient is the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Dynamic Offset</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">J</flowSpan>) which creates an object with a draggable handle (similar to a shape's handle) controlling the offset distance. Select the object below, switch to the node tool, and drag its handle to get an idea:</flowDiv>
-  </flowRoot>
-  <path transform="translate(20 2692.7)" d="m106.27 0.45441c-0.10112 0.1152-0.14628 0.129-0.29492 0.3809-3.8807 6.5756-5.69 15.322-6.7617 23.506-2.2001 16.8 5.6253 36.574 21.996 42.703 7.9689 2.8582 13.099 5.0208 16.59 7.3613 3.1146 2.0883 4.8809 4.3803 6.1445 7.3164 0.83628-3.3298 2.1612-5.698 4.1113-7.1973 2.1712-1.6691 5.0309-2.3008 8.6074-2.3183 8.1602-0.04 14.631 4.8099 20.459 9.205 3.1146 2.349 7.2519 3.2345 11.002 2.6153 3.7501-0.6193 7.0928-2.7204 8.7109-6.336 1.6276-3.6366 1.0018-7.3141-0.78906-10.666s-4.7581-6.3445-7.7363-8.4746c-7.492-5.3587-17.331-5.609-25.744-2.1738-3.339 1.3634-6.1945 4.1375-9.0957 6.6406-2.9012 2.5031-5.8756 4.7546-9.5098 4.8887-3.8591 0.1425-8.0918-1.0526-11.383-3.666-3.291-2.6135-5.6211-6.6662-5.6211-12.137a0.39691 0.39691 0 0 1 0.39648-0.3964c3.0726 0 8.0122 0.5596 13.49 0.9355 5.478 0.376 11.484 0.5678 16.611-0.1504 8.1781-1.1457 17.345-5.8907 21.264-13.6 3.7815-7.4384 10.474-16.43 22.701-18.678-10.736-0.4389-19.366-0.4494-27.271 0.4394-3.8911 0.4375-6.5398 2.3824-8.3496 5.1133s-2.7533 6.2608-3.1133 9.7832c-0.46666 4.5663-3.4945 7.8367-7.373 9.8164-3.8785 1.9797-8.6221 2.711-12.691 2.2559-3.2374-0.362-6.9091-0.9975-9.9941-2.5391-3.085-1.5416-5.5895-4.0329-6.3516-8-0.29262-1.5232 0.12629-3.2173 0.9043-4.7988s1.9241-3.0553 3.1719-4.125 2.6009-1.764 3.8594-1.6465c0.62923 0.059 1.2247 0.3446 1.6875 0.8652 0.4628 0.5207 0.79856 1.2598 1 2.2383 0.74509 3.6194 3.4674 6.2523 6.1602 6.9883 1.3464 0.368 2.6674 0.2684 3.7637-0.377 1.0962-0.6453 1.9987-1.8478 2.457-3.8085 1.7046-7.293-3.7374-14.304-10.67-16.5-4.459-1.4122-9.9397-0.3002-14 2.3183s-6.665 6.662-5.6191 11.15c0.36975 1.5869 0.35132 2.788-2e-3 3.6758-0.35328 0.8877-1.076 1.4223-1.916 1.5879-1.68 0.3311-3.8147-0.579-5.5977-2.0547-7.0565-5.8407-7.3072-15.578-6.3906-23.664 0.10448-0.9216 0.59178-3.3392 0.91601-5.4863 0.16212-1.0735 0.28212-2.0765 0.29297-2.7344 2e-3 -0.1312-0.0143-0.158-0.0215-0.2578z" fill="none" stroke="#ff0100" stroke-width=".675" inkscape:connector-curvature="0"/>
-  <rect id="at" x="20" y="2789.2" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="2635.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
-   <flowDiv>Predmet, ki je dinamičen zamik svojega izvirnika, si zapomni izvorno pot, tako da se natančnost ne izgublja z večkratnim spreminjanjem. Ko ste končali, ga lahko vedno pretvorite nazaj v pot.</flowDiv>
+   <flowDiv>The plain <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Inset</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Outset</flowSpan> commands produce paths (converting the original object to path if it's not a path yet). Often, more convenient is the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Dynamic Offset</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">J</flowSpan>) which creates an object with a draggable handle (similar to a shape's handle) controlling the offset distance. Select the object below, switch to the node tool, and drag its handle to get an idea:</flowDiv>
   </flowRoot>
-  <rect id="as" x="20" y="2827.7" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 2692.7)" d="m106.27 0.45441c-0.10112 0.1152-0.14628 0.129-0.29492 0.3809-3.8807 6.5756-5.69 15.322-6.7617 23.506-2.2001 16.8 5.6253 36.574 21.996 42.703 7.9689 2.8582 13.099 5.0208 16.59 7.3613 3.1146 2.0883 4.8809 4.3803 6.1445 7.3164 0.83628-3.3298 2.1612-5.698 4.1113-7.1973 2.1712-1.6691 5.0309-2.3008 8.6074-2.3183 8.1602-0.04 14.631 4.8099 20.459 9.205 3.1146 2.349 7.2519 3.2345 11.002 2.6153 3.7501-0.6193 7.0928-2.7204 8.7109-6.336 1.6276-3.6366 1.0018-7.3141-0.78906-10.666s-4.7581-6.3445-7.7363-8.4746c-7.492-5.3587-17.331-5.609-25.744-2.1738-3.339 1.3634-6.1945 4.1375-9.0957 6.6406-2.9012 2.5031-5.8756 4.7546-9.5098 4.8887-3.8591 0.1425-8.0918-1.0526-11.383-3.666-3.291-2.6135-5.6211-6.6662-5.6211-12.137a0.39691 0.39691 0 0 1 0.39648-0.3964c3.0726 0 8.0122 0.5596 13.49 0.9355 5.478 0.376 11.484 0.5678 16.611-0.1504 8.1781-1.1457 17.345-5.8907 21.264-13.6 3.7815-7.4384 10.474-16.43 22.701-18.678-10.736-0.4389-19.366-0.4494-27.271 0.4394-3.8911 0.4375-6.5398 2.3824-8.3496 5.1133s-2.7533 6.2608-3.1133 9.7832c-0.46666 4.5663-3.4945 7.8367-7.373 9.8164-3.8785 1.9797-8.6221 2.711-12.691 2.2559-3.2374-0.362-6.9091-0.9975-9.9941-2.5391-3.085-1.5416-5.5895-4.0329-6.3516-8-0.29262-1.5232 0.12629-3.2173 0.9043-4.7988s1.9241-3.0553 3.1719-4.125 2.6009-1.764 3.8594-1.6465c0.62923 0.059 1.2247 0.3446 1.6875 0.8652 0.4628 0.5207 0.79856 1.2598 1 2.2383 0.74509 3.6194 3.4674 6.2523 6.1602 6.9883 1.3464 0.368 2.6674 0.2684 3.7637-0.377 1.0962-0.6453 1.9987-1.8478 2.457-3.8085 1.7046-7.293-3.7374-14.304-10.67-16.5-4.459-1.4122-9.9397-0.3002-14 2.3183s-6.665 6.662-5.6191 11.15c0.36975 1.5869 0.35132 2.788-2e-3 3.6758-0.35328 0.8877-1.076 1.4223-1.916 1.5879-1.68 0.3311-3.8147-0.579-5.5977-2.0547-7.0565-5.8407-7.3072-15.578-6.3906-23.664 0.10448-0.9216 0.59178-3.3392 0.91601-5.4863 0.16212-1.0735 0.28212-2.0765 0.29297-2.7344 2e-3 -0.1312-0.0143-0.158-0.0215-0.2578z" fill="none" stroke="#ff0100" stroke-width=".675" inkscape:connector-curvature="0"/>
+  <rect id="as" x="20" y="2789.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv>Še bolj udoben je <flowSpan font-style="italic">povezan zamik</flowSpan>, ki deluje podobno kot dinamičen, le da je povezan z neko drugo potjo, ki pa jo lahko še vedno urejate. Iz ene izvorne poti lahko ustvarite praktično neomejeno število povezanih zamikov. Spodaj vidite rdečo izvorno pot in en povezan zamik s črnim polnilom in brez obrisa, ter drugi povezan zamik brez polnila s črno črto.</flowDiv>
+   <flowDiv>Predmet, ki je dinamičen zamik svojega izvirnika, si zapomni izvorno pot, tako da se natančnost ne izgublja z večkratnim spreminjanjem. Ko ste končali, ga lahko vedno pretvorite nazaj v pot.</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="2878.2" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="2827.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
+   </flowRegion>
+   <flowDiv>Še bolj udoben je <flowSpan font-style="italic">povezan zamik</flowSpan>, ki deluje podobno kot dinamičen, le da je povezan z neko drugo potjo, ki pa jo lahko še vedno urejate. Iz ene izvorne poti lahko ustvarite praktično neomejeno število povezanih zamikov. Spodaj vidite rdečo izvorno pot in en povezan zamik s črnim polnilom in brez obrisa, ter drugi povezan zamik brez polnila s črno črto.</flowDiv>
+  </flowRoot>
+  <rect id="aq" x="20" y="2878.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#aq"/>
    </flowRegion>
    <flowDiv>Select the red object and node-edit it; watch how both linked offsets respond. Now select any of the offsets and drag its handle to adjust the offset radius. Finally, notehow you can move or transform the offset objects independently without losing their connection with the source. </flowDiv>
   </flowRoot>
@@ -590,33 +590,33 @@
    <path d="m98.58 0.75391c-0.98964 0.079946-1.8669 0.3604-2.3887 0.6543-2.3892 1.3457-2.2609 2.0823-2.7207 2.8613-4.4275 7.5022-10.487 21.232-11.803 31.281-2.6109 19.937 11.658 36.604 30.057 43.492a5.5425 5.5425 0 0 0 0.0723 0.02734c7.8338 2.8097 12.635 4.9291 15.293 6.7148 2.6575 1.7858 3.3726 2.8432 4.3555 5.5098a5.5425 5.5425 0 0 0 10.631-0.81836c0.63397-3.137 1.4593-4.2111 2.2051-4.7852s2.1214-1.0757 5.0137-1.0898c5.7874-0.02835 11.028 3.6188 16.84 8.002 4.5525 3.4334 10.213 4.616 15.549 3.7383s10.655-4.142 13.172-9.7656c2.4762-5.5328 1.4079-11.441-0.97266-15.898-2.3805-4.4576-5.9259-7.9426-9.5234-10.516-3.9468-2.823-8.356-4.4351-12.875-5.123 2.0156-2.0118 3.7773-4.3239 5.1348-6.9941 3.901-7.6734 9.8815-15.982 23.371-15.982a5.5425 5.5425 0 0 0 0.28125-11.076c-13.817-0.70348-24.308-0.90494-34.197 0.20703-5.5572 0.62485-10.053 3.8357-12.637 7.7285s-3.6506 8.295-4.0762 12.459c-0.23342 2.2841-1.5174 3.7891-4.1621 5.1445-0.54205 0.2778-1.255 0.38-1.877 0.59375 2.1733-1.6455 3.7068-4.1436 4.3535-6.9102 2.5326-10.835-5.1568-20.475-14.691-23.494-6.6257-2.0983-13.56-0.52394-19.006 2.9902-4.0425 2.6087-7.5131 6.9193-8.3418 11.984-2.4311-4.0206-2.7176-9.697-2.0449-15.631-2e-3 0.01987 0.52926-2.9245 0.88086-5.2871 0.17579-1.1813 0.3338-2.2696 0.35156-3.5273 9e-3 -0.62885 0.15618-1.1682-0.39844-2.7246-0.27731-0.77819-0.83254-2.2064-2.7793-3.2188-0.9734-0.50618-2.0768-0.62682-3.0664-0.54687zm26.525 40.596c1.2077 2.3778 2.9942 4.286 5.1133 5.6543-0.81851-0.24598-1.6957-0.46762-2.3301-0.78516-1.978-0.99019-2.7826-1.7393-3.1816-3.8164 0.0664 0.3458-1e-3 -0.2433 0.39649-1.0488 6e-4 -0.0012 1e-3 -0.0027 2e-3 -0.0039zm2.5879 23.291c1.973 0.16104 3.041 0.21882 5.3418 0.37695 2.7548 0.18934 5.6754 0.33805 8.625 0.35156-2.3765 1.9783-4.1195 3.0068-5.3106 3.0508-2.4684 0.09117-5.4459-0.76672-7.4844-2.3828-0.48633-0.38556-0.77328-0.94162-1.1719-1.3965z" fill="none" stroke="#000" stroke-width=".675" inkscape:href="#advanced-f11.svgpath1987" inkscape:original="M 98.912109 6.2363281 C 98.75241 6.3262799 98.533813 6.5951 98.244141 7.0859375 C 94.312836 13.747338 88.236546 28.065031 87.162109 36.269531 C 84.941126 53.229031 97.074525 67.640916 113.66797 73.853516 C 129.59321 79.565216 134.11569 82.518206 136.64453 89.378906 C 138.22552 81.555906 142.20585 79.095047 149.26758 79.060547 C 157.26908 79.021347 163.64623 83.785488 169.47266 88.179688 C 175.89399 93.022487 186.44063 91.8116 189.79688 84.3125 C 193.16539 76.7861 187.17378 68.989222 181.13477 64.669922 C 173.51393 59.219122 163.51922 58.99015 155 62.46875 C 148.12235 65.27705 143.50925 73.702184 136.55469 73.958984 C 129.02235 74.237184 119.93945 69.270134 119.93945 58.552734 C 125.987 58.552734 139.7641 60.788791 150.12109 59.337891 C 158.40713 58.177091 167.67782 53.405103 171.67969 45.533203 C 176.00588 37.023403 184.06435 26.521484 199.99023 26.521484 C 186.26483 25.822684 176.07167 25.646672 166.69336 26.701172 C 158.68816 27.601272 155.6037 34.812959 154.875 41.943359 C 153.97293 50.770259 143.24964 54.573641 135.27344 53.681641 C 128.83546 52.961741 120.7394 51.128966 119.26367 43.447266 C 118.18911 37.853766 127.58505 28.710109 129.11914 36.162109 C 130.67039 43.697509 140.37257 47.104766 142.2793 38.947266 C 144.03908 31.418366 138.41784 24.248947 131.31055 21.998047 C 122.10286 19.082047 109.01729 26.569194 111.19922 35.933594 C 112.63428 42.092694 107.75423 41.594794 104.3125 38.746094 C 97.419952 33.041094 97.174249 23.475894 98.085938 15.433594 C 98.280327 13.718769 100.03001 5.606666 98.912109 6.2363281 z " inkscape:radius="5.5419211" sodipodi:type="inkscape:offset" xlink:href="#m"/>
    <path transform="matrix(.39324 0 0 .39324 199.77 1.5238)" d="m97.723 10.586c-3.7538 7.2006-8.5193 18.94-9.4219 25.832-2.1395 16.337 9.544 30.278 25.756 36.354 2e-3 5.79e-4 2e-3 0.0014 4e-3 2e-3 3e-3 0.0012 6e-3 0.0027 0.01 0.0039 7.9799 2.8625 13.153 5.0363 16.75 7.4531 2.6841 1.8036 4.2999 3.922 5.582 6.3027 0.8814-2.6116 2.0342-4.7878 3.7969-6.1445 2.3512-1.8096 5.3992-2.4587 9.0625-2.4766 8.4606-0.04145 15.073 4.9531 20.902 9.3496 2.9324 2.2115 6.881 3.0629 10.434 2.4785 3.5526-0.58437 6.6462-2.5356 8.1504-5.8965 1.52-3.3962 0.95032-6.7969-0.76758-10.014-1.7179-3.2168-4.614-6.1507-7.5137-8.2246-7.2465-5.1831-16.822-5.4253-25.033-2.0723-3.1497 1.2861-5.9569 3.9858-8.877 6.5078-2.92 2.522-6.0279 4.9212-9.959 5.0664-4.0353 0.14904-8.433-1.0885-11.889-3.8281-3.4557-2.7396-5.918-7.0432-5.918-12.727a1.1494 1.1494 0 0 1 1.1484-1.1484c3.1654 0 8.0881 0.56388 13.553 0.93945 5.4646 0.37557 11.44 0.55995 16.469-0.14453 7.9741-1.1171 16.931-5.7875 20.693-13.188 3.2828-6.4575 8.8361-14.155 18.217-17.686-8.208-0.21907-15.591-0.2085-22.049 0.51758-3.6802 0.4138-6.0952 2.1958-7.8086 4.7773-1.7134 2.5815-2.6444 5.9984-2.9961 9.4395-0.49616 4.855-3.7374 8.3554-7.7656 10.42-4.0282 2.0645-8.8815 2.8161-13.105 2.3438-3.2732-0.36601-7.026-1.0052-10.254-2.6211s-5.9497-4.3325-6.7578-8.5391c-0.33813-1.7601 0.14115-3.5944 0.96875-5.2715 0.82759-1.6771 2.0263-3.2126 3.3633-4.3535 1.337-1.1409 2.8246-1.9655 4.4238-1.8125 0.79959 0.07651 1.6004 0.46498 2.1797 1.1172s0.95403 1.5182 1.1738 2.5859c0.68711 3.3377 3.2411 5.7552 5.623 6.4004 1.191 0.32259 2.2876 0.22376 3.1855-0.30664 0.89793-0.5304 1.6839-1.5261 2.1074-3.3379 1.5995-6.8433-3.5933-13.5-10.197-15.592-4.1846-1.3252-9.4746-0.27198-13.355 2.2324-3.8809 2.5044-6.2494 6.2239-5.2891 10.346 0.39065 1.6766 0.40097 3.0251-0.0391 4.127-0.44004 1.1018-1.4307 1.8419-2.4727 2.0469-2.0839 0.40992-4.3255-0.64135-6.2266-2.2148-7.3683-6.0988-7.5625-16.16-6.6367-24.326 0.10076-0.88889 0.47865-2.8736 0.7793-4.7188z" fill-rule="evenodd" stroke-width=".425" inkscape:href="#advanced-f11.svgpath1987" inkscape:original="M 98.912109 6.2363281 C 98.75241 6.3262799 98.533813 6.5951 98.244141 7.0859375 C 94.312836 13.747338 88.236546 28.065031 87.162109 36.269531 C 84.941126 53.229031 97.074525 67.640916 113.66797 73.853516 C 129.59321 79.565216 134.11569 82.518206 136.64453 89.378906 C 138.22552 81.555906 142.20585 79.095047 149.26758 79.060547 C 157.26908 79.021347 163.64623 83.785488 169.47266 88.179688 C 175.89399 93.022487 186.44063 91.8116 189.79688 84.3125 C 193.16539 76.7861 187.17378 68.989222 181.13477 64.669922 C 173.51393 59.219122 163.51922 58.99015 155 62.46875 C 148.12235 65.27705 143.50925 73.702184 136.55469 73.958984 C 129.02235 74.237184 119.93945 69.270134 119.93945 58.552734 C 125.987 58.552734 139.7641 60.788791 150.12109 59.337891 C 158.40713 58.177091 167.67782 53.405103 171.67969 45.533203 C 176.00588 37.023403 184.06435 26.521484 199.99023 26.521484 C 186.26483 25.822684 176.07167 25.646672 166.69336 26.701172 C 158.68816 27.601272 155.6037 34.812959 154.875 41.943359 C 153.97293 50.770259 143.24964 54.573641 135.27344 53.681641 C 128.83546 52.961741 120.7394 51.128966 119.26367 43.447266 C 118.18911 37.853766 127.58505 28.710109 129.11914 36.162109 C 130.67039 43.697509 140.37257 47.104766 142.2793 38.947266 C 144.03908 31.418366 138.41784 24.248947 131.31055 21.998047 C 122.10286 19.082047 109.01729 26.569194 111.19922 35.933594 C 112.63428 42.092694 107.75423 41.594794 104.3125 38.746094 C 97.419952 33.041094 97.174249 23.475894 98.085938 15.433594 C 98.280327 13.718769 100.03001 5.606666 98.912109 6.2363281 z " inkscape:radius="-1.1492475" sodipodi:type="inkscape:offset" xlink:href="#m"/>
   </g>
-  <rect id="aq" x="20" y="3038.8" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="3038.8" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aq"/>
+    <use xlink:href="#ap"/>
    </flowRegion>
    <flowDiv>Poenostavljanje</flowDiv>
   </flowRoot>
-  <rect id="ap" x="20" y="3051.3" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="3051.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ap"/>
+    <use xlink:href="#ao"/>
    </flowRegion>
    <flowDiv>The main use of the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Simplify</flowSpan> command (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">L</flowSpan>) is reducing the number of nodes on a path while <flowSpan font-style="italic">almost</flowSpan> preserving its shape. This may be useful for paths created by the Pencil tool, since that tool sometimes creates more nodes than necessary. Below, the left shape is as created by the freehand tool, and the right one is a copy that was simplified. The original path has 28 nodes, while the simplified one has 17 (which means it is much easier to work with in node tool) and is smoother.</flowDiv>
   </flowRoot>
   <path transform="translate(20 3130)" d="m67.897 41.902c-0.16654-1.3656-0.72364-7.8714-1.13-10.17 0.13455-2.9025-0.09193-6.623-0.37665-9.793-0.74347-4.0763-0.18739-7.7427 0-12.053 2.0612-4.2646 3.993-6.8304 6.7798-9.4163 4.6922 1.1534 5.8937 2.56 6.7798 7.1564 1.0873 3.7603 0.98858 7.7004 0.75331 12.053 0 4.0016-0.0053 5.616 2.2599 8.6631 5.424 0.4687 6.2942-0.011 8.2864-4.8966 1.9055-3.3123 2.5521-6.9294 3.7665-10.546 3.1668-2.2695 5.8839-3.094 9.4163-4.5198 4.767-1.225 7.699-0.0601 10.923 2.2599 1.736 4.9146 2.8524 8.223 0.37665 12.43-1.7277 2.3249-4.1847 4.0172-7.1564 5.6498-2.2199 1.4059-5.2043 2.9242-7.5331 4.5198-3.6775 0.4819-3.8613 3.5006-2.2599 6.4031 2.5469 1.4512 5.7288 0.5687 7.5331-1.8832 3.4855-1.6744 4.9982-3.1988 9.4163-3.3899 3.8053 0.5469 6.0402 1.173 8.2864 3.0133 2.3986 3.4645 3.2622 5.6753 4.1432 8.6629-1.8069 2.5195-2.944 3.8679-5.6498 5.6498-3.431 0-6.863 0.0343-10.17-0.3766-3.0962-0.3198-5.738-1.1251-8.663-1.5066-4.1553 0-8.0759 0.2078-12.053 0.7533-2.6627 0.0563-3.6157 0.3446-6.4031 0.3766-2.3716 0.1552-4.7144 0.5206-6.0265 0.7533-2.9372-0.0253-5.5423-0.5306-5.6498-0.7533-2.1192 0.0433-3.8993 0.0578-4.1432 0.3767" fill="none" stroke="#000" stroke-width=".75128pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3130)" d="m174.38 41.902c-0.87182-10.336-2.3797-20.745-1.3851-31.119 0.98583-3.9091 3.0172-8.0874 6.9661-9.6972 4.6871-0.4192 6.7583 4.9465 7.1422 8.7906 0.72905 5.62-0.93401 11.529 1.2794 16.937 2.7348 3.4226 8.2837 1.0433 9.5588-2.5881 1.709-4.4388 1.8405-10.153 6.203-13.01 4.7286-2.6661 11.107-4.9245 16.057-1.5362 5.7957 4.6363 3.8145 14.882-2.8275 17.711-4.0297 2.8587-9.1072 4.2674-12.62 7.7871-1.8217 4.4839 5.5913 7.2763 7.7162 3.1412 4.2577-3.7219 10.892-5.473 15.921-2.2173 3.932 2.2476 7.1114 7.4635 4.8426 11.89-2.5558 4.1052-8.09 4.2833-12.365 3.5308-6.4891-1.0027-13.049-2.3289-19.634-1.397-7.7471 0.632-15.57 2.1598-23.332 0.8446-0.6842 0.0094-1.3732 0.1076-2.0162 0.349" fill="none" stroke="#000" stroke-width=".75128pt" inkscape:connector-curvature="0"/>
-  <rect id="ao" x="20" y="3194.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ao"/>
-   </flowRegion>
-   <flowDiv>The amount of simplification (called the <flowSpan font-style="italic">threshold</flowSpan>) depends on the size of the selection. Therefore, if you select a path along with some larger object, it will be simplified more aggressively than if you select that path alone. Moreover, the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Simplify</flowSpan> command is <flowSpan font-style="italic">accelerated</flowSpan>. This means that if you press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">L</flowSpan> several times in quick succession (so that the calls are within 0.5 sec from each other), the threshold is increased on each call. (If you do another Simplify after a pause, the threshold is back to its default value.) By making use of the acceleration, it is easy to apply the exact amount of simplification you need for each case.</flowDiv>
-  </flowRoot>
-  <rect id="an" x="20" y="3284.9" width="300" height="1e3px" display="none"/>
+  <rect id="an" x="20" y="3194.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#an"/>
+   </flowRegion>
+   <flowDiv>The amount of simplification (called the <flowSpan font-style="italic">threshold</flowSpan>) depends on the size of the selection. Therefore, if you select a path along with some larger object, it will be simplified more aggressively than if you select that path alone. Moreover, the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Simplify</flowSpan> command is <flowSpan font-style="italic">accelerated</flowSpan>. This means that if you press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">L</flowSpan> several times in quick succession (so that the calls are within 0.5 sec from each other), the threshold is increased on each call. (If you do another Simplify after a pause, the threshold is back to its default value.) By making use of the acceleration, it is easy to apply the exact amount of simplification you need for each case.</flowDiv>
+  </flowRoot>
+  <rect id="am" x="20" y="3284.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#am"/>
    </flowRegion>
    <flowDiv>Besides smoothing freehand strokes, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Simplify</flowSpan> can be used for various creative effects. Often, a shape which is rigid and geometric benefits from some amount of simplification that creates cool life-like generalizations of the original form - melting sharp corners and introducing very natural distortions, sometimes stylish and sometimes plain funny. Here's an example of a clipart shape that looks much nicer after <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Simplify</flowSpan>:</flowDiv>
   </flowRoot>
@@ -626,38 +626,38 @@
   <path transform="translate(20 3353)" d="m92.283 92.194 0.3215 9.6448-1.286 4.0724-1.6075 0.6431v3.8581l-0.96451-0.1072 0.21434 4.8226-1.7147 0.2144-0.85734 10.61 6.5372 4.1795-1.7147 2.6791-10.717-1.9288-10.395 1.9288-1.7147-2.6791 5.2512-3.3221-5.7871-1.179-11.253 2.3575v-1.3928l7.0731-5.3586-1.929-18.862c-1.2146-0.2143-2.3934-0.5359-3.5365-0.9646l-1.5004-16.075-2.572-0.4287-1.1788-3.3222-0.96451 0.2144-2.4649 33.008-2.0362 0.5359 9.1093 5.894-1.1788 3.0006-14.789-3.215-6.0014 1.3934-0.42867 4.7155 5.4656 4.9293c-0.28578 0.2862-0.4644 0.679-0.53584 1.179-0.07145 0.5-0.28578 0.7503-0.64301 0.7503-0.21433 0-0.35722-0.0359-0.42867-0.1072l-9.2164-1.6077-9.8594 1.7149-0.85734-1.9293 5.4656-4.715-1.1788-12.217h-1.3932c-0.14289-1.2148-0.25006-2.4292-0.3215-3.6436-0.07145-1.1431-0.14289-2.3221-0.21434-3.5365l-1.1788-0.8575-2.2505-4.0724 0.64301-11.788h-1.286l1.286-7.7161c0.28578-0.8574 0.71445-1.5005 1.286-1.9293 0.643-0.4287 1.3217-0.7498 2.0362-0.9641 0.7859-0.2144 1.5718-0.3933 2.3577-0.5359 0.85734-0.1431 1.6432-0.3574 2.3577-0.6431l0.53584 2.3575-5.7871 1.3934c-0.42867 0.357-0.643 0.7856-0.643 1.2861l-0.85734 4.3935h2.572v-1.6072h2.1434v6.3227h10.288v-6.3227h2.1434v1.6072h2.572l-0.96451-4.715c-0.07144-0.3574-0.21433-0.6076-0.42867-0.7503-0.14289-0.143-0.28578-0.2856-0.42867-0.4287l-5.8942-1.3934 0.64301-2.1431 6.2157 1.7144c0.57156 0.2862 1.1074 0.7862 1.6075 1.5006v-6.9658c-0.35722 0.5713-0.85734 1.0718-1.5003 1.5-0.64301 0.3574-1.3217 0.6431-2.0362 0.8575-0.28578-1.1431-0.42867-2.2504-0.42867-3.3222v-1.2862c0-0.5 0.07145-1.0713 0.21434-1.7144 0-0.7143-0.17862-1.1431-0.53584-1.2861-0.28578-0.1426-0.64301-0.2144-1.0717-0.2144 0.14289 0.3574 0.25006 0.7503 0.3215 1.179 0.07144 0.3574 0.10717 0.7857 0.10717 1.2862 0 1.7857-0.57156 3.3221-1.7147 4.6078-1.1431 1.2149-2.5363 1.8221-4.1795 1.8221-1.5718 0-2.9293-0.6072-4.0724-1.8221-1.1431-1.2857-1.7147-2.8221-1.7147-4.6078 0-1.0005 0.17861-1.8221 0.53584-2.4652-0.42867 0-0.82162 0.0718-1.1788 0.2144-0.35722 0.143-0.53584 0.5-0.53584 1.0718v0.2143c0.21433 1.2144 0.3215 2.1791 0.3215 2.8934 0 1.0006-0.21434 2.1437-0.64301 3.4294-0.78589-0.2144-1.6075-0.6072-2.4649-1.1785-0.7859-0.5718-1.2503-1.2862-1.3932-2.1437-0.14289-0.5713-0.21433-1-0.21433-1.2862 0-1.3574 0.57156-2.5005 1.7147-3.4293 0.85734-0.5 1.7504-0.7501 2.6792-0.7501l1.0717 0.1071-1.3932-32.579 15.646-4.2868c-1.2146-0.7143-2.1791-1.7503-2.8935-3.1077-0.71445-1.3575-1.0717-2.858-1.0717-4.5012 0-2.5005 0.71445-4.5724 2.1434-6.2157 1.5003-1.7147 3.2865-2.5721 5.3584-2.5721 2.0719 0 3.858 0.8574 5.3584 2.5721 1.5003 1.6433 2.2505 3.7152 2.2505 6.2157 0 1.6432-0.39295 3.1437-1.1788 4.5012-0.71445 1.3574-1.679 2.3934-2.8935 3.1077l16.075 4.2868-0.21433 5.4652 4.8225-1.1785 0.643 2.3575c-0.50011 0.2144-0.82162 0.5718-0.96451 1.0719-0.14289 0.4287-0.21434 0.9287-0.21434 1.5 0 0.7862 0.07145 1.5718 0.21434 2.358 0.21433 0.7856 0.39295 1.3216 0.53584 1.6072h6.1086c0.57156-1.6431 0.85734-3.0006 0.85734-4.0721 0-0.929-0.21434-1.6075-0.64301-2.0362-0.21433-0.2144-0.39295-0.3575-0.53584-0.4288l0.53584-2.3575 11.253 2.3575 2.1434 21.862h0.75018l-0.21434 2.6792c1.0002 1.3575 1.5003 2.7862 1.5003 4.2868 0 0.7143-0.10717 1.3215-0.3215 1.8215-0.35723 0.9288-0.89307 1.7503-1.6075 2.4652-0.71445 0.6426-1.5003 1.1431-2.3577 1.5001l7.0731 1.9292c0.35722 0.2144 0.75018 0.4641 1.1788 0.7503 0.42867 0.2856 0.67873 0.7498 0.75017 1.3928l2.2505 10.074zm-52.834-44.582-5.8942-11.574c-1.5718 0.5-3.1793 0.9646-4.8225 1.3934-1.5718 0.4287-3.1793 0.8569-4.8225 1.2857l1.1788 28.936c0.35722-0.1431 0.67873-0.3216 0.96451-0.536 0.35722-0.2856 0.71445-0.5 1.0717-0.643v-24.22h2.4649v24.22c0.92878 0.143 1.7147 0.4646 2.3577 0.9646 0.71445 0.5 1.2503 1.1431 1.6075 1.9288 0.28578-0.0713 0.78589-0.1071 1.5003-0.1071 0.71445 0 1.2146 0.0358 1.5004 0.1071l2.8935-1.1785zm50.154 36.223c-0.07144-0.4288-0.25006-0.8216-0.53584-1.179-0.21434-0.4288-0.64301-0.7144-1.286-0.8575l-7.2874-1.8216-7.3946 1.8216c-0.64301 0.1431-1.0717 0.3931-1.286 0.7503-0.14289 0.2856-0.3215 0.7144-0.53584 1.2862l-1.286 6.0011h2.8935l0.3215-3.9652 2.2505 0.2144-1.8218 20.791 13.717 1.0718-1.8218-21.862 2.2505-0.2144 0.53584 3.9652h2.7864zm-36.973-46.404c-1.6432-0.4288-3.2865-0.8934-4.9297-1.3934l-5.8942 11.574v20.576l9.2164 3.0005 2.4649-27.756 3.7509-0.7502 0.3215-3.9652zm-10.824 33.543v43.832l5.3584-1.8221 2.8935-39.116zm24.756-12.217c-1.0002-2.0006-2.0719-4.0365-3.215-6.1084-1.0717-2.0718-1.6075-4.3939-1.6075-6.9658 0-0.7148 0.03572-1.2502 0.10717-1.6077-0.14289 0.0713-0.53584 0.1785-1.1788 0.3216-0.57156 0.143-1.2146 0.3215-1.929 0.5359-0.643 0.1426-1.2503 0.2856-1.8218 0.4287-0.57156 0.0713-0.92879 0.1072-1.0717 0.1072l-2.7864 30.757 3.3222 0.2143 1.3932-25.292 2.4649 0.2144-1.3932 25.399c1.2146 0 2.4649-0.1072 3.7509-0.3216 1.286-0.2143 2.4649-0.679 3.5365-1.3933-1.286-1.7149-1.929-3.7868-1.929-6.2156 0-1.7149 0.25006-3.4652 0.75018-5.2513 0.50012-1.7862 1.036-3.3938 1.6075-4.8227zm13.61-13.288-6.0014-1.179c0.07145 0.2856 0.10717 0.5713 0.10717 0.8574v0.6431c0 1.2144-0.17861 2.3934-0.53584 3.5365-0.28578 1.0713-0.67873 2.1431-1.1788 3.215-0.50011 1-1.036 2.0359-1.6075 3.1077-0.50012 1.0001-1.0002 2.036-1.5004 3.1078-0.71445 1.5718-1.3575 3.2149-1.929 4.9298-0.57156 1.6432-0.85734 3.3222-0.85734 5.0371 0 1 0.17861 2.1431 0.53584 3.4293 0.7859 1.7144 2.0005 2.8934 3.6437 3.5365 1.6432 0.5713 3.3579 0.9287 5.144 1.0718-0.35722-0.4288-0.71445-0.9293-1.0717-1.5006-0.35723-0.5718-0.60728-1.1431-0.75018-1.7149-0.07144-0.2856-0.14289-0.5354-0.21433-0.7497v-0.7503c0-0.6431 0.07144-1.2503 0.21433-1.8221 0.21434-0.5713 0.4644-1.1072 0.75018-1.6072l-0.10717-2.7867 1.7147-0.2144-0.75017-14.253h2.4649l0.75018 13.932 1.0717-0.2142h1.929zm-5.2512 33.65c-1.2146-0.1431-2.4291-0.3575-3.6437-0.6431-1.1431-0.357-2.1791-0.8929-3.1079-1.6072-1.4289 1-2.965 1.6431-4.6082 1.9287-1.5718 0.2857-3.1793 0.4287-4.8225 0.4287l1.7147 20.255 7.3946 2.3575h0.53584v-0.4287l0.42867-9.2161c-0.21434-0.1431-0.46439-0.2144-0.75018-0.2144h-0.75017l2.1434-9.8597c0.14289-0.643 0.39295-1.1072 0.75018-1.3928 0.42867-0.2862 0.82162-0.5359 1.1788-0.7503zm-40.295 32.794 0.21434-3.8582c0.07144-1.286 0.10717-2.5363 0.10717-3.7512 0-1.4287-0.07144-2.8575-0.21433-4.2862-0.07145-1.4293-0.28578-2.7868-0.64301-4.0724h-10.502c-0.35722 1.3574-0.60728 2.7503-0.75017 4.1795-0.07145 1.3575-0.10717 2.7504-0.10717 4.1791 0 1.4293 0.03572 2.858 0.10717 4.2868 0.07144 1.4292 0.17861 2.8221 0.3215 4.1795h11.467zm39.545-76.732c-0.21433 1.2149-0.78589 2.3934-1.7147 3.5365-0.85734 1.1431-1.8933 1.8579-3.1079 2.1436-0.28578 0.0713-0.71445 0.1072-1.286 0.1072-1.929 0-3.5723-0.8575-4.9297-2.5724-0.35722-0.5713-0.643-1.1072-0.85734-1.6072-0.21433-0.5-0.35722-1.0359-0.42867-1.6077h-1.3932v-0.7503c0-1.7857 0.35722-3.4293 1.0717-4.9294 0.71445-1.5005 1.8576-2.7508 3.4294-3.7508 0.57156-0.2862 1.2146-0.4287 1.929-0.4287 0.71445-0.0718 1.4289-0.1072 2.1434-0.1072 1.6432 0.3569 2.8935 1 3.7509 1.9288 0.92878 0.9287 1.5718 1.9292 1.929 3.001 0.42867 1.0001 0.67873 2.0001 0.75018 3.0006 0.07144 0.9288 0.10717 1.6072 0.10717 2.036zm-29.685-12.432c-0.57156-0.3569-1.1431-0.6426-1.7147-0.8569-0.21434-0.0718-0.50012-0.1072-0.85734-0.1072-0.71445 0-1.4646 0.1784-2.2505 0.5359-0.71445 0.3569-1.3932 0.7144-2.0362 1.0713-0.78589 0.4287-1.5003 0.9287-2.1434 1.5005v0.3216c0.14289 1.2144 0.50012 2.3934 1.0717 3.5365 0.643 1.0718 1.5718 1.8575 2.7864 2.3575 0.28578 0.0718 0.67873 0.1071 1.1788 0.1071 1.2146 0 2.2505-0.4287 3.1079-1.2856 1.286-1.3575 1.929-3.0011 1.929-4.9299 0-0.3574-0.07144-0.8933-0.21433-1.6077zm39.866 49.298c0-1.5718-0.50011-2.6437-1.5003-3.215l-2.572-0.9646-3.0007 1.2861c-0.35722 0.4283-0.643 0.8929-0.85734 1.3929-0.21433 0.4288-0.3215 0.9288-0.3215 1.5006 0 1.2144 0.42867 2.2149 1.286 3.0006 0.85734 0.7143 1.8218 1.0718 2.8935 1.0718 1.1431 0 2.1076-0.3575 2.8935-1.0718 0.7859-0.7857 1.1788-1.7862 1.1788-3.0006zm-43.832-38.044-4.3939 1.5 4.501 8.7879 4.6082-8.7879zm-8.2519 38.902c0-0.2861-0.03572-0.6077-0.10717-0.9646-0.07145-0.3574-0.17861-0.6072-0.3215-0.7503l-1.0717-0.4287c-0.35723-0.1431-0.71445-0.25-1.0717-0.3215-0.35722-0.0713-0.71445-0.1072-1.0717-0.1072-0.35723 0-0.71445 0.0359-1.0717 0.1072-0.35722 0.0715-0.71445 0.1784-1.0717 0.3215-0.35723 0.1431-0.75018 0.2857-1.1788 0.4287-0.14289 0.7144-0.21433 1.2862-0.21433 1.7149 0 1.0714 0.3215 2.0001 0.96451 2.7863 0.71445 0.7856 1.5718 1.179 2.572 1.179s1.8576-0.3934 2.572-1.179c0.71445-0.7862 1.0717-1.7149 1.0717-2.7863zm39.009-41.796c-1.1431 0.8574-2.322 1.6436-3.5365 2.358-1.1431 0.643-2.322 1.1431-3.5365 1.5 0.21434 0.7144 0.50012 1.3221 0.85734 1.8221 0.35723 0.4287 0.75018 0.8215 1.1788 1.179 0.50012 0.3569 1.1074 0.5354 1.8218 0.5354h0.21434c1.286-0.1426 2.2148-0.857 2.7864-2.1431 0.42867-0.7144 0.643-1.6078 0.643-2.6791 0-0.4287-0.03572-0.8574-0.10717-1.2862-0.07144-0.5-0.17861-0.9287-0.3215-1.2861zm-4.2867 73.088-2.7864-0.8572 1.929 18.111 0.85734 0.2144zm-37.08 10.931v12.217h2.0362v-0.2143l1.0717-12.003zm-2.2505 0h-3.0007l1.1788 12.217h1.8219zm51.655 0.2144h-3.3222l0.96451 10.074h2.4649zm2.3577 0v10.074h2.4649l0.85734-10.074zm-10.288-8.7879-1.7147-0.6431-0.21434-1.3933v17.147l0.53584-0.2144 1.3932-12.539zm-32.043-1.179-1.0717 1.7149-1.1788 0.6431-0.42867 6.2155c0.21433 0.0713 0.46439 0.1431 0.75018 0.2144 0.21433 0.0713 0.50011 0.1431 0.85734 0.2144 0.35722 0.143 0.75017 0.2856 1.1788 0.4287zm-19.397-14.146-0.643 11.145 1.1788 2.3575v-1.3928c0-1.8575 0.14289-3.6083 0.42867-5.2514 0.35723-1.6431 0.53584-3.3934 0.53584-5.2514l-0.10717-1.6072zm59.478 19.933c0-0.5718-0.03572-1.1431-0.10717-1.7149l-4.501-0.2143-0.21434 3.7508h4.8225zm-41.795-19.933h-1.286c-0.07144 0.3569-0.10717 0.6785-0.10717 0.9646v0.7498l0.96451 10.181-0.10717 1.6072 1.1788-2.1431zm52.405 0.9646h-1.6075l0.96451 12.003 0.10717 0.1069 0.10717-0.1069 0.96451-2.7865zm-18.969 0-0.42867 9.2161 0.75018 2.7865c0.14289 0 0.21433 0.0356 0.21433 0.1069h0.10717l0.10717-0.1069 0.75017-12.003zm15.325 17.897c-0.7859 0-1.5718-0.0359-2.3577-0.1072-0.78589-0.0713-1.5718-0.1784-2.3577-0.3215v3.3221h4.9297zm-12.646 5.2514h-0.53584l-0.64301 5.6796 1.8219 1.179zm-17.683-36.223-1.7147-0.3216 1.5003 3.9652 0.64301 0.2144z" stroke-width="1pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3353)" d="m187.06 92.195c1.452 7.0463-0.76618 13.094-3.4692 18.972 0.78347 4.1625-3.3121 6.6127-2.1547 11.439-3.3065 5.288 11.684 7.0419 3.1547 10.095-4.7047-1.016-9.6478-2.5599-14.413-0.8741-2.6518 1.7215-9.1775 0.4874-5.3229-2.956 7.4101-2.6935-3.7387-3.9747-6.3527-2.4077-2.3336 1.0446-10.385 2.3497-5.0656-1.4313 8.0219-3.0081 3.4682-11.485 3.5625-17.941 0.0902-3.3309-0.36723-4.9391-3.527-5.6464-1.5597-4.6581-1.1027-9.8514-1.8635-14.731-0.11608-2.0688-4.2876-1.7831-3.8795-5.1291-2.5156 4.029-1.0625 10.228-2.0763 15.103-0.45102 6.0397-0.90203 12.08-1.353 18.119-4.7708 2.2218 10.085 4.4376 6.216 8.6226-4.3071 1.291-9.2896-1.8963-13.923-2.1021-5.6801-1.8935-10.973 4.9395-4.8046 8.39 4.7288 2.4133 0.90356 5.4893-2.7691 3.5193-5.1093-2.7085-12.375 2.3118-15.947-0.6695 3.119-3.3143 7.1357-6.3197 4.6684-11.697-0.10091-5.1647-2.817-8.0054-2.8544-13.32-5.6589-3.7747-1.0124-12.318-3.1622-16.36-0.75714-4.2132 0.61751-10.907 6.2846-11.275 6.4027 0.3504-0.0491 3.2315-2.8207 3.5378-2.2266 3.1256-1.0704 7.8499 2.4944 3.8122 1.1611 3.3899 0.19128 8.3557 6.2028 6.3226 5.698 1.8998 4.5856-2.9333 5.4476-6.3135 1.7047 1.2812 5.0596 2.9453 3.6227-1.1032 1.3938-5.0937-9.9162-2.9581-5.9066-6.4834 3.1826-0.4143 8.6865 5.4118 7.1457-0.844 1.9049-5.8882-5.2375 2.0491-3.9066-3.3068 0.92644-3.027-1.589-7.4802-0.99268-1.9296-0.18174 9.2257-15.777 4.4031-11.144-3.3819-3.6305 0.9074 0.50271 11.323-5.2807 5.8975-4.1433-6.165 7.9137-6.1258 4.3956-12.416-0.38371-8.9726-0.76741-17.945-1.1511-26.918 4.584-1.6194 12.603-2.7277 15.047-4.6651-6.2791-4.2539-3.3079-16.718 4.8412-15.975 9.2567 1.0241 6.7103 13.153 4.2247 16.804 4.566 1.8506 12.521 1.4654 14.694 5.2836-2.1356 5.5197 2.9025 2.2573 5.0405 3.8358-2.6209 4.3174 3e-3 10.211 5.4375 7.7532 3.1062-3.1678-2.5652-11.291 4.96-7.8481 5.7418-0.1087 8.3048 2.6325 7.6182 8.288 0.70495 5.2681 0.6696 10.733 1.8518 15.874 2.4938 4.1772 1.616 9.1674-1.7068 12.093 6.2527 0.252 9.612 4.5858 9.5974 10.68-0.27146 1.3261 2.2593 4.0244-0.65984 3.2826zm-52.834-44.582c-2.9411-3.1699-3.3623-12.428-8.2595-10.76-5.473-0.2657-8.9586 3.3975-6.9999 8.736 0.29962 7.3548 0.59929 14.71 0.89891 22.065 4.5417-4.5204 0.81925-13.392 2.0362-19.627-1.3175-2.9602 1.4966-9.1226 2.5438-3.6759 0.5324 7.4424-1.479 16.415 1.0341 22.883 3.9374 3.6779 11.187 2.0042 8.7465-4.4418v-15.179zm50.154 36.223c-4.1779-4.8562-13.832-4.6397-18.231-0.2574-1.4297 2.3698-1.6842 9.3141 1.9031 5.0521-1.8353-4.0276 4.2684-2.8062 1.902 0.6508 0.0839 5.623-2.323 13.356-0.68456 17.663 3.8318-0.5353 11.355 2.6011 12.746-0.3623-0.56931-6.8314-1.1387-13.664-1.708-20.496 3.4931-1.9404 2.3444 7.3921 5.3602 2.7501-0.24314-1.6982-0.99142-3.2975-1.2878-5.0006zm-36.973-46.403c-6.9078-4.1382-9.3038 7.4839-10.824 12.1 0.7487 6.0795-1.5101 14.342 1.1521 19.032 3.8279 0.9607 9.7002 5.0165 8.4495-1.7114 0.69327-7.807 1.3865-15.613 2.0797-23.42 5.9141 0.0203 5.6146-5.9972-0.8573-6.0008zm-10.824 33.543v43.831c8.4108-0.3391 5.0562-10.09 6.3858-15.711 0.62204-8.4088 1.2441-16.818 1.8661-25.228-2.7506-0.9641-5.5012-1.9287-8.2519-2.8933zm24.756-12.218c-2.9946-4.1937-4.7935-10.901-5.4449-14.57-7.537-0.1481-5.4323 8.1286-6.3408 13.08-0.5725 6.3192-1.145 12.639-1.7175 18.959 5.9696 1.4092 2.73-7.0904 3.911-10.474 0.26813-4.8677 0.53624-9.7352 0.80437-14.603 4.9474 0.2863 0.99096 7.9454 1.8522 11.384-0.26014 4.7428-0.52034 9.4861-0.78049 14.23 4.852 0.9843 8.5363-2.6049 5.3995-6.9665-0.29136-3.8172 1.0004-7.5186 2.3165-11.038zm13.61-13.288c-3.3283-0.6295-7.1812-2.5226-6.1581 2.4695-1.5177 7.7784-8.3747 14.123-7.3152 22.445-0.23578 4.8082 12.224 9.7856 7.4518 3.213-0.37482-4.226 1.2656-7.2062 2.3208-10.033 0.53407-3.7426-2.5633-11.163 0.97356-12.327 3.0984 3.5515-1.1642 12.715 3.1795 13.975 3.104-3.9587-0.7626-11.393-0.16353-16.634-0.0963-1.036-0.19253-2.0725-0.2888-3.1087zm-5.2512 33.65c-5.0074-2.2722-10.202-0.9806-15.119-0.2324-2.0634 5.2774 0.61558 11.973 0.41592 17.808-1.2708 3.8839 7.5462 5.8323 8.2086 3.9388 1.021-6.7661-2.0006-10.416 0.67482-17.083 0.29498-3.3596 3.0499-3.9581 5.8201-4.4311zm-40.295 32.794c-0.6437-5.1307 3.4074-16.984-4.4743-15.968-3.7912-0.2002-8.0744-0.9026-7.1811 4.2921-0.75328 5.1339-1.7328 15.098 6.4293 12.533 0.98304-0.5792 5.8897 1.1267 5.226-0.857zm39.545-76.732c-0.81927 7.8287-11.621 6.6607-13.293 0.0017-1.9462-5.6048 4.8186-12.889 10.373-9.0906 2.5075 1.071 6.5382 8.2024 2.9194 9.0889zm-29.685-12.432c-6.9261-5.1624-12.886 8.6387-3.5568 8.5175 3.4969-0.4907 6.3381-5.745 3.5568-8.5175zm39.866 49.298c-0.62527-8.6567-13.572-0.7179-5.8308 3.7227 2.5441 1.6038 6.038-0.8345 5.8308-3.7227zm-43.832-38.044c-7.5296 0.3403-1.2702 6.5537 0.10716 10.288 1.2209-4.5696 8.6645-9.6235-0.10716-10.288zm-8.2519 38.902c-1.7939-7.1105-12.387 2.1496-4.1137 3.9536 2.2033 0.311 4.222-1.8 4.1137-3.9536zm39.009-41.796c-3.4136 1.3754-10.451 6.3337-2.8239 7.3742 3.1605-0.6025 3.8326-4.8351 2.8239-7.3742zm-4.2867 73.089c-5.5841-2.0306-0.75096 7.7952-1.5445 10.802-0.22927 2.4879 1.4938 9.8064 1.5575 3.6313-0.0776-4.7921 0.0286-9.6241-0.013-14.433zm-37.08 10.931c0.86395 3.7309-1.8314 11.023 1.5464 12.28 1.0241-3.4962 1.9639-9.7752 0.78447-12.28h-2.3309zm-2.2505 0c-6.0719-0.475-0.88655 8.6483-1.8218 12.218 4.0819-0.5104 0.70179-8.9787 1.8218-12.218zm51.655 0.2146c-5.777-1.4146-2.6095 8.6046-1.3778 10.278 3.2244-0.8547 0.59467-7.7202 1.3778-10.278zm2.3577 0c0.22869 2.5876-1.2843 13.69 2.6365 8.7345-0.70231-3.2402 3.3138-10.524-2.6365-8.7345zm-10.288-8.7877c-4.0574-3.5274-0.97287 6.3116-1.929 8.7927-0.35153 3.243 0.3221 9.0988 0.91328 2.7498 0.25196-3.8467 1.1397-7.6663 1.0157-11.542zm-32.043-1.1794c-2.9312 1.7348-4.3458 10.351 0.0987 8.5563-0.0357-2.8522-0.0655-5.7044-0.0987-8.5563zm-19.397-14.146c0.27896 4.2142-1.6792 9.0292 0.33219 12.841-0.54871-3.3984 3.2161-11.641-0.33219-12.841zm59.478 19.933c-0.71404-5.8898-9.1427 1.9565-2.3108 1.9214 1.7052-0.1431 2.7653 0.4052 2.3108-1.9214zm-41.795-19.933c-3.4013 2.6354 0.613 9.3145-0.53581 13.503 2.4389-3.9582 0.15592-9.1176 0.53581-13.503zm52.405 0.9647c-3.3138 0.8401-0.30774 10.882-0.20622 11.43 1.4915-3.6721 0.0679-7.6309 0.20622-11.43zm-18.969 0c0.12717 3.0721-1.3937 11.448 0.83534 11.065-0.73769-3.0813 2.4702-10.575-0.83534-11.065zm15.325 17.896c-6.1321-2.7606-5.5902 5.5065 0.0533 2.6325 0.62531-0.8149-0.40195-1.7521-0.0533-2.6325zm-12.646 5.2516c-3.0122 2.3591 1.0951 10.315 0.32945 3.5803-0.0992-1.195-0.22049-2.387-0.32945-3.5803zm-17.683-36.223c-3.894-1.7798 1.682 7.5285 0.19067 1.646-0.0467-0.2391-0.17384-1.3364-0.19067-1.646z" stroke-width="1pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3353)" d="m281.84 92.195c1.7345 10.242-3.7675 20.233-6.7905 29.38 2.7628 4.4226 9.2809 12.635-1.0654 9.64-5.6521-0.3099-16.366 3.8161-14.052-4.6042-2.8386-3.1815-14.351 4.4583-10.781-2.8403 7.705-6.5417 2.3406-17.842-1.357-25.229-0.62385-4.229-1.2098-17.585-6.1445-13.717-1.7071 8.9951-0.9698 18.269-2.473 27.315-1.2885 4.2467 10.982 12.59 0.7126 11.01-6.9807-4.4344-21.112-1.2233-12.582 8.345-2.1474 3.3964-10.611 0.3629-15.3 1.6681-4.6796-3.0232 4.889-11.491-0.25129-17.162-3.7101-9.716-6.6791-20.33-4.7875-30.691 0.0704-6.5467 11.78-4.8467 3.2263-1.6705-2.7334 6.0454 9.8826 15.008 14.394 6.8409-0.61137-3.7514 6.1388-2.573 1.1194-6.6952-7.6887-5.0893 5.2589-0.1494 2.7412-6.2025-4.7532 1.0886-3.5905-9.1622-5.0125-1.0201-4.1636 7.9487-12.66-7.6721-12.142-1.3173-9.6493 2.9406 4.6965-10.841 1.3065-16.479 0.20707-7.5759-6.0079-18.798 2.7266-23.543 7.6036 1.2535 10.788-5.2964 6.963-11.08-0.14918-8.6193 14.653-11.134 14.679-1.3712-2.3951 7.5619 1.5148 13.53 9.579 13.368 6.7598 1.8074 6.219 18.387 14.222 12.035-0.6296-12.042 13.97-5.3595 12.738 2.9355-1.9557 7.935 3.392 15.402 1.7361 23.297-1.8985 6.0141 12.282 9.7306 7.2651 17.832-0.22332-0.0143-0.66999-0.0438-0.66999-0.0438zm-52.834-44.582c-0.0826-7.1503-11.884-16.201-14.998-6.2132-1.1822 8.0354 0.92261 16.178 0.58401 24.281 4.0145-0.0523 1.6656-12.919 1.6326-17.956 2.7019-10.251 4.4949 8.1316 2.3007 12.268-3.0236 10.592 14.842 10.949 10.977 0.2046-0.61555-4.1607-0.83686-8.3886-0.49637-12.585zm50.154 36.223c-4.3257-8.3686-23.71-1.3583-16.932 4.7285 5.7765-3.0428-0.90647 10.326 1.5326 13.899 2.2244 10.396 17.003 5.3306 12.854-4.4854-2.256-4.4034-1.8681-13.59 3.4539-9.0254 0.2652-1.7703-0.40336-3.4644-0.90808-5.1165zm-36.973-46.403c-8.8564-1.8367-10.791 9.5207-10.697 16.008-2.8653 5.9992 1.1558 21.939 9.0223 14.339 1.9396-7.8492 1.3025-16.276 2.532-24.346 5.9729 1.4284 4.0764-7.9405-0.85735-6.0008zm-10.824 33.543c-1e-5 14.61-1e-5 29.221-1e-5 43.831 8.5467-2.1123 5.7792-12.669 6.3567-19.118-0.98282-7.7491 6.6065-20.034-3.2311-23.892-0.51321-0.148-2.597-0.6954-3.1256-0.821zm24.756-12.218c-2.3554-3.9014-6.1855-19.179-10.903-9.3378-1.0671 7.9842-1.5662 16.114-2.1019 24.152 5.9315 1.0682 2.3856-12.048 3.5044-16.872 2.5354-9.6356 4.5251 4.4799 2.2882 7.9483-3.2253 5.0416 2.8208 17.762 5.6388 7.0025 1.0396-4.3655-2.0847-9.1963 1.574-12.894zm13.61-13.288c-9.5137-2.0656-7.1759 11.28-11.886 15.95-6.0271 4.7169 2.2936 20.544 6.4827 11.121 1.2327-6.2616 0.24459-14.011 2.8944-19.233 1.3574 2.7378 2.0476 14.588 3.9373 5.9692 0.15257-4.6618-1.943-9.1314-1.429-13.807zm-5.2512 33.65c-6.4425-3.6027-17.884-1.2554-15.837 8.0976-2.7461 6.3991 6.5063 20.195 9.6687 8.9625-0.7898-6.0701-2.551-16.071 6.1682-17.06zm-40.295 32.794c2.3124-6.5524-0.27765-21.302-9.8183-14.879-6.9857 6.5754-0.11983 21.896 9.8183 14.879zm39.545-76.732c-0.72315 8.4828-14.809 5.4647-13.975-2.306-0.31404-9.7021 15.261-9.8288 15.19-0.2748-0.12384 0.4402-0.93355 2.1608-1.2146 2.5808zm-29.685-12.432c-8.5058-7.3293-9.6326 15.325-0.44546 6.6933 1.6121-1.7593 2.3109-4.8396 0.44546-6.6933zm39.866 49.298c-1.7421-10.586-13.823 6.942-2.444 3.8609 1.4623-0.6652 2.5562-2.2152 2.444-3.8609zm-43.832-38.044c-8.893 0.8542 3.0996 14.814 3.7879 4.0934 1.1835-2.2613-1.4528-5.0394-3.7879-4.0934zm-8.2519 38.902c-3.0196-8.5046-10.105 8.3043-1.3439 3.0408 0.89663-0.7313 1.3598-1.9013 1.3439-3.0408zm39.009-41.796c-8.6643-1.5257-1.7709 13.236 0.41312 3.0823-0.0143-0.521-0.28973-2.5757-0.41312-3.0823zm-4.2867 73.089c-6.9046 1.8002 1.3728 20.576 0.0241 8.496-0.0133-2.8318-0.0713-5.664-0.0241-8.496zm-37.08 10.931c-1.7128 4.4473 1.4221 14.82 2.9944 5.1431 0.48132-2.1762-0.16132-5.2367-2.9944-5.1431zm-2.2505 0c-7.7312-0.0512 0.73931 16.72 0.0603 5.5358-0.25841-1.8242-0.57315-3.717-0.0603-5.5358zm51.655 0.2146c-8.4317-1.4398 1.0566 15.238 0.0385 3.955-0.15412-1.3092-0.28543-2.6463-0.0385-3.955zm2.3577 0c-3.2519 4.6683 3.5035 12.297 3.2683 3.4441 0.41612-1.9592-0.74528-5.126-3.2683-3.4441zm-10.288-8.7877c-5.4669 1.619-0.50264 18.148-0.56601 7.5927 0.30896-2.5193 0.57033-5.0514 0.56601-7.5927zm-32.043-1.1794c-6.2588 0.2851 0.77565 12.714 0.0404 3.5135-0.023-1.1707-0.0196-2.3421-0.0404-3.5135zm-19.397-14.146c-1.2933 4.6757 0.17836 15.024 1.5244 4.8823 0.30778-1.7371-0.0346-3.7487-1.5244-4.8823zm59.478 19.933c-3.0928-6.3548-5.4042 6.7483-0.15624 1.288 0.0521-0.4294 0.15624-1.288 0.15624-1.288zm-41.795-19.933c-4.531 4.083 1.9577 15.725 0.29293 5.0776-0.20931-1.6825-0.42227-3.3793-0.29293-5.0776zm52.405 0.9647c-5.3482 2.1627 2.0738 13.993 0.24733 4.1561-0.15142-1.3796-0.28666-2.7662-0.24733-4.1561zm-18.969 0c-1.315 2.8262 0.22678 13.622 1.426 5.0558 0.36182-1.7269 0.27548-4.0362-1.426-5.0558zm15.325 17.896c-6.561-4.0309-0.91358 9.0528 0 0zm-12.646 5.2516c-3.38 3.2529 2.599 7.4997 0 0zm-17.683-36.223c-3.6258 2.1663 3.8363 3.8742 0 0z" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="am" x="20" y="3502.8" width="300" height="1e3px" display="none"/>
+  <rect id="al" x="20" y="3502.8" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#am"/>
-   </flowRegion>
-   <flowDiv>Ustvarjanje besedil</flowDiv>
-  </flowRoot>
-  <rect id="al" x="20" y="3515.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#al"/>
    </flowRegion>
-   <flowDiv>Inkscape je sposoben urejati daljša in zapletena besedila, hkrati pa je priročen pri ustvarjanju kratkih besednih predmetov, kot so naslovi, oglasi, logotipi, diagrami, nalepke,... V tem delu bomo na kratko predstavili te možnosti.</flowDiv>
+   <flowDiv>Ustvarjanje besedil</flowDiv>
   </flowRoot>
-  <rect id="ak" x="20" y="3553.8" width="300" height="1e3px" display="none"/>
+  <rect id="ak" x="20" y="3515.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ak"/>
    </flowRegion>
-   <flowDiv>Creating a text object is as simple as switching to the Text tool (<flowSpan font-weight="bold">F8</flowSpan>), clicking somewhere in the document, and typing your text. To change font family, style, size, and alignment, open the Text and Font dialog (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">T</flowSpan>). That dialog also has a text entry tab where you can edit the selected text object - in some situations, it may be more convenient than editing it right on the canvas (in particular, that tab supports as-you-type spell checking).</flowDiv>
+   <flowDiv>Inkscape je sposoben urejati daljša in zapletena besedila, hkrati pa je priročen pri ustvarjanju kratkih besednih predmetov, kot so naslovi, oglasi, logotipi, diagrami, nalepke,... V tem delu bomo na kratko predstavili te možnosti.</flowDiv>
   </flowRoot>
-  <rect id="aj" x="20" y="3613.7" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="3553.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aj"/>
    </flowRegion>
-   <flowDiv>Like other tools, Text tool can select objects of its own type - text objects -so you can click to select and position the cursor in any existing text object (such as this paragraph). </flowDiv>
+   <flowDiv>Creating a text object is as simple as switching to the Text tool (<flowSpan font-weight="bold">F8</flowSpan>), clicking somewhere in the document, and typing your text. To change font family, style, size, and alignment, open the Text and Font dialog (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">T</flowSpan>). That dialog also has a text entry tab where you can edit the selected text object - in some situations, it may be more convenient than editing it right on the canvas (in particular, that tab supports as-you-type spell checking).</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="3641.7" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="3613.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ai"/>
+   </flowRegion>
+   <flowDiv>Like other tools, Text tool can select objects of its own type - text objects -so you can click to select and position the cursor in any existing text object (such as this paragraph). </flowDiv>
+  </flowRoot>
+  <rect id="ah" x="20" y="3641.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ah"/>
    </flowRegion>
    <flowDiv>One of the most common operations in text design is adjusting spacing between letters and lines. As always, Inkscape provides keyboard shortcuts for this. When you are editing text, the <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> keys change the <flowSpan font-style="italic">letter spacing</flowSpan> in the current line of a text object, so that the total length of the line changes by 1 pixel at the current zoom (compare to Selector tool where the same keys do pixel-sized object scaling). As a rule, if the font size in a text object is larger than the default, it will likely benefit from squeezing letters a bit tighter than the default. Here's an example:</flowDiv>
   </flowRoot>
@@ -665,26 +665,26 @@
   <text transform="translate(20 3730.9)" x="150" y="53.843742" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" stroke-width="3pt" text-align="center" text-anchor="middle" style="line-height:0%" xml:space="preserve"><tspan x="150" y="53.843742" font-size="6px" text-align="center" text-anchor="middle" style="line-height:1.1" sodipodi:role="line">Razmik med črkami zmanjšan</tspan></text>
   <text transform="translate(20 3730.9)" x="56.197266" y="33.29771" fill="#000000" font-family="serif" font-size="33.6px" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan>Inspiration</tspan></text>
   <text transform="translate(20 3730.9)" x="62.436516" y="82.904648" fill="#000000" font-family="serif" font-size="33.6px" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan letter-spacing="-1.2478">Inspiration</tspan></text>
-  <rect id="ah" x="20" y="3831.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ah"/>
-   </flowRegion>
-   <flowDiv>Stisnjena različica bi bila boljši naslov, a še vedno ni popolna: presledki med črkami niso enakomerni. "a" in "t" sta recimo predaleč narazen, medtem ko sta "t" in "i" preblizu. Količina takšnih slabih presledkov je odvisna od kakovosti uporabljene pisave, a celo pri najboljših boste našli pare črk, ki jih bo potrebno popraviti.</flowDiv>
-  </flowRoot>
-  <rect id="ag" x="20" y="3880.6" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="3831.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ag"/>
+   </flowRegion>
+   <flowDiv>Stisnjena različica bi bila boljši naslov, a še vedno ni popolna: presledki med črkami niso enakomerni. "a" in "t" sta recimo predaleč narazen, medtem ko sta "t" in "i" preblizu. Količina takšnih slabih presledkov je odvisna od kakovosti uporabljene pisave, a celo pri najboljših boste našli pare črk, ki jih bo potrebno popraviti.</flowDiv>
+  </flowRoot>
+  <rect id="af" x="20" y="3880.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#af"/>
    </flowRegion>
    <flowDiv>Inkscape makes these adjustments really easy. Just move your text editing cursor between the offending characters and use <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrows</flowSpan> to move the letters right of the cursor. Here is the same heading again, this time with manual adjustments for visually uniform letter positioning:</flowDiv>
   </flowRoot>
   <text transform="translate(20 3937.8)" x="150" y="6" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" stroke-width="3pt" text-align="center" text-anchor="middle" style="line-height:0%" xml:space="preserve"><tspan x="150" y="6" font-size="6px" text-align="center" text-anchor="middle" style="line-height:1.1" sodipodi:role="line">Razmik med črkami zmanjšan, nekateri pari črk ročno spodsekani</tspan></text>
   <text transform="translate(20 3937.8)" x="62.944992" y="34.802681" fill="#000000" font-family="serif" font-size="33.6px" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan dx="0 0 -0.1418031 -0.42540932 -0.42540932 0.42540932 0.42540932 -0.87514824 1.1344248 -0.5672124 -0.5672124" letter-spacing="-1.2478">Inspiration</tspan></text>
-  <rect id="af" x="20" y="3990.3" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="3990.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#af"/>
+    <use xlink:href="#ae"/>
    </flowRegion>
    <flowDiv>In addition to shifting letters horizontally by <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Left</flowSpan> or <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Right</flowSpan>, you can also move them vertically by using <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Up</flowSpan> or <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Down</flowSpan>:</flowDiv>
   </flowRoot>
@@ -696,38 +696,38 @@
    </flowRegion>
    <flowDiv>Of course you could just convert your text to path (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>) and move the letters as regular path objects. However, it is much more convenient to keep text as text - it remains editable, you can try different fonts without removing the kerns and spacing, and it takes much less space in the saved file. The only disadvantage to the “text as text” approach is that you need to have the original font installed on any system where you want to open that SVG document.</flowDiv>
   </flowRoot>
-  <rect id="ab" x="20" y="4140.3" width="300" height="1e3px" display="none"/>
+  <rect id="ac" x="20" y="4140.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ab"/>
+    <use xlink:href="#ac"/>
    </flowRegion>
    <flowDiv>Similar to letter spacing, you can also adjust <flowSpan font-style="italic">line spacing</flowSpan> in multi-line text objects. Try the <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> and <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> keys on any paragraph in this tutorial to space it in or out so that the overall height of the text object changes by 1 pixel at the current zoom. As in Selector, pressing <flowSpan font-weight="bold">Shift</flowSpan> with any spacing or kerning shortcut produces 10 times greater effect than without Shift.</flowDiv>
   </flowRoot>
-  <rect id="aa" x="20" y="4204" width="300" height="1e3px" display="none"/>
+  <rect id="ab" x="20" y="4204" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aa"/>
+    <use xlink:href="#ab"/>
    </flowRegion>
    <flowDiv>Urejevalnik XML</flowDiv>
   </flowRoot>
-  <rect id="z" x="20" y="4216.5" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="4216.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#z"/>
+    <use xlink:href="#aa"/>
    </flowRegion>
    <flowDiv>The ultimate power tool of Inkscape is the XML editor (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">X</flowSpan>). It displays the entire XML tree of the document, always reflecting its current state. You can edit your drawing and watch the corresponding changes in the XML tree. Moreover, you can edit any text, element, or attribute nodes in the XML editor and see the result on your canvas. This is the best tool imaginable for learning SVG interactively, and it allows you to do tricks that would be impossible with regular editing tools.</flowDiv>
   </flowRoot>
-  <rect id="y" x="20" y="4292.5" width="300" height="1e3px" display="none"/>
+  <rect id="z" x="20" y="4292.5" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#y"/>
+    <use xlink:href="#z"/>
    </flowRegion>
    <flowDiv>Zaključek</flowDiv>
   </flowRoot>
-  <rect id="x" x="20" y="4305.1" width="300" height="1e3px" display="none"/>
+  <rect id="y" x="20" y="4305.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#x"/>
+    <use xlink:href="#y"/>
    </flowRegion>
    <flowDiv>Ta vodič pokaže le del vseh zmogljivosti Inkscapa. Upamo, da vam je bil všeč. Ne bojte se eksperimentiranja in svoje stvaritve delite z drugimi. Za več informacij, najnovejše različice in nadaljno pomoč s strani uporabnikov in razvijalcev obiščite <flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">www.inkscape.org</flowSpan>.</flowDiv>
   </flowRoot>
@@ -745,7 +745,7 @@
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv>Boštjan Špetič — 2004, 2005; Martin Srebotnjak — 2007</flowDiv>
+   <flowDiv>Boštjan Špetič — 2004; Martin Srebotnjak — 2007</flowDiv>
   </flowRoot>
   <use x="47" y="4423.0309695" inkscape:label="icon-credits-designer" xlink:href="#bt"/>
   <rect id="bx" x="70" y="4417" width="230" height="1e3px" display="none"/>

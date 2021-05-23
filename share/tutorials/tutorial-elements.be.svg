@@ -259,10 +259,10 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#bx"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Elements of design</tspan></tspan></text>
-  <rect id="bb" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="az" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#bb"/>
+    <use xlink:href="#az"/>
    </flowRegion>
    <flowDiv>Гэты падручнік прадэманструе элемэнты й асновы дызайну, якія звычайна выкладаюцца на першых курсах студэнтам-мастакам, патрэбныя каб зразумець розныя рэчы, якія выкарыстоўваюцца ў творчасьці. Гэта ня поўны сьпіс, таму, калі ласка, дадавайце, аднімайце й спалучайце, каб зрабіць падручнік больш поўным.</flowDiv>
   </flowRoot>
@@ -286,31 +286,31 @@
   <text transform="translate(20 204.02) scale(1 .99997)" x="168.14247" y="126.60123" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.772px" stroke-width="2.9431pt" style="line-height:0%" xml:space="preserve"><tspan x="168.14247" y="126.60123" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" font-size="7.8481px" stroke-width="2.9431pt" style="line-height:1" sodipodi:role="line">Пераход</tspan></text>
   <text transform="translate(20 204.02)" x="124.19861" y="79.084373" fill="#ffffff" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.772px" font-weight="bold" stroke-width="2.9431pt" style="line-height:0%" xml:space="preserve"><tspan x="124.19861" y="79.084373" dx="0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0" fill="#ffffff" font-size="7.8483px" stroke-width="2.9431pt" style="line-height:1" sodipodi:role="line">Кампазыцыя</tspan></text>
   <text transform="translate(20 204.02)" x="5.103054" y="12.210741" fill="#000000" fill-opacity=".21476" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.772px" font-weight="bold" stroke-width="2.9431pt" style="line-height:0%" xml:space="preserve"><tspan x="5.103054" y="12.210741" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#000000" fill-opacity=".21476" font-size="9.8104px" stroke-width="2.9431pt" style="line-height:1" sodipodi:role="line">Агляд</tspan></text>
-  <rect id="ba" x="20" y="386.31" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="386.31" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ba"/>
-   </flowRegion>
-   <flowDiv>Элемэнты дызайну</flowDiv>
-  </flowRoot>
-  <rect id="az" x="20" y="398.93" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#az"/>
-   </flowRegion>
-   <flowDiv>Наступныя элемэнты — будаўнічыя блёкі дызайну.</flowDiv>
-  </flowRoot>
-  <rect id="ay" x="20" y="421.38" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv>Лінія</flowDiv>
+   <flowDiv>Элемэнты дызайну</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="431.47" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="398.93" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
+   </flowRegion>
+   <flowDiv>Наступныя элемэнты — будаўнічыя блёкі дызайну.</flowDiv>
+  </flowRoot>
+  <rect id="aw" x="20" y="421.38" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#aw"/>
+   </flowRegion>
+   <flowDiv>Лінія</flowDiv>
+  </flowRoot>
+  <rect id="av" x="20" y="431.47" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#av"/>
    </flowRegion>
    <flowDiv>Лінія вызначаная як знак з даўжынёй і напрамкам, створаны пунктам, які рухаецца праз паверхню. Лінія можа мець розную даўжыню, таўшчыню, напрамак, крывіню й колер. Лінія можа быць дзьвюхвымернай (лінія алоўка па паперы) ці меркавацца трохвымернай.</flowDiv>
   </flowRoot>
@@ -326,17 +326,17 @@
    <path d="m307.64 433.78-60.474 66.219-0.10437-15.79 60.574-55.538z" fill-rule="evenodd" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
    <path d="m307.64 440.1-60.474 79.034-0.10437-15.79 60.574-68.353z" fill-rule="evenodd" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
   </g>
-  <rect id="aw" x="20" y="605.19" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="605.19" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aw"/>
+    <use xlink:href="#au"/>
    </flowRegion>
    <flowDiv>Фіґура</flowDiv>
   </flowRoot>
-  <rect id="av" x="20" y="616.8" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="616.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#av"/>
+    <use xlink:href="#at"/>
    </flowRegion>
    <flowDiv>Плоская фіґура атрымоўваецца, калі існая ці меркаваная лініі сустракаюцца, каб абмежаваць прастору. Зьмена колеру ці адценьня можа вызначыць фіґуру. Фіґуры могуць быць падзеленыя на некалькі відаў: ґеамэтрычныя (квадрат, трохкутнік, акружына) і натуральныя (зь няправільным контурам).</flowDiv>
   </flowRoot>
@@ -346,34 +346,34 @@
    <rect x="28.147" y="628.75" width="65.282" height="65.282" fill-rule="evenodd" stroke-width="1pt"/>
    <path transform="matrix(1.1957 0 0 1.1957 83.878 -215.2)" d="m175.45 733.14c0 14.808-12.004 26.812-26.812 26.812s-26.812-12.004-26.812-26.812 12.004-26.812 26.812-26.812 26.812 12.004 26.812 26.812z" fill-rule="evenodd" stroke-width="1pt" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="au" x="20" y="790.79" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="790.79" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#au"/>
+    <use xlink:href="#as"/>
    </flowRegion>
    <flowDiv>Памер</flowDiv>
   </flowRoot>
-  <rect id="at" x="20" y="802.1" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="802.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#at"/>
+    <use xlink:href="#ar"/>
    </flowRegion>
    <flowDiv>Гэта датычыцца адрозьненьняў у прапорцыях аб'ектаў, ліній ці фіґур. Адрозьненьні памераў аб'ектаў могуць быць сапраўднымі ці ўяўнымі.</flowDiv>
   </flowRoot>
   <rect transform="translate(20 838.2)" x=".24455" y=".24454" width="299.51" height="99.125" fill="none" stroke="#000" stroke-width=".4891"/>
   <text transform="translate(20 838.2) scale(.99998 1)" x="67.585907" y="93.976639" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.778px" font-weight="bold" stroke-width="2.9445pt" style="line-height:0%" xml:space="preserve"><tspan x="67.585907" y="93.976639" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" fill="#000000" font-size="120.04px" stroke-width="2.9445pt" style="line-height:1" sodipodi:role="line">ВЯЛІКІ</tspan></text>
   <text transform="translate(20 838.2) scale(.99998 1)" x="41.980042" y="93.882477" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="11.778px" font-weight="bold" stroke-width="2.9445pt" style="line-height:0%" xml:space="preserve"><tspan x="41.980042" y="93.882477" dx="0 0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0 0" fill="#000000" font-size="9.8902px" stroke-width="2.9445pt" style="line-height:1" sodipodi:role="line">малы</tspan></text>
-  <rect id="as" x="20" y="954.81" width="300" height="1e3px" display="none"/>
+  <rect id="aq" x="20" y="954.81" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#as"/>
+    <use xlink:href="#aq"/>
    </flowRegion>
    <flowDiv>Прастора</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="966.13" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="966.13" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ar"/>
+    <use xlink:href="#ap"/>
    </flowRegion>
    <flowDiv>Прастора — гэта пусты ці адкрыты абсяг між, вакол, над, пад ці ўнутры аб'ектаў. Фіґуры й формы ствараюцца прасторай вакол і ўнутры іх. Прастора часта завецца трохвымернай ці дзьвюхвымернай. Дадатная прастора — запоўненая фіґурай ці формай. Адмоўная прастора акружае фіґуру ці форму.</flowDiv>
   </flowRoot>
@@ -381,17 +381,17 @@
   <rect transform="translate(20 1023.5)" x="28.245" y="3.8605" width="98.737" height="89.246" fill-rule="evenodd"/>
   <path transform="translate(20 1023.5)" d="m265.32 47.927c0 22.433-18.186 40.619-40.619 40.619-22.433 0-40.619-18.186-40.619-40.619s18.186-40.619 40.619-40.619c22.433 0 40.619 18.186 40.619 40.619z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1023.5)" d="m118.4 47.927c0 22.433-18.186 40.619-40.619 40.619-22.433 0-40.619-18.186-40.619-40.619s18.186-40.619 40.619-40.619c22.433 0 40.619 18.186 40.619 40.619z" fill="#fff" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="aq" x="20" y="1140.1" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="1140.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aq"/>
+    <use xlink:href="#ao"/>
    </flowRegion>
    <flowDiv>Колер</flowDiv>
   </flowRoot>
-  <rect id="ap" x="20" y="1151.4" width="300" height="1e3px" display="none"/>
+  <rect id="an" x="20" y="1151.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ap"/>
+    <use xlink:href="#an"/>
    </flowRegion>
    <flowDiv>Колер — гэта ўспрымальная характарыстыка паверхні, адпаведная даўжыні хвалі сьвятла, адбітага ёй. Колер мае тры вымеры: адценьне (іншае слова для колеру, пазначанае ягонай назвай, такой як «чырвоны» ці «жоўты»), яркасьць (ягоная сьветласьць ці цёмнасьць), інтэнсіўнасьць (насычанасьць ці прыглушанасьць).</flowDiv>
   </flowRoot>
@@ -407,17 +407,17 @@
    </linearGradient>
   </defs>
   <rect transform="translate(20 1208.6)" x=".24455" y=".24455" width="299.51" height="99.125" fill="url(#et)" fill-rule="evenodd" stroke="#000" stroke-width=".4891"/>
-  <rect id="ao" x="20" y="1325.2" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="1325.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ao"/>
+    <use xlink:href="#am"/>
    </flowRegion>
    <flowDiv>Тэкстура</flowDiv>
   </flowRoot>
-  <rect id="an" x="20" y="1336.5" width="300" height="1e3px" display="none"/>
+  <rect id="al" x="20" y="1336.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#an"/>
+    <use xlink:href="#al"/>
    </flowRegion>
    <flowDiv>Тэкстура — гэта як адчуваецца паверхня (існая тэкстура) ці як яна можа выглядаць (меркаваная тэкстура). Тэкстуры апісваюцца словамі, такімі як грубая, аксамітная ці галечная.</flowDiv>
   </flowRoot>
@@ -436,17 +436,17 @@
   <rect transform="translate(20 1381.4)" x=".076369" y=".82354" width="299.19" height="53.237" fill="url(#eq)"/>
   <rect transform="translate(20 1381.4)" x=".076369" y="22.907" width="299.19" height="53.237" fill="url(#er)"/>
   <rect transform="translate(20 1381.4)" x=".076369" y="45.773" width="299.19" height="53.237" fill="url(#es)"/>
-  <rect id="am" x="20" y="1498" width="300" height="1e3px" display="none"/>
+  <rect id="ak" x="20" y="1498" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#am"/>
+    <use xlink:href="#ak"/>
    </flowRegion>
    <flowDiv>Яркасьць</flowDiv>
   </flowRoot>
-  <rect id="al" x="20" y="1509.4" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="1509.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#al"/>
+    <use xlink:href="#aj"/>
    </flowRegion>
    <flowDiv>Яркасьць — гэта як цёмна ці як сьветла нешта выглядае. Мы дасягаем зьменаў яркасьці дадаючы чорнага ці белага да колеру. Сьветлацень выкарыстоўвае яркасьць робячы драматычны кантраст сьветлых і цёмных месцаў кампазыцыі.</flowDiv>
   </flowRoot>
@@ -475,31 +475,31 @@
   <rect transform="translate(20 1555.8)" x="8.256" y="49.627" width="282.04" height="20.595" fill="url(#el)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1555.8)" x="8.256" y="29.032" width="282.04" height="20.595" fill="url(#em)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1555.8)" x="8.256" y="8.4366" width="282.04" height="20.595" fill="url(#en)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="ak" x="20" y="1672.9" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="1672.9" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ak"/>
-   </flowRegion>
-   <flowDiv>Асновы дызайну</flowDiv>
-  </flowRoot>
-  <rect id="aj" x="20" y="1685.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#aj"/>
-   </flowRegion>
-   <flowDiv>Асновы выкарыстоўваюць элемэнты дызайну, каб стварыць кампазыцыю.</flowDiv>
-  </flowRoot>
-  <rect id="ai" x="20" y="1707.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
-   <flowDiv>Балянс</flowDiv>
+   <flowDiv>Асновы дызайну</flowDiv>
   </flowRoot>
-  <rect id="ah" x="20" y="1717.8" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="1685.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
+   </flowRegion>
+   <flowDiv>Асновы выкарыстоўваюць элемэнты дызайну, каб стварыць кампазыцыю.</flowDiv>
+  </flowRoot>
+  <rect id="ag" x="20" y="1707.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#ag"/>
+   </flowRegion>
+   <flowDiv>Балянс</flowDiv>
+  </flowRoot>
+  <rect id="af" x="20" y="1717.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#af"/>
    </flowRegion>
    <flowDiv>Балянс (вага) — гэта адчуваньне візуальнай роўнасьці фіґураў, формаў, яркасьцяў, колераў і г.д. Балянс можа быць сымэтрычным або роўнаўзважаным, ці асымэтрычным або няроўнаўзважаным. Аб'екты, яркасьці, колеры, тэкстуры, фіґуры, формы й г.д. могуць выкарыстоўвацца каб стварыць балянс у кампазыцыі.</flowDiv>
   </flowRoot>
@@ -509,17 +509,17 @@
   <path transform="translate(20 1775)" d="m69.226 34.74c0 18.928-15.344 34.272-34.271 34.272-18.928 0-34.271-15.344-34.271-34.272s15.344-34.272 34.271-34.272c18.928 0 34.271 15.344 34.271 34.272z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1775)" d="m273.22 74.46c0 9.2682-7.5134 16.782-16.782 16.782s-16.782-7.5134-16.782-16.782c0-9.2682 7.5134-16.782 16.782-16.782s16.782 7.5134 16.782 16.782z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1775)" d="m243.96 40.898c0 18.928-15.344 34.272-34.271 34.272s-34.271-15.344-34.271-34.272 15.344-34.272 34.271-34.272 34.271 15.344 34.271 34.272z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="ag" x="20" y="1891.6" width="300" height="1e3px" display="none"/>
+  <rect id="bt" x="20" y="1891.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ag"/>
+    <use xlink:href="#bt"/>
    </flowRegion>
    <flowDiv>Кантраст</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="1902.9" width="300" height="1e3px" display="none"/>
+  <rect id="bs" x="20" y="1902.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#af"/>
+    <use xlink:href="#bs"/>
    </flowRegion>
    <flowDiv>Кантраст — гэта непасрэднае суседства супрацьлеглых элемэнтаў</flowDiv>
   </flowRoot>
@@ -527,17 +527,17 @@
   <rect transform="translate(20 1928.1)" x="181.39" y="21.039" width="86.96" height="57.58" fill="#fff" fill-rule="evenodd"/>
   <rect transform="translate(20 1928.1)" x=".24466" y=".24455" width="149.77" height="99.168" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".48931"/>
   <rect transform="translate(20 1928.1)" x="31.648" y="21.039" width="86.96" height="57.58" fill="#d4d4d4" fill-rule="evenodd"/>
-  <rect id="bt" x="20" y="2044.7" width="300" height="1e3px" display="none"/>
+  <rect id="br" x="20" y="2044.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#bt"/>
+    <use xlink:href="#br"/>
    </flowRegion>
    <flowDiv>Вылучэньне</flowDiv>
   </flowRoot>
-  <rect id="bs" x="20" y="2056.1" width="300" height="1e3px" display="none"/>
+  <rect id="bq" x="20" y="2056.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bs"/>
+    <use xlink:href="#bq"/>
    </flowRegion>
    <flowDiv>Вылучэньне выкарыстоўваецца каб пэўныя часткі твора вызначаліся й прыцягвалі вашую ўвагу. Цэнтар інтарэсу ці вузлавы пункт — гэта месца працы, куды спачатку скіроўваюцца позіркі.</flowDiv>
   </flowRoot>
@@ -546,17 +546,17 @@
   <rect transform="translate(20 2102.8)" x=".24466" y=".24455" width="149.77" height="99.169" fill="#c8c8c8" fill-rule="evenodd" stroke="#000" stroke-width=".48931"/>
   <rect transform="translate(20 2102.8)" x="31.649" y="21.039" width="86.96" height="57.581" fill="#d4d4d4" fill-rule="evenodd"/>
   <path transform="translate(20 2102.8)" d="m267 66.642c0 6.1415-4.9786 11.12-11.12 11.12-6.1414 0-11.12-4.9786-11.12-11.12 0-6.1414 4.9786-11.12 11.12-11.12 6.1414 0 11.12 4.9786 11.12 11.12z" fill="#f00" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="br" x="20" y="2219.5" width="300" height="1e3px" display="none"/>
+  <rect id="bp" x="20" y="2219.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#br"/>
+    <use xlink:href="#bp"/>
    </flowRegion>
    <flowDiv>Прапорцыя</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="2230.8" width="300" height="1e3px" display="none"/>
+  <rect id="bo" x="20" y="2230.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bq"/>
+    <use xlink:href="#bo"/>
    </flowRegion>
    <flowDiv>Прапорцыя апісвае памер, месца ці важнасьць адной рэчы, параўнальна да іншай.</flowDiv>
   </flowRoot>
@@ -673,17 +673,17 @@
   </g>
   <use transform="translate(20 2256) matrix(1.7185 0 0 1.7185 141.7 -40.576) translate(-20 -2256)" width="320" height="3146.25" xlink:href="#ej"/>
   <use transform="translate(20 2256) matrix(.25 0 0 .25 242.02 39.847) translate(-20 -2256)" width="320" height="3146.25" xlink:href="#ei"/>
-  <rect id="bp" x="20" y="2391.2" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="2391.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#bp"/>
+    <use xlink:href="#bn"/>
    </flowRegion>
    <flowDiv>Узор</flowDiv>
   </flowRoot>
-  <rect id="bo" x="20" y="2402.5" width="300" height="1e3px" display="none"/>
+  <rect id="bm" x="20" y="2402.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bo"/>
+    <use xlink:href="#bm"/>
    </flowRegion>
    <flowDiv>Узор ствараецца паўтарэньнямі элемэнта (лініі, фіґуры ці колеру) зноў і зноў.</flowDiv>
   </flowRoot>
@@ -700,17 +700,17 @@
   <rect transform="translate(20 2427.8)" x=".16661" y=".3482" width="299.66" height="98.884" fill="url(#dq)"/>
   <rect transform="translate(20 2427.8)" x=".33523" y=".31848" width="299.33" height="98.745" fill="none"/>
   <rect transform="translate(20 2427.8)" x=".24455" y=".24468" width="299.51" height="99.125" fill="none" stroke="#000" stroke-width=".4891"/>
-  <rect id="bn" x="20" y="2544.4" width="300" height="1e3px" display="none"/>
+  <rect id="bl" x="20" y="2544.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.5" font-style="italic" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#bn"/>
+    <use xlink:href="#bl"/>
    </flowRegion>
    <flowDiv>Пераход</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="2556" width="300" height="1e3px" display="none"/>
+  <rect id="bk" x="20" y="2556" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bm"/>
+    <use xlink:href="#bk"/>
    </flowRegion>
    <flowDiv>Пераход памеру й напрамку стварае лінейную пэрспэктыву. Пераход колеру ад цёплага да халоднага й тону ад цёмнага да сьветлага стварае паветраную пэрспэктыву. Пераход можа дадаць фіґуры цікавасьці й рухавасьці. Пераход ад цёмнага да сьветлага прымусіць вочы рухацца ўздоўж фіґуры.</flowDiv>
   </flowRoot>
@@ -730,17 +730,17 @@
   <path transform="translate(20 2613.1)" d="m185.56 61.748v-23.735l114.02-37.608v98.952z" fill="url(#dm)" fill-rule="evenodd" stroke="#000" stroke-width=".49075" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
   <path transform="translate(20 2613.1)" d="m299.58 0.40467h-299.2l114.02 37.608h71.161z" fill="url(#dn)" fill-rule="evenodd" stroke="#000" stroke-width=".49075" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
   <path transform="translate(20 2613.1)" d="m299.58 99.357h-299.2l114.02-37.608h71.161z" fill="url(#do)" fill-rule="evenodd" stroke="#000" stroke-width=".49075" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
-  <rect id="bl" x="20" y="2730.2" width="300" height="1e3px" display="none"/>
+  <rect id="bj" x="20" y="2730.2" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#bl"/>
+    <use xlink:href="#bj"/>
    </flowRegion>
    <flowDiv>Кампазыцыя</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="2742.3" width="300" height="1e3px" display="none"/>
+  <rect id="bi" x="20" y="2742.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bk"/>
+    <use xlink:href="#bi"/>
    </flowRegion>
    <flowDiv>Спалучэньне асобных элемэнтаў, каб ён складаў цэлае.</flowDiv>
   </flowRoot>
@@ -854,64 +854,64 @@
    <path d="m247.23 2943.6 22.679-24.915 21.719 12.574z" fill="url(#ck)" inkscape:connector-curvature="0" sodipodi:nodetypes="cccc"/>
   </g>
   <path transform="translate(20 2767.8)" d="m183.96 67.522-6.5922 24.302 15.127 4.3247 11.686-0.83637 10.826 3.4645 15.987 0.02384 27.585-2.0178 21.478-9.3005-5.3361-3.9249-2.6681-1.5324-3.5282 0.18795-4.3884 3.1985-1.8079 1.4782-4.476 2.0963-7.9166 2.0962-7.0565-1.3444-8.7768 5.537-1.8955-4.7851-3.5021 0.0073-4.3622-1.7132-0.0614-4.2936-2.6419-4.2936-7.1269 3.4696-4.5464-2.5516-1.1058-7.7126-3.4916-1.9173-3.4916 0.66323-2.6824 3.0466-3.6446-4.2287-6.2251-1.2918z" fill="url(#cz)" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccccccccccccccccccccccc"/>
-  <rect id="bj" x="20" y="2885.7" width="300" height="1e3px" display="none"/>
+  <rect id="bh" x="20" y="2885.7" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#bj"/>
-   </flowRegion>
-   <flowDiv>Бібліяґрафія</flowDiv>
-  </flowRoot>
-  <rect id="bi" x="20" y="2898.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bi"/>
-   </flowRegion>
-   <flowDiv>Вось частковая бібліяґрафія, скарыстаная для пабудовы гэтага дакумэнта.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 2921.6)" r="2"/>
-  <rect id="bh" x="40" y="2915.6" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.makart.com/resources/artclass/EPlist.html</flowSpan></flowDiv>
+   <flowDiv>Бібліяґрафія</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2939.1)" r="2"/>
-  <rect id="bg" x="40" y="2933.1" width="280" height="1e3px" display="none"/>
+  <rect id="bg" x="20" y="2898.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.princetonol.com/groups/iad/Files/elements2.htm</flowSpan></flowDiv>
+   <flowDiv>Вось частковая бібліяґрафія, скарыстаная для пабудовы гэтага дакумэнта.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2956.6)" r="2"/>
-  <rect id="bf" x="40" y="2950.6" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2921.6)" r="2"/>
+  <rect id="bf" x="40" y="2915.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.johnlovett.com/test.htm</flowSpan></flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.makart.com/resources/artclass/EPlist.html</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2974)" r="2"/>
-  <rect id="be" x="40" y="2968" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2939.1)" r="2"/>
+  <rect id="be" x="40" y="2933.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/elements_of_design/</flowSpan></flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.princetonol.com/groups/iad/Files/elements2.htm</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2991.5)" r="2"/>
-  <rect id="bd" x="40" y="2985.5" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2956.6)" r="2"/>
+  <rect id="bd" x="40" y="2950.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/principles_of_design/</flowSpan></flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.johnlovett.com/test.htm</flowSpan></flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="3003" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2974)" r="2"/>
+  <rect id="bc" x="40" y="2968" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/elements_of_design/</flowSpan></flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 2991.5)" r="2"/>
+  <rect id="bb" x="40" y="2985.5" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bb"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://digital-web.com/articles/principles_of_design/</flowSpan></flowDiv>
+  </flowRoot>
+  <rect id="ba" x="20" y="3003" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ba"/>
    </flowRegion>
    <flowDiv>Асаблівая падзяка Linda Kim (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.coroflot.com/redlucite/</flowSpan>) за дапамогу мне, (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.rejon.org/</flowSpan>), з гэтым падручнікам. Таксама дзякуй Адкрытай бібліятэцы відарысаў (<flowSpan font-family="Liberation Sans,Arial,sans-serif" font-weight="bold">http://www.openclipart.org/</flowSpan>) і людзям, якія перадалі ґрафіку гэтаму праекту.</flowDiv>
   </flowRoot>

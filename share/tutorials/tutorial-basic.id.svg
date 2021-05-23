@@ -259,122 +259,122 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#cr"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Dasar</tspan></tspan></text>
-  <rect id="as" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="ak" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#as"/>
+    <use xlink:href="#ak"/>
    </flowRegion>
    <flowDiv>This tutorial demonstrates the basics of using Inkscape. If you have opened it from the Inkscape <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan> menu, it is a regular Inkscape document that you can view, edit, or copy from. You can also save a copy to a location of your choice.</flowDiv>
   </flowRoot>
-  <rect id="ao" x="40" y="174.31" width="264" height="1e3px" display="none"/>
+  <rect id="af" x="40" y="174.31" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#ao"/>
+    <use xlink:href="#af"/>
    </flowRegion>
    <flowDiv>The Basic Tutorial covers canvas navigation, managing documents, shape tool basics, selection techniques, transforming objects with selector, grouping, setting fill and stroke, alignment, and stacking order. For more advanced topics, check out the other tutorials in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan> menu.</flowDiv>
   </flowRoot>
-  <rect id="aj" x="20" y="230.82" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="230.82" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#aj"/>
+    <use xlink:href="#aa"/>
    </flowRegion>
    <flowDiv>Menggulung kanvas</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="243.31" width="300" height="1e3px" display="none"/>
+  <rect id="y" x="20" y="243.31" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ai"/>
+    <use xlink:href="#y"/>
    </flowRegion>
    <flowDiv>There are many ways to pan (scroll) the document canvas. Try <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">arrow</flowSpan> keys to scroll by keyboard. (Try this now to scroll this document down.) You can also drag the canvas by the middle mouse button. Or, you can use the scrollbars (press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">B</flowSpan> to show or hide them). The <flowSpan font-weight="bold">wheel</flowSpan> on your mouse also works for scrolling vertically; press <flowSpan font-weight="bold">Shift</flowSpan> and move the wheel to scroll horizontally.</flowDiv>
   </flowRoot>
-  <rect id="w" x="20" y="308.65" width="300" height="1e3px" display="none"/>
+  <rect id="v" x="20" y="308.65" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#w"/>
-   </flowRegion>
-   <flowDiv>Zum kedalam atau keluar</flowDiv>
-  </flowRoot>
-  <rect id="v" x="20" y="319.53" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#v"/>
    </flowRegion>
-   <flowDiv>The easiest way to zoom is by pressing <flowSpan font-weight="bold">-</flowSpan> and <flowSpan font-weight="bold">+</flowSpan> (or <flowSpan font-weight="bold">=</flowSpan>) keys. You can also use <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">middle click</flowSpan> or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">right click</flowSpan> to zoom in, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">middle click</flowSpan> or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">right click</flowSpan> to zoom out, or rotate the mouse <flowSpan font-weight="bold">wheel</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan>. Or, you can click in the zoom entry field (in the bottom right region of the document window, labelled “Z”), type a precise zoom value in %, and press <flowSpan font-weight="bold">Enter</flowSpan>. We also have the Zoom tool (in the toolbar on left) which lets you to zoom into an area by dragging around it.</flowDiv>
+   <flowDiv>Zum kedalam atau keluar</flowDiv>
   </flowRoot>
-  <rect id="u" x="20" y="390.14" width="300" height="1e3px" display="none"/>
+  <rect id="u" x="20" y="319.53" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#u"/>
    </flowRegion>
-   <flowDiv>Inkscape also keeps a history of the zoom levels you've used in this work session. Press the <flowSpan font-weight="bold">`</flowSpan> key to go back to the previous zoom, or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">`</flowSpan> to go forward.</flowDiv>
+   <flowDiv>The easiest way to zoom is by pressing <flowSpan font-weight="bold">-</flowSpan> and <flowSpan font-weight="bold">+</flowSpan> (or <flowSpan font-weight="bold">=</flowSpan>) keys. You can also use <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">middle click</flowSpan> or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">right click</flowSpan> to zoom in, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">middle click</flowSpan> or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">right click</flowSpan> to zoom out, or rotate the mouse <flowSpan font-weight="bold">wheel</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan>. Or, you can click in the zoom entry field (in the bottom right region of the document window, labelled “Z”), type a precise zoom value in %, and press <flowSpan font-weight="bold">Enter</flowSpan>. We also have the Zoom tool (in the toolbar on left) which lets you to zoom into an area by dragging around it.</flowDiv>
   </flowRoot>
-  <rect id="t" x="20" y="423.58" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="t" x="20" y="390.14" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#t"/>
    </flowRegion>
-   <flowDiv>Peralatan Inkscape</flowDiv>
+   <flowDiv>Inkscape also keeps a history of the zoom levels you've used in this work session. Press the <flowSpan font-weight="bold">`</flowSpan> key to go back to the previous zoom, or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">`</flowSpan> to go forward.</flowDiv>
   </flowRoot>
-  <rect id="s" x="20" y="436.04" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="s" x="20" y="423.58" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#s"/>
    </flowRegion>
-   <flowDiv>The vertical toolbar on the left shows Inkscape's drawing and editing tools. Depending on your screen resolution, the <flowSpan font-style="italic">Commands bar</flowSpan> with general command buttons, such as “Save” and “Print”, can be found either in the top part of the window, right below the menu, or on the right side of the window, in between the scroll bar and the <flowSpan font-style="italic">Snap Controls bar</flowSpan>. Right above the white <flowSpan font-style="italic">Canvas Area</flowSpan>, there's the <flowSpan font-style="italic">Tool Controls bar</flowSpan> with controls that are specific to each tool. The <flowSpan font-style="italic">status bar</flowSpan> at the bottom of the window will display useful hints and messages as you work.</flowDiv>
+   <flowDiv>Peralatan Inkscape</flowDiv>
   </flowRoot>
-  <rect id="r" x="20" y="517.24" width="300" height="1e3px" display="none"/>
+  <rect id="r" x="20" y="436.04" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#r"/>
    </flowRegion>
-   <flowDiv>Many operations are available through keyboard shortcuts. Open <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Keys and Mouse Reference</flowSpan> to see the complete list of available shortcuts.</flowDiv>
+   <flowDiv>The vertical toolbar on the left shows Inkscape's drawing and editing tools. Depending on your screen resolution, the <flowSpan font-style="italic">Commands bar</flowSpan> with general command buttons, such as “Save” and “Print”, can be found either in the top part of the window, right below the menu, or on the right side of the window, in between the scroll bar and the <flowSpan font-style="italic">Snap Controls bar</flowSpan>. Right above the white <flowSpan font-style="italic">Canvas Area</flowSpan>, there's the <flowSpan font-style="italic">Tool Controls bar</flowSpan> with controls that are specific to each tool. The <flowSpan font-style="italic">status bar</flowSpan> at the bottom of the window will display useful hints and messages as you work.</flowDiv>
   </flowRoot>
-  <rect id="q" x="20" y="550.89" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="q" x="20" y="517.24" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#q"/>
    </flowRegion>
-   <flowDiv>Membuat dan mengatur dokumen</flowDiv>
+   <flowDiv>Many operations are available through keyboard shortcuts. Open <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Keys and Mouse Reference</flowSpan> to see the complete list of available shortcuts.</flowDiv>
   </flowRoot>
-  <rect id="p" x="20" y="563.38" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="p" x="20" y="550.89" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#p"/>
    </flowRegion>
-   <flowDiv>To create a new empty document, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">New</flowSpan> or press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>. To create a new document from one of Inkscape's many templates, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">New from Template…</flowSpan> or press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>.</flowDiv>
+   <flowDiv>Membuat dan mengatur dokumen</flowDiv>
   </flowRoot>
-  <rect id="cn" x="20" y="602.3" width="300" height="1e3px" display="none"/>
+  <rect id="cn" x="20" y="563.38" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cn"/>
    </flowRegion>
-   <flowDiv>To open an existing SVG document, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Open</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). To save, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Save</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>), or <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Save As</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>) to save under a new name. (While Inkscape comes with its Autosave feature enabled, it is still recommended that you follow the best practice to “save early, save often“.)</flowDiv>
+   <flowDiv>To create a new empty document, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">New</flowSpan> or press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>. To create a new document from one of Inkscape's many templates, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">New from Template…</flowSpan> or press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="cm" x="20" y="651.92" width="300" height="1e3px" display="none"/>
+  <rect id="cm" x="20" y="602.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cm"/>
    </flowRegion>
-   <flowDiv>Inkscape uses the SVG (Scalable Vector Graphics) format for its files. SVG is an open standard widely supported by graphic software. SVG files are based on XML and can be edited with any text or XML editor (apart from Inkscape, that is). Besides SVG, Inkscape can import and export many other file formats. You can find lists of the supported file formats in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Save</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Import</flowSpan> dialogs.</flowDiv>
+   <flowDiv>To open an existing SVG document, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Open</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). To save, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Save</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>), or <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Save As</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>) to save under a new name. (While Inkscape comes with its Autosave feature enabled, it is still recommended that you follow the best practice to “save early, save often“.)</flowDiv>
   </flowRoot>
-  <rect id="cl" x="20" y="711.94" width="300" height="1e3px" display="none"/>
+  <rect id="cl" x="20" y="651.92" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cl"/>
    </flowRegion>
-   <flowDiv>Inkscape opens a separate document window for each document. You can navigate among them using your window manager (e.g. by <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>), or you can use the Inkscape shortcut, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>, which will cycle through all open document windows. (Create a new document now and switch between it and this document for practice.) Note: Inkscape treats these windows like tabs in a web browser, this means the <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> shortcut only works with documents running in the same process. If you open multiple files from a file browser or launch more than one Inkscape process from an icon it will not work.</flowDiv>
+   <flowDiv>Inkscape uses the SVG (Scalable Vector Graphics) format for its files. SVG is an open standard widely supported by graphic software. SVG files are based on XML and can be edited with any text or XML editor (apart from Inkscape, that is). Besides SVG, Inkscape can import and export many other file formats. You can find lists of the supported file formats in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Save</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Import</flowSpan> dialogs.</flowDiv>
   </flowRoot>
-  <rect id="ck" x="20" y="798.62" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ck" x="20" y="711.94" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ck"/>
    </flowRegion>
-   <flowDiv>Membuat bentuk</flowDiv>
+   <flowDiv>Inkscape opens a separate document window for each document. You can navigate among them using your window manager (e.g. by <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>), or you can use the Inkscape shortcut, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>, which will cycle through all open document windows. (Create a new document now and switch between it and this document for practice.) Note: Inkscape treats these windows like tabs in a web browser, this means the <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> shortcut only works with documents running in the same process. If you open multiple files from a file browser or launch more than one Inkscape process from an icon it will not work.</flowDiv>
   </flowRoot>
-  <rect id="cj" x="20" y="809.49" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cj" x="20" y="798.62" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cj"/>
+   </flowRegion>
+   <flowDiv>Membuat bentuk</flowDiv>
+  </flowRoot>
+  <rect id="ci" x="20" y="809.49" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ci"/>
    </flowRegion>
    <flowDiv>Time for some nice shapes! Click on the Rectangle tool in the toolbar on the left (or press <flowSpan font-weight="bold">F4</flowSpan>) and click-and-drag, either in a new empty document or right here:</flowDiv>
   </flowRoot>
@@ -389,10 +389,10 @@
   <rect transform="translate(20 845.53)" x="247.55" y="28.116" width="7.0564" height="4.1162" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 845.53)" x="262.25" y="20.472" width="4.1162" height="1.7641" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 845.53)" x="274.01" y="17.532" width="2.9402" height="1.1761" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="ci" x="20" y="907.26" width="300" height="1e3px" display="none"/>
+  <rect id="ch" x="20" y="907.26" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ci"/>
+    <use xlink:href="#ch"/>
    </flowRegion>
    <flowDiv>As you can see, default rectangles come up with a blue <flowSpan font-style="italic">fill</flowSpan> and a black <flowSpan font-style="italic">stroke</flowSpan> (outline), and fully opaque. We'll see how to change that below. With other tools, you can also create ellipses, stars, and spirals:</flowDiv>
   </flowRoot>
@@ -412,189 +412,189 @@
   <path transform="translate(20 953.88)" d="m166.79 26.291-10.51 1.7486-4.5176 9.6488-4.9106-9.4548-10.573-1.3148 7.4746-7.592-2.0166-10.461 9.5302 4.7627 9.3262-5.1507-1.5846 10.536z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.29358899" sodipodi:arg2="0.92190752" sodipodi:cx="151.42822" sodipodi:cy="21.647896" sodipodi:r1="16.043627" sodipodi:r2="8.0218134" sodipodi:sides="5" sodipodi:type="star"/>
   <path transform="translate(20 953.88)" d="m184.64 21.648-5.3031-0.02752-3.0291 4.353-1.6126-5.0521-5.076-1.5357 4.3065-3.0948-0.10804-5.3021 4.2742 3.1394 5.0092-1.7412-1.6649 5.0351z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.46364761" sodipodi:arg2="1.0919661" sodipodi:cx="177.49966" sodipodi:cy="18.076466" sodipodi:r1="7.9859571" sodipodi:r2="3.9929783" sodipodi:sides="5" sodipodi:type="star"/>
   <path transform="translate(20 953.88)" d="m202.14 24.505-3.7067-1.0799-2.991 2.4413-0.11839-3.859-3.246-2.0902 3.6335-1.3051 0.9848-3.7331 2.364 3.0524 3.8547-0.21699-2.1725 3.1916z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.74194727" sodipodi:arg2="1.3702658" sodipodi:cx="197.85681" sodipodi:cy="20.576469" sodipodi:r1="5.8138647" sodipodi:r2="2.9069321" sodipodi:sides="5" sodipodi:type="star"/>
-  <rect id="ch" x="20" y="1026.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ch"/>
-   </flowRegion>
-   <flowDiv>These tools are collectively known as <flowSpan font-style="italic">shape tools</flowSpan>. Each shape you create displays one or more <flowSpan font-style="italic">handles</flowSpan>; try dragging them to see how the shape responds. The Tool Controls bar for a shape tool is another way to tweak a shape; these controls affect the currently selected shapes (i.e. those that display the handles) <flowSpan font-style="italic">and</flowSpan> set the default that will apply to newly created shapes.</flowDiv>
-  </flowRoot>
-  <rect id="cg" x="20" y="1086.3" width="300" height="1e3px" display="none"/>
+  <rect id="cg" x="20" y="1026.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cg"/>
    </flowRegion>
-   <flowDiv>To <flowSpan font-style="italic">undo</flowSpan> your last action, press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan>. (Or, if you change your mind again, you can <flowSpan font-style="italic">redo</flowSpan> the undone action by <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan>.)</flowDiv>
+   <flowDiv>These tools are collectively known as <flowSpan font-style="italic">shape tools</flowSpan>. Each shape you create displays one or more <flowSpan font-style="italic">handles</flowSpan>; try dragging them to see how the shape responds. The Tool Controls bar for a shape tool is another way to tweak a shape; these controls affect the currently selected shapes (i.e. those that display the handles) <flowSpan font-style="italic">and</flowSpan> set the default that will apply to newly created shapes.</flowDiv>
   </flowRoot>
-  <rect id="cf" x="20" y="1119.7" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cf" x="20" y="1086.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cf"/>
    </flowRegion>
-   <flowDiv>Memindahkan, mengatur skala, memutar</flowDiv>
+   <flowDiv>To <flowSpan font-style="italic">undo</flowSpan> your last action, press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan>. (Or, if you change your mind again, you can <flowSpan font-style="italic">redo</flowSpan> the undone action by <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan>.)</flowDiv>
   </flowRoot>
-  <rect id="ce" x="20" y="1132.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ce" x="20" y="1119.7" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ce"/>
    </flowRegion>
-   <flowDiv>The most frequently used Inkscape tool is the <flowSpan font-style="italic">Selector</flowSpan>. Click the topmost button (with the arrow) on the toolbar, or press <flowSpan font-weight="bold">s</flowSpan>, <flowSpan font-weight="bold">F1</flowSpan> or toggle the tool using <flowSpan font-weight="bold">Space</flowSpan>. Now you can select any object on the canvas. Click on the rectangle below.</flowDiv>
+   <flowDiv>Memindahkan, mengatur skala, memutar</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 1178.9)" x="129.71" y=".66667" width="40.574" height="38.81" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="cd" x="20" y="1231" width="300" height="1e3px" display="none"/>
+  <rect id="cd" x="20" y="1132.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv>Anda akan melihat empat handles berbentuk panah muncul di sekitar obyek. Kini anda bisa:</flowDiv>
+   <flowDiv>The most frequently used Inkscape tool is the <flowSpan font-style="italic">Selector</flowSpan>. Click the topmost button (with the arrow) on the toolbar, or press <flowSpan font-weight="bold">s</flowSpan>, <flowSpan font-weight="bold">F1</flowSpan> or toggle the tool using <flowSpan font-weight="bold">Space</flowSpan>. Now you can select any object on the canvas. Click on the rectangle below.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1254.3)" r="2"/>
-  <rect id="cc" x="40" y="1248.3" width="280" height="1e3px" display="none"/>
+  <rect transform="translate(20 1178.9)" x="129.71" y=".66667" width="40.574" height="38.81" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect id="cc" x="20" y="1231" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cc"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Move</flowSpan> the object by dragging it. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to restrict movement to horizontal and vertical.)</flowDiv>
+   <flowDiv>Anda akan melihat empat handles berbentuk panah muncul di sekitar obyek. Kini anda bisa:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1282.2)" r="2"/>
-  <rect id="cb" x="40" y="1276.2" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1254.3)" r="2"/>
+  <rect id="cb" x="40" y="1248.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Scale</flowSpan> the object by dragging any handle. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to preserve the original height/width ratio.)</flowDiv>
+   <flowDiv><flowSpan font-style="italic">Move</flowSpan> the object by dragging it. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to restrict movement to horizontal and vertical.)</flowDiv>
   </flowRoot>
-  <rect id="ca" x="20" y="1304.1" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1282.2)" r="2"/>
+  <rect id="ca" x="40" y="1276.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ca"/>
    </flowRegion>
-   <flowDiv>Sekarang klik persegi tersebut lagi. Bentuk handlenya berubah. Kini anda bisa:</flowDiv>
+   <flowDiv><flowSpan font-style="italic">Scale</flowSpan> the object by dragging any handle. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to preserve the original height/width ratio.)</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1327.4)" r="2"/>
-  <rect id="bz" x="40" y="1321.4" width="280" height="1e3px" display="none"/>
+  <rect id="bz" x="20" y="1304.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bz"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Rotate</flowSpan> the object by dragging the corner handles. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to restrict rotation to 15 degree steps. Drag the cross mark to position the center of rotation.)</flowDiv>
+   <flowDiv>Sekarang klik persegi tersebut lagi. Bentuk handlenya berubah. Kini anda bisa:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1355.4)" r="2"/>
-  <rect id="by" x="40" y="1349.4" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1327.4)" r="2"/>
+  <rect id="by" x="40" y="1321.4" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#by"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Skew</flowSpan> (shear) the object by dragging non-corner handles. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to restrict skewing to 15 degree steps.)</flowDiv>
+   <flowDiv><flowSpan font-style="italic">Rotate</flowSpan> the object by dragging the corner handles. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to restrict rotation to 15 degree steps. Drag the cross mark to position the center of rotation.)</flowDiv>
   </flowRoot>
-  <rect id="bx" x="20" y="1377.3" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1355.4)" r="2"/>
+  <rect id="bx" x="40" y="1349.4" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bx"/>
    </flowRegion>
-   <flowDiv>While using the Selector, you can also use the numeric entry fields in the Tool Controls bar (above the canvas) to set exact values for coordinates (X and Y) and size (W and H) of the selection. </flowDiv>
+   <flowDiv><flowSpan font-style="italic">Skew</flowSpan> (shear) the object by dragging non-corner handles. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to restrict skewing to 15 degree steps.)</flowDiv>
   </flowRoot>
-  <rect id="bw" x="20" y="1419.7" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bw" x="20" y="1377.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv>Merubah dengan tombol keyboard</flowDiv>
+   <flowDiv>While using the Selector, you can also use the numeric entry fields in the Tool Controls bar (above the canvas) to set exact values for coordinates (X and Y) and size (W and H) of the selection. </flowDiv>
   </flowRoot>
-  <rect id="bv" x="20" y="1432.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bv" x="20" y="1419.7" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bv"/>
    </flowRegion>
-   <flowDiv>One of the features that set Inkscape apart from most other vector editors is its emphasis on keyboard accessibility. There's hardly any command or action that is impossible to do from keyboard, and transforming objects is no exception. </flowDiv>
+   <flowDiv>Merubah dengan tombol keyboard</flowDiv>
   </flowRoot>
-  <rect id="bu" x="20" y="1470.9" width="300" height="1e3px" display="none"/>
+  <rect id="bu" x="20" y="1432.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bu"/>
    </flowRegion>
-   <flowDiv>You can use the keyboard to move (<flowSpan font-weight="bold">arrow</flowSpan> keys), scale (<flowSpan font-weight="bold">&lt;</flowSpan> and <flowSpan font-weight="bold">&gt;</flowSpan> keys), and rotate (<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">]</flowSpan> keys) objects. Default moves and scales are by 2 px; with <flowSpan font-weight="bold">Shift</flowSpan>, you move by 10 times that. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> and <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> scale up or down to 200% or 50% of the original, respectively. Default rotates are by 15 degrees; with <flowSpan font-weight="bold">Ctrl</flowSpan>, you rotate by 90 degrees.</flowDiv>
+   <flowDiv>One of the features that set Inkscape apart from most other vector editors is its emphasis on keyboard accessibility. There's hardly any command or action that is impossible to do from keyboard, and transforming objects is no exception. </flowDiv>
   </flowRoot>
-  <rect id="bt" x="20" y="1520.2" width="300" height="1e3px" display="none"/>
+  <rect id="bt" x="20" y="1470.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bt"/>
    </flowRegion>
-   <flowDiv>However, perhaps the most useful are <flowSpan font-style="italic">pixel-size transformations</flowSpan>, invoked by using <flowSpan font-weight="bold">Alt</flowSpan> with the transform keys. For example, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrows</flowSpan> will move the selection by 1 <flowSpan font-style="italic">screen pixel</flowSpan> (i.e. a pixel on your monitor). This means that if you zoom in, you can move objects with very high precision, if you're using <flowSpan font-weight="bold">Alt</flowSpan> with your keyboard shortcut. In reverse, when you zoom out, precision will be lower when you use the <flowSpan font-weight="bold">Alt</flowSpan> key. Using different zoom levels, you can vary the amount of precision that you need for your current task.</flowDiv>
+   <flowDiv>You can use the keyboard to move (<flowSpan font-weight="bold">arrow</flowSpan> keys), scale (<flowSpan font-weight="bold">&lt;</flowSpan> and <flowSpan font-weight="bold">&gt;</flowSpan> keys), and rotate (<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">]</flowSpan> keys) objects. Default moves and scales are by 2 px; with <flowSpan font-weight="bold">Shift</flowSpan>, you move by 10 times that. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> and <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> scale up or down to 200% or 50% of the original, respectively. Default rotates are by 15 degrees; with <flowSpan font-weight="bold">Ctrl</flowSpan>, you rotate by 90 degrees.</flowDiv>
   </flowRoot>
-  <rect id="bs" x="20" y="1590.9" width="300" height="1e3px" display="none"/>
+  <rect id="bs" x="20" y="1520.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bs"/>
    </flowRegion>
-   <flowDiv>Similarly, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> scale the selection so that its visible size changes by one screen pixel, and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> rotate it so that its farthest-from-center point moves by one screen pixel.</flowDiv>
+   <flowDiv>However, perhaps the most useful are <flowSpan font-style="italic">pixel-size transformations</flowSpan>, invoked by using <flowSpan font-weight="bold">Alt</flowSpan> with the transform keys. For example, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrows</flowSpan> will move the selection by 1 <flowSpan font-style="italic">screen pixel</flowSpan> (i.e. a pixel on your monitor). This means that if you zoom in, you can move objects with very high precision, if you're using <flowSpan font-weight="bold">Alt</flowSpan> with your keyboard shortcut. In reverse, when you zoom out, precision will be lower when you use the <flowSpan font-weight="bold">Alt</flowSpan> key. Using different zoom levels, you can vary the amount of precision that you need for your current task.</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="1629.5" width="300" height="1e3px" display="none"/>
+  <rect id="br" x="20" y="1590.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>Note: Linux users may not get the expected results with the <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrow</flowSpan> and a few other key combinations if their Window Manager catches those key events before they reach the Inkscape application (and uses it to do things like switching workspaces instead). One solution would be to change the Window Manager's configuration accordingly.</flowDiv>
+   <flowDiv>Similarly, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> scale the selection so that its visible size changes by one screen pixel, and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> rotate it so that its farthest-from-center point moves by one screen pixel.</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="1684.2" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bq" x="20" y="1629.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>Seleksi lebih dari satu</flowDiv>
+   <flowDiv>Note: Linux users may not get the expected results with the <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrow</flowSpan> and a few other key combinations if their Window Manager catches those key events before they reach the Inkscape application (and uses it to do things like switching workspaces instead). One solution would be to change the Window Manager's configuration accordingly.</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="1695.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bp" x="20" y="1684.2" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bp"/>
+   </flowRegion>
+   <flowDiv>Seleksi lebih dari satu</flowDiv>
+  </flowRoot>
+  <rect id="bo" x="20" y="1695.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bo"/>
    </flowRegion>
    <flowDiv>You can select any number of objects simultaneously by <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>ing them. Or, you can <flowSpan font-weight="bold">drag</flowSpan> around the objects you need to select; this is called <flowSpan font-style="italic">rubberband selection</flowSpan>. (Selector creates rubberband when dragging from an empty space; however, if you press <flowSpan font-weight="bold">Shift</flowSpan> before starting to drag, Inkscape will always create the rubberband.) Practice by selecting all three of the shapes below:</flowDiv>
   </flowRoot>
   <rect transform="translate(20 1763.1)" x="84.63" y="6.0478" width="25.253" height="26.656" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt"/>
   <path transform="translate(20 1763.1)" d="m166.54 18.915c0 7.8776-7.8516 14.264-17.537 14.264s-17.537-6.386-17.537-14.264c0-7.8775 7.8516-14.264 17.537-14.264s17.537 6.386 17.537 14.264z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1763.1)" d="m213.42 29.945-11.509-2.8097-8.8394 7.8882-0.88434-11.814-10.234-5.9692 10.963-4.4919 2.5147-11.577 7.6597 9.0381 11.788-1.186-6.2288 10.078z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
-  <rect id="bo" x="20" y="1811.2" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="1811.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bo"/>
+    <use xlink:href="#bn"/>
    </flowRegion>
    <flowDiv>Now, use rubberband (by drag or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan>) to select the two ellipses but not the rectangle:</flowDiv>
   </flowRoot>
   <rect transform="translate(20 1836.6)" x="74.428" y="1.7363" width="151.14" height="39.698" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".93523pt"/>
   <path transform="translate(20 1836.6)" d="m141.19 16.262c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1836.6)" d="m168.87 16.619c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
-  <rect id="bn" x="20" y="1889.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bn"/>
-   </flowRegion>
-   <flowDiv>Each individual object within a selection displays a <flowSpan font-style="italic">selection cue</flowSpan> — by default, a dashed rectangular frame. These cues make it easy to see at once what is selected and what is not. For example, if you select both the two ellipses and the rectangle, without the cues you would have a hard time guessing whether the ellipses are selected or not.</flowDiv>
-  </flowRoot>
-  <rect id="bm" x="20" y="1938.8" width="300" height="1e3px" display="none"/>
+  <rect id="bm" x="20" y="1889.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>ing on a selected object excludes it from the selection. Select all three objects above, then use <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to exclude both ellipses from the selection leaving only the rectangle selected.</flowDiv>
+   <flowDiv>Each individual object within a selection displays a <flowSpan font-style="italic">selection cue</flowSpan> — by default, a dashed rectangular frame. These cues make it easy to see at once what is selected and what is not. For example, if you select both the two ellipses and the rectangle, without the cues you would have a hard time guessing whether the ellipses are selected or not.</flowDiv>
   </flowRoot>
-  <rect id="bl" x="20" y="1977.5" width="300" height="1e3px" display="none"/>
+  <rect id="bl" x="20" y="1938.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv>Pressing <flowSpan font-weight="bold">Esc</flowSpan> deselects all selected objects. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> selects all objects in the current layer (if you did not create any layers, this is the same as all objects in the document). The default behavior of the <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> shortcut can be adjusted in the preferences.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>ing on a selected object excludes it from the selection. Select all three objects above, then use <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to exclude both ellipses from the selection leaving only the rectangle selected.</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="2021.6" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bk" x="20" y="1977.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
-   <flowDiv>Grouping</flowDiv>
+   <flowDiv>Pressing <flowSpan font-weight="bold">Esc</flowSpan> deselects all selected objects. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> selects all objects in the current layer (if you did not create any layers, this is the same as all objects in the document). The default behavior of the <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> shortcut can be adjusted in the preferences.</flowDiv>
   </flowRoot>
-  <rect id="bj" x="20" y="2034.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bj" x="20" y="2021.6" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bj"/>
+   </flowRegion>
+   <flowDiv>Grouping</flowDiv>
+  </flowRoot>
+  <rect id="bi" x="20" y="2034.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bi"/>
    </flowRegion>
    <flowDiv>Beberapa obyek bisa digabungkan menjadi satu <flowSpan font-style="italic">group</flowSpan>/grup. Sebuah group/grup bersifat layaknya sebuah obyek saat anda menyeret atau merubah bentuknya. Dibawah, tiga obyek disebelah kiri berdiri sendiri; obyek yang sama pada layar sebelah kiri sudah digrup. Cobalah menyeret yang segrup.</flowDiv>
   </flowRoot>
@@ -606,81 +606,81 @@
    <path transform="translate(104.03 224.65)" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" inkscape:connector-curvature="0"/>
    <path transform="translate(86.386 261.2)" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="bi" x="20" y="2169.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bi"/>
-   </flowRegion>
-   <flowDiv>To create a group, select one or more objects and press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">G</flowSpan>. To ungroup one or more groups, select them and press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>. These actions are also accessible by <flowSpan font-weight="bold">right click</flowSpan>, the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object</flowSpan> menu, or the Commands bar. Groups themselves may be grouped, just like any other objects; such nested groups may go down to arbitrary depth. However, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> only ungroups the topmost level of grouping in a selection; you'll need to press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> repeatedly if you want to completely ungroup a deep group-in-group (or use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Arrange</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Deep Ungroup</flowSpan>).</flowDiv>
-  </flowRoot>
-  <rect id="bh" x="20" y="2251.4" width="300" height="1e3px" display="none"/>
+  <rect id="bh" x="20" y="2169.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv>You don't necessarily have to ungroup, however, if you want to edit an object within a group. Just <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> that object and it will be selected and editable alone, or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> several objects (inside or outside any groups) for multiple selection regardless of grouping.</flowDiv>
+   <flowDiv>To create a group, select one or more objects and press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">G</flowSpan>. To ungroup one or more groups, select them and press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>. These actions are also accessible by <flowSpan font-weight="bold">right click</flowSpan>, the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object</flowSpan> menu, or the Commands bar. Groups themselves may be grouped, just like any other objects; such nested groups may go down to arbitrary depth. However, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> only ungroups the topmost level of grouping in a selection; you'll need to press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> repeatedly if you want to completely ungroup a deep group-in-group (or use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Arrange</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Deep Ungroup</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="2290" width="300" height="1e3px" display="none"/>
+  <rect id="bg" x="20" y="2251.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>You can also <flowSpan font-weight="bold">double-click</flowSpan> on a group, to enter it and access all the objects inside without ungrouping. <flowSpan font-weight="bold">Double-click</flowSpan> on any empty canvas area to leave the group again.</flowDiv>
+   <flowDiv>You don't necessarily have to ungroup, however, if you want to edit an object within a group. Just <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> that object and it will be selected and editable alone, or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> several objects (inside or outside any groups) for multiple selection regardless of grouping.</flowDiv>
   </flowRoot>
-  <rect id="bf" x="20" y="2318" width="300" height="1e3px" display="none"/>
+  <rect id="bf" x="20" y="2290" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>Try to move or transform the individual shapes in the group (above right) without ungrouping it, then deselect and select the group normally to see that it still remains grouped. </flowDiv>
+   <flowDiv>You can also <flowSpan font-weight="bold">double-click</flowSpan> on a group, to enter it and access all the objects inside without ungrouping. <flowSpan font-weight="bold">Double-click</flowSpan> on any empty canvas area to leave the group again.</flowDiv>
   </flowRoot>
-  <rect id="be" x="20" y="2351.4" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="be" x="20" y="2318" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv>Fill dan stroke</flowDiv>
+   <flowDiv>Try to move or transform the individual shapes in the group (above right) without ungrouping it, then deselect and select the group normally to see that it still remains grouped. </flowDiv>
   </flowRoot>
-  <rect id="bd" x="20" y="2362.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bd" x="20" y="2351.4" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>Probably the simplest way to paint an object some color is to select an object, and click a <flowSpan font-style="italic">swatch</flowSpan> (color field) in the palette below the canvas to paint it (change its fill color).</flowDiv>
+   <flowDiv>Fill dan stroke</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="2390.2" width="300" height="1e3px" display="none"/>
+  <rect id="bc" x="20" y="2362.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
-   <flowDiv>Alternatively, you can open the Swatches dialog from the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">View</flowSpan> menu (or press <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">W</flowSpan>), select the palette that you want to use after clicking on the little triangle in its top right corner, select an object, and click any swatch to fill the object (change its fill color).</flowDiv>
+   <flowDiv>Probably the simplest way to paint an object some color is to select an object, and click a <flowSpan font-style="italic">swatch</flowSpan> (color field) in the palette below the canvas to paint it (change its fill color).</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="2439.7" width="300" height="1e3px" display="none"/>
+  <rect id="bb" x="20" y="2390.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv>More powerful is the Fill and Stroke dialog from the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object</flowSpan> menu (or press <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F</flowSpan>). Select the shape below and open the Fill and Stroke dialog.</flowDiv>
+   <flowDiv>Alternatively, you can open the Swatches dialog from the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">View</flowSpan> menu (or press <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">W</flowSpan>), select the palette that you want to use after clicking on the little triangle in its top right corner, select an object, and click any swatch to fill the object (change its fill color).</flowDiv>
   </flowRoot>
-  <path transform="translate(20 2475.9)" d="m216.26 17.909c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="ba" x="20" y="2521.9" width="300" height="1e3px" display="none"/>
+  <rect id="ba" x="20" y="2439.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
-   <flowDiv>You will see that the dialog has three tabs: Fill, Stroke paint, and Stroke style. The Fill tab lets you edit the fill (interior) of the selected object(s). Using the buttons just below the tab, you can select types of fill, including no fill (the button with the X), flat color fill, as well as linear or radial gradients. For the above shape, the flat fill button will be activated. </flowDiv>
+   <flowDiv>More powerful is the Fill and Stroke dialog from the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object</flowSpan> menu (or press <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F</flowSpan>). Select the shape below and open the Fill and Stroke dialog.</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2571.1" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 2475.9)" d="m216.26 17.909c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <rect id="az" x="20" y="2521.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
-   <flowDiv>Further below, you see a collection of <flowSpan font-style="italic">color pickers</flowSpan>, each in its own tab: RGB, CMYK, HSL, and Wheel. Perhaps the most convenient is the Wheel picker, where you can rotate the triangle to choose a hue on the wheel, and then select a shade of that hue within the triangle. All color pickers contain a slider labelled “A“ to set the <flowSpan font-style="italic">alpha</flowSpan> (opacity) of the selected color.</flowDiv>
+   <flowDiv>You will see that the dialog has three tabs: Fill, Stroke paint, and Stroke style. The Fill tab lets you edit the fill (interior) of the selected object(s). Using the buttons just below the tab, you can select types of fill, including no fill (the button with the X), flat color fill, as well as linear or radial gradients. For the above shape, the flat fill button will be activated. </flowDiv>
   </flowRoot>
-  <rect id="ay" x="20" y="2620.4" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="2571.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ay"/>
+   </flowRegion>
+   <flowDiv>Further below, you see a collection of <flowSpan font-style="italic">color pickers</flowSpan>, each in its own tab: RGB, CMYK, HSL, and Wheel. Perhaps the most convenient is the Wheel picker, where you can rotate the triangle to choose a hue on the wheel, and then select a shade of that hue within the triangle. All color pickers contain a slider labelled “A“ to set the <flowSpan font-style="italic">alpha</flowSpan> (opacity) of the selected color.</flowDiv>
+  </flowRoot>
+  <rect id="ax" x="20" y="2620.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ax"/>
    </flowRegion>
    <flowDiv>Kapanpun anda memilih sebuah objel, color picker langsung diperbaharui untuk menampilkan status Fill and Stroke obyek tersebut (untuk obyek lebih dari satu, dialog akan menampilkan warna <flowSpan font-style="italic">average</flowSpan>/standar.) Bereksperimenlah dengan sampel ini atau buatlah yang baru:</flowDiv>
   </flowRoot>
@@ -691,10 +691,10 @@
   <path transform="translate(20 2677.6)" d="m213.78 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#3d0fa1" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2677.6)" d="m245.6 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#6fe225" fill-opacity=".74902" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2677.6)" d="m277.42 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#ff3077" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <rect id="ax" x="20" y="2724.7" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="2724.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ax"/>
+    <use xlink:href="#aw"/>
    </flowRegion>
    <flowDiv>Dengan menggunakan tab Stroke paint, anda bisa menghapus <flowSpan font-style="italic">stroke</flowSpan> (garis luar/pinggir) dari obyek, atau mengatur warna dan transparansinya:</flowDiv>
   </flowRoot>
@@ -706,10 +706,10 @@
   <path transform="translate(20 2760.6)" d="m222.48 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#16417c" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2760.6)" d="m252.35 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#7c7016" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2760.6)" d="m278.89 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="aw" x="20" y="2807.3" width="300" height="1e3px" display="none"/>
+  <rect id="av" x="20" y="2807.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#aw"/>
+    <use xlink:href="#av"/>
    </flowRegion>
    <flowDiv>Tab terakhir, Stroke style, membuat anda bisa mengatur lebar dan parameter lain dari stroke:</flowDiv>
   </flowRoot>
@@ -720,10 +720,10 @@
   <path transform="translate(20 2832.6)" d="m205.14 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 6.95506" stroke-width="1.7388" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2832.6)" d="m241.29 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 3.47753, 1.73877, 3.47753" stroke-width="1.7388" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2832.6)" d="m277.43 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.811426, 0.811426" stroke-width=".81143" inkscape:connector-curvature="0"/>
-  <rect id="av" x="20" y="2886.9" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="2886.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#av"/>
+    <use xlink:href="#au"/>
    </flowRegion>
    <flowDiv>Finally, instead of a flat color, you can use <flowSpan font-style="italic">gradients</flowSpan> for fills and/or strokes:</flowDiv>
   </flowRoot>
@@ -771,17 +771,17 @@
   <path transform="translate(20 2912.2)" d="m208.72 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dj)" fill-rule="evenodd" stroke="url(#dq)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2912.2)" d="m192.1 20.273c0-9.8338 13.238-17.806 29.568-17.806s29.568 7.9719 29.568 17.806-13.238 17.806-29.568 17.806-29.568-7.9719-29.568-17.806z" fill="url(#dm)" fill-rule="evenodd" stroke="url(#dn)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2912.2)" d="m286.67 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dk)" fill-rule="evenodd" stroke="url(#dl)" stroke-dasharray="3.76251, 3.76251" stroke-width="3.7625" inkscape:connector-curvature="0"/>
-  <rect id="au" x="20" y="2963.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#au"/>
-   </flowRegion>
-   <flowDiv>When you switch from flat color to gradient, the newly created gradient uses the previous flat color, going from opaque to transparent. Switch to the Gradient tool (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F1</flowSpan> or just <flowSpan font-weight="bold">G</flowSpan>) to drag the <flowSpan font-style="italic">gradient handles</flowSpan> — the controls connected by lines that define the direction and length of the gradient. When any of the gradient handles is selected (highlighted blue), the Fill and Stroke dialog sets (and displays) the color of that handle instead of the color of the entire selected object.</flowDiv>
-  </flowRoot>
-  <rect id="at" x="20" y="3034.2" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="2963.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#at"/>
+   </flowRegion>
+   <flowDiv>When you switch from flat color to gradient, the newly created gradient uses the previous flat color, going from opaque to transparent. Switch to the Gradient tool (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F1</flowSpan> or just <flowSpan font-weight="bold">G</flowSpan>) to drag the <flowSpan font-style="italic">gradient handles</flowSpan> — the controls connected by lines that define the direction and length of the gradient. When any of the gradient handles is selected (highlighted blue), the Fill and Stroke dialog sets (and displays) the color of that handle instead of the color of the entire selected object.</flowDiv>
+  </flowRoot>
+  <rect id="as" x="20" y="3034.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#as"/>
    </flowRegion>
    <flowDiv>Yet another convenient way to change the color of an object is by using the Dropper tool (<flowSpan font-weight="bold">F7</flowSpan> or <flowSpan font-weight="bold">D</flowSpan>). Just <flowSpan font-weight="bold">click</flowSpan> anywhere in the drawing with that tool, and the color you clicked on will be assigned to the selected object's fill (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> will assign the stroke color).</flowDiv>
   </flowRoot>
@@ -872,24 +872,24 @@
   <path transform="translate(20 3239.3)" d="m252.34 52.406c0 0.1579-0.21227 1.6131 0.73678 2.2376" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3239.3)" d="m256.85 52.183c1.0548 1.2333 1.1304 2.6855 6.631 3.5801" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3239.3)" d="m267.26 52.854c0 0.8403-0.10579 1.6705 0.73678 2.4614" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <rect id="an" x="20" y="3312.7" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="3312.7" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#an"/>
+    <use xlink:href="#ao"/>
    </flowRegion>
    <flowDiv>Z-order</flowDiv>
   </flowRoot>
-  <rect id="am" x="20" y="3323.6" width="300" height="1e3px" display="none"/>
+  <rect id="an" x="20" y="3323.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#am"/>
+    <use xlink:href="#an"/>
    </flowRegion>
    <flowDiv>The term <flowSpan font-style="italic">z-order</flowSpan> refers to the stacking order of objects in a drawing, i.e. to which objects are on top of other objects, and cover them, so the bottom objects are not (completely) visible. The two commands in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object</flowSpan> menu, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Raise to Top</flowSpan> (the <flowSpan font-weight="bold">Home</flowSpan> key) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lower to Bottom</flowSpan> (the <flowSpan font-weight="bold">End</flowSpan> key), will move your selected objects to the very top or very bottom of the current layer's z-order. Two more commands, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Raise</flowSpan> (<flowSpan font-weight="bold">PgUp</flowSpan>) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lower</flowSpan> (<flowSpan font-weight="bold">PgDn</flowSpan>), will sink or emerge the selection <flowSpan font-style="italic">one step only</flowSpan>, i.e. move it past one non-selected object in z-order (only objects that overlap the selection count, based on their respective bounding boxes).</flowDiv>
   </flowRoot>
-  <rect id="al" x="20" y="3405.2" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="3405.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#al"/>
+    <use xlink:href="#am"/>
    </flowRegion>
    <flowDiv>Berlatihlah menggunakan perintah ini dengan membalik z-order obyek dibawah ini, sehingga lingkaran paling bawah menjadi paling atas dan sebaliknya:</flowDiv>
   </flowRoot>
@@ -899,69 +899,69 @@
   <path transform="translate(20 3441.1)" d="m198.09 18.86c0 5.622-5.7804 10.18-12.911 10.18-7.1304 0-12.911-4.5576-12.911-10.18 0-5.6222 5.7804-10.18 12.911-10.18 7.1304 0 12.911 4.5575 12.911 10.18z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3441.1)" d="m212.19 22.63c0 4.4296-5.2549 8.0203-11.737 8.0203-6.4822 0-11.737-3.5908-11.737-8.0203 0-4.4295 5.2549-8.0203 11.737-8.0203 6.4822 0 11.737 3.5909 11.737 8.0203z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3441.1)" d="m219.23 17.597c0 3.2369-3.2843 5.861-7.3357 5.861-4.0514 0-7.3357-2.6241-7.3357-5.861 0-3.237 3.2843-5.861 7.3357-5.861 4.0514 0 7.3357 2.624 7.3357 5.861z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
-  <rect id="ak" x="20" y="3505.9" width="300" height="1e3px" display="none"/>
+  <rect id="al" x="20" y="3505.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ak"/>
+    <use xlink:href="#al"/>
    </flowRegion>
    <flowDiv>A very useful selection shortcut is the <flowSpan font-weight="bold">Tab</flowSpan> key. If nothing is selected, it selects the bottommost object; otherwise it selects the object <flowSpan font-style="italic">above the selected object(s)</flowSpan> in z-order. <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> works in reverse, starting from the topmost object and proceeding downwards. Since the objects you create are added to the top of the stack, pressing <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> with nothing selected will conveniently select the object you created <flowSpan font-style="italic">last</flowSpan>. Practice the <flowSpan font-weight="bold">Tab</flowSpan> and <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> keys on the stack of ellipses above.</flowDiv>
   </flowRoot>
-  <rect id="ah" x="20" y="3582" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="3582" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ah"/>
+    <use xlink:href="#aj"/>
    </flowRegion>
    <flowDiv>Memilih yang dibawah dan menyeret yang dipilih</flowDiv>
   </flowRoot>
-  <rect id="ag" x="20" y="3594.5" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="3594.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ai"/>
+   </flowRegion>
+   <flowDiv>Apa yang harus dilakukan jika obyek yang anda butuhkan tersembunyi dibalik obyek yang lain? Anda mungkin masih bisa melihat obyek dibawah jika diatasnya (sebagian) transparan, tapi jika anda klik, yang dipilih adalah obyek yang diatas, bukan dibawahnya.</flowDiv>
+  </flowRoot>
+  <rect id="ah" x="20" y="3633.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ah"/>
+   </flowRegion>
+   <flowDiv>This is what <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> is for. First <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> selects the top object, just like the regular click. However, the next <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> at the same point will select the object <flowSpan font-style="italic">below</flowSpan> the top one; the next one, the object still lower, etc. Thus, several <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>s in a row will cycle, top-to-bottom, through the entire z-order stack of objects at the click point. When the bottom object is reached, next <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> will, naturally, again select the topmost object.</flowDiv>
+  </flowRoot>
+  <rect id="ag" x="20" y="3693.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ag"/>
    </flowRegion>
-   <flowDiv>Apa yang harus dilakukan jika obyek yang anda butuhkan tersembunyi dibalik obyek yang lain? Anda mungkin masih bisa melihat obyek dibawah jika diatasnya (sebagian) transparan, tapi jika anda klik, yang dipilih adalah obyek yang diatas, bukan dibawahnya.</flowDiv>
+   <flowDiv>[If you are on Linux, you might find that <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> does not work properly. Instead, it might be moving the whole Inkscape window. This is because your window manager has reserved <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> for a different action. The way to fix this is to find the Window Behavior configuration for your window manager, and either turn it off, or map it to use the <flowSpan font-weight="bold">Meta</flowSpan> key (aka <flowSpan font-weight="bold">Windows</flowSpan> key), so Inkscape and other applications may use the <flowSpan font-weight="bold">Alt</flowSpan> key freely.]</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="3633.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#af"/>
-   </flowRegion>
-   <flowDiv>This is what <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> is for. First <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> selects the top object, just like the regular click. However, the next <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> at the same point will select the object <flowSpan font-style="italic">below</flowSpan> the top one; the next one, the object still lower, etc. Thus, several <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>s in a row will cycle, top-to-bottom, through the entire z-order stack of objects at the click point. When the bottom object is reached, next <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> will, naturally, again select the topmost object.</flowDiv>
-  </flowRoot>
-  <rect id="ae" x="20" y="3693.1" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="3753.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ae"/>
    </flowRegion>
-   <flowDiv>[If you are on Linux, you might find that <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> does not work properly. Instead, it might be moving the whole Inkscape window. This is because your window manager has reserved <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> for a different action. The way to fix this is to find the Window Behavior configuration for your window manager, and either turn it off, or map it to use the <flowSpan font-weight="bold">Meta</flowSpan> key (aka <flowSpan font-weight="bold">Windows</flowSpan> key), so Inkscape and other applications may use the <flowSpan font-weight="bold">Alt</flowSpan> key freely.]</flowDiv>
+   <flowDiv>This is nice, but once you selected an under-the-surface object, what can you do with it? You can use keys to transform it, and you can drag the selection handles. However, dragging the object itself will reset the selection to the top object again (this is how click-and-drag is designed to work — it selects the (top) object under the cursor first, then drags the selection). To tell Inkscape to drag <flowSpan font-style="italic">what is selected now</flowSpan>, without selecting anything else, use <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan>. This will move the current selection, no matter where you drag your mouse.</flowDiv>
   </flowRoot>
-  <rect id="ad" x="20" y="3753.2" width="300" height="1e3px" display="none"/>
+  <rect id="ad" x="20" y="3823.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ad"/>
-   </flowRegion>
-   <flowDiv>This is nice, but once you selected an under-the-surface object, what can you do with it? You can use keys to transform it, and you can drag the selection handles. However, dragging the object itself will reset the selection to the top object again (this is how click-and-drag is designed to work — it selects the (top) object under the cursor first, then drags the selection). To tell Inkscape to drag <flowSpan font-style="italic">what is selected now</flowSpan>, without selecting anything else, use <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan>. This will move the current selection, no matter where you drag your mouse.</flowDiv>
-  </flowRoot>
-  <rect id="ac" x="20" y="3823.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ac"/>
    </flowRegion>
    <flowDiv>Practice <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> on the two brown shapes under the green transparent rectangle:</flowDiv>
   </flowRoot>
   <path transform="translate(20 3859.7) matrix(.39512 .68437 -.68437 .39512 2799.7 -1592.7)" d="m126.89 3940.5c-1.7128 2.7762-13.227-1.9871-15.92-0.2673-2.6928 1.7197-2.717 13.972-5.8567 14.525-3.1397 0.5531-6.3535-10.32-9.5433-11.1s-13.307 5.7281-15.627 3.5431c-2.3203-2.1851 6.0756-11.819 4.6565-14.776-1.4191-2.9564-12.432-3.072-12.315-6.2422s12.009-3.7964 13.505-6.565c1.4954-2.7687-2.9446-13.24-0.39835-15.118 2.5463-1.8777 10.873 5.667 14.076 5.0626 3.2032-0.6043 7.3014-9.5359 10.365-8.6831s0.25246 11.285 2.778 13.344c2.5256 2.0584 12.649-0.7081 13.802 2.2959 1.1532 3.0041-8.7265 9.769-8.7641 12.932-0.0376 3.1628 10.955 8.2731 9.2423 11.049z" color="#000000" fill="#ac7335" inkscape:flatsided="false" inkscape:randomized="0.047" inkscape:rounded="0.21" sodipodi:arg1="0.52143444" sodipodi:arg2="0.97023339" sodipodi:cx="100.73942" sodipodi:cy="3927.1016" sodipodi:r1="28.739008" sodipodi:r2="16.983238" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(20 3859.7) matrix(.8326 .4807 -.4807 .8326 1967.2 -3288.2)" d="m107.62 3941.6c-0.52759 2.111-9.0763-3.5197-10.951-2.3937-2.4976 1.5003-1.9722 11.854-4.8626 12.594-2.1693 0.5554-1.5842-8.522-3.5626-9.4629-2.6361-1.2536-11.029 4.1052-13.221 2.1498-1.6453-1.4675 6.9505-5.6944 6.8942-7.9439-0.07507-2.9973-9.6434-9.8527-9.0821-12.757 0.42125-2.18 9.4727 5.1817 11.397 4.018 2.5638-1.5505 2.3375-12.598 5.2294-13.243 2.1704-0.4837 1.6931 9.0878 3.6599 10.096 2.6207 1.3439 12.061-3.374 14.214-1.3192 1.6159 1.5422-7.3719 4.7859-7.261 6.987 0.14775 2.9328 8.2486 8.462 7.5456 11.275z" color="#000000" fill="#ff9400" inkscape:flatsided="false" inkscape:randomized="0.047" inkscape:rounded="0.21" sodipodi:arg1="0.48833395" sodipodi:arg2="0.77161843" sodipodi:cx="90.665482" sodipodi:cy="3933.4641" sodipodi:r1="19.21225" sodipodi:r2="9.3934679" sodipodi:sides="6" sodipodi:type="star"/>
   <rect transform="translate(20 3859.7)" x="64.106" width="171.79" height="56.564" rx="10.424" ry="10.424" color="#000000" fill="#2dd268" fill-opacity=".29609"/>
-  <rect id="ab" x="20" y="3933.7" width="300" height="1e3px" display="none"/>
+  <rect id="ac" x="20" y="3933.7" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ab"/>
+    <use xlink:href="#ac"/>
    </flowRegion>
    <flowDiv>Selecting similar objects</flowDiv>
   </flowRoot>
-  <rect id="aa" x="20" y="3946.2" width="300" height="1e3px" display="none"/>
+  <rect id="ab" x="20" y="3946.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#aa"/>
+    <use xlink:href="#ab"/>
    </flowRegion>
    <flowDiv>Inkscape can select other objects that are similar to the object that is currently selected. For example, if you want to select all the blue squares below, first select one of the blue squares, and use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Edit</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Select Same</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fill Color</flowSpan> from the menu (<flowSpan font-weight="bold">right-click</flowSpan> on the canvas). All objects with the same blue fill color are now selected.</flowDiv>
   </flowRoot>
@@ -1011,17 +1011,17 @@
    </flowRegion>
    <flowDiv>In addition to selecting by fill color, you can select multiple similar objects by stroke color, stroke style, fill &amp; stroke, and object type. If these are not enough choices for your use case, try using the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Edit</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Find/Replace</flowSpan> dialog.</flowDiv>
   </flowRoot>
-  <rect id="y" x="20" y="4108.7" width="300" height="1e3px" display="none"/>
+  <rect id="x" x="20" y="4108.7" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#y"/>
+    <use xlink:href="#x"/>
    </flowRegion>
    <flowDiv>Akhir</flowDiv>
   </flowRoot>
-  <rect id="x" x="20" y="4119.5" width="300" height="1e3px" display="none"/>
+  <rect id="w" x="20" y="4119.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#x"/>
+    <use xlink:href="#w"/>
    </flowRegion>
    <flowDiv>This concludes the Basic tutorial. There's much more than that to Inkscape, but with the techniques described here, you will already be able to create simple yet useful graphics. To learn more, we recommend going through the “Inkscape: Advanced” tutorial and the other tutorials in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Tutorials</flowSpan>.</flowDiv>
   </flowRoot>
@@ -1039,10 +1039,10 @@
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
-   <flowDiv/>
+   <flowDiv>pengakuan untuk penerjemah — </flowDiv>
   </flowRoot>
-  <use x="47" y="4248.7001638" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
-  <rect id="ct" x="70" y="4242.7" width="230" height="1e3px" display="none"/>
+  <use x="47" y="4254.2929372" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
+  <rect id="ct" x="70" y="4248.3" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#ct"/>
@@ -1051,7 +1051,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="cr" transform="translate(0 4090.3)">
+  <g id="cr" transform="translate(0 4095.9)">
    <defs>
     <filter id="l" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

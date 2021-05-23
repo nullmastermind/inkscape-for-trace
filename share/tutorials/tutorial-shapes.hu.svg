@@ -259,154 +259,154 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#ee"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Ismertető<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Alakzatok</tspan></tspan></text>
-  <rect id="cc" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="bc" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#cc"/>
+    <use xlink:href="#bc"/>
    </flowRegion>
    <flowDiv>Az alábbiakban bemutatjuk a négy alakzateszközt: a Téglalap, az Ellipszis, a Csillag és a Spirál eszközt. Megismerheti az Inkscape alakzatokkal kapcsolatos képességeit, és példákat láthat a használatukra.</flowDiv>
   </flowRoot>
-  <rect id="bx" x="40" y="174.4" width="264" height="1e3px" display="none"/>
+  <rect id="az" x="40" y="174.4" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#bx"/>
+    <use xlink:href="#az"/>
    </flowRegion>
    <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">nyíl</flowSpan> billentyű, az <flowSpan font-weight="bold">egérgörgő</flowSpan> vagy az <flowSpan font-weight="bold">egér középső gombbal való húzása</flowSpan> segít a lapozásban. Ha az objektumkészítés alapjairól, a kijelölésről vagy az átalakításról szeretne olvasni, javasoljuk a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Súgó</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ismertetők</flowSpan> menüből a Bevezetést.</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="224.21" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="224.21" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bb"/>
-   </flowRegion>
-   <flowDiv>Négy sokoldalú <flowSpan font-style="italic">alakzateszköz</flowSpan> található az Inkscape-ben, mindegyikkel a neki megfelelő alakzat rajzolható és szerkeszthető. Az alakzat egy olyan objektum, amelyet a típusára jellemző egyedi módon lehet módosítani a mozgatható <flowSpan font-style="italic">fogantyúival</flowSpan> és a megjelenését befolyásoló számszerű <flowSpan font-style="italic">paraméterek</flowSpan>kel.</flowDiv>
-  </flowRoot>
-  <rect id="av" x="20" y="273.49" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#av"/>
-   </flowRegion>
-   <flowDiv>Egy csillag esetében például módosíthatja a csúcsainak a számát, azok hosszát, szögét, lekerekítettségét stb. – de ettől a csillag még csillag marad. Bár egy alakzat „kevésbé szabad”, mint egy egyszerű útvonal, de sok esetben sokkal érdekesebb és jobban használható. Egy alakzat bármikor útvonallá alakítható (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), viszont fordítva ez nem lehetséges.</flowDiv>
-  </flowRoot>
-  <rect id="au" x="20" y="333.37" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#au"/>
-   </flowRegion>
-   <flowDiv>Az alakzateszközök a következők: <flowSpan font-style="italic">Téglalap</flowSpan>, <flowSpan font-style="italic">Ellipszis</flowSpan>, <flowSpan font-style="italic">Csillag</flowSpan> és <flowSpan font-style="italic">Spirál</flowSpan>. Először áttekintjük az általános tulajdonságaikat, azután részleteiben is bemutatjuk az egyes típusokat.</flowDiv>
-  </flowRoot>
-  <rect id="at" x="20" y="366.7" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
-   <flowDiv>Általános tulajdonságok</flowDiv>
+   <flowDiv>Négy sokoldalú <flowSpan font-style="italic">alakzateszköz</flowSpan> található az Inkscape-ben, mindegyikkel a neki megfelelő alakzat rajzolható és szerkeszthető. Az alakzat egy olyan objektum, amelyet a típusára jellemző egyedi módon lehet módosítani a mozgatható <flowSpan font-style="italic">fogantyúival</flowSpan> és a megjelenését befolyásoló számszerű <flowSpan font-style="italic">paraméterek</flowSpan>kel.</flowDiv>
   </flowRoot>
-  <rect id="as" x="20" y="380.49" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="273.49" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv>A megfelelő alakzateszköz kiválasztása után a vásznon való <flowSpan font-weight="bold">húzás</flowSpan>sal lehet új alakzatot rajzolni. A létrehozása után (feltéve, hogy ki van jelölve) észreveheti a fehér gyémánt, négyszög vagy lekerekített alakú fogantyúit (az eszköztől függően), ezek húzásával rögtön formálható is az éppen létrehozott alakzat.</flowDiv>
+   <flowDiv>Egy csillag esetében például módosíthatja a csúcsainak a számát, azok hosszát, szögét, lekerekítettségét stb. – de ettől a csillag még csillag marad. Bár egy alakzat „kevésbé szabad”, mint egy egyszerű útvonal, de sok esetben sokkal érdekesebb és jobban használható. Egy alakzat bármikor útvonallá alakítható (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>), viszont fordítva ez nem lehetséges.</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="429.78" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="333.37" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv>Mind a négy fajta alakzat a saját fogantyúit jeleníti meg, bármelyik alakzateszközt vagy akár a Csomópont eszközt (<flowSpan font-weight="bold">F2</flowSpan>) használja is éppen. Ha ráviszi az <flowSpan font-weight="bold">egeret</flowSpan> egy fogantyúra, az állapotsoron olvashatja, hogy az adott fogantyúval milyen művelet végezhető a módosítóbillentyűkkel kombinálva vagy azok nélkül.</flowDiv>
+   <flowDiv>Az alakzateszközök a következők: <flowSpan font-style="italic">Téglalap</flowSpan>, <flowSpan font-style="italic">Ellipszis</flowSpan>, <flowSpan font-style="italic">Csillag</flowSpan> és <flowSpan font-style="italic">Spirál</flowSpan>. Először áttekintjük az általános tulajdonságaikat, azután részleteiben is bemutatjuk az egyes típusokat.</flowDiv>
   </flowRoot>
-  <rect id="aq" x="20" y="479.09" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="aq" x="20" y="366.7" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
-   <flowDiv>Az <flowSpan font-style="italic">Eszközvezérlősáv</flowSpan>on (mely a vászon felett vízszintesen helyezkedik el) minden alakzathoz tartoznak bizonyos paraméterek. Általában számbeviteli mezőket és egy gombot talál itt, ez utóbbival az alapértelmezett értékek állíthatók vissza. A beviteli mezők értékeinek a módosítása közvetlenül hat az eszköznek megfelelő és kijelölt alakzatra vagy alakzatokra.</flowDiv>
+   <flowDiv>Általános tulajdonságok</flowDiv>
   </flowRoot>
-  <rect id="ap" x="20" y="528.38" width="300" height="1e3px" display="none"/>
+  <rect id="ap" x="20" y="380.49" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
-   <flowDiv>A program megjegyzi az Eszközvezérlősáv bármely értékének módosítását, és figyelembe veszi ezeket, amikor Ön legközelebb az adott eszközzel új alakzatot készít. Például ha megváltoztatja egy csillag csúcsainak a számát, akkor ha legközelebb egy csillagot rajzol, az új csillagnak is ennyi csúcsa lesz. Sőt, egyszerűen csak kijelölve egy alakzatot, az a hozzá tartozó értékeket átadja az Eszközvezérlősávnak, ily módon beállítva az ezután létrehozandó, ugyanilyen típusú alakzat tulajdonságait.</flowDiv>
+   <flowDiv>A megfelelő alakzateszköz kiválasztása után a vásznon való <flowSpan font-weight="bold">húzás</flowSpan>sal lehet új alakzatot rajzolni. A létrehozása után (feltéve, hogy ki van jelölve) észreveheti a fehér gyémánt, négyszög vagy lekerekített alakú fogantyúit (az eszköztől függően), ezek húzásával rögtön formálható is az éppen létrehozott alakzat.</flowDiv>
   </flowRoot>
-  <rect id="ao" x="20" y="598.94" width="300" height="1e3px" display="none"/>
+  <rect id="ao" x="20" y="429.78" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ao"/>
    </flowRegion>
-   <flowDiv>Egy objektumot úgy is kijelölhet, hogy valamely alakzateszközzel rá<flowSpan font-weight="bold">kattint</flowSpan>. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> (kijelölés csoportból) és az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> (alsó kijelölése) is ugyanúgy működik, mint a Kijelölő eszközzel. Az <flowSpan font-weight="bold">Esc</flowSpan> megszünteti a kijelölést.</flowDiv>
+   <flowDiv>Mind a négy fajta alakzat a saját fogantyúit jeleníti meg, bármelyik alakzateszközt vagy akár a Csomópont eszközt (<flowSpan font-weight="bold">F2</flowSpan>) használja is éppen. Ha ráviszi az <flowSpan font-weight="bold">egeret</flowSpan> egy fogantyúra, az állapotsoron olvashatja, hogy az adott fogantyúval milyen művelet végezhető a módosítóbillentyűkkel kombinálva vagy azok nélkül.</flowDiv>
   </flowRoot>
-  <rect id="an" x="20" y="642.98" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="an" x="20" y="479.09" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#an"/>
    </flowRegion>
-   <flowDiv>Téglalapok</flowDiv>
+   <flowDiv>Az <flowSpan font-style="italic">Eszközvezérlősáv</flowSpan>on (mely a vászon felett vízszintesen helyezkedik el) minden alakzathoz tartoznak bizonyos paraméterek. Általában számbeviteli mezőket és egy gombot talál itt, ez utóbbival az alapértelmezett értékek állíthatók vissza. A beviteli mezők értékeinek a módosítása közvetlenül hat az eszköznek megfelelő és kijelölt alakzatra vagy alakzatokra.</flowDiv>
   </flowRoot>
-  <rect id="am" x="20" y="655.54" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="528.38" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
    </flowRegion>
-   <flowDiv>A <flowSpan font-style="italic">téglalap</flowSpan>ok a legegyszerűbb, de valószínűleg a leggyakrabban előforduló alakzatok a grafikai munka során. Az Inkscape megpróbálja ezek készítését és módosítását minél egyszerűbbé és kényelmesebbé tenni.</flowDiv>
+   <flowDiv>A program megjegyzi az Eszközvezérlősáv bármely értékének módosítását, és figyelembe veszi ezeket, amikor Ön legközelebb az adott eszközzel új alakzatot készít. Például ha megváltoztatja egy csillag csúcsainak a számát, akkor ha legközelebb egy csillagot rajzol, az új csillagnak is ennyi csúcsa lesz. Sőt, egyszerűen csak kijelölve egy alakzatot, az a hozzá tartozó értékeket átadja az Eszközvezérlősávnak, ily módon beállítva az ezután létrehozandó, ugyanilyen típusú alakzat tulajdonságait.</flowDiv>
   </flowRoot>
-  <rect id="al" x="20" y="694.18" width="300" height="1e3px" display="none"/>
+  <rect id="al" x="20" y="598.94" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#al"/>
+   </flowRegion>
+   <flowDiv>Egy objektumot úgy is kijelölhet, hogy valamely alakzateszközzel rá<flowSpan font-weight="bold">kattint</flowSpan>. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> (kijelölés csoportból) és az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> (alsó kijelölése) is ugyanúgy működik, mint a Kijelölő eszközzel. Az <flowSpan font-weight="bold">Esc</flowSpan> megszünteti a kijelölést.</flowDiv>
+  </flowRoot>
+  <rect id="ak" x="20" y="642.98" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#ak"/>
+   </flowRegion>
+   <flowDiv>Téglalapok</flowDiv>
+  </flowRoot>
+  <rect id="aj" x="20" y="655.54" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#aj"/>
+   </flowRegion>
+   <flowDiv>A <flowSpan font-style="italic">téglalap</flowSpan>ok a legegyszerűbb, de valószínűleg a leggyakrabban előforduló alakzatok a grafikai munka során. Az Inkscape megpróbálja ezek készítését és módosítását minél egyszerűbbé és kényelmesebbé tenni.</flowDiv>
+  </flowRoot>
+  <rect id="ai" x="20" y="694.18" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ai"/>
    </flowRegion>
    <flowDiv>Váltson a Téglalap eszközre az <flowSpan font-weight="bold">F4</flowSpan> billentyűvel, vagy az eszköztáron a gombjára kattintva. Rajzoljon egy új téglalapot ide, a kék mellé:</flowDiv>
   </flowRoot>
   <text transform="translate(20 730.14)" x="40.248711" y="26.427183" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" opacity=".065574" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan x="40.248711" y="26.427183" font-size="16.8px" style="line-height:1.25" sodipodi:role="line">ide rajzoljon</tspan></text>
   <rect transform="translate(20 730.14)" x="180.93" y=".625" width="77.318" height="53.706" color="#000000" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="ak" x="20" y="797.18" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ak"/>
-   </flowRegion>
-   <flowDiv>Most anélkül, hogy más eszközre váltana, kattintással jelölje ki a másik téglalapot.</flowDiv>
-  </flowRoot>
-  <rect id="aj" x="20" y="814.47" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#aj"/>
-   </flowRegion>
-   <flowDiv>A téglalaprajzoló módosítóbillentyűk:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 837.76)" r="2"/>
-  <rect id="ai" x="40" y="831.76" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ai"/>
-   </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával négyzetet vagy egész oldalarányú (2:1, 3:1 stb.) téglalapot rajzolhat.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 865.7)" r="2"/>
-  <rect id="ah" x="40" y="859.7" width="280" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="797.18" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
    </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Shift</flowSpan> nyomva tartásával a kezdőpont mint középpont köré rajzolhat.</flowDiv>
+   <flowDiv>Most anélkül, hogy más eszközre váltana, kattintással jelölje ki a másik téglalapot.</flowDiv>
   </flowRoot>
-  <rect id="ag" x="20" y="877.06" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="814.47" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ag"/>
    </flowRegion>
-   <flowDiv>Amint láthatja, a kijelölt téglalap (megrajzolása után mindig az új lesz az éppen kijelölt) három sarkánál megjelenik három fogantyú. Valójában négy fogantyú van, de ezek közül kettő (a jobb felső sarokban) egymáson helyezkedik el, ha a téglalap sarkai nincsenek lekerekítve. Ez a kettő a <flowSpan font-style="italic">lekerekítő fogantyú</flowSpan>; a másik kettő (a bal felső és a jobb alsó) az <flowSpan font-style="italic">átméretező fogantyú</flowSpan>.</flowDiv>
+   <flowDiv>A téglalaprajzoló módosítóbillentyűk:</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="936.91" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 837.76)" r="2"/>
+  <rect id="af" x="40" y="831.76" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#af"/>
    </flowRegion>
-   <flowDiv>Nézzük először a lekerekítő fogantyút. Fogja meg, és húzza lejjebb. A téglalapnak mind a négy sarka lekerekítetté vált, és most már látszik a második lekerekítő fogantyú is – ott van az eredeti helyén, a sarokban. Ha körív alakú sarkokat szeretne, akkor mást már nem is kell tennie. Ha viszont olyan lekerekítésre gondol, ahol az egyik irányból nagyobb a lekerekítés mértéke, mint a másikból, akkor ezt a második fogantyút mozgassa balra.</flowDiv>
+   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával négyzetet vagy egész oldalarányú (2:1, 3:1 stb.) téglalapot rajzolhat.</flowDiv>
   </flowRoot>
-  <rect id="ae" x="20" y="996.83" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 865.7)" r="2"/>
+  <rect id="ae" x="40" y="859.7" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ae"/>
+   </flowRegion>
+   <flowDiv>A <flowSpan font-weight="bold">Shift</flowSpan> nyomva tartásával a kezdőpont mint középpont köré rajzolhat.</flowDiv>
+  </flowRoot>
+  <rect id="ea" x="20" y="877.06" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ea"/>
+   </flowRegion>
+   <flowDiv>Amint láthatja, a kijelölt téglalap (megrajzolása után mindig az új lesz az éppen kijelölt) három sarkánál megjelenik három fogantyú. Valójában négy fogantyú van, de ezek közül kettő (a jobb felső sarokban) egymáson helyezkedik el, ha a téglalap sarkai nincsenek lekerekítve. Ez a kettő a <flowSpan font-style="italic">lekerekítő fogantyú</flowSpan>; a másik kettő (a bal felső és a jobb alsó) az <flowSpan font-style="italic">átméretező fogantyú</flowSpan>.</flowDiv>
+  </flowRoot>
+  <rect id="dz" x="20" y="936.91" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dz"/>
+   </flowRegion>
+   <flowDiv>Nézzük először a lekerekítő fogantyút. Fogja meg, és húzza lejjebb. A téglalapnak mind a négy sarka lekerekítetté vált, és most már látszik a második lekerekítő fogantyú is – ott van az eredeti helyén, a sarokban. Ha körív alakú sarkokat szeretne, akkor mást már nem is kell tennie. Ha viszont olyan lekerekítésre gondol, ahol az egyik irányból nagyobb a lekerekítés mértéke, mint a másikból, akkor ezt a második fogantyút mozgassa balra.</flowDiv>
+  </flowRoot>
+  <rect id="dy" x="20" y="996.83" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dy"/>
    </flowRegion>
    <flowDiv>Az alábbi téglalapok közül az első kettőnél köríves, a másik kettőnél elliptikus a lekerekítés:</flowDiv>
   </flowRoot>
@@ -416,24 +416,24 @@
   <rect transform="translate(20 1022.1)" x="83.596" y="11.833" width="56.849" height="33.94" ry="16.97" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 1022.1)" x="159.72" y="11.833" width="56.849" height="33.94" rx="6.6372" ry="16.97" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 1022.1)" x="234.28" y="11.833" width="56.849" height="33.94" rx="24.046" ry="5.9394" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="ea" x="20" y="1079" width="300" height="1e3px" display="none"/>
+  <rect id="dx" x="20" y="1079" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ea"/>
+    <use xlink:href="#dx"/>
    </flowRegion>
    <flowDiv>Továbbra is a Téglalap eszköznél maradva, kattintással jelölje ki ezeket az alakzatokat, és figyelje meg a lekerekítő fogantyúk helyzetét.</flowDiv>
   </flowRoot>
-  <rect id="dz" x="20" y="1106.9" width="300" height="1e3px" display="none"/>
+  <rect id="dw" x="20" y="1106.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dz"/>
+    <use xlink:href="#dw"/>
    </flowRegion>
    <flowDiv>Gyakran szükség lehet arra, hogy egy kompozíción belül a lekerekített sarkok sugara és alakja állandó legyen akkor is, ha a téglalapok mérete változó (gondoljon a különféle méretű, lekerekített sarkú oszlopokat tartalmazó diagramokra). Az Inkscape-pel könnyű ilyet készíteni. Váltson a Kijelölő eszközre; ekkor az Eszközvezérlősávon kapcsológombok egy négyes csoportját találja, ahol balról a második gombon két koncentrikus, lekerekített sarok látható. Ezzel a gombbal szabályozható, hogy átméretezéskor a lekerekített sarkok is méreteződjenek-e.</flowDiv>
   </flowRoot>
-  <rect id="dy" x="20" y="1188" width="300" height="1e3px" display="none"/>
+  <rect id="dv" x="20" y="1188" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dy"/>
+    <use xlink:href="#dv"/>
    </flowRegion>
    <flowDiv>Például az alábbi vörös téglalapot néhányszor megdupláztuk, majd a másolatokat úgy nagyítottuk, illetve kicsinyítettük különféle mértékben, hogy közben a „<flowSpan font-family="Liberation Sans,Arial,sans-serif">Kerekített sarkok átméretezése</flowSpan>” <flowSpan font-style="italic">ki</flowSpan> volt kapcsolva:</flowDiv>
   </flowRoot>
@@ -446,17 +446,17 @@
   <rect transform="translate(20 1234.8)" x="218.34" y=".33081" width="47.954" height="149.52" rx="6.6372" ry="16.97" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1234.8)" x="227.64" y=".31225" width="38.352" height="28.79" rx="6.6371" ry="16.97" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1234.8)" x="36.352" y=".35815" width="229.82" height="41.087" rx="6.6371" ry="16.97" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
-  <rect id="dx" x="20" y="1401.6" width="300" height="1e3px" display="none"/>
+  <rect id="du" x="20" y="1401.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dx"/>
+    <use xlink:href="#du"/>
    </flowRegion>
    <flowDiv>Megfigyelheti, hogy a lekerekített sarkok mérete és alakja minden téglalapon egyforma, így a jobb felső sarkok pontosan egymásra illeszthetők. Minden kék téglalap az eredeti vörösnek egy-egy másolata, pusztán a Kijelölő eszközzel át lettek méretezve, nem kellett semmit utólag módosítani a lekerekítő fogantyúk helyzetén.</flowDiv>
   </flowRoot>
-  <rect id="dw" x="20" y="1450.9" width="300" height="1e3px" display="none"/>
+  <rect id="dt" x="20" y="1450.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dw"/>
+    <use xlink:href="#dt"/>
    </flowRegion>
    <flowDiv>Összevetésként bemutatjuk ugyanazt a kompozíciót, de most a „<flowSpan font-family="Liberation Sans,Arial,sans-serif">Kerekített sarkok átméretezése</flowSpan>” <flowSpan font-style="italic">be</flowSpan> volt kapcsolva:</flowDiv>
   </flowRoot>
@@ -469,99 +469,99 @@
   <rect transform="translate(20 1487.8)" x="205.74" y=".38217" width="60.456" height="55.042" rx="4.8444" ry="14.801" color="#000000" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1487.8)" x="227.86" y=".31296" width="38.454" height="29.249" rx="3.0813" ry="7.8653" color="#000000" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
   <rect transform="translate(20 1487.8)" x="38.124" y=".31247" width="227.21" height="42.865" rx="18.207" ry="11.527" color="#000000" fill="#00f" fill-opacity=".11037" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.625, 1.25" stroke-width=".625"/>
-  <rect id="dv" x="20" y="1654.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#dv"/>
-   </flowRegion>
-   <flowDiv>Így a lekerekített sarkok ugyanúgy különböznek, akár maguk a téglalapok, és egyáltalán nem illeszkednek a jobb felső sarkok (nagyítsa fel, ha nem látja). Az ilyen átméretezés ugyanazt a (látható) eredményt adja, mint egy útvonallá alakított (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>) téglalap átméretezése.</flowDiv>
-  </flowRoot>
-  <rect id="du" x="20" y="1694.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#du"/>
-   </flowRegion>
-   <flowDiv>Íme a lekerekítő fogantyúkhoz használható billentyűkombinációk:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 1719.1)" r="2"/>
-  <rect id="dt" x="40" y="1713.1" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#dt"/>
-   </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartása melletti <flowSpan font-weight="bold">húzás</flowSpan> a két sugarat kiegyenlíti (körív alakú lekerekítés).</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 1747.1)" r="2"/>
-  <rect id="ds" x="40" y="1741.1" width="280" height="1e3px" display="none"/>
+  <rect id="ds" x="20" y="1654.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ds"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> az egyik fogantyún húzás nélkül is kiegyenlíti a másikhoz tartozó sugarat.</flowDiv>
+   <flowDiv>Így a lekerekített sarkok ugyanúgy különböznek, akár maguk a téglalapok, és egyáltalán nem illeszkednek a jobb felső sarkok (nagyítsa fel, ha nem látja). Az ilyen átméretezés ugyanazt a (látható) eredményt adja, mint egy útvonallá alakított (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">C</flowSpan>) téglalap átméretezése.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1775.1)" r="2"/>
-  <rect id="dr" x="40" y="1769.1" width="280" height="1e3px" display="none"/>
+  <rect id="dr" x="20" y="1694.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dr"/>
    </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> megszünteti a lekerekítést.</flowDiv>
+   <flowDiv>Íme a lekerekítő fogantyúkhoz használható billentyűkombinációk:</flowDiv>
   </flowRoot>
-  <rect id="dq" x="20" y="1786.5" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1719.1)" r="2"/>
+  <rect id="dq" x="40" y="1713.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dq"/>
    </flowRegion>
-   <flowDiv>Valószínűleg észrevette, hogy a Téglalap eszköz Eszközvezérlősávján megadható a lekerekítés vízszintes (<flowSpan font-style="italic">Rx</flowSpan>) és függőleges (<flowSpan font-style="italic">Ry</flowSpan>) sugara, így azokat tetszőleges pontossággal és mértékegységben állíthatja be a kijelölt téglalapra. A <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Csúcsok szögletessé tétele</flowSpan> gomb pontosan azt teszi, amire a nevéből is gondol – megszünteti a kijelölt téglalapok sarkainak kerekítettségét.</flowDiv>
+   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartása melletti <flowSpan font-weight="bold">húzás</flowSpan> a két sugarat kiegyenlíti (körív alakú lekerekítés).</flowDiv>
   </flowRoot>
-  <rect id="dp" x="20" y="1846.4" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1747.1)" r="2"/>
+  <rect id="dp" x="40" y="1741.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dp"/>
    </flowRegion>
-   <flowDiv>Megvan az a nem elhanyagolható előnyük ezeknek a vezérlőknek, hogy egyidejűleg tetszőleges számú téglalapra alkalmazhatók. Például ha szeretné egyszerre megváltoztatni a rétegen levő összes téglalapot, csak nyomja meg a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> billentyűket (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Minden kijelölése</flowSpan>), és állítsa be a kívánt értékeket az Eszközvezérlősávon. Ha a kijelölésében téglalapobjektumon kívül bármi más is van, az egyszerűen figyelmen kívül lesz hagyva – csak a téglalapok módosulnak.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> az egyik fogantyún húzás nélkül is kiegyenlíti a másikhoz tartozó sugarat.</flowDiv>
   </flowRoot>
-  <rect id="do" x="20" y="1917.1" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1775.1)" r="2"/>
+  <rect id="do" x="40" y="1769.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#do"/>
    </flowRegion>
-   <flowDiv>Most vessen egy pillantást az átméretező fogantyúkra. Csodálkozhat, hogy ezekre egyáltalán mi szükség van, hiszen a Kijelölő eszközzel is remekül méretezhető bármely téglalap.</flowDiv>
+   <flowDiv>A <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> megszünteti a lekerekítést.</flowDiv>
   </flowRoot>
-  <rect id="dn" x="20" y="1945.1" width="300" height="1e3px" display="none"/>
+  <rect id="dn" x="20" y="1786.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dn"/>
    </flowRegion>
-   <flowDiv>Az a baj a Kijelölő eszközzel, hogy ott a vízszintes és a függőleges mindig a lap szerint értendő. Ezzel szemben a Téglalap eszköz átméretező fogantyúit használva az átméretezés mindig <flowSpan font-style="italic">a téglalap oldalai mentén</flowSpan> történik akkor is, ha a téglalap el van forgatva vagy döntve. Próbálja meg átméretezni ezt a téglalapot előbb a Kijelölő eszközzel, aztán a Téglalap eszköz átméretező fogantyúival:</flowDiv>
+   <flowDiv>Valószínűleg észrevette, hogy a Téglalap eszköz Eszközvezérlősávján megadható a lekerekítés vízszintes (<flowSpan font-style="italic">Rx</flowSpan>) és függőleges (<flowSpan font-style="italic">Ry</flowSpan>) sugara, így azokat tetszőleges pontossággal és mértékegységben állíthatja be a kijelölt téglalapra. A <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Csúcsok szögletessé tétele</flowSpan> gomb pontosan azt teszi, amire a nevéből is gondol – megszünteti a kijelölt téglalapok sarkainak kerekítettségét.</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 2013) matrix(.69601 -.71803 -.95272 -.30385 0 0)" x="7.7759" y="-179.49" width="41.625" height="64.103" rx="5.8251" ry="3.8355" color="#000000" fill="#00f" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="dm" x="20" y="2073.4" width="300" height="1e3px" display="none"/>
+  <rect id="dm" x="20" y="1846.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dm"/>
    </flowRegion>
-   <flowDiv>Minthogy két átméretező fogantyú van, bármilyen irányban tud méretezni vagy mozgatni egy téglalapot az oldalai mentén. Az ilyen átméretezés mindig megtartja a lekerekítés sugarát.</flowDiv>
+   <flowDiv>Megvan az a nem elhanyagolható előnyük ezeknek a vezérlőknek, hogy egyidejűleg tetszőleges számú téglalapra alkalmazhatók. Például ha szeretné egyszerre megváltoztatni a rétegen levő összes téglalapot, csak nyomja meg a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> billentyűket (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Minden kijelölése</flowSpan>), és állítsa be a kívánt értékeket az Eszközvezérlősávon. Ha a kijelölésében téglalapobjektumon kívül bármi más is van, az egyszerűen figyelmen kívül lesz hagyva – csak a téglalapok módosulnak.</flowDiv>
   </flowRoot>
-  <rect id="dl" x="20" y="2101.4" width="300" height="1e3px" display="none"/>
+  <rect id="dl" x="20" y="1917.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dl"/>
    </flowRegion>
-   <flowDiv>Íme az átméretező fogantyúkhoz használható módosítók:</flowDiv>
+   <flowDiv>Most vessen egy pillantást az átméretező fogantyúkra. Csodálkozhat, hogy ezekre egyáltalán mi szükség van, hiszen a Kijelölő eszközzel is remekül méretezhető bármely téglalap.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2126)" r="2"/>
-  <rect id="dk" x="40" y="2120" width="280" height="1e3px" display="none"/>
+  <rect id="dk" x="20" y="1945.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dk"/>
    </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartása melletti <flowSpan font-weight="bold">húzás</flowSpan> a mozgást az oldalakhoz vagy az átlóhoz kényszeríti. Magyarul: a <flowSpan font-weight="bold">Ctrl</flowSpan>lal megtartható a téglalap szélessége vagy magassága, vagy pedig a magasság és szélesség aránya (a saját koordináta-rendszerében, amely lehet elforgatott vagy döntött).</flowDiv>
+   <flowDiv>Az a baj a Kijelölő eszközzel, hogy ott a vízszintes és a függőleges mindig a lap szerint értendő. Ezzel szemben a Téglalap eszköz átméretező fogantyúit használva az átméretezés mindig <flowSpan font-style="italic">a téglalap oldalai mentén</flowSpan> történik akkor is, ha a téglalap el van forgatva vagy döntve. Próbálja meg átméretezni ezt a téglalapot előbb a Kijelölő eszközzel, aztán a Téglalap eszköz átméretező fogantyúival:</flowDiv>
   </flowRoot>
-  <rect id="dj" x="20" y="2169.2" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 2013) matrix(.69601 -.71803 -.95272 -.30385 0 0)" x="7.7759" y="-179.49" width="41.625" height="64.103" rx="5.8251" ry="3.8355" color="#000000" fill="#00f" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect id="dj" x="20" y="2073.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dj"/>
+   </flowRegion>
+   <flowDiv>Minthogy két átméretező fogantyú van, bármilyen irányban tud méretezni vagy mozgatni egy téglalapot az oldalai mentén. Az ilyen átméretezés mindig megtartja a lekerekítés sugarát.</flowDiv>
+  </flowRoot>
+  <rect id="di" x="20" y="2101.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#di"/>
+   </flowRegion>
+   <flowDiv>Íme az átméretező fogantyúkhoz használható módosítók:</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 2126)" r="2"/>
+  <rect id="dh" x="40" y="2120" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dh"/>
+   </flowRegion>
+   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartása melletti <flowSpan font-weight="bold">húzás</flowSpan> a mozgást az oldalakhoz vagy az átlóhoz kényszeríti. Magyarul: a <flowSpan font-weight="bold">Ctrl</flowSpan>lal megtartható a téglalap szélessége vagy magassága, vagy pedig a magasság és szélesség aránya (a saját koordináta-rendszerében, amely lehet elforgatott vagy döntött).</flowDiv>
+  </flowRoot>
+  <rect id="dg" x="20" y="2169.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#dg"/>
    </flowRegion>
    <flowDiv>Itt látható az előző téglalap, a szürke szaggatott vonalakkal jelzett irányokhoz kényszeríthető a mozgás a <flowSpan font-weight="bold">Ctrl</flowSpan> billentyűvel (próbálja ki):</flowDiv>
   </flowRoot>
@@ -574,10 +574,10 @@
   </g>
   <rect transform="translate(20 2205.2) matrix(.69601 -.71803 -.95272 -.30385 0 0)" x="-35.379" y="-211.02" width="41.625" height="64.103" rx="5.825" ry="3.8355" color="#000000" fill="#00f" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <text transform="translate(20 2205.2)" x="78.675034" y="126.24259" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="78.675034" y="126.24259" sodipodi:role="line">Téglalap illesztése</tspan><tspan x="78.675034" y="133.7426" sodipodi:role="line">- átméretező fogantyúk Ctrl-lal</tspan></text>
-  <rect id="di" x="20" y="2351.8" width="300" height="1e3px" display="none"/>
+  <rect id="df" x="20" y="2351.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#di"/>
+    <use xlink:href="#df"/>
    </flowRegion>
    <flowDiv>Egyszerűen készíthető például 3D kompozíció egy téglalap megdöntésével és elforgatásával, majd ezt néhányszor duplikálva, végül a fogantyúkkal átméretezve a másolatokat:</flowDiv>
   </flowRoot>
@@ -603,10 +603,10 @@
   <rect transform="translate(20 2387.8) matrix(.91237 -.40937 0 1 0 0)" x="242.25" y="127.05" width="31.198" height="20.233" color="#000000" fill="#ff6300" fill-rule="evenodd" stroke="#fff" stroke-width=".39259"/>
   <text transform="translate(20 2387.8)" x="44.409821" y="4.5585938" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="44.409821" y="4.5585938" sodipodi:role="line">A 3 eredeti téglalap</tspan></text>
   <text transform="translate(20 2387.8)" x="196.02606" y="4.5585938" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="196.02606" y="4.5585938" sodipodi:role="line">A lemásolt és fogantyúkkal átméretezett téglalapok</tspan><tspan x="196.02606" y="12.058594" sodipodi:role="line">(többnyire a Ctrl billentyűvel)</tspan></text>
-  <rect id="dh" x="20" y="2525.6" width="300" height="1e3px" display="none"/>
+  <rect id="de" x="20" y="2525.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#dh"/>
+    <use xlink:href="#de"/>
    </flowRegion>
    <flowDiv>Bemutatunk néhány további téglalap-kompozíciót, amelyeknél lekerekítést és színátmenetes kitöltést is alkalmaztunk:</flowDiv>
   </flowRoot>
@@ -696,48 +696,48 @@
   <rect transform="translate(20 2559.9) matrix(.99447 .10503 -.99521 .097739 0 0)" x="368.67" y="210.65" width="21.022" height="15.702" rx="10.937" ry="7.8879" color="#000000" fill="url(#ab)" fill-rule="evenodd" stroke="#000" stroke-width=".97176"/>
   <rect transform="translate(20 2559.9) matrix(.99447 .10503 -.99521 .097739 0 0)" x="437.19" y="274.21" width="52.249" height="47.25" rx="13.386" ry="7.8879" color="#000000" fill="url(#ac)" fill-rule="evenodd" stroke="#000" stroke-width=".97176"/>
   <rect transform="translate(20 2559.9) matrix(.99447 .10503 -.99521 .097739 0 0)" x="350.07" y="174.4" width="9.8364" height="11.479" rx="4.8633" ry="5.0297" color="#000000" fill="url(#ad)" fill-rule="evenodd" stroke="#000" stroke-width=".97176"/>
-  <rect id="dg" x="20" y="2691.2" width="300" height="1e3px" display="none"/>
+  <rect id="dd" x="20" y="2691.2" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#dg"/>
-   </flowRegion>
-   <flowDiv>Ellipszisek</flowDiv>
-  </flowRoot>
-  <rect id="df" x="20" y="2703.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#df"/>
-   </flowRegion>
-   <flowDiv>Az Ellipszis eszközzel (<flowSpan font-weight="bold">F5</flowSpan>) ellipsziseket és köröket készíthet, melyeket cikkekké vagy ívekké is alakíthat. A módosítóbillentyűk megegyeznek a Téglalap eszköznél megismertekkel:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 2748.3)" r="2"/>
-  <rect id="de" x="40" y="2742.3" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#de"/>
-   </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával kört vagy olyan ellipszist rajzolhat, melynek a tengelyaránya egész (2:1, 3:1 stb.).</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 2776.2)" r="2"/>
-  <rect id="dd" x="40" y="2770.2" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dd"/>
    </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Shift</flowSpan> nyomva tartásával a kezdőpont mint középpont köré rajzolhat.</flowDiv>
+   <flowDiv>Ellipszisek</flowDiv>
   </flowRoot>
-  <rect id="dc" x="20" y="2787.6" width="300" height="1e3px" display="none"/>
+  <rect id="dc" x="20" y="2703.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#dc"/>
    </flowRegion>
-   <flowDiv>Jelölje ki az alábbi ellipszist, és vizsgálja meg a fogantyúit:</flowDiv>
+   <flowDiv>Az Ellipszis eszközzel (<flowSpan font-weight="bold">F5</flowSpan>) ellipsziseket és köröket készíthet, melyeket cikkekké vagy ívekké is alakíthat. A módosítóbillentyűk megegyeznek a Téglalap eszköznél megismertekkel:</flowDiv>
   </flowRoot>
-  <ellipse transform="translate(20 2812.9)" cx="150" cy="30.874" rx="54.032" ry="30.249" color="#000000" fill="#ff000b" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect id="db" x="20" y="2886.7" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2748.3)" r="2"/>
+  <rect id="db" x="40" y="2742.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#db"/>
+   </flowRegion>
+   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával kört vagy olyan ellipszist rajzolhat, melynek a tengelyaránya egész (2:1, 3:1 stb.).</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 2776.2)" r="2"/>
+  <rect id="da" x="40" y="2770.2" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#da"/>
+   </flowRegion>
+   <flowDiv>A <flowSpan font-weight="bold">Shift</flowSpan> nyomva tartásával a kezdőpont mint középpont köré rajzolhat.</flowDiv>
+  </flowRoot>
+  <rect id="cz" x="20" y="2787.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cz"/>
+   </flowRegion>
+   <flowDiv>Jelölje ki az alábbi ellipszist, és vizsgálja meg a fogantyúit:</flowDiv>
+  </flowRoot>
+  <ellipse transform="translate(20 2812.9)" cx="150" cy="30.874" rx="54.032" ry="30.249" color="#000000" fill="#ff000b" fill-opacity=".99666" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect id="cy" x="20" y="2886.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cy"/>
    </flowRegion>
    <flowDiv>Először itt is három fogantyút láthat, de valójában ez is négy. A jobb oldalon két fogantyú van egymáson, melyek lehetővé teszik az ellipszis „felnyitását”. <flowSpan font-weight="bold">Húzza</flowSpan> el a jobb oldali fogantyút, majd a másikat is, amely alatta volt, és egy tortadiagram-szerű cikket vagy ívet kap:</flowDiv>
   </flowRoot>
@@ -748,10 +748,10 @@
   <path transform="translate(20 2944)" d="m98.591 5.8998a24.91 17.693 0 0 1 9.3502-4.3583l8.6431 16.594z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".70293pt" sodipodi:arc-type="slice" sodipodi:cx="116.58386" sodipodi:cy="18.135038" sodipodi:end="4.3580459" sodipodi:rx="24.909876" sodipodi:ry="17.692751" sodipodi:start="3.9052122" sodipodi:type="arc"/>
   <path transform="translate(20 2944)" d="m224.71 10.505a24.91 17.693 0 0 1 24.35-10.012 24.91 17.693 0 0 1 21.957 12.496" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".70293pt" sodipodi:arc-type="arc" sodipodi:cx="247.18883" sodipodi:cy="18.135038" sodipodi:end="5.9880333" sodipodi:open="true" sodipodi:rx="24.909876" sodipodi:ry="17.692751" sodipodi:start="3.5874838" sodipodi:type="arc"/>
   <path transform="translate(20 2944)" d="m114.9 0.48277a24.91 17.693 0 0 1 24.972 11.372l-23.288 6.2801z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".70293pt" sodipodi:arc-type="slice" sodipodi:cx="116.58386" sodipodi:cy="18.135038" sodipodi:end="5.9203236" sodipodi:rx="24.909876" sodipodi:ry="17.692751" sodipodi:start="4.6447262" sodipodi:type="arc"/>
-  <rect id="da" x="20" y="2992.3" width="300" height="1e3px" display="none"/>
+  <rect id="cx" x="20" y="2992.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#da"/>
+    <use xlink:href="#cx"/>
    </flowRegion>
    <flowDiv>Ha <flowSpan font-style="italic">ellipszis- vagy körcikk</flowSpan>et (egy ív és két sugár) szeretne rajzolni, akkor a fogantyút az ellipszisen <flowSpan font-style="italic">kívül</flowSpan> mozgassa; ha <flowSpan font-style="italic">ív</flowSpan>et, akkor pedig azon <flowSpan font-style="italic">belül</flowSpan>. Fent, a bal oldalon 4 cikket láthat, míg a jobb oldalon 3 ívet. Figyelje meg, hogy az ív nyitott alakzat, vagyis a körvonala csak az ellipszis vonalán fut végig, de nem köti össze a két végpontot. Ez még jobban érzékelhető, ha megszünteti a kitöltést, és csak a körvonalat látja:</flowDiv>
   </flowRoot>
@@ -783,63 +783,63 @@
   <path transform="translate(20 3060.2)" d="m221.79 123.7a15.141 58.56 0 0 1-4.9811-49.685 15.141 58.56 0 0 1 7.4912-44.724" color="#000000" fill="none" stroke="#000" stroke-width=".75" sodipodi:arc-type="arc" sodipodi:cx="231.87538" sodipodi:cy="80.004387" sodipodi:end="4.1887902" sodipodi:open="true" sodipodi:rx="15.141271" sodipodi:ry="58.560177" sodipodi:start="2.2993372" sodipodi:type="arc"/>
   <path transform="translate(20 3060.2)" d="m181.84 88.102a75.148 10.853 0 0 1-23.24-10.507 75.148 10.853 0 0 1 52.45-8.0181 75.148 10.853 0 0 1 73.959 2.7537" color="#000000" fill="none" stroke="#000" stroke-width=".75" sodipodi:arc-type="arc" sodipodi:cx="231.87538" sodipodi:cy="80.004387" sodipodi:end="5.4977871" sodipodi:open="true" sodipodi:rx="75.147621" sodipodi:ry="10.852578" sodipodi:start="2.2993372" sodipodi:type="arc"/>
   <path transform="translate(20 3060.2)" d="m50.789 123.7a59.578 58.56 0 0 1-17.882-58.851l57.548 15.156z" color="#000000" fill="none" stroke="#000" stroke-width=".75" sodipodi:arc-type="slice" sodipodi:cx="90.455017" sodipodi:cy="80.004387" sodipodi:end="3.403392" sodipodi:rx="59.578407" sodipodi:ry="58.560177" sodipodi:start="2.2993372" sodipodi:type="arc"/>
-  <rect id="cz" x="20" y="3196.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cz"/>
-   </flowRegion>
-   <flowDiv>Nézze meg a bal oldali ellipsziscikkek legyezőszerű csoportját. Ilyet könnyű készíteni a fogantyú <flowSpan font-style="italic">szöghöz igazításával</flowSpan>, a <flowSpan font-weight="bold">Ctrl</flowSpan> segítségével. Az alábbi módosítóbillentyűket használhatja az ív vagy cikk fogantyúihoz:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 3241.2)" r="2"/>
-  <rect id="cy" x="40" y="3235.2" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cy"/>
-   </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával 15°-os szögenként érvényesül a változás.</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 3258.5)" r="2"/>
-  <rect id="cx" x="40" y="3252.5" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cx"/>
-   </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> egésszé teszi az ellipszist (megszünteti az ívet vagy a cikket).</flowDiv>
-  </flowRoot>
-  <rect id="cw" x="20" y="3269.9" width="300" height="1e3px" display="none"/>
+  <rect id="cw" x="20" y="3196.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cw"/>
    </flowRegion>
-   <flowDiv>A szöghöz illesztés megváltoztatható az Inkscape-beállításokban (a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Működés</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lépések</flowSpan> lapon).</flowDiv>
+   <flowDiv>Nézze meg a bal oldali ellipsziscikkek legyezőszerű csoportját. Ilyet könnyű készíteni a fogantyú <flowSpan font-style="italic">szöghöz igazításával</flowSpan>, a <flowSpan font-weight="bold">Ctrl</flowSpan> segítségével. Az alábbi módosítóbillentyűket használhatja az ív vagy cikk fogantyúihoz:</flowDiv>
   </flowRoot>
-  <rect id="cv" x="20" y="3298.1" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 3241.2)" r="2"/>
+  <rect id="cv" x="40" y="3235.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cv"/>
    </flowRegion>
-   <flowDiv>A másik két fogantyúval lehet az ellipszist a középpontja körül átméretezni. Ezek módosítóbillentyűi hasonlók a téglalapok lekerekítő fogantyúiéihoz:</flowDiv>
+   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával 15°-os szögenként érvényesül a változás.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3332.1)" r="2"/>
-  <rect id="cu" x="40" y="3326.1" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 3258.5)" r="2"/>
+  <rect id="cu" x="40" y="3252.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cu"/>
    </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával történő <flowSpan font-weight="bold">húzás</flowSpan>sal körré alakítható (a másik sugár az éppen mozgatott fogantyúhoz tartozó sugárhoz igazodik) az ellipszis.</flowDiv>
+   <flowDiv>A <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> egésszé teszi az ellipszist (megszünteti az ívet vagy a cikket).</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3360.1)" r="2"/>
-  <rect id="ct" x="40" y="3354.1" width="280" height="1e3px" display="none"/>
+  <rect id="ct" x="20" y="3269.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ct"/>
    </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> húzás nélkül is körré alakítja az ellipszist.</flowDiv>
+   <flowDiv>A szöghöz illesztés megváltoztatható az Inkscape-beállításokban (a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Működés</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lépések</flowSpan> lapon).</flowDiv>
   </flowRoot>
-  <rect id="cs" x="20" y="3371.4" width="300" height="1e3px" display="none"/>
+  <rect id="cs" x="20" y="3298.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cs"/>
+   </flowRegion>
+   <flowDiv>A másik két fogantyúval lehet az ellipszist a középpontja körül átméretezni. Ezek módosítóbillentyűi hasonlók a téglalapok lekerekítő fogantyúiéihoz:</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 3332.1)" r="2"/>
+  <rect id="cr" x="40" y="3326.1" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cr"/>
+   </flowRegion>
+   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával történő <flowSpan font-weight="bold">húzás</flowSpan>sal körré alakítható (a másik sugár az éppen mozgatott fogantyúhoz tartozó sugárhoz igazodik) az ellipszis.</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 3360.1)" r="2"/>
+  <rect id="cq" x="40" y="3354.1" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cq"/>
+   </flowRegion>
+   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> húzás nélkül is körré alakítja az ellipszist.</flowDiv>
+  </flowRoot>
+  <rect id="cp" x="20" y="3371.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cp"/>
    </flowRegion>
    <flowDiv>És akárcsak a téglalap esetében, ezek az átméretező fogantyúk a szélességet és a magasságot <flowSpan font-style="italic">az ellipszis saját koordináta-rendszerén belül</flowSpan> módosítják. Vagyis így egy elforgatott vagy nyírt ellipszis az eredeti tengelyei mentén könnyedén nyújtható vagy összenyomható, mialatt megtartja az elforgatását vagy nyírását. Próbálja meg átméretezni az alábbi ellipsziseket a méretező fogantyúkkal:</flowDiv>
   </flowRoot>
@@ -849,24 +849,24 @@
   <ellipse transform="translate(20 3440.5) matrix(.91395 .40583 -.87516 .48384 0 0)" cx="129.13" cy="-36.549" rx="32.589" ry="22.827" color="#000000" fill="#ffd300" fill-opacity=".14716" fill-rule="evenodd" stroke="#000" stroke-width=".83991"/>
   <ellipse transform="translate(20 3440.5) matrix(.91395 .40583 -.87516 .48384 0 0)" cx="129.13" cy="-36.549" rx="6.8571" ry="42.356" color="#000000" fill="#ffd300" fill-opacity=".14716" fill-rule="evenodd" stroke="#000" stroke-width=".83991"/>
   <ellipse transform="translate(20 3440.5) matrix(.91395 .40583 -.87516 .48384 0 0)" cx="129.13" cy="-36.549" rx="32.589" ry="6.6323" color="#000000" fill="#ffd300" fill-opacity=".14716" fill-rule="evenodd" stroke="#000" stroke-width=".83991"/>
-  <rect id="cr" x="20" y="3527.1" width="300" height="1e3px" display="none"/>
+  <rect id="co" x="20" y="3527.1" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#cr"/>
+    <use xlink:href="#co"/>
    </flowRegion>
    <flowDiv>Csillagok</flowDiv>
   </flowRoot>
-  <rect id="cq" x="20" y="3539.6" width="300" height="1e3px" display="none"/>
+  <rect id="cn" x="20" y="3539.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#cq"/>
+    <use xlink:href="#cn"/>
    </flowRegion>
    <flowDiv>A csillagok az Inkscape legösszetettebb és legérdekesebb alakzatai. Ha ámulatba akarja ejteni a barátait az Inkscape-pel, akkor a Csillag eszközt mutassa meg nekik. Végtelenül szórakoztató – szinte függőséget okoz!</flowDiv>
   </flowRoot>
-  <rect id="cp" x="20" y="3578.2" width="300" height="1e3px" display="none"/>
+  <rect id="cm" x="20" y="3578.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#cp"/>
+    <use xlink:href="#cm"/>
    </flowRegion>
    <flowDiv>Ezzel az eszközzel két hasonló, de mégis különböző alakzatfélét lehet készíteni: csillagot és sokszöget. A csillagnak két fogantyúja van, ezek helyzete határozza meg az ágak hosszát és alakját; egy sokszög csak egy fogantyúval bír, ezt mozgatva egyszerűen forgathatja és méretezheti a sokszöget:</flowDiv>
   </flowRoot>
@@ -876,39 +876,39 @@
    <path transform="matrix(.67263 .35535 -.35535 .67263 1513.8 -2577.2)" d="m107.3 3871.6-39.426 21.029-32.183-30.998 19.535-40.187 44.257 6.1608z" color="#000000" fill="#fff100" fill-rule="evenodd" stroke="#000" stroke-width=".98589" inkscape:flatsided="true" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.45247489" sodipodi:arg2="1.0807934" sodipodi:cx="73.11795" sodipodi:cy="3855.0315" sodipodi:r1="38.010052" sodipodi:r2="19.005026" sodipodi:sides="5" sodipodi:type="star"/>
    <text x="193.02451" y="6" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="193.02451" y="6" text-align="center" text-anchor="middle" sodipodi:role="line">Sokszög</tspan></text>
   </g>
-  <rect id="co" x="20" y="3711.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#co"/>
-   </flowRegion>
-   <flowDiv>A csillag eszközvezérlősávján az első két gomb szabályozza az alakzat rajzolásának módját (szabályos sokszög vagy csillag). E gombok mellett egy számbeviteli mezőben lehet megadni a csillag vagy sokszög <flowSpan font-style="italic">csúcsainak a számát</flowSpan>. Ez a tulajdonság csak innen módosítható. A csúcsok száma 3 (értelemszerűen) és 1024 között lehet, de egy kevésbé erős számítógépen ne próbálkozzon túl nagy számmal (úgy 200 felett).</flowDiv>
-  </flowRoot>
-  <rect id="cn" x="20" y="3771.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cn"/>
-   </flowRegion>
-   <flowDiv>Egy csillag vagy sokszög rajzolásakor</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 3794.9)" r="2"/>
-  <rect id="cm" x="40" y="3788.9" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cm"/>
-   </flowRegion>
-   <flowDiv>a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával történő <flowSpan font-weight="bold">húzás</flowSpan>sal kényszerítheti a szög 15°-onkénti változását.</flowDiv>
-  </flowRoot>
-  <rect id="cl" x="20" y="3815.3" width="300" height="1e3px" display="none"/>
+  <rect id="cl" x="20" y="3711.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cl"/>
    </flowRegion>
-   <flowDiv>Természetesen a csillag sokkal érdekesebb alakzat (jóllehet a sokszög sokszor hasznosabbak bizonyul a gyakorlatban). A csillag két fogantyújának kicsit eltérő a rendeltetése. Az egyik (ez kezdetben egy csúcson helyezkedik el, vagyis a csillag egy <flowSpan font-style="italic">konvex</flowSpan> sarkán) a csillag ágait növeli vagy csökkenti, de ha (az alakzat középpontjához képest) forgatja, a másik fogantyú is ennek megfelelően elforog. Ebből következően a csillag ágait így nem lehet nyírni.</flowDiv>
+   <flowDiv>A csillag eszközvezérlősávján az első két gomb szabályozza az alakzat rajzolásának módját (szabályos sokszög vagy csillag). E gombok mellett egy számbeviteli mezőben lehet megadni a csillag vagy sokszög <flowSpan font-style="italic">csúcsainak a számát</flowSpan>. Ez a tulajdonság csak innen módosítható. A csúcsok száma 3 (értelemszerűen) és 1024 között lehet, de egy kevésbé erős számítógépen ne próbálkozzon túl nagy számmal (úgy 200 felett).</flowDiv>
   </flowRoot>
-  <rect id="ck" x="20" y="3875.1" width="300" height="1e3px" display="none"/>
+  <rect id="ck" x="20" y="3771.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ck"/>
+   </flowRegion>
+   <flowDiv>Egy csillag vagy sokszög rajzolásakor</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 3794.9)" r="2"/>
+  <rect id="cj" x="40" y="3788.9" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cj"/>
+   </flowRegion>
+   <flowDiv>a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával történő <flowSpan font-weight="bold">húzás</flowSpan>sal kényszerítheti a szög 15°-onkénti változását.</flowDiv>
+  </flowRoot>
+  <rect id="ci" x="20" y="3815.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ci"/>
+   </flowRegion>
+   <flowDiv>Természetesen a csillag sokkal érdekesebb alakzat (jóllehet a sokszög sokszor hasznosabbak bizonyul a gyakorlatban). A csillag két fogantyújának kicsit eltérő a rendeltetése. Az egyik (ez kezdetben egy csúcson helyezkedik el, vagyis a csillag egy <flowSpan font-style="italic">konvex</flowSpan> sarkán) a csillag ágait növeli vagy csökkenti, de ha (az alakzat középpontjához képest) forgatja, a másik fogantyú is ennek megfelelően elforog. Ebből következően a csillag ágait így nem lehet nyírni.</flowDiv>
+  </flowRoot>
+  <rect id="ch" x="20" y="3875.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ch"/>
    </flowRegion>
    <flowDiv>A másik fogantyút (kezdetben két csúcs között egy <flowSpan font-style="italic">konkáv</flowSpan> sarokban találja) viszont szabadon mozgathatja mind sugárirányban, mind érintőlegesen, anélkül, hogy ez hatással lenne a csúcson ülő fogantyúra. (Tulajdonképpen ez a fogantyú csúccsá válik, ha a középponttól távolabbra kerül, mint a másik fogantyú.) Ezzel lehet tehát egy csillag ágait ferdévé tenni, és így készíthető mindenféle kristály, mandala, hópehely vagy sündisznószerűség:</flowDiv>
   </flowRoot>
@@ -921,70 +921,70 @@
   <path transform="translate(20 3943.1) rotate(.0019184 1.2489e8 0)" d="m307.95 4272-41.28 0.6425 33.556 17.416-29.644-28.735 11.412 36.043-0.64253-41.28-17.416 33.556 28.735-29.644-36.043 11.412 41.28-0.6425-33.556-17.416 29.644 28.735-11.412-36.043 0.64253 41.28 17.416-33.556-28.735 29.644z" color="#000000" fill="#520100" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.011487387" sodipodi:arg2="3.0816518" sodipodi:cx="282.28931" sodipodi:cy="4271.7378" sodipodi:r1="25.662985" sodipodi:r2="15.646836" sodipodi:sides="8" sodipodi:type="star"/>
   <path transform="translate(20 3943.1)" d="m92.431 52.264-14.034-33.728 0.070659 27.944 13.926-33.773-19.71 19.81 33.728-14.034-27.944 0.070659 33.773 13.926-19.81-19.71 14.034 33.728-0.07066-27.944-13.926 33.773 19.71-19.81-33.728 14.034 27.944-0.070659-33.773-13.926z" color="#000000" fill="none" stroke="#000" stroke-width=".25" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="1.5707963" sodipodi:arg2="-2.3580603" sodipodi:cx="92.431129" sodipodi:cy="32.516994" sodipodi:r1="19.746624" sodipodi:r2="19.809624" sodipodi:sides="8" sodipodi:type="star"/>
   <path transform="translate(20 3943.1)" d="m102.43 123.68-54.979-38.435 42.246 53.111-37.383-55.7 20.208 64.785-14.737-65.443-4.56 67.71 9.8988-66.347-28.712 61.491 33.198-58.291-48.986 46.967 52.013-42.363-62.645 26.099 63.804-20.713-67.842 1.7069 66.978 3.7348-63.878-22.916 61.106 27.678-51.286-44.444 46.981 47.883-31.768-59.969 26.511 61.621-7.9594-67.395 2.461 67.037 16.924-65.72-21.922 63.399 39.522-55.168-43.344 51.199 56.782-37.166-58.912 32.084 66.374-14.144-66.524 8.6359 67.001 10.788-65.151-15.978z" color="#000000" fill="#520100" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.52982957" sodipodi:arg2="-2.2448164" sodipodi:cx="56.805591" sodipodi:cy="96.95668" sodipodi:r1="52.870548" sodipodi:r2="14.99335" sodipodi:sides="17" sodipodi:type="star"/>
-  <rect id="cj" x="20" y="4104.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cj"/>
-   </flowRegion>
-   <flowDiv>Ha szabályos csillagot szeretne rajzolni, akkor a nyíró fogantyút is kényszerítheti a másikhoz hasonló viselkedésre:</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 4137.2)" r="2"/>
-  <rect id="ci" x="40" y="4131.2" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ci"/>
-   </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával történő <flowSpan font-weight="bold">húzás</flowSpan>sal a csillag ágai sugárirányban tarthatók (nincs nyírás).</flowDiv>
-  </flowRoot>
-  <circle transform="translate(35 4165.1)" r="2"/>
-  <rect id="ch" x="40" y="4159.1" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ch"/>
-   </flowRegion>
-   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> húzás nélkül is megszünteti a nyírást.</flowDiv>
-  </flowRoot>
-  <rect id="cg" x="20" y="4176.4" width="300" height="1e3px" display="none"/>
+  <rect id="cg" x="20" y="4104.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cg"/>
    </flowRegion>
-   <flowDiv>Hasznos kiegészítője a mozgatható fogantyúknak az Eszközvezérlősávon található <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ágarány</flowSpan> beviteli mező, amellyel a két fogantyú középponttól való távolságának aránya adható meg.</flowDiv>
+   <flowDiv>Ha szabályos csillagot szeretne rajzolni, akkor a nyíró fogantyút is kényszerítheti a másikhoz hasonló viselkedésre:</flowDiv>
   </flowRoot>
-  <rect id="cf" x="20" y="4205.7" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 4137.2)" r="2"/>
+  <rect id="cf" x="40" y="4131.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cf"/>
    </flowRegion>
-   <flowDiv>Két további trükköt is tartogat még az Inkscape Csillag eszköze. A geometriában a sokszög egyenes vonalú oldalakból és éles szögekből áll. A valóságban azonban gyakran találunk különféle mértékben görbült vagy lekerekített formákat – és az Inkscape-pel készíthető ilyen is. Viszont a csillagok és a sokszögek lekerekítését kicsit másképpen kell csinálni, mint a téglalapokét. Nincs külön fogantyú a lekerekítéshez, de</flowDiv>
+   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával történő <flowSpan font-weight="bold">húzás</flowSpan>sal a csillag ágai sugárirányban tarthatók (nincs nyírás).</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 4271.6)" r="2"/>
-  <rect id="ce" x="40" y="4265.6" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 4165.1)" r="2"/>
+  <rect id="ce" x="40" y="4159.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ce"/>
    </flowRegion>
-   <flowDiv>a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> egy fogantyún az érintő irányában kerekíti le a csillag vagy a sokszög csúcsait;</flowDiv>
+   <flowDiv>A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> húzás nélkül is megszünteti a nyírást.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 4299.1)" r="2"/>
-  <rect id="cd" x="40" y="4293.1" width="280" height="1e3px" display="none"/>
+  <rect id="cd" x="20" y="4176.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv>a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> egy fogantyún megszünteti a lekerekítettséget.</flowDiv>
+   <flowDiv>Hasznos kiegészítője a mozgatható fogantyúknak az Eszközvezérlősávon található <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ágarány</flowSpan> beviteli mező, amellyel a két fogantyú középponttól való távolságának aránya adható meg.</flowDiv>
   </flowRoot>
-  <rect id="cb" x="20" y="4310.5" width="300" height="1e3px" display="none"/>
+  <rect id="cc" x="20" y="4205.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cc"/>
+   </flowRegion>
+   <flowDiv>Két további trükköt is tartogat még az Inkscape Csillag eszköze. A geometriában a sokszög egyenes vonalú oldalakból és éles szögekből áll. A valóságban azonban gyakran találunk különféle mértékben görbült vagy lekerekített formákat – és az Inkscape-pel készíthető ilyen is. Viszont a csillagok és a sokszögek lekerekítését kicsit másképpen kell csinálni, mint a téglalapokét. Nincs külön fogantyú a lekerekítéshez, de</flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 4271.6)" r="2"/>
+  <rect id="cb" x="40" y="4265.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv>Az „érintő irányában” a középpont felé irányuló egyenesre merőleges irányként értendő. Ha a fogantyút az óramutató járásával ellentétes irányba „forgatja”, akkor pozitív, ha az óramutató járásával egyező irányba, akkor negatív lesz a lekerekítés. (Lejjebb láthat példákat a negatív lekerekítésre.)</flowDiv>
+   <flowDiv>a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> egy fogantyún az érintő irányában kerekíti le a csillag vagy a sokszög csúcsait;</flowDiv>
   </flowRoot>
-  <rect id="ca" x="20" y="4359.7" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 4299.1)" r="2"/>
+  <rect id="ca" x="40" y="4293.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ca"/>
+   </flowRegion>
+   <flowDiv>a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> egy fogantyún megszünteti a lekerekítettséget.</flowDiv>
+  </flowRoot>
+  <rect id="bz" x="20" y="4310.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bz"/>
+   </flowRegion>
+   <flowDiv>Az „érintő irányában” a középpont felé irányuló egyenesre merőleges irányként értendő. Ha a fogantyút az óramutató járásával ellentétes irányba „forgatja”, akkor pozitív, ha az óramutató járásával egyező irányba, akkor negatív lesz a lekerekítés. (Lejjebb láthat példákat a negatív lekerekítésre.)</flowDiv>
+  </flowRoot>
+  <rect id="by" x="20" y="4359.7" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#by"/>
    </flowRegion>
    <flowDiv>Álljon itt összehasonlításként egy lekerekített négyzet (Téglalap eszköz) és egy lekerekített, négy oldalú sokszög (Csillag eszköz):</flowDiv>
   </flowRoot>
@@ -994,17 +994,17 @@
    <rect x="56.117" y="1.8127" width="87.192" height="87.192" rx="18.04" ry="18.04" color="#000000" fill-rule="evenodd"/>
    <text x="99.512451" y="41.917397" fill="#ffffff" font-family="'Liberation Sans',Arial,sans-serif" font-size="10px" stroke-width="1px" text-align="center" text-anchor="middle" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="99.512451" y="41.917397" sodipodi:role="line">Lekerekített</tspan><tspan x="99.512451" y="54.417397" sodipodi:role="line">téglalap</tspan></text>
   </g>
-  <rect id="bz" x="20" y="4499.7" width="300" height="1e3px" display="none"/>
+  <rect id="bx" x="20" y="4499.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bz"/>
+    <use xlink:href="#bx"/>
    </flowRegion>
    <flowDiv>Láthatja, hogy míg a lekerekített négyzet oldalai egyenesek, a sarkok pedig körív alakúak (általánosan elliptikusak), addig egy lekerekített sokszög vagy csillag esetében nem talál egyenes vonalat; a görbület egyenletesen változik a maximumtól (a sarkoknál) a minimumig (a sarkok közt félúton). A program ezt úgy éri el, hogy minden csomóponthoz hozzáad két, egy egyenesre eső Bézier-érintőt (meg is nézheti ezeket, ha az alakzatot útvonallá alakítja, majd a Csomópont eszközzel megvizsgálja).</flowDiv>
   </flowRoot>
-  <rect id="by" x="20" y="4570.2" width="300" height="1e3px" display="none"/>
+  <rect id="bw" x="20" y="4570.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#by"/>
+    <use xlink:href="#bw"/>
    </flowRegion>
    <flowDiv>Az Eszközvezérlősávon szintén beállítható a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lekerekítettség</flowSpan>, ami az érintők hosszának és az érintők melletti oldalak hosszának az arányát adja meg. Ez a paraméter negatív is lehet, ekkor az érintők iránya megfordul. A 0,2 és a 0,4 közötti értékekkel „rendes” lekerekítésre számíthat, ettől eltérő értékek nagyon szép, komplikált és egészen megjósolhatatlan formákat eredményeznek. Egy nagymértékben lekerekített csillag messze túlnyúlhat a fogantyúja pozícióján. Bemutatunk néhány példát, mindegyiknél jelezve a lekerekítettség mértékét:</flowDiv>
   </flowRoot>
@@ -1041,10 +1041,10 @@
   <text transform="translate(20 4649)" x="13.713703" y="140.0249" fill="#000000" font-family="'Liberation Sans',Arial,sans-serif" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan x="13.713703" y="140.0249" font-size="3.979px" style="line-height:1.2" sodipodi:role="line">−8,94</tspan></text>
   <path transform="translate(20 4649)" d="m101.39 91.493c-4.3019 4.3019-11.298 4.3019-15.599 0s-4.3019-11.298 0-15.599 11.298-4.3019 15.599 0c4.3019 4.3019 4.3019 11.298 0 15.599z" color="#000000" fill-rule="evenodd" inkscape:flatsided="true" inkscape:randomized="0" inkscape:rounded="0.39" sodipodi:arg1="0.78539816" sodipodi:arg2="1.5707963" sodipodi:cx="93.58579" sodipodi:cy="83.69278" sodipodi:r1="11.03049" sodipodi:r2="7.7997341" sodipodi:sides="4" sodipodi:type="star"/>
   <text transform="translate(20 4649)" x="89.161873" y="85.14119" fill="#ffffff" font-family="'Liberation Sans',Arial,sans-serif" stroke-width="1pt" style="line-height:0%" xml:space="preserve"><tspan x="89.161873" y="85.14119" font-size="3.979px" style="line-height:1.2" sodipodi:role="line">0,39</tspan></text>
-  <rect id="bw" x="20" y="4809.7" width="300" height="1e3px" display="none"/>
+  <rect id="bv" x="20" y="4809.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bw"/>
+    <use xlink:href="#bv"/>
    </flowRegion>
    <flowDiv>Ha olyan csillagot szeretne, melynek a csúcsai hegyesek, de a konkáv részek kerekítettek vagy fordítva, ezt könnyen elérheti <flowSpan font-style="italic">perem</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">J</flowSpan>) alkalmazásával:</flowDiv>
   </flowRoot>
@@ -1054,40 +1054,40 @@
   <text transform="translate(20 4845.6)" x="51.01371" y="6" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" text-align="center" text-anchor="middle" style="line-height:1.25" xml:space="preserve"><tspan x="51.01371" y="6" sodipodi:role="line">Eredeti csillag</tspan></text>
   <text transform="translate(20 4845.6)" x="144.32384" y="6" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" text-align="center" text-anchor="middle" style="line-height:1.25" xml:space="preserve"><tspan x="144.32384" y="6" sodipodi:role="line">Kapcsolt perem, zsugorítva</tspan></text>
   <text transform="translate(20 4845.6)" x="246.51053" y="6" font-family="'Liberation Sans',Arial,sans-serif" font-size="6px" text-align="center" text-anchor="middle" style="line-height:1.25" xml:space="preserve"><tspan x="246.51053" y="6" sodipodi:role="line">Kapcsolt perem, nyújtva</tspan></text>
-  <rect id="bv" x="20" y="4955.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bv"/>
-   </flowRegion>
-   <flowDiv>Egy csillag fogantyúinak a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan>a sokak szerint az egyik legkiválóbb időtöltés. De van valami, ami még ennél is jobb.</flowDiv>
-  </flowRoot>
-  <rect id="bu" x="20" y="4983.6" width="300" height="1e3px" display="none"/>
+  <rect id="bu" x="20" y="4955.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bu"/>
    </flowRegion>
-   <flowDiv>A valóságban előforduló formák utánzását segíti a csillag vagy sokszög <flowSpan font-style="italic">véletlenszerűsítés</flowSpan>e (vagyis véletlenszerű torzítása). Kevés véletlenszerűség hozzáadása által a csillag kevésbé lesz szabályos, természetesebben hat, gyakran mókásan; sok véletlenszerűség alkalmazása a kiszámíthatatlan, furcsa alakzatok előállításának egy izgalmas módja. Egy lekerekített csillag véletlenszerűsítve is megtartja a lekerekítettségét. Íme a módosítóbillentyűk:</flowDiv>
+   <flowDiv>Egy csillag fogantyúinak a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan>a sokak szerint az egyik legkiválóbb időtöltés. De van valami, ami még ennél is jobb.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5049.5)" r="2"/>
-  <rect id="bt" x="40" y="5043.5" width="280" height="1e3px" display="none"/>
+  <rect id="bt" x="20" y="4983.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bt"/>
    </flowRegion>
-   <flowDiv>Az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> érintő irányú véletlenszerűsítést eredményez.</flowDiv>
+   <flowDiv>A valóságban előforduló formák utánzását segíti a csillag vagy sokszög <flowSpan font-style="italic">véletlenszerűsítés</flowSpan>e (vagyis véletlenszerű torzítása). Kevés véletlenszerűség hozzáadása által a csillag kevésbé lesz szabályos, természetesebben hat, gyakran mókásan; sok véletlenszerűség alkalmazása a kiszámíthatatlan, furcsa alakzatok előállításának egy izgalmas módja. Egy lekerekített csillag véletlenszerűsítve is megtartja a lekerekítettségét. Íme a módosítóbillentyűk:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5066.8)" r="2"/>
-  <rect id="bs" x="40" y="5060.8" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 5049.5)" r="2"/>
+  <rect id="bs" x="40" y="5043.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bs"/>
    </flowRegion>
-   <flowDiv>Az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> egy fogantyún megszünteti a véletlenszerűséget.</flowDiv>
+   <flowDiv>Az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> érintő irányú véletlenszerűsítést eredményez.</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="5078.2" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 5066.8)" r="2"/>
+  <rect id="br" x="40" y="5060.8" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
+   </flowRegion>
+   <flowDiv>Az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> egy fogantyún megszünteti a véletlenszerűséget.</flowDiv>
+  </flowRoot>
+  <rect id="bq" x="20" y="5078.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bq"/>
    </flowRegion>
    <flowDiv>Miközben megrajzol, vagy a fogantyú húzásával szerkeszt egy véletlenszerűsített csillagot, az kicsit „remegni” fog, mivel a fogantyúk minden egyedi pozíciójához egy egyedi véletlenszerű érték tartozik. Így ha egy fogantyút Alt nélkül mozgat, az állandó véletlenszerűségi szint mellett újra véletlenszerűsíti az alakzatot, az Alt+húzás ellenben megtartja a véletlenszerű értéket, de megváltoztatja annak a mértékét. Az alábbi csillagok paraméterei pontosan egyformák, de mindegyiket újra véletlenszerűsítettük a fogantyúk nagyon pici megmozdításával (a véletlenszerűség mértéke mindegyiknél 0,1):</flowDiv>
   </flowRoot>
@@ -1096,10 +1096,10 @@
   <path transform="translate(140.83 471.62)" d="m52.391 4738.4c-1.6698 3.0151-13.282-7.4782-16.028-5.6143-2.649 1.7976-0.86361 17.743-4.0031 17.888-3.2553 0.1497-2.5749-12.013-5.9559-13.19-3.2608-1.1351-14.777 6.4465-17.295 4.5531-2.6118-1.9632 7.9554-13.134 6.41-16.128-1.4905-2.8879-14.539-2.1979-14.634-5.489-0.098892-3.4124 15.238 0.055 17.443-2.6425 2.1263-2.6011-5.4766-14.427-2.52-15.702 3.0656-1.3213 6.2602 6.2503 9.4967 6.0002 3.1214-0.2412 6.2222-12.359 9.3778-11.553 3.272 0.8362 2.0281 16.248 4.6179 18.556 2.4976 2.2264 14.237-5.2851 15.746-2.3349 1.5644 3.0591-13.438 10.222-13.574 13.76-0.13163 3.4125 12.531 8.9876 10.92 11.896z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0.1" inkscape:rounded="0.22" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.807421" sodipodi:r2="12.903711" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(200.87 471.62)" d="m49.555 4735.1c-1.7693 2.9355-9.5769-0.1479-12.32 1.5699-2.6455 1.6568-2.1019 14.19-5.3105 14.184-3.3269-0.01-6.7331-17.083-9.7996-18.561-2.9575-1.4254-7.9483 11.223-9.7975 8.6727-1.9174-2.6444 5.5804-12.623 4.4055-15.802-1.1331-3.0658-14.853-5.2513-14.352-8.3855 0.51938-3.2498 12.378 3.2171 14.054 0.1922 1.6165-2.9173-2.1737-14.554 0.7361-15.865 3.017-1.3598 9.2728 11.052 12.61 10.802 3.2183-0.2408 6.234-11.819 9.2835-10.345 3.1619 1.5284-4.1862 10.493-1.9296 13.072 2.1763 2.4871 17.753-1.491 18.267 1.5856 0.53322 3.19-13.85 5.5554-14.749 8.7186-0.86715 3.0509 10.608 7.3306 8.9012 10.162z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0.1" inkscape:rounded="0.22" sodipodi:arg1="0.59796906" sodipodi:arg2="1.075916" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.69157" sodipodi:r2="12.845784" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(260.91 471.62)" d="m47.131 4741.3c-2.4289 2.4346-10.695-6.456-13.826-4.8668-3.0195 1.5327-2.6557 11.321-5.8693 11.551-3.3321 0.2388-1.9882-10.868-5.289-12.154-3.1834-1.2399-13.914 3.1779-15.416 0.459-1.5568-2.819 12.611-10.322 12.095-13.813-0.49765-3.367-17.46-5.6256-16.311-8.8056 1.1914-3.2972 13.369 4.8152 15.687 2.2743 2.236-2.4506-1.3809-12.655 1.403-14.204 2.8866-1.6067 7.9434 7.2122 11.44 6.8838 3.3721-0.3167 8.7096-9.1965 11.589-7.9401 2.9856 1.3027-4.4989 11.562-2.9394 14.445 1.5041 2.7807 16.416 2.8228 16.386 6.061-0.03077 3.3577-12.902 4.7491-14.093 8.084-1.149 3.2164 7.4856 9.6776 5.1431 12.026z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0.1" inkscape:rounded="0.22" sodipodi:arg1="0.72564034" sodipodi:arg2="1.2035873" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.504747" sodipodi:r2="12.752373" sodipodi:sides="7" sodipodi:type="star"/>
-  <rect id="bq" x="20" y="5234.5" width="300" height="1e3px" display="none"/>
+  <rect id="bp" x="20" y="5234.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bq"/>
+    <use xlink:href="#bp"/>
    </flowRegion>
    <flowDiv>Itt pedig az előző sor középső csillaga látható, a véletlenszerűség mértékét −0,2 és 0,2 között változtatva:</flowDiv>
   </flowRoot>
@@ -1113,17 +1113,17 @@
   <path transform="translate(262.78 582.26)" d="m53.698 4740.7c-1.4934 3.1399-14.05-10.809-16.693-8.9665-2.5495 1.7773-1.6909 21.214-4.6814 21.172-3.1008-0.043-0.59275-11.654-4.1017-12.959-3.3842-1.2582-18.458 4.0355-21.101 2.601-2.7408-1.4874 9.055-15.027 7.1961-17.781-1.7928-2.6563-15.193-1.2481-15.771-4.487-0.59958-3.3583 17.437 1.7332 20.063-0.6573 2.532-2.3055-4.7386-15.998-1.6996-16.804 3.151-0.8362 3.0578 3.3563 6.1332 3.2967 2.966-0.058 6.2446-11.895 9.4242-11.391 3.2968 0.5229 5.3135 19.38 8.0225 21.631 2.6127 2.171 14.591-7.3828 16.515-4.6617 1.9946 2.8215-15.847 13.254-15.802 16.92 0.04407 3.535 13.937 9.0588 12.496 12.087z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="0.2" inkscape:rounded="0.22" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.807421" sodipodi:r2="12.903711" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(68.894 582.26)" d="m49.776 4734c-1.9929 2.7374-11.742-0.8088-14.698 1.0901-2.8507 1.8315 0.75324 10.751-2.6466 11.318-3.5252 0.5884-6.5503-12.714-9.6643-13.653-3.0033-0.906-7.6544 11.233-9.6844 8.4573-2.1048-2.8777 5.6678-9.4591 4.8379-12.821-0.80038-3.2425-13.228-4.312-12.36-7.4928 0.90013-3.2982 10.925-3.5171 12.203-6.6129 1.2324-2.9857-6.734-11.321-4.1607-13.497 2.6682-2.2566 12.703 12.094 16.224 11.407 3.395-0.6619 6.2644-13.283 9.2852-11.876 3.1321 1.4595-4.5407 9.9996-2.1914 12.406 2.2658 2.3213 13.597-0.8997 14.207 2.319 0.63289 3.3373-8.6588 4.1823-9.1201 7.4414-0.44485 3.1433 9.6897 8.8727 7.7676 11.513z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="-0.1" inkscape:rounded="0.22" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.807421" sodipodi:r2="12.903711" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(12.201 582.26)" d="m48.469 4731.8c-2.1388 2.5856-10.971 2.5293-14.033 4.4423-2.9528 1.8449 1.5397 7.2299-1.9683 8.0333-3.6374 0.8329-8.5431-13.055-11.518-13.885-2.8696-0.8003-4.2115 13.58-5.8788 10.41-1.7288-3.2874 4.4886-7.6854 4.0519-11.168-0.42124-3.3586-12.55-5.4742-11.222-8.4948 1.3767-3.132 8.7888-5.4137 9.5835-8.5981 0.76636-3.0711-7.2562-9.807-4.9811-12.395 2.359-2.6829 15.947 15.041 19.587 14.111 3.5102-0.8972 6.3291-13.738 9.2388-12.037 3.017 1.7635-7.8247 6.8838-5.5961 9.3317 2.1494 2.3608 13.292 1.3918 13.438 4.6458 0.15112 3.3739-6.2898 1.173-6.8929 4.282-0.58167 2.9985 8.2541 8.8275 6.1914 11.321z" color="#000000" fill="#ff6c2e" fill-rule="evenodd" inkscape:flatsided="false" inkscape:randomized="-0.2" inkscape:rounded="0.22" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:cx="28.926914" sodipodi:cy="4723.0049" sodipodi:r1="25.807421" sodipodi:r2="12.903711" sodipodi:sides="7" sodipodi:type="star"/>
-  <rect id="bp" x="20" y="5345.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bp"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan>sal mozgassa a fenti középső csillag egyik fogantyúját, és közben figyelje meg, hogyan alakul át a jobb és a bal oldali szomszédjához hasonlóvá – majd változik tovább.</flowDiv>
-  </flowRoot>
-  <rect id="bo" x="20" y="5373.4" width="300" height="1e3px" display="none"/>
+  <rect id="bo" x="20" y="5345.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bo"/>
+   </flowRegion>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan>sal mozgassa a fenti középső csillag egyik fogantyúját, és közben figyelje meg, hogyan alakul át a jobb és a bal oldali szomszédjához hasonlóvá – majd változik tovább.</flowDiv>
+  </flowRoot>
+  <rect id="bn" x="20" y="5373.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bn"/>
    </flowRegion>
    <flowDiv>Biztosan Ön is fog magának találni olyan felhasználási területet, ahol a véletlenszerű csillagok jól alkalmazhatók, de én különösen rajongok a kerek, amőbaszerű foltokért és a nagy, viharos bolygók fantasztikus tájaiért:</flowDiv>
   </flowRoot>
@@ -1136,93 +1136,93 @@
   <path transform="translate(20 5420.8) matrix(-.0059092 0 0 -.0044634 64.65 86.72)" d="m-624.47-581.43c325.22 56.055 9.0386 753.22 309.98 918.23 234.36 128.5 581.31-539.04 760.22-379.93 229.74 204.3-465.84 517.23-317.07 802.07 115.86 221.83 895.33-44.684 853.46 194.02-53.765 306.52-699.32 70.319-850.97 383.69-118.1 244.04 261.11 693.64 5.9323 752.21-327.67 75.209-268.13-428.54-571.07-381.87-235.92 36.343-425.66 907.59-636.9 739.05-271.25-216.43 198.89-667.12-80.939-853.57-217.92-145.2-642.09-86.641-720.66-317.79-100.89-296.82 544.95-125.88 616.97-441.64 56.082-245.9-582.08-516.88-375.45-681.65 265.33-211.58 294.71 291.45 603.54 157.11 240.5-104.62 149.68-933.57 402.95-889.91z" inkscape:flatsided="false" inkscape:randomized="0.14" inkscape:rounded="0.4" sodipodi:arg1="-1.6706296" sodipodi:arg2="-1.0962105" sodipodi:cx="-564.31024" sodipodi:cy="945.83423" sodipodi:r1="1395.4882" sodipodi:r2="866.36334" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(20 5420.8) matrix(.9375 0 0 .9375 221.35 74.908)" d="m7.5344 13.786c-0.97597 2.7758-5.2867 0.77712-7.2988 3.1091-2.0121 2.332-0.60535 3.8413-3.4395 5.193-2.8341 1.3518-1.0092-3.7658-3.9602-4.2701-2.951-0.5043-4.6784 7.2092-7.448 6.2459s1.4076-6.6712-0.21625-9.4457c-1.6239-2.7746-3.5127 1.5343-3.5138-1.4269-0.0012-2.9613 4.3468-2.5599 5.0005-5.4526 0.6537-2.8927-5.1332-5.0283-2.9815-7.138 2.1517-2.1097 3.5647 2.7816 6.3556 2.3854 2.7909-0.3962 1.4114-8.7288 4.1531-8.0908 2.7417 0.6379 1.7223 5.5753 4.4164 6.9468 2.6941 1.3715 7.1204-1.4208 8.6496 1.0544 1.5292 2.4752-6.0994 3.2936-5.9018 6.4833 0.19761 3.1896 7.1605 1.6305 6.1845 4.4063z" stroke-width=".011048" inkscape:flatsided="false" inkscape:randomized="0.14" inkscape:rounded="0.4" sodipodi:arg1="0.32910642" sodipodi:arg2="0.77790537" sodipodi:cx="-6.2346616" sodipodi:cy="10.449848" sodipodi:r1="13.82637" sodipodi:r2="7.9316006" sodipodi:sides="7" sodipodi:type="star"/>
   <path transform="translate(20 5420.8) matrix(.9375 0 0 .9375 161.27 90.961)" d="m-2.0772 11.911c-0.31867 1.94 3.1277 2.2745 1.8426 3.8315s-4.115-2.0037-5.936-1.245 0.93551 4.5191-1.0718 4.4922c-2.0073-0.02688 0.93611-4.3105-0.80738-5.5017-1.7435-1.1912-3.0455 3.6828-3.8641 1.6307s2.2055-2.0647 1.8843-4.1994c-0.32116-2.1347-3.8887-0.22801-3.3619-2.3396 0.52679-2.1116 3.3935 0.69879 5.0354-0.48164s-2.8928-4.444-0.91986-5.2841c1.973-0.84011 1.0145 5.2884 3.1364 5.3948 2.1219 0.10639 2.8011-4.9676 4.5781-4.0556 1.777 0.91206-3.6333 1.7285-2.7849 3.7339 0.84846 2.0054 5.9769-0.12464 5.8202 2.0387-0.15672 2.1633-3.2325 0.045389-3.5512 1.9853z" stroke-width=".011048" inkscape:flatsided="false" inkscape:randomized="0.14" inkscape:rounded="0.4" sodipodi:arg1="0.32929262" sodipodi:arg2="0.77809157" sodipodi:cx="-6.2346616" sodipodi:cy="10.449848" sodipodi:r1="3.228641" sodipodi:r2="7.9316006" sodipodi:sides="7" sodipodi:type="star"/>
-  <rect id="bn" x="20" y="5555.9" width="300" height="1e3px" display="none"/>
+  <rect id="bm" x="20" y="5555.9" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#bn"/>
-   </flowRegion>
-   <flowDiv>Spirálok</flowDiv>
-  </flowRoot>
-  <rect id="bm" x="20" y="5568.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv>Az Inkscape spirálja is sokoldalú alakzat, és ha nem is oly sokrétűen, mint a csillag, azért néha nagyon jól felhasználható. A spirál a csillaghoz hasonlóan a középpontjából indul; rajzolásakor éppúgy, mint módosításkor,</flowDiv>
+   <flowDiv>Spirálok</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5613)" r="2"/>
-  <rect id="bl" x="40" y="5607" width="280" height="1e3px" display="none"/>
+  <rect id="bl" x="20" y="5568.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv>a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> 15°-os lépésközhöz kényszeríti az egérmozgás szögét.</flowDiv>
+   <flowDiv>Az Inkscape spirálja is sokoldalú alakzat, és ha nem is oly sokrétűen, mint a csillag, azért néha nagyon jól felhasználható. A spirál a csillaghoz hasonlóan a középpontjából indul; rajzolásakor éppúgy, mint módosításkor,</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="5624.3" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 5613)" r="2"/>
+  <rect id="bk" x="40" y="5607" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
-   <flowDiv>A spirálhoz két fogantyú tartozik, egy a belső, egy a külső végén. Egyszerű húzásuk fel- vagy letekeri a spirált (vagyis „folytatja” azt, megváltoztatja a fordulatok számát). További módosítóbillentyűk:</flowDiv>
+   <flowDiv>a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> 15°-os lépésközhöz kényszeríti az egérmozgás szögét.</flowDiv>
   </flowRoot>
-  <rect id="bj" x="20" y="5662.9" width="300" height="1e3px" display="none"/>
+  <rect id="bj" x="20" y="5624.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bj"/>
    </flowRegion>
-   <flowDiv>A külső fogantyú esetében</flowDiv>
+   <flowDiv>A spirálhoz két fogantyú tartozik, egy a belső, egy a külső végén. Egyszerű húzásuk fel- vagy letekeri a spirált (vagyis „folytatja” azt, megváltoztatja a fordulatok számát). További módosítóbillentyűk:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5686.3)" r="2"/>
-  <rect id="bi" x="40" y="5680.3" width="280" height="1e3px" display="none"/>
+  <rect id="bi" x="20" y="5662.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> méretezi vagy forgatja a spirált a középpont körül (nem teker fel és le);</flowDiv>
+   <flowDiv>A külső fogantyú esetében</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5703.6)" r="2"/>
-  <rect id="bh" x="40" y="5697.6" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 5686.3)" r="2"/>
+  <rect id="bh" x="40" y="5680.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv>az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> zárolt sugár mellett teker fel vagy le.</flowDiv>
+   <flowDiv>a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> méretezi vagy forgatja a spirált a középpont körül (nem teker fel és le);</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="5715" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 5703.6)" r="2"/>
+  <rect id="bg" x="40" y="5697.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>A belső fogantyú esetében</flowDiv>
+   <flowDiv>az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> zárolt sugár mellett teker fel vagy le.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5738.3)" r="2"/>
-  <rect id="bf" x="40" y="5732.3" width="280" height="1e3px" display="none"/>
+  <rect id="bf" x="20" y="5715" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> tágítja vagy szűkíti a spirált;</flowDiv>
+   <flowDiv>A belső fogantyú esetében</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5755.6)" r="2"/>
-  <rect id="be" x="40" y="5749.6" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 5738.3)" r="2"/>
+  <rect id="be" x="40" y="5732.3" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv>az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> visszaállítja az eredeti szűkítést;</flowDiv>
+   <flowDiv>az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> tágítja vagy szűkíti a spirált;</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 5772.9)" r="2"/>
-  <rect id="bd" x="40" y="5766.9" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 5755.6)" r="2"/>
+  <rect id="bd" x="40" y="5749.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> a fogantyút a spirál középpontjába mozgatja.</flowDiv>
+   <flowDiv>az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> visszaállítja az eredeti szűkítést;</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="5784.3" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 5772.9)" r="2"/>
+  <rect id="bb" x="40" y="5766.9" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bc"/>
+    <use xlink:href="#bb"/>
+   </flowRegion>
+   <flowDiv>a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> a fogantyút a spirál középpontjába mozgatja.</flowDiv>
+  </flowRoot>
+  <rect id="ba" x="20" y="5784.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ba"/>
    </flowRegion>
    <flowDiv>A spirál <flowSpan font-style="italic">szűkülés</flowSpan>e a csavarodás menetének egyenletestől való eltérését jelenti. Ha ez az érték 1, akkor a spirál egyenletes; ha 1-nél kisebb (<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> felfelé), a spirál a külső széle felé sűrűsödik; ha nagyobb 1-nél (<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> lefelé), akkor a középpontja felé sűrűbb:</flowDiv>
   </flowRoot>
@@ -1236,17 +1236,17 @@
   <path transform="translate(20 5830.9) scale(-1 1)" d="m-277.29 29.463c-1e-5 2e-6 -1e-5 -6e-6 -1e-5 -7e-6 0-4.3e-5 7e-5 -5.7e-5 9e-5 -5.6e-5 2.6e-4 9e-6 3.1e-4 3.7e-4 2.7e-4 5.53e-4 -1.7e-4 9.61e-4 -1e-3 0.0011-2e-3 8.71e-4 -3e-3 -8.42e-4 -3e-3 -0.0046-2e-3 -0.0069 3e-3 -0.0071 0.0122-0.0075 0.0181-0.0047 0.0155 0.0073 0.0159 0.0283 9e-3 0.04156-0.0167 0.03097-0.0593 0.03114-0.0863 0.01497-0.0575-0.03443-0.0567-0.11483-0.0236-0.16574 0.0654-0.10069 0.20849-0.09745 0.29871-0.03485 0.16791 0.1165 0.1599 0.35897 0.0485 0.51097-0.19708 0.26884-0.59116 0.25228-0.83663 0.06374-0.41576-0.31934-0.38497-0.9374-0.0793-1.3198 0.4989-0.62405 1.4388-0.57081 2.0164-0.09271 0.91266 0.75542 0.82547 2.1468 0.10067 2.9961-1.1132 1.3046-3.1245 1.1678-4.3445 0.09832-1.8275-1.602-1.6202-4.4489-0.0792-6.1651 2.2575-2.5142 6.2121-2.2092 8.582-0.0349 3.4033 3.1224 2.9657 8.5236-0.0453 11.742-4.2468 4.54-11.512 3.9256-15.819-0.17464-5.9764-5.6898-5.1302-15.329 0.36947-21.013 7.5195-7.7726 20.147-6.6268 27.558 0.64943 9.9973 9.8149 8.4692 26.167-1.038 35.721" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-36.75835" sodipodi:cx="-277.28845" sodipodi:cy="29.462816" sodipodi:expansion="6" sodipodi:radius="28.251171" sodipodi:revolution="6" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 5830.9) scale(-1 1)" d="m-96.58 37.072c2.6555 3.6418-2.0606 5.3029-4.6596 3.3976-3.2858-2.4088-2.798-7.3215-0.14538-9.9872 3.591-3.6087 9.5797-2.9358 12.876 0.70479 4.0049 4.4238 3.1466 11.407-1.2754 15.204-5.1117 4.3887-12.983 3.3679-17.214-1.7219-4.7502-5.7134-3.5854-14.387 2.0967-19.011 6.2556-5.0901 15.667-3.7952 20.65 2.4243 5.4109 6.7534 3.9968 16.851-2.7182 22.168-7.2164 5.7149-17.956 4.1904-23.589-2.9864-6.0043-7.651-4.3765-18.998 3.2345-24.928 8.0621-6.281 19.986-4.5557 26.198 3.4663 6.5464 8.4529 4.7287 20.927-3.6844 27.41-8.8264 6.8016-21.827 4.896-28.57-3.891-7.0479-9.1846-5.058-22.692 4.0876-29.685 9.5293-7.2859 23.525-5.2152 30.759 4.2756 7.5166 9.8619 5.3679 24.33-4.456 31.797-10.184 7.7404-25.109 5.5166-32.802-4.6296-7.9581-10.495-5.6615-25.865 4.7971-33.778 10.798-8.17 26.599-5.8028 34.725 4.959 8.3766 11.093 5.9409 27.313-5.116 35.648-11.38 8.5782-28.009 6.0759-36.547-5.2684-8.7753-11.659-6.208-28.688 5.4166-37.425 11.933-8.9681 29.352-6.3373 38.283 5.561 9.1568 12.2 6.4642 30.001-5.7017 39.122" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-36.75835" sodipodi:cx="-96.57975" sodipodi:cy="37.071815" sodipodi:expansion="0.5" sodipodi:radius="28.251171" sodipodi:revolution="6" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 5830.9) scale(-1 1)" d="m-36.343 37.072c9.9592 13.658-4.981 16.344-12.09 8.8153-6.1702-6.5352-4.7374-17.131 1.9634-22.703 7.5862-6.3074 19.127-4.7041 25.186 2.9057 6.5555 8.2329 4.7964 20.526-3.4284 26.934-8.7186 6.7925-21.622 4.9108-28.312-3.7895-7.0074-9.1134-5.0257-22.533 4.0659-29.462 9.449-7.2018 23.317-5.1357 30.456 4.2904 7.3788 9.7422 5.2394 24.007-4.4799 31.334-10.004 7.5411-24.626 5.3369-32.123-4.6443-7.691-10.24-5.4286-25.189 4.7898-32.841 10.457-7.8305 25.705-5.5151 33.501 4.9204 7.9608 10.656 5.5968 26.183-5.0392 34.112-10.842 8.0833-26.628 5.6744-34.683-5.1482-8.199-11.016-5.7481-27.045 5.249-35.218 11.179-8.3085 27.439-5.8183 35.723 5.3429 8.4126 11.334 5.8855 27.81-5.4308 36.201-11.48 8.5118-28.163 5.9498-36.654-5.5135-8.6067-11.62-6.0115-28.499 5.5917-37.086 11.752-8.6975 28.82-6.0708 37.499 5.6658 8.7848 11.88 6.1279 29.128-5.7363 37.895-12.002 8.8687-29.422 6.1831-38.274-5.8036-8.9496-12.119-6.2363-29.706 5.8679-38.64 12.232-9.0277 29.979-6.2878 38.991 5.9296 9.1032 12.34 6.3377 30.242-5.9888 39.331" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-36.75835" sodipodi:cx="-36.343452" sodipodi:cy="37.071815" sodipodi:expansion="0.2" sodipodi:radius="28.251171" sodipodi:revolution="6" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <rect id="ba" x="20" y="5906.1" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="5906.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ba"/>
+    <use xlink:href="#ay"/>
    </flowRegion>
    <flowDiv>Egy spirálnak legfeljebb 1024 fordulata lehet.</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="5923.5" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="5923.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#az"/>
+    <use xlink:href="#ax"/>
    </flowRegion>
    <flowDiv>Ahogy az Ellipszis eszközzel nem csak ellipszisek, hanem ívek (vonalak állandó görbülettel) is rajzolhatók, úgy a Spirál eszköz is alkalmas <flowSpan font-style="italic">szabályosan változó</flowSpan> görbületek létrehozására. A közönséges Bézier-görbével összevetve egy ív vagy egy spirál sokszor megfelelőbb, mert a hossza az egyik fogantyúja mozgatásával módosítható, anélkül hogy közben az alakja megváltozna. Továbbá, bár a spirált kitöltés nélkül szokás rajzolni, kitöltési szín hozzáadásával és a körvonalát kikapcsolva érdekes hatások érhetők el.</flowDiv>
   </flowRoot>
@@ -1270,27 +1270,27 @@
   <path transform="translate(20 6001.9) matrix(-.4889 -.4889 .4889 -.4889 -2793.2 3319.2)" d="m241.32 6459.8c0.70485-3.0046 4.8734-3.2812 7.2313-2.5958 10.574 3.0737 11.298 17.568 8.3935 26.061-1.9033 5.5648-5.2933 10.55-9.4538 14.676" color="#000000" fill="none" stroke="#000" stroke-width="1.4463pt" sodipodi:argument="-16.24534" sodipodi:cx="242.34204" sodipodi:cy="6461.3071" sodipodi:expansion="13.200652" sodipodi:radius="36.96331" sodipodi:revolution="2.8132913" sodipodi:t0="0.79694211" sodipodi:type="spiral"/>
   <path transform="translate(20 6001.9) scale(-1)" d="m-257.87-57.577c0.48734-2.0774 3.3695-2.2686 4.9998-1.7947 7.3107 2.1251 7.8118 12.146 5.8033 18.019-1.3017 3.8058-3.6095 7.2203-6.4432 10.054" color="#000000" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-16.24534" sodipodi:cx="-257.16202" sodipodi:cy="-56.513443" sodipodi:expansion="13.200652" sodipodi:radius="25.47789" sodipodi:revolution="2.8126345" sodipodi:t0="0.7971282" sodipodi:type="spiral"/>
   <path transform="translate(20 6001.9) matrix(-.3457 .59877 -.59877 -.3457 4234.6 2172)" d="m241.32 6459.8c0.70484-3.0046 4.8734-3.2812 7.2313-2.5958 10.574 3.0736 11.298 17.568 8.3936 26.061-5.8132 16.996-23.616 26.861-40.458 29.582" color="#000000" fill="none" stroke="#000" stroke-width="1.4463pt" sodipodi:argument="-16.24534" sodipodi:cx="242.34204" sodipodi:cy="6461.3071" sodipodi:expansion="13.200652" sodipodi:radius="57.635422" sodipodi:revolution="2.9095716" sodipodi:t0="0.7705704" sodipodi:type="spiral"/>
-  <rect id="ay" x="20" y="6113.9" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="6113.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ay"/>
+    <use xlink:href="#aw"/>
    </flowRegion>
    <flowDiv>Különösen érdekes például a spirál pontozott körvonallal – egy ilyen egyesíti az alakzat egyenletes körkörösségét a szabályos, egyenlő közű foltokkal (pontok vagy szaggatott vonal), mellyel gyönyörű moaréhatás érhető el:</flowDiv>
   </flowRoot>
   <path transform="translate(20 6160.4) matrix(-.17215 .64245 -.64245 -.17215 4253.6 1103.7)" d="m103.2 6518.4c0.36965 0.459-0.43058 0.7245-0.75891 0.6112-0.87059-0.3005-0.88847-1.4597-0.45146-2.1142 0.77579-1.1617 2.4473-1.1256 3.4519-0.3021 1.4666 1.2021 1.3714 3.4426 0.15551 4.7817-1.6141 1.7777-4.4386 1.6205-6.106 0.01-2.0915-2.0198-1.8712-5.4337 0.13398-7.4261 2.422-2.4066 6.4275-2.1227 8.7428 0.2775 2.7221 2.822 2.3744 7.42-0.42059 10.057-3.2204 3.038-8.411 2.6263-11.368-0.5632-3.3538-3.6174-2.8781-9.4007 0.70542-12.677 4.0136-3.6696 10.389-3.1299 13.984 0.8473 3.9852 4.4089 3.3816 11.377-0.98896 15.29-4.8035 4.3007-12.363 3.6331-16.594-1.1304-4.616-5.1975-3.8845-13.348 1.2715-17.896 5.5909-4.9311 14.333-4.1359 19.197 1.4124 5.246 5.9839 4.387 15.316-1.5533 20.497-6.3764 5.5608-16.299 4.638-21.795-1.6939-5.8753-6.7685-4.8888-17.281 1.8344-23.092 7.1602-6.1896 18.262-5.1395 24.389 1.9747 6.5038 7.5516 5.39 19.242-2.1149 25.684-7.9426 6.8178-20.222 5.6404-26.979-2.255-7.1316-8.3333-5.8908-21.201 2.3949-28.272 8.7238-7.4453 22.179-6.1409 29.565 2.5347 7.7588 9.114 6.3909 23.157-2.6744 30.857-9.5039 8.0721-24.134 6.6409-32.148-2.814-8.3853-9.8936-6.8906-25.111 2.9536-33.438 10.283-8.6983 26.087-7.1404 34.728 3.093 9.0112 10.672 7.3899 27.063-3.2324 36.017-11.061 9.3239-28.038 7.6393-37.305-3.3716-9.6365-11.45-7.8887-29.013 3.5108-38.593 11.839-9.9489 29.987-8.1379 39.88 3.6499 10.261 12.227 8.387 30.961-3.7889 41.166-12.615 10.574-31.934 8.6361-42.452-3.9279-10.886-13.003-8.885-32.907 4.0668-43.737 13.391-11.198 33.88-9.1339 45.022 4.2056 11.509 13.779 9.3826 34.852-4.3444 46.306-14.166 11.821-35.824 9.6313-47.59-4.483-12.133-14.554-9.8798-36.795 4.6217-48.873 14.941-12.444 37.766-10.128 50.156 4.7603 12.756 15.328 10.377 38.737-4.8988 51.438-15.715 13.067-39.707 10.625-52.72-5.0372-13.378-16.102-10.873-40.677 5.1757-54.002 16.488-13.689 41.647-11.122 55.282 5.314 14 16.875 11.37 42.616-5.4523 56.563-17.261 14.311-43.585 11.618-57.843-5.5906-14.622-17.647-11.866-44.554 5.7288-59.123 18.033-14.933 45.522-12.113 60.402 5.8669 15.243 18.419 12.361 46.49-6.005 61.681-18.805 15.554-47.458 12.609-62.959-6.1431-15.864-19.191-12.857-48.426 6.2811-64.237 19.577-16.174 49.393-13.104 65.515 6.4191 16.485 19.962 13.352 50.36-6.5571 66.793-20.348 16.795-51.327 13.599-68.07-6.695-17.105-20.733-13.847-52.293 6.8328-69.346 21.118-17.415 53.259-14.094 70.623 6.9706 17.725 21.503 14.341 54.225-7.1084 71.899-21.888 18.035-55.191 14.588-73.174-7.2461-18.345-22.273-14.836-56.156 7.3839-74.45 22.658-18.654 57.122-15.083 75.725 7.5215 18.964 23.043 15.33 58.087-7.6592 77-23.427 19.274-59.051 15.577-78.274-7.7967-19.583-23.812-15.824-60.016 7.9343-79.548 24.196-19.893 60.98-16.07 80.822 8.0719 20.202 24.581 16.317 61.944-8.2093 82.096-24.965 20.511-62.908 16.564-83.369-8.3468-20.821-25.349-16.811-63.872 8.4842-84.642 25.733-21.13 64.836-17.058 85.915 8.6216 21.439 26.117 17.304 65.799-8.759 87.187-26.501 21.748-66.762 17.551-88.459-8.8963-22.057-26.885-17.797-67.725 9.0336-89.731 27.269-22.366 68.687-18.044 91.003 9.1709 22.675 27.653 18.29 69.65-9.3081 92.274-28.036 22.984-70.612 18.536-93.546-9.4454-23.292-28.42-18.783-71.574 9.5825-94.816 28.803-23.601 72.536-19.029 96.087 9.7196 6.5075 7.9438 11.19 17.336 13.625 27.312" color="#000000" fill="none" stroke="#000" stroke-dasharray="1.875, 1.875" stroke-width="3.75" sodipodi:argument="-36.806286" sodipodi:cx="103.19778" sodipodi:cy="6518.4199" sodipodi:expansion="0.98582262" sodipodi:radius="68.998032" sodipodi:revolution="18.821123" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 6160.4) matrix(-.17929 .65451 -.66912 -.17538 4627.6 1123.6)" d="m103.2 6518.4c0.36965 0.459-0.43058 0.7245-0.75891 0.6112-0.87059-0.3005-0.88847-1.4597-0.45146-2.1142 0.77579-1.1617 2.4473-1.1256 3.4519-0.3021 1.4666 1.2021 1.3714 3.4426 0.15551 4.7817-1.6141 1.7777-4.4386 1.6205-6.106 0.01-2.0915-2.0198-1.8712-5.4337 0.13398-7.4261 2.422-2.4066 6.4275-2.1227 8.7428 0.2775 2.7221 2.822 2.3744 7.42-0.42059 10.057-3.2204 3.038-8.411 2.6263-11.368-0.5632-3.3538-3.6174-2.8781-9.4007 0.70542-12.677 4.0136-3.6696 10.389-3.1299 13.984 0.8473 3.9852 4.4089 3.3816 11.377-0.98896 15.29-4.8035 4.3007-12.363 3.6331-16.594-1.1304-4.616-5.1975-3.8845-13.348 1.2715-17.896 5.5909-4.9311 14.333-4.1359 19.197 1.4124 5.246 5.9839 4.387 15.316-1.5533 20.497-6.3764 5.5608-16.299 4.638-21.795-1.6939-5.8753-6.7685-4.8888-17.281 1.8344-23.092 7.1602-6.1896 18.262-5.1395 24.389 1.9747 6.5038 7.5516 5.39 19.242-2.1149 25.684-7.9426 6.8178-20.222 5.6404-26.979-2.255-7.1316-8.3333-5.8908-21.201 2.3949-28.272 8.7238-7.4453 22.179-6.1409 29.565 2.5347 7.7588 9.114 6.3909 23.157-2.6744 30.857-9.5039 8.0721-24.134 6.6409-32.148-2.814-8.3853-9.8936-6.8906-25.111 2.9536-33.438 10.283-8.6983 26.087-7.1404 34.728 3.093 9.0112 10.672 7.3899 27.063-3.2324 36.017-11.061 9.3239-28.038 7.6393-37.305-3.3716-9.6365-11.45-7.8887-29.013 3.5108-38.593 11.839-9.9489 29.987-8.1379 39.88 3.6499 10.261 12.227 8.387 30.961-3.7889 41.166-12.615 10.574-31.934 8.6361-42.452-3.9279-10.886-13.003-8.885-32.907 4.0668-43.737 13.391-11.198 33.88-9.1339 45.022 4.2056 11.509 13.779 9.3826 34.852-4.3444 46.306-14.166 11.821-35.824 9.6313-47.59-4.483-12.133-14.554-9.8798-36.795 4.6217-48.873 14.941-12.444 37.766-10.128 50.156 4.7603 12.756 15.328 10.377 38.737-4.8988 51.438-15.715 13.067-39.707 10.625-52.72-5.0372-13.378-16.102-10.873-40.677 5.1757-54.002 16.488-13.689 41.647-11.122 55.282 5.314 14 16.875 11.37 42.616-5.4523 56.563-17.261 14.311-43.585 11.618-57.843-5.5906-14.622-17.647-11.866-44.554 5.7288-59.123 18.033-14.933 45.522-12.113 60.402 5.8669 15.243 18.419 12.361 46.49-6.005 61.681-18.805 15.554-47.458 12.609-62.959-6.1431-15.864-19.191-12.857-48.426 6.2811-64.237 19.577-16.174 49.393-13.104 65.515 6.4191 16.485 19.962 13.352 50.36-6.5571 66.793-20.348 16.795-51.327 13.599-68.07-6.695-17.105-20.733-13.847-52.293 6.8328-69.346 21.118-17.415 53.259-14.094 70.623 6.9706 17.725 21.503 14.341 54.225-7.1084 71.899-21.888 18.035-55.191 14.588-73.174-7.2461-18.345-22.273-14.836-56.156 7.3839-74.45 22.658-18.654 57.122-15.083 75.725 7.5215 18.964 23.043 15.33 58.087-7.6592 77-23.427 19.274-59.051 15.577-78.274-7.7967-19.583-23.812-15.824-60.016 7.9343-79.548 24.196-19.893 60.98-16.07 80.822 8.0719 20.202 24.581 16.317 61.944-8.2093 82.096-24.965 20.511-62.908 16.564-83.369-8.3468-20.821-25.349-16.811-63.872 8.4842-84.642 25.733-21.13 64.836-17.058 85.915 8.6216 21.439 26.117 17.304 65.799-8.759 87.187-26.501 21.748-66.762 17.551-88.459-8.8963-22.057-26.885-17.797-67.725 9.0336-89.731 27.269-22.366 68.687-18.044 91.003 9.1709 22.675 27.653 18.29 69.65-9.3081 92.274-28.036 22.984-70.612 18.536-93.546-9.4454-23.292-28.42-18.783-71.574 9.5825-94.816 28.803-23.601 72.536-19.029 96.087 9.7196 6.5075 7.9438 11.19 17.336 13.625 27.312" color="#000000" fill="none" stroke="#000" stroke-dasharray="3.75, 3.75" stroke-width="7.5" sodipodi:argument="-36.806286" sodipodi:cx="103.19778" sodipodi:cy="6518.4199" sodipodi:expansion="0.98582262" sodipodi:radius="68.998032" sodipodi:revolution="18.821123" sodipodi:t0="0" sodipodi:type="spiral"/>
   <path transform="translate(20 6160.4) matrix(-.17929 .65451 -.66912 -.17538 4526.2 1123.2)" d="m103.2 6518.4c0.36965 0.459-0.43058 0.7245-0.75891 0.6112-0.87059-0.3005-0.88847-1.4597-0.45146-2.1142 0.77579-1.1617 2.4473-1.1256 3.4519-0.3021 1.4666 1.2021 1.3714 3.4426 0.15551 4.7817-1.6141 1.7777-4.4386 1.6205-6.106 0.01-2.0915-2.0198-1.8712-5.4337 0.13398-7.4261 2.422-2.4066 6.4275-2.1227 8.7428 0.2775 2.7221 2.822 2.3744 7.42-0.42059 10.057-3.2204 3.038-8.411 2.6263-11.368-0.5632-3.3538-3.6174-2.8781-9.4007 0.70542-12.677 4.0136-3.6696 10.389-3.1299 13.984 0.8473 3.9852 4.4089 3.3816 11.377-0.98896 15.29-4.8035 4.3007-12.363 3.6331-16.594-1.1304-4.616-5.1975-3.8845-13.348 1.2715-17.896 5.5909-4.9311 14.333-4.1359 19.197 1.4124 5.246 5.9839 4.387 15.316-1.5533 20.497-6.3764 5.5608-16.299 4.638-21.795-1.6939-5.8753-6.7685-4.8888-17.281 1.8344-23.092 7.1602-6.1896 18.262-5.1395 24.389 1.9747 6.5038 7.5516 5.39 19.242-2.1149 25.684-7.9426 6.8178-20.222 5.6404-26.979-2.255-7.1316-8.3333-5.8908-21.201 2.3949-28.272 8.7238-7.4453 22.179-6.1409 29.565 2.5347 7.7588 9.114 6.3909 23.157-2.6744 30.857-9.5039 8.0721-24.134 6.6409-32.148-2.814-8.3853-9.8936-6.8906-25.111 2.9536-33.438 10.283-8.6983 26.087-7.1404 34.728 3.093 9.0112 10.672 7.3899 27.063-3.2324 36.017-11.061 9.3239-28.038 7.6393-37.305-3.3716-9.6365-11.45-7.8887-29.013 3.5108-38.593 11.839-9.9489 29.987-8.1379 39.88 3.6499 10.261 12.227 8.387 30.961-3.7889 41.166-12.615 10.574-31.934 8.6361-42.452-3.9279-10.886-13.003-8.885-32.907 4.0668-43.737 13.391-11.198 33.88-9.1339 45.022 4.2056 11.509 13.779 9.3826 34.852-4.3444 46.306-14.166 11.821-35.824 9.6313-47.59-4.483-12.133-14.554-9.8798-36.795 4.6217-48.873 14.941-12.444 37.766-10.128 50.156 4.7603 12.756 15.328 10.377 38.737-4.8988 51.438-15.715 13.067-39.707 10.625-52.72-5.0372-13.378-16.102-10.873-40.677 5.1757-54.002 16.488-13.689 41.647-11.122 55.282 5.314 14 16.875 11.37 42.616-5.4523 56.563-17.261 14.311-43.585 11.618-57.843-5.5906-14.622-17.647-11.866-44.554 5.7288-59.123 18.033-14.933 45.522-12.113 60.402 5.8669 15.243 18.419 12.361 46.49-6.005 61.681-18.805 15.554-47.458 12.609-62.959-6.1431-15.864-19.191-12.857-48.426 6.2811-64.237 19.577-16.174 49.393-13.104 65.515 6.4191 16.485 19.962 13.352 50.36-6.5571 66.793-20.348 16.795-51.327 13.599-68.07-6.695-17.105-20.733-13.847-52.293 6.8328-69.346 21.118-17.415 53.259-14.094 70.623 6.9706 17.725 21.503 14.341 54.225-7.1084 71.899-21.888 18.035-55.191 14.588-73.174-7.2461-18.345-22.273-14.836-56.156 7.3839-74.45 22.658-18.654 57.122-15.083 75.725 7.5215 18.964 23.043 15.33 58.087-7.6592 77-23.427 19.274-59.051 15.577-78.274-7.7967-19.583-23.812-15.824-60.016 7.9343-79.548 24.196-19.893 60.98-16.07 80.822 8.0719 20.202 24.581 16.317 61.944-8.2093 82.096-24.965 20.511-62.908 16.564-83.369-8.3468-20.821-25.349-16.811-63.872 8.4842-84.642 25.733-21.13 64.836-17.058 85.915 8.6216 21.439 26.117 17.304 65.799-8.759 87.187-26.501 21.748-66.762 17.551-88.459-8.8963-22.057-26.885-17.797-67.725 9.0336-89.731 27.269-22.366 68.687-18.044 91.003 9.1709 22.675 27.653 18.29 69.65-9.3081 92.274-28.036 22.984-70.612 18.536-93.546-9.4454-23.292-28.42-18.783-71.574 9.5825-94.816 28.803-23.601 72.536-19.029 96.087 9.7196 6.5075 7.9438 11.19 17.336 13.625 27.312" color="#000000" fill="none" stroke="#000" stroke-dasharray="0.604293, 7.25151" stroke-width=".60429" sodipodi:argument="-36.806286" sodipodi:cx="103.19778" sodipodi:cy="6518.4199" sodipodi:expansion="0.98582262" sodipodi:radius="68.998032" sodipodi:revolution="18.821123" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <rect id="ax" x="20" y="6275.1" width="300" height="1e3px" display="none"/>
+  <rect id="av" x="20" y="6275.1" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ax"/>
+    <use xlink:href="#av"/>
    </flowRegion>
    <flowDiv>Zárszó</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="6286" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="6286" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#aw"/>
+    <use xlink:href="#au"/>
    </flowRegion>
    <flowDiv>Az Inkscape alakzateszközei nagyon sokoldalú szerszámok. Tanulja meg a fogásaikat, és játsszon velük kedve szerint – kifizetődő lesz a grafikai munkái során, mert alakzatok alkalmazása egyszerű útvonalak helyett sok esetben felgyorsítja egy vektorgrafika elkészítését, és könnyebben módosíthatóvá is teszi azt. Ha van valamilyen ötlete, amivel az alakzatok még használhatóbbak lennének, a fejlesztők örömmel várják a javaslatait.</flowDiv>
   </flowRoot>
@@ -1308,7 +1308,7 @@
    <flowRegion>
     <use xlink:href="#ef"/>
    </flowRegion>
-   <flowDiv>Somogyvári Róbert — 2008; Gyuris Gellért — 2018, 2019, 2020</flowDiv>
+   <flowDiv>Somogyvári Róbert — 2008; Gyuris Gellért — 2018</flowDiv>
   </flowRoot>
   <use x="47" y="6417.2718225" inkscape:label="icon-credits-designer" xlink:href="#ec"/>
   <rect id="eg" x="70" y="6411.3" width="230" height="1e3px" display="none"/>

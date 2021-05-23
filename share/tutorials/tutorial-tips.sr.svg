@@ -259,38 +259,38 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#cr"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Упутство<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Савети и трикови</tspan></tspan></text>
-  <rect id="ao" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="al" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
-   <flowRegion>
-    <use xlink:href="#ao"/>
-   </flowRegion>
-   <flowDiv>Ово упутство ће вам показати разне савете и трикове које су корисници научили током коришћења Мастилурка и неких „скривених“ могућности које вам могу помоћи да убрзате производне задатке.</flowDiv>
-  </flowRoot>
-  <rect id="an" x="20" y="179.71" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#an"/>
-   </flowRegion>
-   <flowDiv>Радијални размештај са клоновима поплочавања</flowDiv>
-  </flowRoot>
-  <rect id="am" x="20" y="192.17" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#am"/>
-   </flowRegion>
-   <flowDiv>Лако је видети како се користи прозорче <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Направи клонове поплочавања</flowSpan> за правоугаоне мреже и шаблоне. Али шта ако вам треба <flowSpan font-style="italic">радијални</flowSpan> размештај, где објекти деле заједничко средиште ротације? То је такође могуће!</flowDiv>
-  </flowRoot>
-  <rect id="al" x="20" y="230.68" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#al"/>
    </flowRegion>
-   <flowDiv>Ако ваш радијални шаблон треба да има само 3, 4, 6, 8, или 12 елемената, онда можете пробати П3, П31М, П3М1, П4, П4М, П6, или П6М симетрије. Радиће лепо за пахуљице и слично. Општији поступак, међутим, је као што следи.</flowDiv>
+   <flowDiv>Ово упутство ће вам показати разне савете и трикове које су корисници научили током коришћења Мастилурка и неких „скривених“ могућности које вам могу помоћи да убрзате производне задатке.</flowDiv>
   </flowRoot>
-  <rect id="ak" x="20" y="269.41" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ak" x="20" y="179.71" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ak"/>
+   </flowRegion>
+   <flowDiv>Радијални размештај са клоновима поплочавања</flowDiv>
+  </flowRoot>
+  <rect id="aj" x="20" y="192.17" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#aj"/>
+   </flowRegion>
+   <flowDiv>Лако је видети како се користи прозорче <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Направи клонове поплочавања</flowSpan> за правоугаоне мреже и шаблоне. Али шта ако вам треба <flowSpan font-style="italic">радијални</flowSpan> размештај, где објекти деле заједничко средиште ротације? То је такође могуће!</flowDiv>
+  </flowRoot>
+  <rect id="ai" x="20" y="230.68" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ai"/>
+   </flowRegion>
+   <flowDiv>Ако ваш радијални шаблон треба да има само 3, 4, 6, 8, или 12 елемената, онда можете пробати П3, П31М, П3М1, П4, П4М, П6, или П6М симетрије. Радиће лепо за пахуљице и слично. Општији поступак, међутим, је као што следи.</flowDiv>
+  </flowRoot>
+  <rect id="ah" x="20" y="269.41" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ah"/>
    </flowRegion>
    <flowDiv>Изаберите П1 симетрију (једноставан превод), а затим <flowSpan font-style="italic">надокнаду</flowSpan> за тај превод тако што ћете отићи на језичак <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Шифт</flowSpan> и подесити <flowSpan font-family="Liberation Sans,Arial,sans-serif">Према реду/Помак Y</flowSpan> и <flowSpan font-family="Liberation Sans,Arial,sans-serif">Према колони/Помак X</flowSpan> на -100%. Сада ће сви клонови бити сложени тачно на врх оригинала. Све што остаје да се уради је да идете на језичак <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ротација</flowSpan> и подесите неке углове заокретања према колони, а затим направите шаблон са једним редом и више колона. На пример, овде је шаблон направљен од хоризонталне линије, са 30 колона, свака колона заокренута за 6 степени:</flowDiv>
   </flowRoot>
@@ -324,17 +324,17 @@
   <use transform="translate(20 359.02) rotate(162 150 58.9) translate(-20 -359.02)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
   <use transform="translate(20 359.02) rotate(168 150 58.9) translate(-20 -359.02)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
   <use transform="translate(20 359.02) rotate(174 150 58.9) translate(-20 -359.02)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#path25" xlink:href="#e"/>
-  <rect id="aj" x="20" y="488.52" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="488.52" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#aj"/>
+    <use xlink:href="#ag"/>
    </flowRegion>
    <flowDiv>Да добијете бројчаник сата од овога, све што треба да урадите је да исечете или једноставно преклопите средишњи део белим кругом (да одрадите логичке операције на клоновима, прво их развежите).</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="527.23" width="300" height="1e3px" display="none"/>
+  <rect id="af" x="20" y="527.23" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ai"/>
+    <use xlink:href="#af"/>
    </flowRegion>
    <flowDiv>Више интересантних дејстава можете направити користећи и редове и колоне. Овде је шаблон са 10 колона и 8 редова, са заокретом од 2 степена по реду и 18 степени по колони. Свака група линија овде је „колона“, тако да су групе 18 степени једна од друге; у свакој колони, појединачне линије су удаљене 2 степена:</flowDiv>
   </flowRoot>
@@ -418,10 +418,10 @@
   <use transform="translate(20 584.43) rotate(169.5 150 71.649) translate(-20 -584.43)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
   <use transform="translate(20 584.43) rotate(171 150 71.65) translate(-20 -584.43)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
   <use transform="translate(20 584.43) rotate(172.5 150 71.651) translate(-20 -584.43)" width="320" height="2150.5" inkscape:tiled-clone-of="#path92" xlink:href="#c"/>
-  <rect id="ah" x="20" y="739.43" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="739.43" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ah"/>
+    <use xlink:href="#ae"/>
    </flowRegion>
    <flowDiv>У горњим примерима, линија је заокренута око свог центра. Али шта ако желите да центар буде ван облика? Само кликните два пута на објекат алатом избирача да уђете у режим окретања. Сада преместите средиште окретања објекта (мала ручка у облику крстића) на тачку за коју желите да буде средиште окретања за радњу поплочаних клонова. Затим користите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Направи клонове плочице</flowSpan> на објекту. На овај начин можете да одрадите лепе „експлозије“ или „исијавања звезда“ насумичном променом величине, заокретања и евентуално непрозрачности:</flowDiv>
   </flowRoot>
@@ -500,52 +500,52 @@
   <use transform="translate(20 828.4) matrix(1.1627 -.6377 .6377 1.1627 -73.507 83.13) translate(-20 -828.4)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
   <use transform="translate(20 828.4) matrix(1.5217 -.57461 .57461 1.5217 -122.51 46.016) translate(-20 -828.4)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
   <use transform="translate(20 828.4) matrix(.54625 -.90456 .90456 .54625 -1.5938 170.63) translate(-20 -828.4)" width="744.09448" height="1052.3622" inkscape:tiled-clone-of="#g1768" xlink:href="#d"/>
-  <rect id="ag" x="20" y="999.81" width="300" height="1e3px" display="none"/>
+  <rect id="ad" x="20" y="999.81" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ag"/>
-   </flowRegion>
-   <flowDiv>Како да одрадите одсецање (области извоза неколико правоугаоника)?</flowDiv>
-  </flowRoot>
-  <rect id="af" x="20" y="1012.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#af"/>
-   </flowRegion>
-   <flowDiv>Направите нови слој, у том слоју направите невидљиве правоугаонике који покривају делове ваше слике. Уверите се да ваш документ користи „px“ јединицу (основно), укључите мрежу и прилепите правоугаонике на мрежу тако да сваки од њих обухвата цео број „px“ јединица. Доделите смислене иб-ове правоугаоницима, и извезите сваки у појединачну датотеку (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Датотека</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Извези ПНГ слику</flowSpan> (<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">Е</flowSpan>)). Тада ће правоугаоници запамтити своје извозне називе. Након тога, биће веома лако поновни извоз неког правоугаоника: пребаците се на слој извоза, користите <flowSpan font-weight="bold">Таб</flowSpan> да изаберете онај који вам је потребан (или користите „Нађи према иб-у“), и кликните на <flowSpan font-family="Liberation Sans,Arial,sans-serif">Извези</flowSpan> у прозорчету. Или, можете написати скрипту или груписати датотеку да извезете све ваше области, са наредбом као што је:</flowDiv>
-  </flowRoot>
-  <rect id="ae" x="20" y="1125.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ae"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i area-id -t naziv_datoteke.svg</flowSpan></flowDiv>
-  </flowRoot>
-  <rect id="ad" x="20" y="1142.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ad"/>
    </flowRegion>
-   <flowDiv>за сваку извезену област. Прекидач <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-t</flowSpan> јој говори да користи упамћени назив датотеке, иначе можете да доставите извозни назив датотеке са прекидачем <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-e</flowSpan>. Другачије, можете користити проширење из изборника <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Проширења</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Веб</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Резач</flowSpan>, или <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Проширења</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Извези</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Гиљотина</flowSpan> за сличне резултате.</flowDiv>
+   <flowDiv>Како да одрадите одсецање (области извоза неколико правоугаоника)?</flowDiv>
   </flowRoot>
-  <rect id="ac" x="20" y="1197.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ac" x="20" y="1012.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ac"/>
    </flowRegion>
-   <flowDiv>Нелинеарни преливи</flowDiv>
+   <flowDiv>Направите нови слој, у том слоју направите невидљиве правоугаонике који покривају делове ваше слике. Уверите се да ваш документ користи „px“ јединицу (основно), укључите мрежу и прилепите правоугаонике на мрежу тако да сваки од њих обухвата цео број „px“ јединица. Доделите смислене иб-ове правоугаоницима, и извезите сваки у појединачну датотеку (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Датотека</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Извези ПНГ слику</flowSpan> (<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">Е</flowSpan>)). Тада ће правоугаоници запамтити своје извозне називе. Након тога, биће веома лако поновни извоз неког правоугаоника: пребаците се на слој извоза, користите <flowSpan font-weight="bold">Таб</flowSpan> да изаберете онај који вам је потребан (или користите „Нађи према иб-у“), и кликните на <flowSpan font-family="Liberation Sans,Arial,sans-serif">Извези</flowSpan> у прозорчету. Или, можете написати скрипту или груписати датотеку да извезете све ваше области, са наредбом као што је:</flowDiv>
   </flowRoot>
-  <rect id="ab" x="20" y="1210" width="300" height="1e3px" display="none"/>
+  <rect id="ab" x="20" y="1125.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ab"/>
    </flowRegion>
-   <flowDiv>Издање 1.1 СВГ-а не подржава нелинеарне преливе (тј. оне који имају нелинеарне преводе између боја). Можете, међутим, да их опонашате преливима са <flowSpan font-style="italic">више станица</flowSpan>.</flowDiv>
+   <flowDiv><flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">inkscape -i area-id -t filename.svg</flowSpan></flowDiv>
   </flowRoot>
-  <rect id="aa" x="20" y="1237.9" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="1142.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aa"/>
+   </flowRegion>
+   <flowDiv>за сваку извезену област. Прекидач <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-t</flowSpan> јој говори да користи упамћени назив датотеке, иначе можете да доставите извозни назив датотеке са прекидачем <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">-e</flowSpan>. Другачије, можете користити проширење из изборника <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Проширења</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Веб</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Резач</flowSpan>, или <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Проширења</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Извези</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Гиљотина</flowSpan> за сличне резултате.</flowDiv>
+  </flowRoot>
+  <rect id="cn" x="20" y="1197.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#cn"/>
+   </flowRegion>
+   <flowDiv>Нелинеарни преливи</flowDiv>
+  </flowRoot>
+  <rect id="cm" x="20" y="1210" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cm"/>
+   </flowRegion>
+   <flowDiv>Издање 1.1 СВГ-а не подржава нелинеарне преливе (тј. оне који имају нелинеарне преводе између боја). Можете, међутим, да их опонашате преливима са <flowSpan font-style="italic">више станица</flowSpan>.</flowDiv>
+  </flowRoot>
+  <rect id="cl" x="20" y="1237.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cl"/>
    </flowRegion>
    <flowDiv>Почните са једноставним преливом на две станице (то можете доделити у прозорчету испуне и потеза или да користите алат прелива). Сада, помоћу алата прелива, додајте нову станицу прелива у средини; било двоструким кликом на линију прелива или избором станице прелива квадратног облика и кликом на дугме <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Убаци нову станицу</flowSpan> на траци алата прелива на врху. Мало превуците нову станицу. Затим додајте још станица пре и после средишње станице и превуците и њих такође, тако да прелив изгледа глатко. Што више станица додате, равномерније можете да направите добијени прелив. Ево почетног црно-белог прелива са две станице:</flowDiv>
   </flowRoot>
@@ -556,10 +556,10 @@
    </linearGradient>
   </defs>
   <rect transform="translate(20 1337.8) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#z)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="cn" x="20" y="1365.9" width="300" height="1e3px" display="none"/>
+  <rect id="ck" x="20" y="1365.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#cn"/>
+    <use xlink:href="#ck"/>
    </flowRegion>
    <flowDiv>А овде су различити „нелинеарни“ преливи са више станица (испитајте их у уређивачу прелива):</flowDiv>
   </flowRoot>
@@ -652,17 +652,17 @@
   <rect transform="translate(20 1401.8) matrix(0 -1 -1 0 0 0)" x="-32.181" y="-293.2" width="16.125" height="286.4" fill="url(#w)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1401.8) matrix(0 -1 -1 0 0 0)" x="-16.125" y="-293.2" width="16.125" height="286.4" fill="url(#x)" fill-opacity=".75" fill-rule="evenodd"/>
   <rect transform="translate(20 1401.8) matrix(0 -1 -1 0 0 0)" x="-128.52" y="-293.2" width="16.125" height="286.4" fill="url(#y)" fill-opacity=".75" fill-rule="evenodd"/>
-  <rect id="cm" x="20" y="1547.7" width="300" height="1e3px" display="none"/>
+  <rect id="cj" x="20" y="1547.7" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#cm"/>
+    <use xlink:href="#cj"/>
    </flowRegion>
    <flowDiv>Ексцентрични радијални преливи</flowDiv>
   </flowRoot>
-  <rect id="cl" x="20" y="1560.2" width="300" height="1e3px" display="none"/>
+  <rect id="ci" x="20" y="1560.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#cl"/>
+    <use xlink:href="#ci"/>
    </flowRegion>
    <flowDiv>Радијални преливи не морају бити симетрични. У алату прелива, превуците средишњу ручку елипсастог прелива тастером <flowSpan font-weight="bold">Шифт</flowSpan>. Ово ће преместити x-обликовану <flowSpan font-style="italic">ручку фокуса</flowSpan> прелива даље од центра. Када вам није потребно, можете да прилепите фокус назад тако што ћете га превући близу центра.</flowDiv>
   </flowRoot>
@@ -678,371 +678,371 @@
   </defs>
   <rect transform="translate(20 1617.6)" x="71.384" y=".59618" width="74.385" height="68.187" fill="url(#p)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
   <rect transform="translate(20 1617.6)" x="154.23" y=".59618" width="74.385" height="68.187" fill="url(#q)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".89427pt"/>
-  <rect id="ck" x="20" y="1704.3" width="300" height="1e3px" display="none"/>
+  <rect id="ch" x="20" y="1704.3" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ck"/>
-   </flowRegion>
-   <flowDiv>Постављање по средини странице</flowDiv>
-  </flowRoot>
-  <rect id="cj" x="20" y="1716.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cj"/>
-   </flowRegion>
-   <flowDiv>Да поравнате нешто на средиште или са страном странице, изаберите објекат или групу, а затим изаберите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Страница</flowSpan> са списка <flowSpan font-family="Liberation Sans,Arial,sans-serif">У односу на:</flowSpan> у прозорчету <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Поравнање и распоређивање</flowSpan> (<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">А</flowSpan>).</flowDiv>
-  </flowRoot>
-  <rect id="ci" x="20" y="1760.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ci"/>
-   </flowRegion>
-   <flowDiv>Чишћење документа</flowDiv>
-  </flowRoot>
-  <rect id="ch" x="20" y="1773.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ch"/>
    </flowRegion>
-   <flowDiv>Многи од прелива, шаблона и маркера који се више не користе (прецизније, они које сте ручно уређивали) остају у одговарајућим палетама и могу се поново употребити за нове објекте. Међутим, уколико желите да оптимизујете ваш документ, користите наредбу <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Очисти документ</flowSpan> у изборнику <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Датотека</flowSpan>. То ће уклонити све преливе, шаблоне или маркере који се не користе у документу, што датотеку чини мањом.</flowDiv>
+   <flowDiv>Постављање по средини странице</flowDiv>
   </flowRoot>
-  <rect id="cg" x="20" y="1838.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cg" x="20" y="1716.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cg"/>
    </flowRegion>
-   <flowDiv>Скривене функције и ИксМЛ уређивач</flowDiv>
+   <flowDiv>Да поравнате нешто на средиште или са страном странице, изаберите објекат или групу, а затим изаберите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Страница</flowSpan> са списка <flowSpan font-family="Liberation Sans,Arial,sans-serif">У односу на:</flowSpan> у прозорчету <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Поравнање и распоређивање</flowSpan> (<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">А</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="cf" x="20" y="1851.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cf" x="20" y="1760.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cf"/>
    </flowRegion>
-   <flowDiv>ИксМЛ уређивач (<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">Х</flowSpan>) вам омогућава да измените скоро све аспекте документа а да не користите спољашни програм за обраду текста. Исто тако, Мастилурко обично подржава више СВГ функција од оних које су доступне из графичког сучеља. ИксМЛ уређивач је један од начина да приступите тим функцијама (ако познајете СВГ).</flowDiv>
+   <flowDiv>Чишћење документа</flowDiv>
   </flowRoot>
-  <rect id="ce" x="20" y="1916.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ce" x="20" y="1773.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ce"/>
    </flowRegion>
-   <flowDiv>Промена мерних јединица лењира</flowDiv>
+   <flowDiv>Многи од прелива, шаблона и маркера који се више не користе (прецизније, они које сте ручно уређивали) остају у одговарајућим палетама и могу се поново употребити за нове објекте. Међутим, уколико желите да оптимизујете ваш документ, користите наредбу <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Очисти документ</flowSpan> у изборнику <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Датотека</flowSpan>. То ће уклонити све преливе, шаблоне или маркере који се не користе у документу, што датотеку чини мањом.</flowDiv>
   </flowRoot>
-  <rect id="cd" x="20" y="1929" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cd" x="20" y="1838.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv>У основном шаблону, јединица мере која се користи за лењир је у милиметрима. Ово је уједно и јединица која се користи у приказу координата у доњем десном углу и унапред изабрана у свим изборницима јединица. (Увек можете наднети <flowSpan font-weight="bold">миша</flowSpan> над лењиром да видите облачић обавештења у коме пише која јединица се тренутно користи.) Да је измените, отворите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Поставке документа</flowSpan> (<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) и промените <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Јединице приказа</flowSpan> у језичку <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Страница</flowSpan>.</flowDiv>
+   <flowDiv>Скривене функције и ИксМЛ уређивач</flowDiv>
   </flowRoot>
-  <rect id="cc" x="20" y="2005.3" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="cc" x="20" y="1851.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cc"/>
    </flowRegion>
-   <flowDiv>Калуп</flowDiv>
+   <flowDiv>ИксМЛ уређивач (<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">Х</flowSpan>) вам омогућава да измените скоро све аспекте документа а да не користите спољашни програм за обраду текста. Исто тако, Мастилурко обично подржава више СВГ функција од оних које су доступне из графичког сучеља. ИксМЛ уређивач је један од начина да приступите тим функцијама (ако познајете СВГ).</flowDiv>
   </flowRoot>
-  <rect id="cb" x="20" y="2017.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cb" x="20" y="1916.5" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv>Да брзо направите много умножака објекта, користите <flowSpan font-style="italic">калупе</flowSpan>. Само превуците објекат (или му промените величину или га заокрените), и док држите притиснуто дугме <flowSpan font-weight="bold">миша</flowSpan>, притисните <flowSpan font-weight="bold">Размак</flowSpan>. Ово оставља „отисак“ облика тренутног објекта. Можете га поновити онолико пута колико желите.</flowDiv>
+   <flowDiv>Промена мерних јединица лењира</flowDiv>
   </flowRoot>
-  <rect id="ca" x="20" y="2072.3" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ca" x="20" y="1929" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ca"/>
    </flowRegion>
-   <flowDiv>Трикови пенкале</flowDiv>
+   <flowDiv>У основном шаблону, јединица мере која се користи за лењир је у милиметрима. Ово је уједно и јединица која се користи у приказу координата у доњем десном углу и унапред изабрана у свим изборницима јединица. (Увек можете наднети <flowSpan font-weight="bold">миша</flowSpan> над лењиром да видите облачић обавештења у коме пише која јединица се тренутно користи.) Да је измените, отворите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Поставке документа</flowSpan> (<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>) и промените <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Јединице приказа</flowSpan> у језичку <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Страница</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bz" x="20" y="2084.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bz" x="20" y="2005.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bz"/>
    </flowRegion>
-   <flowDiv>У алату пенкале (Безјер), имате следеће могућности да довршите текућу линију:</flowDiv>
+   <flowDiv>Калуп</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2107.7)" r="2"/>
-  <rect id="by" x="40" y="2101.7" width="280" height="1e3px" display="none"/>
+  <rect id="by" x="20" y="2017.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#by"/>
    </flowRegion>
-   <flowDiv>Притисните „<flowSpan font-weight="bold">Унеси</flowSpan>“</flowDiv>
+   <flowDiv>Да брзо направите много умножака објекта, користите <flowSpan font-style="italic">калупе</flowSpan>. Само превуците објекат (или му промените величину или га заокрените), и док држите притиснуто дугме <flowSpan font-weight="bold">миша</flowSpan>, притисните <flowSpan font-weight="bold">Размак</flowSpan>. Ово оставља „отисак“ облика тренутног објекта. Можете га поновити онолико пута колико желите.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2124.8)" r="2"/>
-  <rect id="bx" x="40" y="2118.8" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bx" x="20" y="2072.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bx"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Два пута кликните</flowSpan> левим тастером миша</flowDiv>
+   <flowDiv>Трикови пенкале</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2141.7)" r="2"/>
-  <rect id="bw" x="40" y="2135.7" width="280" height="1e3px" display="none"/>
+  <rect id="bw" x="20" y="2084.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv>Кликните <flowSpan font-weight="bold">десним</flowSpan> дугметом миша</flowDiv>
+   <flowDiv>У алату пенкале (Безјер), имате следеће могућности да довршите текућу линију:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 2158.7)" r="2"/>
-  <rect id="bv" x="40" y="2152.7" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 2107.7)" r="2"/>
+  <rect id="bv" x="40" y="2101.7" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bv"/>
    </flowRegion>
-   <flowDiv>Изаберите неки други алат</flowDiv>
+   <flowDiv>Притисните „<flowSpan font-weight="bold">Унеси</flowSpan>“</flowDiv>
   </flowRoot>
-  <rect id="bu" x="20" y="2170.2" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2124.8)" r="2"/>
+  <rect id="bu" x="40" y="2118.8" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bu"/>
    </flowRegion>
-   <flowDiv>Знајте да све док је путања недовршена (тј. док се приказује зеленом бојом, са тренутним сегментима црвене боје) још увек не постоји као објекат у документу. Стога, да је обришете, користите или <flowSpan font-weight="bold">Есц</flowSpan> (обришите целу путању) или <flowSpan font-weight="bold">Обриши</flowSpan> (уклоните последњи сегмент недовршене путање) уместо <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Опозови</flowSpan>.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Два пута кликните</flowSpan> левим тастером миша</flowDiv>
   </flowRoot>
-  <rect id="bt" x="20" y="2219.7" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 2141.7)" r="2"/>
+  <rect id="bt" x="40" y="2135.7" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bt"/>
    </flowRegion>
-   <flowDiv>Да додате нову подпутању постојећој путањи, изаберите ту путању и почните да цртате са <flowSpan font-weight="bold">Шифтом</flowSpan> од произвољне тачке. Ако, међутим, оно што желите је једноставно <flowSpan font-style="italic">наставак</flowSpan> постојеће путање, Помак није потребан; само почните да цртате од једног од крајњих сидра изабране путање.</flowDiv>
+   <flowDiv>Кликните <flowSpan font-weight="bold">десним</flowSpan> дугметом миша</flowDiv>
   </flowRoot>
-  <rect id="bs" x="20" y="2274.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <circle transform="translate(35 2158.7)" r="2"/>
+  <rect id="bs" x="40" y="2152.7" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bs"/>
    </flowRegion>
-   <flowDiv>Унос вредности Уникода</flowDiv>
+   <flowDiv>Изаберите неки други алат</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="2286.6" width="300" height="1e3px" display="none"/>
+  <rect id="br" x="20" y="2170.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>Док сте у алату текста, притисак на <flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> пребацује између Уникода и нормалног режима. У Уникод режиму, свака група од 4 хексадецималне цифре које укуцате постаје један Уникод знак, што вам омогућава да унесете произвољне симболе (све докле год знате њихове Уникодне кодне тачке и док их подржава врста слова). Да завршите унос Уникода, притисните <flowSpan font-weight="bold">Унеси</flowSpan>. На пример, <flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>+<flowSpan font-weight="bold">2</flowSpan>+<flowSpan font-weight="bold">0</flowSpan>+<flowSpan font-weight="bold">1</flowSpan>+<flowSpan font-weight="bold">4</flowSpan>+<flowSpan font-weight="bold">Унеси</flowSpan> убацује ем-цртицу (—). Да изађете из Уникод режима а да не убаците ништа притисните <flowSpan font-weight="bold">Есц</flowSpan>.</flowDiv>
+   <flowDiv>Знајте да све док је путања недовршена (тј. док се приказује зеленом бојом, са тренутним сегментима црвене боје) још увек не постоји као објекат у документу. Стога, да је обришете, користите или <flowSpan font-weight="bold">Есц</flowSpan> (обришите целу путању) или <flowSpan font-weight="bold">Обриши</flowSpan> (уклоните последњи сегмент недовршене путање) уместо <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Опозови</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="2357.4" width="300" height="1e3px" display="none"/>
+  <rect id="bq" x="20" y="2219.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>Такође можете да користите прозорче <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Текст</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Уникод знаци</flowSpan> да потражите и убаците глифове у документ.</flowDiv>
+   <flowDiv>Да додате нову подпутању постојећој путањи, изаберите ту путању и почните да цртате са <flowSpan font-weight="bold">Шифтом</flowSpan> од произвољне тачке. Ако, међутим, оно што желите је једноставно <flowSpan font-style="italic">наставак</flowSpan> постојеће путање, Помак није потребан; само почните да цртате од једног од крајњих сидра изабране путање.</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="2390.9" width="300" height="1e3px" display="none"/>
+  <rect id="bp" x="20" y="2274.5" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bp"/>
    </flowRegion>
-   <flowDiv>Коришћење мреже за цртање иконица</flowDiv>
+   <flowDiv>Унос вредности Уникода</flowDiv>
   </flowRoot>
-  <rect id="bo" x="20" y="2403.3" width="300" height="1e3px" display="none"/>
+  <rect id="bo" x="20" y="2286.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bo"/>
    </flowRegion>
-   <flowDiv>Претпоставимо да желите да направите иконицу величине 24×24 пиксела. Направите платно 24×24 px (користите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Поставке документа</flowSpan>) и поставите мрежу на 0,5 px (48×48 линија мреже). Сада, ако поравнате испуњене објекте на <flowSpan font-style="italic">парне</flowSpan> линије мреже, а објекте са потезима на <flowSpan font-style="italic">непарне</flowSpan> линије мреже са ширином потеза у пикселима која је паран број, и извезете је у подразумеваних 90тпи (тако да 1 „px“ постаје 1 пиксел битмапе), добијате јасну битмап слику без непотребног умекшавања ивица.</flowDiv>
+   <flowDiv>Док сте у алату текста, притисак на <flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> пребацује између Уникода и нормалног режима. У Уникод режиму, свака група од 4 хексадецималне цифре које укуцате постаје један Уникод знак, што вам омогућава да унесете произвољне симболе (све докле год знате њихове Уникодне кодне тачке и док их подржава врста слова). Да завршите унос Уникода, притисните <flowSpan font-weight="bold">Унеси</flowSpan>. На пример, <flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>+<flowSpan font-weight="bold">2</flowSpan>+<flowSpan font-weight="bold">0</flowSpan>+<flowSpan font-weight="bold">1</flowSpan>+<flowSpan font-weight="bold">4</flowSpan>+<flowSpan font-weight="bold">Унеси</flowSpan> убацује ем-цртицу (—). Да изађете из Уникод режима а да не убаците ништа притисните <flowSpan font-weight="bold">Есц</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bn" x="20" y="2479" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bn" x="20" y="2357.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bn"/>
    </flowRegion>
-   <flowDiv>Заокретање објекта</flowDiv>
+   <flowDiv>Такође можете да користите прозорче <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Текст</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Уникод знаци</flowSpan> да потражите и убаците глифове у документ.</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="2491.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bm" x="20" y="2390.9" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv>Када сте у алату избора, <flowSpan font-weight="bold">кликните</flowSpan> на објекат да видите стрелице за промену величине, а затим <flowSpan font-weight="bold">кликните</flowSpan> поново на објекат да видите стрелице за заокретање и померање. Ако су стрелице на теменима кликнуте и превучене, објекат ће се заокренути око центра (који је приказан као знак крстића). Ако држите притиснут тастер <flowSpan font-weight="bold">Шифт</flowSpan> док радите ово, заокретање ће се обавити око супротног темена. Такође можете превући центар ротације на било које место.</flowDiv>
+   <flowDiv>Коришћење мреже за цртање иконица</flowDiv>
   </flowRoot>
-  <rect id="bl" x="20" y="2562.3" width="300" height="1e3px" display="none"/>
+  <rect id="bl" x="20" y="2403.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv>Или, можете да заокренете са тастатуре притиснувши <flowSpan font-weight="bold">[</flowSpan> и <flowSpan font-weight="bold">]</flowSpan> (за 15 степени) или <flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> и <flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> (за 90 степени). Исти ти тастери <flowSpan font-weight="bold">[</flowSpan><flowSpan font-weight="bold">]</flowSpan> са тастером <flowSpan font-weight="bold">Алт</flowSpan> обављају споро заокретање по величини пиксела.</flowDiv>
+   <flowDiv>Претпоставимо да желите да направите иконицу величине 24×24 пиксела. Направите платно 24×24 px (користите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Поставке документа</flowSpan>) и поставите мрежу на 0,5 px (48×48 линија мреже). Сада, ако поравнате испуњене објекте на <flowSpan font-style="italic">парне</flowSpan> линије мреже, а објекте са потезима на <flowSpan font-style="italic">непарне</flowSpan> линије мреже са ширином потеза у пикселима која је паран број, и извезете је у подразумеваних 90тпи (тако да 1 „px“ постаје 1 пиксел битмапе), добијате јасну битмап слику без непотребног умекшавања ивица.</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="2606.3" width="300" height="1e3px" display="none"/>
+  <rect id="bk" x="20" y="2479" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
-   <flowDiv>Стварање сенке</flowDiv>
+   <flowDiv>Заокретање објекта</flowDiv>
   </flowRoot>
-  <rect id="bj" x="20" y="2618.6" width="300" height="1e3px" display="none"/>
+  <rect id="bj" x="20" y="2491.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bj"/>
    </flowRegion>
-   <flowDiv>Да брзо направите сенке за објекте, користите функцију <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Филтери</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Сенке и одсјаји</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Баци сенку</flowSpan>.</flowDiv>
+   <flowDiv>Када сте у алату избора, <flowSpan font-weight="bold">кликните</flowSpan> на објекат да видите стрелице за промену величине, а затим <flowSpan font-weight="bold">кликните</flowSpan> поново на објекат да видите стрелице за заокретање и померање. Ако су стрелице на теменима кликнуте и превучене, објекат ће се заокренути око центра (који је приказан као знак крстића). Ако држите притиснут тастер <flowSpan font-weight="bold">Шифт</flowSpan> док радите ово, заокретање ће се обавити око супротног темена. Такође можете превући центар ротације на било које место.</flowDiv>
   </flowRoot>
-  <rect id="bi" x="20" y="2646.7" width="300" height="1e3px" display="none"/>
+  <rect id="bi" x="20" y="2562.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>Такође можете лако направити замућене сенке за објекте ручно са замућењем у прозорчету попуне и потеза. Изаберите објекат, удвостручите га са <flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>, притисните стрелицу <flowSpan font-weight="bold">Страница доле</flowSpan> да га стави испод изворног објекта, ставите га мало у десно и ниже од изворног објекта. Сада отворите прозорче попуне и потеза и промените вредност замућења, рецимо на 5.0. То је то!</flowDiv>
+   <flowDiv>Or, you can rotate from keyboard by pressing <flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">]</flowSpan> (by 15 degrees) or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> (by 90 degrees). The same <flowSpan font-weight="bold">[</flowSpan> <flowSpan font-weight="bold">]</flowSpan> keys with <flowSpan font-weight="bold">Alt</flowSpan> perform slow pixel-size rotation.</flowDiv>
   </flowRoot>
-  <rect id="bh" x="20" y="2712.2" width="300" height="1e3px" display="none"/>
+  <rect id="bh" x="20" y="2595.7" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv>Постављање текста на путању</flowDiv>
+   <flowDiv>Стварање сенке</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="2724.3" width="300" height="1e3px" display="none"/>
+  <rect id="bg" x="20" y="2608" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>Да поставите текст дуж криве, изаберите текст и криву заједно и изаберите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Стави на путању</flowSpan> из изборника <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Текст</flowSpan>. Текст ће почињати на почетку путање. У принципу је најбоље да направите изричиту путању на којој желите да уметнете текст, уместо да га умећете на неком другом елементу цртежа — ово ће вам дати већу контролу без завртања над цртежом.</flowDiv>
+   <flowDiv>Да брзо направите сенке за објекте, користите функцију <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Филтери</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Сенке и одсјаји</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Баци сенку</flowSpan>.</flowDiv>
   </flowRoot>
-  <rect id="bf" x="20" y="2789.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bf" x="20" y="2636.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>Бирање оригинала</flowDiv>
+   <flowDiv>Такође можете лако направити замућене сенке за објекте ручно са замућењем у прозорчету попуне и потеза. Изаберите објекат, удвостручите га са <flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>, притисните стрелицу <flowSpan font-weight="bold">Страница доле</flowSpan> да га стави испод изворног објекта, ставите га мало у десно и ниже од изворног објекта. Сада отворите прозорче попуне и потеза и промените вредност замућења, рецимо на 5.0. То је то!</flowDiv>
   </flowRoot>
-  <rect id="be" x="20" y="2802" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="be" x="20" y="2701.6" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv>Када имате текст на путањи, повезани померај, или клон, бирање њиховог извора објекта/путање може бити отежано јер може бити одмах испод, или невидљив и/или закључан. Чаробни тастер <flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> ће вам помоћи; изаберите текст, повезан померај, или клон, и притисните <flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> да преместите избор на одговарајућу путању, извор помераја, или оригинал клона.</flowDiv>
+   <flowDiv>Постављање текста на путању</flowDiv>
   </flowRoot>
-  <rect id="bd" x="20" y="2867.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bd" x="20" y="2713.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>Поправка размештаја прозора</flowDiv>
+   <flowDiv>Да поставите текст дуж криве, изаберите текст и криву заједно и изаберите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Стави на путању</flowSpan> из изборника <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Текст</flowSpan>. Текст ће почињати на почетку путање. У принципу је најбоље да направите изричиту путању на којој желите да уметнете текст, уместо да га умећете на неком другом елементу цртежа — ово ће вам дати већу контролу без завртања над цртежом.</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="2879.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bc" x="20" y="2779.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
-   <flowDiv>Када премештате документе између система са различитим резолуцијама или бројем монитора, можете видети да је Мастилурко сачувао положај прозора који поставља прозор ван домашаја на вашем екрану. Једноставно увећајте прозор (који ће га вратити у преглед, користите траку задатака), сачувајте и поново учитајте. Ово можете да избегнете поништавањем опште опције за чување геометрије прозора (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Поставке Мастилурка</flowSpan>, одељак <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Сучеље</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Прозори</flowSpan>).</flowDiv>
+   <flowDiv>Бирање оригинала</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="2956.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bb" x="20" y="2791.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv>Провидност, преливи и извоз Постскрипта</flowDiv>
+   <flowDiv>Када имате текст на путањи, повезани померај, или клон, бирање њиховог извора објекта/путање може бити отежано јер може бити одмах испод, или невидљив и/или закључан. Чаробни тастер <flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> ће вам помоћи; изаберите текст, повезан померај, или клон, и притисните <flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">D</flowSpan> да преместите избор на одговарајућу путању, извор помераја, или оригинал клона.</flowDiv>
   </flowRoot>
-  <rect id="ba" x="20" y="2968.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ba" x="20" y="2856.9" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
-   <flowDiv>Постскрипт или ЕПС записи не подржавају <flowSpan font-style="italic">провидност</flowSpan>, тако да не бисте требали никада да је користите ако ћете да извезете у ПС/ЕПС. У случају једнобојне провидности која преклапа једнобосјност, то се лако да поправити: Изаберите један од провидних објеката; пребаците на алат капаљке (<flowSpan font-weight="bold">Ф7</flowSpan> или <flowSpan font-weight="bold">d</flowSpan>); уверите се да је дугме <flowSpan font-family="Liberation Sans,Arial,sans-serif">Непрозирност: Изабери</flowSpan> на траци алата капаљке искључено; кликните на исти објекат. То ће захватити видљиву боју и доделити је назад објекту, али овај пут без провидности. Поновите поступак за све провидне објекте. Ако ваш провидни објекат прекрива неколико једнобојних површина, мораћете да га сломите на одговарајуће комаде и да примените овај поступак за сваки комад. Знајте да капаљка не мења вредност непрозирности објекта, већ само алфа вредност боје испуне или потеза, зато проверите да ли је вредност непрозирности сваког објекта постављена на 100% пре него што започнете.</flowDiv>
+   <flowDiv>Поправка размештаја прозора</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="3106.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="az" x="20" y="2869.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
-   <flowDiv>Међудејственост</flowDiv>
+   <flowDiv>Када премештате документе између система са различитим резолуцијама или бројем монитора, можете видети да је Мастилурко сачувао положај прозора који поставља прозор ван домашаја на вашем екрану. Једноставно увећајте прозор (који ће га вратити у преглед, користите траку задатака), сачувајте и поново учитајте. Ово можете да избегнете поништавањем опште опције за чување геометрије прозора (<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Поставке Мастилурка</flowSpan>, одељак <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Сучеље</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Прозори</flowSpan>).</flowDiv>
   </flowRoot>
-  <rect id="ay" x="20" y="3119.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ay" x="20" y="2945.6" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv>Већина СВГ елемената се може подесити да реагује на кориснички унос (обично ово ће радити само ако је СВГ приказана у веб прегледнику).</flowDiv>
+   <flowDiv>Провидност, преливи и извоз Постскрипта</flowDiv>
   </flowRoot>
-  <rect id="ax" x="20" y="3147.4" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="2957.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
-   <flowDiv>Најједноставнија могућност је да додате објекту везу на коју се може кликнути. Да то урадите <flowSpan font-weight="bold">десни клик</flowSpan> на објекат и изаберите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Направи везу</flowSpan> из приручног изборника. Прозорче „Атрибути објекта“ ће се отворити, где можете поставити мету везе користећи вредности <flowSpan font-family="Liberation Sans,Arial,sans-serif">„href“</flowSpan>.</flowDiv>
+   <flowDiv>Постскрипт или ЕПС записи не подржавају <flowSpan font-style="italic">провидност</flowSpan>, тако да не бисте требали никада да је користите ако ћете да извезете у ПС/ЕПС. У случају једнобојне провидности која преклапа једнобосјност, то се лако да поправити: Изаберите један од провидних објеката; пребаците на алат капаљке (<flowSpan font-weight="bold">Ф7</flowSpan> или <flowSpan font-weight="bold">d</flowSpan>); уверите се да је дугме <flowSpan font-family="Liberation Sans,Arial,sans-serif">Непрозирност: Изабери</flowSpan> на траци алата капаљке искључено; кликните на исти објекат. То ће захватити видљиву боју и доделити је назад објекту, али овај пут без провидности. Поновите поступак за све провидне објекте. Ако ваш провидни објекат прекрива неколико једнобојних површина, мораћете да га сломите на одговарајуће комаде и да примените овај поступак за сваки комад. Знајте да капаљка не мења вредност непрозирности објекта, већ само алфа вредност боје испуне или потеза, зато проверите да ли је вредност непрозирности сваког објекта постављена на 100% пре него што започнете.</flowDiv>
   </flowRoot>
-  <rect id="aw" x="20" y="3197" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="aw" x="20" y="3096.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aw"/>
    </flowRegion>
-   <flowDiv>Више упправљања је могуће коришћењем међудејствених атрибута којима се може приступити из прозорчета „Својства објекта“ (<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). Овде можете применити изборну функционалност користећи Јава скрипту. Неки основни примери:</flowDiv>
+   <flowDiv>Међудејственост</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3241.7)" r="2"/>
-  <rect id="av" x="40" y="3235.7" width="280" height="1e3px" display="none"/>
+  <rect id="av" x="20" y="3108.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#av"/>
    </flowRegion>
-   <flowDiv>Отворите другу датотеку у текућем прозору када кликнете на објекат:</flowDiv>
+   <flowDiv>Већина СВГ елемената се може подесити да реагује на кориснички унос (обично ово ће радити само ако је СВГ приказана у веб прегледнику).</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3259.2)" r="2"/>
-  <rect id="au" x="60" y="3253.2" width="260" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="3136.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#au"/>
    </flowRegion>
-   <flowDiv>Поставите <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> на <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.location='file2.svg';</flowSpan></flowDiv>
+   <flowDiv>Најједноставнија могућност је да додате објекту везу на коју се може кликнути. Да то урадите <flowSpan font-weight="bold">десни клик</flowSpan> на објекат и изаберите <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Направи везу</flowSpan> из приручног изборника. Прозорче „Атрибути објекта“ ће се отворити, где можете поставити мету везе користећи вредности <flowSpan font-family="Liberation Sans,Arial,sans-serif">„href“</flowSpan>.</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3276.7)" r="2"/>
-  <rect id="at" x="40" y="3270.7" width="280" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="3186.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#at"/>
    </flowRegion>
-   <flowDiv>Отворите изборну веб везу у новом прозору када кликнете на нови објекат:</flowDiv>
+   <flowDiv>Више упправљања је могуће коришћењем међудејствених атрибута којима се може приступити из прозорчета „Својства објекта“ (<flowSpan font-weight="bold">Ктрл</flowSpan>+<flowSpan font-weight="bold">Шифт</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). Овде можете применити изборну функционалност користећи Јава скрипту. Неки основни примери:</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3294.1)" r="2"/>
-  <rect id="as" x="60" y="3288.1" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(35 3231.2)" r="2"/>
+  <rect id="as" x="40" y="3225.2" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv>Поставите <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> на <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.open("https://inkscape.org","_blank");</flowSpan></flowDiv>
+   <flowDiv>Отворите другу датотеку у текућем прозору када кликнете на објекат:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 3322.2)" r="2"/>
-  <rect id="ar" x="40" y="3316.2" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(55 3248.6)" r="2"/>
+  <rect id="ar" x="60" y="3242.6" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv>Умањите провидност објекта приликом надлетања:</flowDiv>
+   <flowDiv>Поставите <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> на <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.location='file2.svg';</flowSpan></flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3339.7)" r="2"/>
-  <rect id="aq" x="60" y="3333.7" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(35 3266.1)" r="2"/>
+  <rect id="aq" x="40" y="3260.1" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
-   <flowDiv>Поставите <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseover</flowSpan> на <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 0.5;</flowSpan></flowDiv>
+   <flowDiv>Отворите изборну веб везу у новом прозору када кликнете на нови објекат:</flowDiv>
   </flowRoot>
-  <circle transform="translate(55 3357.1)" r="2"/>
-  <rect id="ap" x="60" y="3351.1" width="260" height="1e3px" display="none"/>
+  <circle transform="translate(55 3283.5)" r="2"/>
+  <rect id="ap" x="60" y="3277.5" width="260" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ap"/>
    </flowRegion>
+   <flowDiv>Поставите <flowSpan font-family="Liberation Sans,Arial,sans-serif">onclick</flowSpan> на <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">window.open("https://inkscape.org","_blank");</flowSpan></flowDiv>
+  </flowRoot>
+  <circle transform="translate(35 3311.7)" r="2"/>
+  <rect id="ao" x="40" y="3305.7" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ao"/>
+   </flowRegion>
+   <flowDiv>Умањите провидност објекта приликом надлетања:</flowDiv>
+  </flowRoot>
+  <circle transform="translate(55 3329.1)" r="2"/>
+  <rect id="an" x="60" y="3323.1" width="260" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#an"/>
+   </flowRegion>
+   <flowDiv>Поставите <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseover</flowSpan> на <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 0.5;</flowSpan></flowDiv>
+  </flowRoot>
+  <circle transform="translate(55 3346.5)" r="2"/>
+  <rect id="am" x="60" y="3340.5" width="260" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#am"/>
+   </flowRegion>
    <flowDiv>Поставите <flowSpan font-family="Liberation Sans,Arial,sans-serif">onmouseout</flowSpan> на <flowSpan font-family="Liberation Mono,Lucida Console,Consolas,monospace">style.opacity = 1;</flowSpan></flowDiv>
   </flowRoot>
-  <use x="47" y="3404.5653355" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
-  <rect id="cu" x="70" y="3398.6" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3393.9965405" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
+  <rect id="cu" x="70" y="3388" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#cu"/>
    </flowRegion>
    <flowDiv>Bulia Byak; Alexandre Prokoudine; Colin Marquardt; Ivan Masár; Kris De Gussem; Nicolas Dufour; Maren Hachmann; Roland Alton; Patrick Storz; Guillaume Audirac; Gellért Gyuris</flowDiv>
   </flowRoot>
-  <use x="47" y="3436.6284225" inkscape:label="icon-credits-translators" xlink:href="#co"/>
-  <rect id="cs" x="70" y="3430.6" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3426.0596275" inkscape:label="icon-credits-translators" xlink:href="#co"/>
+  <rect id="cs" x="70" y="3420.1" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
-   <flowDiv/>
+   <flowDiv>Мирослав Николић — 2021</flowDiv>
   </flowRoot>
-  <use x="47" y="3448.6284225" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
-  <rect id="ct" x="70" y="3442.6" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3443.6524009" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
+  <rect id="ct" x="70" y="3437.7" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#ct"/>
@@ -1051,7 +1051,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="cr" transform="translate(0 3290.2)">
+  <g id="cr" transform="translate(0 3285.2)">
    <defs>
     <filter id="m" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>

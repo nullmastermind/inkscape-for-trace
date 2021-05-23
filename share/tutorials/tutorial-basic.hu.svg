@@ -259,122 +259,122 @@
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#cr"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
   <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Ismertető<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">Bevezetés</tspan></tspan></text>
-  <rect id="al" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <rect id="x" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#al"/>
+    <use xlink:href="#x"/>
    </flowRegion>
    <flowDiv>Az alábbi ismertető bemutatja az Inkscape használatának alapjait. Ha az Inkscape <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Súgó</flowSpan> menüjéből lett megnyitva, akkor ez egy szokásos Inkscape dokumentum, mely a megtekintésen túl szerkeszthető is, másolhat is belőle és tetszés szerinti helyre is elmentheti.</flowDiv>
   </flowRoot>
-  <rect id="ah" x="40" y="185.2" width="264" height="1e3px" display="none"/>
+  <rect id="w" x="40" y="185.2" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
-   <flowRegion>
-    <use xlink:href="#ah"/>
-   </flowRegion>
-   <flowDiv>A Bevezetés bemutatja a rajzvászon mozgatását, a dokumentumok kezelését, az alakzateszközök alapvető használatát, a kijelölési módszereket, a kijelölt objektumok átalakítását, a csoportosítást, a kitöltés és a körvonal beállításait, továbbá az igazítást és az egymásra rendezést. A <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Súgó</flowSpan> menüben található további ismertetők részletesebben tárgyalnak egyes témaköröket.</flowDiv>
-  </flowRoot>
-  <rect id="ad" x="20" y="252.59" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ad"/>
-   </flowRegion>
-   <flowDiv>A rajzvászon mozgatása</flowDiv>
-  </flowRoot>
-  <rect id="aa" x="20" y="265.15" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#aa"/>
-   </flowRegion>
-   <flowDiv>A rajzvászon mozgatására többféle lehetőség is adódik. Görgethet billentyűzettel, a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">nyíl</flowSpan> billentyűkombinációval. (Ki is próbálhatja, görgesse lejjebb ezt a dokumentumot.) A középső egérgomb vagy a gördítősáv (melyet a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">B</flowSpan> lenyomásával megjeleníthet és elrejthet) is használható e célra. Az <flowSpan font-weight="bold">egérgörgő</flowSpan> a vásznat függőlegesen, a <flowSpan font-weight="bold">Shift</flowSpan> billentyű nyomva tartása mellett vízszintesen mozgatja.</flowDiv>
-  </flowRoot>
-  <rect id="w" x="20" y="330.58" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#w"/>
    </flowRegion>
-   <flowDiv>Nagyítás és kicsinyítés</flowDiv>
+   <flowDiv>A Bevezetés bemutatja a rajzvászon mozgatását, a dokumentumok kezelését, az alakzateszközök alapvető használatát, a kijelölési módszereket, a kijelölt objektumok átalakítását, a csoportosítást, a kitöltés és a körvonal beállításait, továbbá az igazítást és az egymásra rendezést. A <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Súgó</flowSpan> menüben található további ismertetők részletesebben tárgyalnak egyes témaköröket.</flowDiv>
   </flowRoot>
-  <rect id="v" x="20" y="343.14" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="v" x="20" y="252.59" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#v"/>
    </flowRegion>
-   <flowDiv>A nagyítást legegyszerűbben a <flowSpan font-weight="bold">-</flowSpan> és a <flowSpan font-weight="bold">+</flowSpan> (vagy <flowSpan font-weight="bold">=</flowSpan>) billentyűkkel változtathatja. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">középső gomb</flowSpan> vagy a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">jobb gomb</flowSpan> is nagyít, a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">középső gomb</flowSpan> vagy a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">jobb gomb</flowSpan> kicsinyít. Az <flowSpan font-weight="bold">egérgörgő</flowSpan> a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával szintén a nagyítást változtatja. A nagyítás – az ablak jobb alsó részében található, „N”-nel címkézett – beviteli mezőjébe beírható, majd <flowSpan font-weight="bold">Enterrel</flowSpan> érvényesíthető a pontos nagyítási százalékérték. A Nagyító eszközzel (balra, az eszköztáron) a nagyítandó terület körberajzolható.</flowDiv>
+   <flowDiv>A rajzvászon mozgatása</flowDiv>
   </flowRoot>
-  <rect id="u" x="20" y="413.88" width="300" height="1e3px" display="none"/>
+  <rect id="u" x="20" y="265.15" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#u"/>
    </flowRegion>
-   <flowDiv>Az Inkscape emlékszik az adott munkamenetben végrehajtott nagyítási műveletekre. A <flowSpan font-weight="bold">`</flowSpan> billentyűvel visszatérhet az előző nagyításhoz, a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">`</flowSpan> kombinációval pedig előre lépkedhet a nagyítási előzményekben.</flowDiv>
+   <flowDiv>A rajzvászon mozgatására többféle lehetőség is adódik. Görgethet billentyűzettel, a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">nyíl</flowSpan> billentyűkombinációval. (Ki is próbálhatja, görgesse lejjebb ezt a dokumentumot.) A középső egérgomb vagy a gördítősáv (melyet a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">B</flowSpan> lenyomásával megjeleníthet és elrejthet) is használható e célra. Az <flowSpan font-weight="bold">egérgörgő</flowSpan> a vásznat függőlegesen, a <flowSpan font-weight="bold">Shift</flowSpan> billentyű nyomva tartása mellett vízszintesen mozgatja.</flowDiv>
   </flowRoot>
-  <rect id="t" x="20" y="457.91" width="300" height="1e3px" display="none"/>
+  <rect id="t" x="20" y="330.58" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#t"/>
    </flowRegion>
-   <flowDiv>Az Inkscape eszközei</flowDiv>
+   <flowDiv>Nagyítás és kicsinyítés</flowDiv>
   </flowRoot>
-  <rect id="s" x="20" y="470.37" width="300" height="1e3px" display="none"/>
+  <rect id="s" x="20" y="343.14" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#s"/>
    </flowRegion>
-   <flowDiv>A bal oldalon található függőleges eszköztár tartalmazza az Inkscape rajzoló és szerkesztő eszközeit. A képernyőfelbontástól függően a <flowSpan font-style="italic">parancsok eszköztár</flowSpan> az olyan fő parancsok gombjaival, mint a „Mentés” és a „Nyomtatás”, az ablak felső részén található, közvetlenül a menü alatt, vagy a képernyő jobb oldalán a görgetősáv és az<flowSpan font-style="italic">illesztésvezérlő eszköztár</flowSpan> között. A fehér <flowSpan font-style="italic">vászonterület</flowSpan> felett közvetlenül található a <flowSpan font-style="italic">eszközvezérlő eszköztár</flowSpan>az egyes eszközökre jellemző vezérlőkkel. Az ablak alján látható <flowSpan font-style="italic">állapotsor</flowSpan> hasznos tanácsokkal és üzenetekkel szolgál munka közben.</flowDiv>
+   <flowDiv>A nagyítást legegyszerűbben a <flowSpan font-weight="bold">-</flowSpan> és a <flowSpan font-weight="bold">+</flowSpan> (vagy <flowSpan font-weight="bold">=</flowSpan>) billentyűkkel változtathatja. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">középső gomb</flowSpan> vagy a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">jobb gomb</flowSpan> is nagyít, a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">középső gomb</flowSpan> vagy a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">jobb gomb</flowSpan> kicsinyít. Az <flowSpan font-weight="bold">egérgörgő</flowSpan> a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával szintén a nagyítást változtatja. A nagyítás – az ablak jobb alsó részében található, „N”-nel címkézett – beviteli mezőjébe beírható, majd <flowSpan font-weight="bold">Enterrel</flowSpan> érvényesíthető a pontos nagyítási százalékérték. A Nagyító eszközzel (balra, az eszköztáron) a nagyítandó terület körberajzolható.</flowDiv>
   </flowRoot>
-  <rect id="r" x="20" y="551.58" width="300" height="1e3px" display="none"/>
+  <rect id="r" x="20" y="413.88" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#r"/>
    </flowRegion>
-   <flowDiv>Sok művelet billentyűparancsokkal is végrehajtható. Ezek teljes listája a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Súgó</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Billentyű- és egérkombinációk leírása</flowSpan> menüpontban található.</flowDiv>
+   <flowDiv>Az Inkscape emlékszik az adott munkamenetben végrehajtott nagyítási műveletekre. A <flowSpan font-weight="bold">`</flowSpan> billentyűvel visszatérhet az előző nagyításhoz, a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">`</flowSpan> kombinációval pedig előre lépkedhet a nagyítási előzményekben.</flowDiv>
   </flowRoot>
-  <rect id="q" x="20" y="585.32" width="300" height="1e3px" display="none"/>
+  <rect id="q" x="20" y="457.91" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#q"/>
    </flowRegion>
-   <flowDiv>Dokumentumok létrehozása és kezelése</flowDiv>
+   <flowDiv>Az Inkscape eszközei</flowDiv>
   </flowRoot>
-  <rect id="p" x="20" y="596.26" width="300" height="1e3px" display="none"/>
+  <rect id="p" x="20" y="470.37" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#p"/>
    </flowRegion>
-   <flowDiv>Új, üres dokumentum a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Új</flowSpan> menüpontban hozható létre vagy a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">N</flowSpan> megnyomásával. Új dokumentum létrehozható az Inkscape sok-sok sablonjai egyikéből is, amelyet a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Új, sablonból…</flowSpan> menüpontban lehet megtenni vagy a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">N</flowSpan> billentyűzetkombinációval.</flowDiv>
+   <flowDiv>A bal oldalon található függőleges eszköztár tartalmazza az Inkscape rajzoló és szerkesztő eszközeit. A képernyőfelbontástól függően a <flowSpan font-style="italic">parancsok eszköztár</flowSpan> az olyan fő parancsok gombjaival, mint a „Mentés” és a „Nyomtatás”, az ablak felső részén található, közvetlenül a menü alatt, vagy a képernyő jobb oldalán a görgetősáv és az<flowSpan font-style="italic">illesztésvezérlő eszköztár</flowSpan> között. A fehér <flowSpan font-style="italic">vászonterület</flowSpan> felett közvetlenül található a <flowSpan font-style="italic">eszközvezérlő eszköztár</flowSpan>az egyes eszközökre jellemző vezérlőkkel. Az ablak alján látható <flowSpan font-style="italic">állapotsor</flowSpan> hasznos tanácsokkal és üzenetekkel szolgál munka közben.</flowDiv>
   </flowRoot>
-  <rect id="cn" x="20" y="647.02" width="300" height="1e3px" display="none"/>
+  <rect id="cn" x="20" y="551.58" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cn"/>
    </flowRegion>
-   <flowDiv>Egy meglévő SVG-dokumentum megnyitása a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl </flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Megnyitás</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>) menüpontban történik. Mentéshez a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mentés</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>) használatos, vagy új néven való mentéshez a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mentés másként…</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>). (Habár az Inkscape automatikus mentési funkciója alapértelmezetten be van kapcsolva, javasolt a „ments korán és gyakran” bevált gyakorlatot követni.)</flowDiv>
+   <flowDiv>Sok művelet billentyűparancsokkal is végrehajtható. Ezek teljes listája a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Súgó</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Billentyű- és egérkombinációk leírása</flowSpan> menüpontban található.</flowDiv>
   </flowRoot>
-  <rect id="cm" x="20" y="707.51" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cm" x="20" y="585.32" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cm"/>
    </flowRegion>
-   <flowDiv>Az Inkscape saját formátuma az SVG (Scalable Vector Graphics). Ez egy – a grafikai szoftverek által széleskörűen támogatott – nyílt szabvány. Az SVG az XML leírónyelven alapul, így bármely szöveg- vagy XML-szerkesztővel (az Inkscape-en kívül, merthogy az is az) szerkeszthető. Az SVG mellett több más formátum importjára és exportjára is lehetőséget ad a program. A támogatott formátumok listája a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mentés</flowSpan> és az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Importálás</flowSpan> párbeszédablakokban tekinthetőek meg.</flowDiv>
+   <flowDiv>Dokumentumok létrehozása és kezelése</flowDiv>
   </flowRoot>
-  <rect id="cl" x="20" y="778.18" width="300" height="1e3px" display="none"/>
+  <rect id="cl" x="20" y="596.26" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cl"/>
    </flowRegion>
-   <flowDiv>Az Inkscape minden dokumentumot külön ablakban nyit meg. Ezen ablakok között az ablakkezelővel (pl. <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>) vagy az Inkscape nyitott dokumentumablakok között léptető gyorsbillentyűjével (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>) válthat. (Gyakorlásként most hozzon létre egy új dokumentumot, és váltson az új és ezen dokumentum között.) Megjegyzés: Az Inkscape ezen ablakokat úgy kezeli, ahogyan a webböngészők a lapokat, azaz a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> csak ugyanazon folyamat dokumentumaira működik. Ha Ön több fájlt nyit meg egy fájlkezelőből, vagy több Inkscape-folyamatot indít el egy ikonnal, akkor ez a módszer nem fog működni.</flowDiv>
+   <flowDiv>Új, üres dokumentum a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Új</flowSpan> menüpontban hozható létre vagy a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">N</flowSpan> megnyomásával. Új dokumentum létrehozható az Inkscape sok-sok sablonjai egyikéből is, amelyet a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Új, sablonból…</flowSpan> menüpontban lehet megtenni vagy a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">N</flowSpan> billentyűzetkombinációval.</flowDiv>
   </flowRoot>
-  <rect id="ck" x="20" y="864.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ck" x="20" y="647.02" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ck"/>
    </flowRegion>
-   <flowDiv>Alakzatok készítése</flowDiv>
+   <flowDiv>Egy meglévő SVG-dokumentum megnyitása a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl </flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Megnyitás</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>) menüpontban történik. Mentéshez a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mentés</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>) használatos, vagy új néven való mentéshez a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fájl</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mentés másként…</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>). (Habár az Inkscape automatikus mentési funkciója alapértelmezetten be van kapcsolva, javasolt a „ments korán és gyakran” bevált gyakorlatot követni.)</flowDiv>
   </flowRoot>
-  <rect id="cj" x="20" y="875.74" width="300" height="1e3px" display="none"/>
+  <rect id="cj" x="20" y="707.51" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cj"/>
+   </flowRegion>
+   <flowDiv>Az Inkscape saját formátuma az SVG (Scalable Vector Graphics). Ez egy – a grafikai szoftverek által széleskörűen támogatott – nyílt szabvány. Az SVG az XML leírónyelven alapul, így bármely szöveg- vagy XML-szerkesztővel (az Inkscape-en kívül, merthogy az is az) szerkeszthető. Az SVG mellett több más formátum importjára és exportjára is lehetőséget ad a program. A támogatott formátumok listája a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mentés</flowSpan> és az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Importálás</flowSpan> párbeszédablakokban tekinthetőek meg.</flowDiv>
+  </flowRoot>
+  <rect id="ci" x="20" y="778.18" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ci"/>
+   </flowRegion>
+   <flowDiv>Az Inkscape minden dokumentumot külön ablakban nyit meg. Ezen ablakok között az ablakkezelővel (pl. <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>) vagy az Inkscape nyitott dokumentumablakok között léptető gyorsbillentyűjével (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>) válthat. (Gyakorlásként most hozzon létre egy új dokumentumot, és váltson az új és ezen dokumentum között.) Megjegyzés: Az Inkscape ezen ablakokat úgy kezeli, ahogyan a webböngészők a lapokat, azaz a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> csak ugyanazon folyamat dokumentumaira működik. Ha Ön több fájlt nyit meg egy fájlkezelőből, vagy több Inkscape-folyamatot indít el egy ikonnal, akkor ez a módszer nem fog működni.</flowDiv>
+  </flowRoot>
+  <rect id="ch" x="20" y="864.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#ch"/>
+   </flowRegion>
+   <flowDiv>Alakzatok készítése</flowDiv>
+  </flowRoot>
+  <rect id="cg" x="20" y="875.74" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#cg"/>
    </flowRegion>
    <flowDiv>Itt az ideje rajzolni néhány alakzatot! Kattintson az eszköztár bal oldalán a Téglalap eszközre (vagy nyomja le az <flowSpan font-weight="bold">F4</flowSpan> billentyűt), majd kattint-és-húz módszerrel rajzoljon egy új dokumentumba, vagy ide:</flowDiv>
   </flowRoot>
@@ -389,10 +389,10 @@
   <rect transform="translate(20 922.34)" x="247.55" y="28.116" width="7.0564" height="4.1162" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 922.34)" x="262.25" y="20.472" width="4.1162" height="1.7641" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
   <rect transform="translate(20 922.34)" x="274.01" y="17.532" width="2.9402" height="1.1761" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="ci" x="20" y="984.08" width="300" height="1e3px" display="none"/>
+  <rect id="cf" x="20" y="984.08" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ci"/>
+    <use xlink:href="#cf"/>
    </flowRegion>
    <flowDiv>Amint látja, az alapértelmezett téglalapok <flowSpan font-style="italic">kitöltése</flowSpan> kék, <flowSpan font-style="italic">körvonaluk</flowSpan> (kontúrjuk) fekete, és teljesen átlátszatlanok. Később majd meglátjuk, hogyan módosítható ez. A további eszközökkel ellipszisek, csillagok és spirálok is rajzolhatók:</flowDiv>
   </flowRoot>
@@ -412,189 +412,189 @@
   <path transform="translate(20 1030.7)" d="m166.79 26.291-10.51 1.7486-4.5176 9.6488-4.9106-9.4548-10.573-1.3148 7.4746-7.592-2.0166-10.461 9.5302 4.7627 9.3262-5.1507-1.5846 10.536z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.29358899" sodipodi:arg2="0.92190752" sodipodi:cx="151.42822" sodipodi:cy="21.647896" sodipodi:r1="16.043627" sodipodi:r2="8.0218134" sodipodi:sides="5" sodipodi:type="star"/>
   <path transform="translate(20 1030.7)" d="m184.64 21.648-5.3031-0.02752-3.0291 4.353-1.6126-5.0521-5.076-1.5357 4.3065-3.0948-0.10804-5.3021 4.2742 3.1394 5.0092-1.7412-1.6649 5.0351z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.46364761" sodipodi:arg2="1.0919661" sodipodi:cx="177.49966" sodipodi:cy="18.076466" sodipodi:r1="7.9859571" sodipodi:r2="3.9929783" sodipodi:sides="5" sodipodi:type="star"/>
   <path transform="translate(20 1030.7)" d="m202.14 24.505-3.7067-1.0799-2.991 2.4413-0.11839-3.859-3.246-2.0902 3.6335-1.3051 0.9848-3.7331 2.364 3.0524 3.8547-0.21699-2.1725 3.1916z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.74194727" sodipodi:arg2="1.3702658" sodipodi:cx="197.85681" sodipodi:cy="20.576469" sodipodi:r1="5.8138647" sodipodi:r2="2.9069321" sodipodi:sides="5" sodipodi:type="star"/>
-  <rect id="ch" x="20" y="1103.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ch"/>
-   </flowRegion>
-   <flowDiv>Ezek az eszközök közös néven az <flowSpan font-style="italic">alakzateszközök</flowSpan>. Minden alakzathoz tartozik egy vagy több <flowSpan font-style="italic">fogantyú</flowSpan>; próbálja mozgatni őket, és figyelje meg, hogy az alakzatok miként változnak. Alakzatok módosításának egy más módját nyújtja az Eszközvezérlő eszközár; az itt található vezérlők az éppen kijelölt alakzatra hatnak (azaz amelynek láthatók a fogantyúi), <flowSpan font-style="italic">valamint</flowSpan> alapértelmezett értékként az újonnan létrehozott alakzatokra.</flowDiv>
-  </flowRoot>
-  <rect id="cg" x="20" y="1163.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#cg"/>
-   </flowRegion>
-   <flowDiv>A legutóbb végrehajtott műveletet a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan> lenyomásával <flowSpan font-style="italic">vonhatja vissza</flowSpan>. (Vagy ha meggondolja magát, a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan> kombinációval <flowSpan font-style="italic">újra végrehajthatja</flowSpan> a visszavont műveletet.)</flowDiv>
-  </flowRoot>
-  <rect id="cf" x="20" y="1207.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#cf"/>
-   </flowRegion>
-   <flowDiv>Mozgatás, átméretezés, forgatás</flowDiv>
-  </flowRoot>
-  <rect id="ce" x="20" y="1219.7" width="300" height="1e3px" display="none"/>
+  <rect id="ce" x="20" y="1103.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ce"/>
    </flowRegion>
-   <flowDiv>A leggyakrabban használt Inkscape-eszköz a <flowSpan font-style="italic">Kijelölő</flowSpan> eszköz. Kattintson az eszköztáron a legfelső gombra (egy nyilat ábrázol), vagy nyomja meg az <flowSpan font-weight="bold">s</flowSpan>, <flowSpan font-weight="bold">F1</flowSpan>billentyűt, ill. a <flowSpan font-weight="bold">Szóköz</flowSpan> billentyűvel is átváltható az eszköz. Ekkor ki tud jelölni bármilyen objektumot a vásznon. Kattintson az alábbi négyszögre.</flowDiv>
+   <flowDiv>Ezek az eszközök közös néven az <flowSpan font-style="italic">alakzateszközök</flowSpan>. Minden alakzathoz tartozik egy vagy több <flowSpan font-style="italic">fogantyú</flowSpan>; próbálja mozgatni őket, és figyelje meg, hogy az alakzatok miként változnak. Alakzatok módosításának egy más módját nyújtja az Eszközvezérlő eszközár; az itt található vezérlők az éppen kijelölt alakzatra hatnak (azaz amelynek láthatók a fogantyúi), <flowSpan font-style="italic">valamint</flowSpan> alapértelmezett értékként az újonnan létrehozott alakzatokra.</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 1277)" x="129.71" y=".66667" width="40.574" height="38.81" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="cd" x="20" y="1329.1" width="300" height="1e3px" display="none"/>
+  <rect id="cd" x="20" y="1163.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv>Nyolc nyíl alakú fogantyút láthat az objektum körül. Ilyenkor lehetősége van:</flowDiv>
+   <flowDiv>A legutóbb végrehajtott műveletet a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan> lenyomásával <flowSpan font-style="italic">vonhatja vissza</flowSpan>. (Vagy ha meggondolja magát, a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan> kombinációval <flowSpan font-style="italic">újra végrehajthatja</flowSpan> a visszavont műveletet.)</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1352.5)" r="2"/>
-  <rect id="cc" x="40" y="1346.5" width="280" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cc" x="20" y="1207.1" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cc"/>
    </flowRegion>
-   <flowDiv>húzással <flowSpan font-style="italic">mozgatni</flowSpan> az objektumot (a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával kényszerítheti a vízszintes vagy függőleges irányt);</flowDiv>
+   <flowDiv>Mozgatás, átméretezés, forgatás</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1380.5)" r="2"/>
-  <rect id="cb" x="40" y="1374.5" width="280" height="1e3px" display="none"/>
+  <rect id="cb" x="20" y="1219.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv>valamely fogantyú húzásával <flowSpan font-style="italic">átméretezni</flowSpan> az objektumot (a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával tarthatja meg az eredeti oldalarányt).</flowDiv>
+   <flowDiv>A leggyakrabban használt Inkscape-eszköz a <flowSpan font-style="italic">Kijelölő</flowSpan> eszköz. Kattintson az eszköztáron a legfelső gombra (egy nyilat ábrázol), vagy nyomja meg az <flowSpan font-weight="bold">s</flowSpan>, <flowSpan font-weight="bold">F1</flowSpan>billentyűt, ill. a <flowSpan font-weight="bold">Szóköz</flowSpan> billentyűvel is átváltható az eszköz. Ekkor ki tud jelölni bármilyen objektumot a vásznon. Kattintson az alábbi négyszögre.</flowDiv>
   </flowRoot>
-  <rect id="ca" x="20" y="1402.5" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 1277)" x="129.71" y=".66667" width="40.574" height="38.81" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect id="ca" x="20" y="1329.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ca"/>
    </flowRegion>
-   <flowDiv>Ha újra a négyszögre kattint, a fogantyúk megváltoznak. Így lehetősége van:</flowDiv>
+   <flowDiv>Nyolc nyíl alakú fogantyút láthat az objektum körül. Ilyenkor lehetősége van:</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1427.1)" r="2"/>
-  <rect id="bz" x="40" y="1421.1" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1352.5)" r="2"/>
+  <rect id="bz" x="40" y="1346.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bz"/>
    </flowRegion>
-   <flowDiv>a sarokfogantyúk mozgatásával <flowSpan font-style="italic">forgatni</flowSpan> az objektumot (a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartása mellett 15°-onként forgathat; a kereszt alakú jel elmozgatásával módosíthatja a forgás középpontját);</flowDiv>
+   <flowDiv>húzással <flowSpan font-style="italic">mozgatni</flowSpan> az objektumot (a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával kényszerítheti a vízszintes vagy függőleges irányt);</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1465.7)" r="2"/>
-  <rect id="by" x="40" y="1459.7" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1380.5)" r="2"/>
+  <rect id="by" x="40" y="1374.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#by"/>
    </flowRegion>
-   <flowDiv>valamely nem sarokponti fogantyú húzásával <flowSpan font-style="italic">megdönteni</flowSpan> (nyírni) az objektumot. (a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával kényszerítheti, hogy 15°-os lépésekkel történjen a nyírás).</flowDiv>
+   <flowDiv>valamely fogantyú húzásával <flowSpan font-style="italic">átméretezni</flowSpan> az objektumot (a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával tarthatja meg az eredeti oldalarányt).</flowDiv>
   </flowRoot>
-  <rect id="bx" x="20" y="1487.8" width="300" height="1e3px" display="none"/>
+  <rect id="bx" x="20" y="1402.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bx"/>
    </flowRegion>
-   <flowDiv>A Kijelölő eszköz Eszközvezérlő eszköztárán (a rajzvászon felett) levő numerikus beviteli mezőkben pontosan is megadhatja a kijelölt objektumok koordinátáit (X és Y) és méretét (Sz és M).</flowDiv>
+   <flowDiv>Ha újra a négyszögre kattint, a fogantyúk megváltoznak. Így lehetősége van:</flowDiv>
   </flowRoot>
-  <rect id="bw" x="20" y="1531.8" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <circle transform="translate(35 1427.1)" r="2"/>
+  <rect id="bw" x="40" y="1421.1" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv>Átalakítás billentyűzettel</flowDiv>
+   <flowDiv>a sarokfogantyúk mozgatásával <flowSpan font-style="italic">forgatni</flowSpan> az objektumot (a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartása mellett 15°-onként forgathat; a kereszt alakú jel elmozgatásával módosíthatja a forgás középpontját);</flowDiv>
   </flowRoot>
-  <rect id="bv" x="20" y="1545.5" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1465.7)" r="2"/>
+  <rect id="bv" x="40" y="1459.7" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bv"/>
    </flowRegion>
-   <flowDiv>Az Inkscape többek közt a billentyűzettel való nagyfokú kezelhetőségében különbözik más vektorgrafikai programoktól. Alig van olyan parancs vagy művelet, amelyet billentyűzettel ne lehetne végrehajtani, és az objektumok átalakítása sem kivétel.</flowDiv>
+   <flowDiv>valamely nem sarokponti fogantyú húzásával <flowSpan font-style="italic">megdönteni</flowSpan> (nyírni) az objektumot. (a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával kényszerítheti, hogy 15°-os lépésekkel történjen a nyírás).</flowDiv>
   </flowRoot>
-  <rect id="bu" x="20" y="1584.2" width="300" height="1e3px" display="none"/>
+  <rect id="bu" x="20" y="1487.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bu"/>
    </flowRegion>
-   <flowDiv>Billentyűzettel mozgathatja (kurzormozgató <flowSpan font-weight="bold">nyilak</flowSpan>), méretezheti (<flowSpan font-weight="bold">&lt;</flowSpan> és <flowSpan font-weight="bold">&gt;</flowSpan>) és forgathatja (<flowSpan font-weight="bold">[</flowSpan> és <flowSpan font-weight="bold">]</flowSpan>) az objektumokat. Az alapértelmezett mozgatási vagy méretezési lépésköz 2 px; a <flowSpan font-weight="bold">Shift</flowSpan> nyomva tartásával ennek tízszerese az elmozdítás. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> és a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> hatása 200 %-os, illetve 50 %-os átméretezés. A forgatás alapértelmezetten 15°-onként, a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával 90°-onként történik.</flowDiv>
+   <flowDiv>A Kijelölő eszköz Eszközvezérlő eszköztárán (a rajzvászon felett) levő numerikus beviteli mezőkben pontosan is megadhatja a kijelölt objektumok koordinátáit (X és Y) és méretét (Sz és M).</flowDiv>
   </flowRoot>
-  <rect id="bt" x="20" y="1642.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bt" x="20" y="1531.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bt"/>
    </flowRegion>
-   <flowDiv>De talán a leghasznosabb a <flowSpan font-style="italic">pixelmértékű transzformáció</flowSpan>, mely a fenti billentyűk és az <flowSpan font-weight="bold">Alt</flowSpan> együttes használatával valósítható meg. Például az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">nyíl</flowSpan> a kijelölést az aktuális nagyítás szerinti 1 <flowSpan font-style="italic">képernyőpixellel</flowSpan> mozgatja el (vagyis a képernyő egy pixelével) Ezt úgy kell érteni, hogy ha növeli a nagyítást, akkor az <flowSpan font-weight="bold">Alt</flowSpan>-tal nagyon finoman lehet az objektumokat elmozdítani. És fordítva, kicsinyítés után az <flowSpan font-weight="bold">Alt</flowSpan>-tal a finomság csökken. Tehát a nagyítási mértékének megválasztásával tudja az éppen végzet művelethez szükséges finomságot beállítani.</flowDiv>
+   <flowDiv>Átalakítás billentyűzettel</flowDiv>
   </flowRoot>
-  <rect id="bs" x="20" y="1722.4" width="300" height="1e3px" display="none"/>
+  <rect id="bs" x="20" y="1545.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bs"/>
    </flowRegion>
-   <flowDiv>Hasonlóan, az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan>és az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> a kijelölés látható méretét egy képernyőpixellel változtatja meg. Az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> és az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> forgatás a kijelölésnek a középponttól legtávolabb eső pontját mozgatja el egy képernyőpixellel.</flowDiv>
+   <flowDiv>Az Inkscape többek közt a billentyűzettel való nagyfokú kezelhetőségében különbözik más vektorgrafikai programoktól. Alig van olyan parancs vagy művelet, amelyet billentyűzettel ne lehetne végrehajtani, és az objektumok átalakítása sem kivétel.</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="1761" width="300" height="1e3px" display="none"/>
+  <rect id="br" x="20" y="1584.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>Megjegyzés: Linux-felhasználók esetleg nem az elvárt működést tapasztalják az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">nyíl</flowSpan> és még néhány billentyűkombináció esetében, ha az ablakkezelőjük elfogja az Inkscape elől ezeket a billentyűleütéseket (és pl. a munkaterületek váltására használja). Az ablakkezelő beállításainak megfelelő megváltoztatása segíthet a probléma megoldásában.</flowDiv>
+   <flowDiv>Billentyűzettel mozgathatja (kurzormozgató <flowSpan font-weight="bold">nyilak</flowSpan>), méretezheti (<flowSpan font-weight="bold">&lt;</flowSpan> és <flowSpan font-weight="bold">&gt;</flowSpan>) és forgathatja (<flowSpan font-weight="bold">[</flowSpan> és <flowSpan font-weight="bold">]</flowSpan>) az objektumokat. Az alapértelmezett mozgatási vagy méretezési lépésköz 2 px; a <flowSpan font-weight="bold">Shift</flowSpan> nyomva tartásával ennek tízszerese az elmozdítás. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> és a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> hatása 200 %-os, illetve 50 %-os átméretezés. A forgatás alapértelmezetten 15°-onként, a <flowSpan font-weight="bold">Ctrl</flowSpan> nyomva tartásával 90°-onként történik.</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="1815.7" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bq" x="20" y="1642.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>Többszörös kijelölés</flowDiv>
+   <flowDiv>De talán a leghasznosabb a <flowSpan font-style="italic">pixelmértékű transzformáció</flowSpan>, mely a fenti billentyűk és az <flowSpan font-weight="bold">Alt</flowSpan> együttes használatával valósítható meg. Például az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">nyíl</flowSpan> a kijelölést az aktuális nagyítás szerinti 1 <flowSpan font-style="italic">képernyőpixellel</flowSpan> mozgatja el (vagyis a képernyő egy pixelével) Ezt úgy kell érteni, hogy ha növeli a nagyítást, akkor az <flowSpan font-weight="bold">Alt</flowSpan>-tal nagyon finoman lehet az objektumokat elmozdítani. És fordítva, kicsinyítés után az <flowSpan font-weight="bold">Alt</flowSpan>-tal a finomság csökken. Tehát a nagyítási mértékének megválasztásával tudja az éppen végzet művelethez szükséges finomságot beállítani.</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="1828.2" width="300" height="1e3px" display="none"/>
+  <rect id="bp" x="20" y="1722.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bp"/>
+   </flowRegion>
+   <flowDiv>Hasonlóan, az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan>és az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> a kijelölés látható méretét egy képernyőpixellel változtatja meg. Az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> és az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> forgatás a kijelölésnek a középponttól legtávolabb eső pontját mozgatja el egy képernyőpixellel.</flowDiv>
+  </flowRoot>
+  <rect id="bo" x="20" y="1761" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bo"/>
+   </flowRegion>
+   <flowDiv>Megjegyzés: Linux-felhasználók esetleg nem az elvárt működést tapasztalják az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">nyíl</flowSpan> és még néhány billentyűkombináció esetében, ha az ablakkezelőjük elfogja az Inkscape elől ezeket a billentyűleütéseket (és pl. a munkaterületek váltására használja). Az ablakkezelő beállításainak megfelelő megváltoztatása segíthet a probléma megoldásában.</flowDiv>
+  </flowRoot>
+  <rect id="bn" x="20" y="1815.7" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#bn"/>
+   </flowRegion>
+   <flowDiv>Többszörös kijelölés</flowDiv>
+  </flowRoot>
+  <rect id="bm" x="20" y="1828.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bm"/>
    </flowRegion>
    <flowDiv>Egymás utáni<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>okkal tetszőleges számú objektumot ki tud jelölni, vagy <flowSpan font-weight="bold">egérhúzás</flowSpan>sal körbe is rajzolhatja a kijelölendő objektumokat; ez utóbbi a <flowSpan font-style="italic">területkijelölés</flowSpan>. (A Kijelölő eszköz megrajzolja a területet, amint egy üres területen kattintva húzni kezdi az egeret; viszont ha nyomva tartja a <flowSpan font-weight="bold">Shift</flowSpan> billentyűt, mielőtt elkezdi a húzást, akkor a kezdőpont bárhol lehet, mindenképpen területkijelölés készül.) Próbaképpen jelölje ki mind a három alábbi alakzatot:</flowDiv>
   </flowRoot>
   <rect transform="translate(20 1905.3)" x="84.63" y="6.0478" width="25.253" height="26.656" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt"/>
   <path transform="translate(20 1905.3)" d="m166.54 18.915c0 7.8776-7.8516 14.264-17.537 14.264s-17.537-6.386-17.537-14.264c0-7.8775 7.8516-14.264 17.537-14.264s17.537 6.386 17.537 14.264z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1905.3)" d="m213.42 29.945-11.509-2.8097-8.8394 7.8882-0.88434-11.814-10.234-5.9692 10.963-4.4919 2.5147-11.577 7.6597 9.0381 11.788-1.186-6.2288 10.078z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
-  <rect id="bo" x="20" y="1953.4" width="300" height="1e3px" display="none"/>
+  <rect id="bl" x="20" y="1953.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#bo"/>
+    <use xlink:href="#bl"/>
    </flowRegion>
    <flowDiv>Jelölje ki területkijelöléssel (húzás vagy <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan>) az alábbi két ellipszist úgy, hogy a négyszög ne kerüljön bele a kijelölésbe:</flowDiv>
   </flowRoot>
   <rect transform="translate(20 1989.5)" x="74.428" y="1.7363" width="151.14" height="39.698" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".93523pt"/>
   <path transform="translate(20 1989.5)" d="m141.19 16.262c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 1989.5)" d="m168.87 16.619c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
-  <rect id="bn" x="20" y="2042.4" width="300" height="1e3px" display="none"/>
+  <rect id="bk" x="20" y="2042.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bn"/>
-   </flowRegion>
-   <flowDiv>A kijelölésben minden különálló objektum körül egy <flowSpan font-style="italic">kijelölésjelző</flowSpan> látható – alapértelmezetten egy szaggatott vonalú, téglalap alakú keret. Ezen jelzők segítségével könnyen átlátható, hogy mi van és mi nincs éppen kijelölve. Például ha kijelöli a két ellipszist és a négyszöget is, akkor e jelzők nélkül nehéz lenne megállapítani, hogy az ellipszisek ki vannak-e jelölve vagy sem.</flowDiv>
-  </flowRoot>
-  <rect id="bm" x="20" y="2102.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bm"/>
-   </flowRegion>
-   <flowDiv>Egy objektumot <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>sal vehet ki a kijelölésből. Jelölje ki mindhárom fenti objektumot, majd <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>sal vegye ki a kijelölésből a két ellipszist, hogy csak a négyszög maradjon kijelölve.</flowDiv>
-  </flowRoot>
-  <rect id="bl" x="20" y="2141" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bl"/>
-   </flowRegion>
-   <flowDiv>Az <flowSpan font-weight="bold">Esc</flowSpan> billentyű megszüntet minden kijelölést. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> kijelöli az összes objektumot az aktuális rétegen (ha nem hozott létre réteget, akkor ez megfelel a dokumentum összes objektumának). A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> gyorsbillentyű alapértelmezett viselkedése a beállításokban módosítható.</flowDiv>
-  </flowRoot>
-  <rect id="bk" x="20" y="2194.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
-   <flowDiv>Csoportosítás</flowDiv>
+   <flowDiv>A kijelölésben minden különálló objektum körül egy <flowSpan font-style="italic">kijelölésjelző</flowSpan> látható – alapértelmezetten egy szaggatott vonalú, téglalap alakú keret. Ezen jelzők segítségével könnyen átlátható, hogy mi van és mi nincs éppen kijelölve. Például ha kijelöli a két ellipszist és a négyszöget is, akkor e jelzők nélkül nehéz lenne megállapítani, hogy az ellipszisek ki vannak-e jelölve vagy sem.</flowDiv>
   </flowRoot>
-  <rect id="bj" x="20" y="2206.6" width="300" height="1e3px" display="none"/>
+  <rect id="bj" x="20" y="2102.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bj"/>
+   </flowRegion>
+   <flowDiv>Egy objektumot <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>sal vehet ki a kijelölésből. Jelölje ki mindhárom fenti objektumot, majd <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>sal vegye ki a kijelölésből a két ellipszist, hogy csak a négyszög maradjon kijelölve.</flowDiv>
+  </flowRoot>
+  <rect id="bi" x="20" y="2141" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bi"/>
+   </flowRegion>
+   <flowDiv>Az <flowSpan font-weight="bold">Esc</flowSpan> billentyű megszüntet minden kijelölést. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> kijelöli az összes objektumot az aktuális rétegen (ha nem hozott létre réteget, akkor ez megfelel a dokumentum összes objektumának). A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> gyorsbillentyű alapértelmezett viselkedése a beállításokban módosítható.</flowDiv>
+  </flowRoot>
+  <rect id="bh" x="20" y="2194.1" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#bh"/>
+   </flowRegion>
+   <flowDiv>Csoportosítás</flowDiv>
+  </flowRoot>
+  <rect id="bg" x="20" y="2206.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#bg"/>
    </flowRegion>
    <flowDiv>Különböző objektumokat <flowSpan font-style="italic">csoport</flowSpan>ba is foglalhat. Egy csoport mozgatáskor vagy átalakításkor úgy viselkedik, mint egy egyszerű objektum. Lent, a bal oldalon három különálló objektum látható; három ugyanilyen objektum a jobb oldalon csoportba van foglalva. Próbálja húzással elmozgatni a csoportot.</flowDiv>
   </flowRoot>
@@ -606,81 +606,81 @@
    <path transform="translate(104.03 224.65)" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" inkscape:connector-curvature="0"/>
    <path transform="translate(86.386 261.2)" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0" inkscape:connector-curvature="0"/>
   </g>
-  <rect id="bi" x="20" y="2342.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bi"/>
-   </flowRegion>
-   <flowDiv>Egy vagy több kijelölt objektumot a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">G</flowSpan> billentyűkkel foglalhat csoportba. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> kombinációval pedig felbonthatja a kijelölt csoportokat. Ezek a műveletek a <flowSpan font-weight="bold">jobb kattintással</flowSpan> elérhető helyi menüben, az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objektum</flowSpan> menüpontban és a Műveletek eszköztáron is elérhetőek. Más objektumokhoz hasonlóan a csoportok maguk is csoportba foglalhatók; ilyen beágyazott csoportok tetszőleges mélységben készíthetők. Viszont a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> csak a kijelölt csoport legfelső szintjét szünteti meg; így ha egy ilyen többszörös csoportot teljesen fel akar bontani, akkor ismételten használnia kell a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> billentyűket, a csoport mélysége szerint (vagy használható még erre a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Kiterjesztések</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Elrendezés</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mély csoportbontás</flowSpan> is).</flowDiv>
-  </flowRoot>
-  <rect id="bh" x="20" y="2445.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bh"/>
-   </flowRegion>
-   <flowDiv>De egy csoportban levő objektum szerkesztéséhez nem is kell felbontania a csoportot. Csak válassza ki <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>sal az objektumot, és már szerkesztheti is, a csoporttól függetlenül. <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>okkal egyidejűleg jelölhet ki különféle objektumokat (bármely csoportban vagy azon kívül is).</flowDiv>
-  </flowRoot>
-  <rect id="bg" x="20" y="2494.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#bg"/>
-   </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Dupla kattintással</flowSpan> is be tud lépni úgy a csoportba, hogy nem bontja föl azt, mégis eléri az összes tartalmazott objektumát. Továbbá bármely üres vászonterületen való ismételt <flowSpan font-weight="bold">dupla kattintással</flowSpan> tudja elhagyni a csoportot.</flowDiv>
-  </flowRoot>
-  <rect id="bf" x="20" y="2533.3" width="300" height="1e3px" display="none"/>
+  <rect id="bf" x="20" y="2342.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>Próbálja mozgatni vagy átalakítani valamelyik alakzatot a fenti csoportban (a jobb oldalon) anélkül, hogy a csoportot felbontaná, majd szüntesse meg a kijelölést, ezután újra jelölje ki a csoportot. Így láthatja, hogy az objektumok továbbra is csoportban vannak. </flowDiv>
+   <flowDiv>Egy vagy több kijelölt objektumot a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">G</flowSpan> billentyűkkel foglalhat csoportba. A <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> kombinációval pedig felbonthatja a kijelölt csoportokat. Ezek a műveletek a <flowSpan font-weight="bold">jobb kattintással</flowSpan> elérhető helyi menüben, az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objektum</flowSpan> menüpontban és a Műveletek eszköztáron is elérhetőek. Más objektumokhoz hasonlóan a csoportok maguk is csoportba foglalhatók; ilyen beágyazott csoportok tetszőleges mélységben készíthetők. Viszont a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> csak a kijelölt csoport legfelső szintjét szünteti meg; így ha egy ilyen többszörös csoportot teljesen fel akar bontani, akkor ismételten használnia kell a <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> billentyűket, a csoport mélysége szerint (vagy használható még erre a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Kiterjesztések</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Elrendezés</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Mély csoportbontás</flowSpan> is).</flowDiv>
   </flowRoot>
-  <rect id="be" x="20" y="2577.3" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="be" x="20" y="2445.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv>Kitöltés és körvonal</flowDiv>
+   <flowDiv>De egy csoportban levő objektum szerkesztéséhez nem is kell felbontania a csoportot. Csak válassza ki <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>sal az objektumot, és már szerkesztheti is, a csoporttól függetlenül. <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>okkal egyidejűleg jelölhet ki különféle objektumokat (bármely csoportban vagy azon kívül is).</flowDiv>
   </flowRoot>
-  <rect id="bd" x="20" y="2588.3" width="300" height="1e3px" display="none"/>
+  <rect id="bd" x="20" y="2494.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>Egy objektum kifestésének talán a legegyszerűbb módja, ha kiválasztva az objektumot kattintunk a vászon alatti paletta egy <flowSpan font-style="italic">színmintáján</flowSpan> (módosítva a kitöltés színét).</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Dupla kattintással</flowSpan> is be tud lépni úgy a csoportba, hogy nem bontja föl azt, mégis eléri az összes tartalmazott objektumát. Továbbá bármely üres vászonterületen való ismételt <flowSpan font-weight="bold">dupla kattintással</flowSpan> tudja elhagyni a csoportot.</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="2616.3" width="300" height="1e3px" display="none"/>
+  <rect id="bc" x="20" y="2533.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
-   <flowDiv>A Színminta párbeszédablakot másképpen a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Nézet</flowSpan> menüből (vagy a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">W</flowSpan> billentyűkkel) lehet megnyitni a párbeszédablak jobb felső sarkában található kis háromszögre való kattintással és a kívánt paletta kiválasztásával. Jelöljön ki egy objektumot, majd választhat egy mintát a kitöltéshez (a kitöltés színének megváltoztatásához).</flowDiv>
+   <flowDiv>Próbálja mozgatni vagy átalakítani valamelyik alakzatot a fenti csoportban (a jobb oldalon) anélkül, hogy a csoportot felbontaná, majd szüntesse meg a kijelölést, ezután újra jelölje ki a csoportot. Így láthatja, hogy az objektumok továbbra is csoportban vannak. </flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="2665.9" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bb" x="20" y="2577.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv>Még hasznosabb az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objektum</flowSpan> menüből (vagy a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F</flowSpan> billentyűkkel) nyitható Kitöltés és körvonal párbeszédablak. Jelölje ki az alábbi alakzatot, és nyissa meg a Kitöltés és körvonal ablakát.</flowDiv>
+   <flowDiv>Kitöltés és körvonal</flowDiv>
   </flowRoot>
-  <path transform="translate(20 2711.1)" d="m216.26 17.909c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="ba" x="20" y="2757.1" width="300" height="1e3px" display="none"/>
+  <rect id="ba" x="20" y="2588.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
-   <flowDiv>A párbeszédablakon három lapot láthat: Kitöltés, Körvonalrajzolat és Körvonalstílus. A Kitöltés lapon a kijelölt objektumok (belső) kitöltése állítható be. A fülek alatti gombokkal módosítható a kitöltés típusa: nincs kitöltés (az X gomb), egyenletes szín, lineáris vagy sugárirányú színátmenet. A fenti alakzat kijelölésekor az egyenletes szín aktiválódik.</flowDiv>
+   <flowDiv>Egy objektum kifestésének talán a legegyszerűbb módja, ha kiválasztva az objektumot kattintunk a vászon alatti paletta egy <flowSpan font-style="italic">színmintáján</flowSpan> (módosítva a kitöltés színét).</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2806.3" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="2616.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
-   <flowDiv>A gombok alatt, egy-egy külön lapon találhatók a <flowSpan font-style="italic">színválasztók</flowSpan>: RGB, CMYK, HSL és Kerék. Valószínűleg a Kerék a legkényelmesebben használható színválasztó, ahol a háromszög forgatásával a kerékről kiválasztható egy szín, majd a háromszögben megadható a szín árnyalata. Mindegyik színválasztóhoz tartozik egy, a kijelölt objektumok <flowSpan font-style="italic">alfaérték</flowSpan>ét (átlátszóságát) szabályozó „A”-val címkézett csúszka.</flowDiv>
+   <flowDiv>A Színminta párbeszédablakot másképpen a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Nézet</flowSpan> menüből (vagy a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">W</flowSpan> billentyűkkel) lehet megnyitni a párbeszédablak jobb felső sarkában található kis háromszögre való kattintással és a kívánt paletta kiválasztásával. Jelöljön ki egy objektumot, majd választhat egy mintát a kitöltéshez (a kitöltés színének megváltoztatásához).</flowDiv>
   </flowRoot>
-  <rect id="ay" x="20" y="2866.2" width="300" height="1e3px" display="none"/>
+  <rect id="ay" x="20" y="2665.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ay"/>
+   </flowRegion>
+   <flowDiv>Még hasznosabb az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objektum</flowSpan> menüből (vagy a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F</flowSpan> billentyűkkel) nyitható Kitöltés és körvonal párbeszédablak. Jelölje ki az alábbi alakzatot, és nyissa meg a Kitöltés és körvonal ablakát.</flowDiv>
+  </flowRoot>
+  <path transform="translate(20 2711.1)" d="m216.26 17.909c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <rect id="ax" x="20" y="2757.1" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ax"/>
+   </flowRegion>
+   <flowDiv>A párbeszédablakon három lapot láthat: Kitöltés, Körvonalrajzolat és Körvonalstílus. A Kitöltés lapon a kijelölt objektumok (belső) kitöltése állítható be. A fülek alatti gombokkal módosítható a kitöltés típusa: nincs kitöltés (az X gomb), egyenletes szín, lineáris vagy sugárirányú színátmenet. A fenti alakzat kijelölésekor az egyenletes szín aktiválódik.</flowDiv>
+  </flowRoot>
+  <rect id="aw" x="20" y="2806.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#aw"/>
+   </flowRegion>
+   <flowDiv>A gombok alatt, egy-egy külön lapon találhatók a <flowSpan font-style="italic">színválasztók</flowSpan>: RGB, CMYK, HSL és Kerék. Valószínűleg a Kerék a legkényelmesebben használható színválasztó, ahol a háromszög forgatásával a kerékről kiválasztható egy szín, majd a háromszögben megadható a szín árnyalata. Mindegyik színválasztóhoz tartozik egy, a kijelölt objektumok <flowSpan font-style="italic">alfaérték</flowSpan>ét (átlátszóságát) szabályozó „A”-val címkézett csúszka.</flowDiv>
+  </flowRoot>
+  <rect id="av" x="20" y="2866.2" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#av"/>
    </flowRegion>
    <flowDiv>Ha kijelöl egy objektumot, a színválasztó értékei az aktuális objektum színének megfelelően változnak (többszörös kijelölés esetén a színek <flowSpan font-style="italic">átlagának</flowSpan> megfelelően). Próbálgassa az alábbi alakzatokkal:</flowDiv>
   </flowRoot>
@@ -691,10 +691,10 @@
   <path transform="translate(20 2911.2)" d="m213.78 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#3d0fa1" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2911.2)" d="m245.6 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#6fe225" fill-opacity=".74902" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2911.2)" d="m277.42 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#ff3077" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <rect id="ax" x="20" y="2958.4" width="300" height="1e3px" display="none"/>
+  <rect id="au" x="20" y="2958.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ax"/>
+    <use xlink:href="#au"/>
    </flowRegion>
    <flowDiv>A Körvonalrajzolat lapon eltávolíthatja egy objektum <flowSpan font-style="italic">körvonal</flowSpan>át, vagy beállíthatja a körvonal színét és átlátszóságát:</flowDiv>
   </flowRoot>
@@ -706,10 +706,10 @@
   <path transform="translate(20 2994.3)" d="m222.48 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#16417c" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2994.3)" d="m252.35 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#7c7016" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 2994.3)" d="m278.89 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="aw" x="20" y="3040.9" width="300" height="1e3px" display="none"/>
+  <rect id="at" x="20" y="3040.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#aw"/>
+    <use xlink:href="#at"/>
    </flowRegion>
    <flowDiv>A Körvonalstílus lapon tudja beállítani a körvonal szélességét és egyéb tulajdonságait:</flowDiv>
   </flowRoot>
@@ -720,10 +720,10 @@
   <path transform="translate(20 3066.2)" d="m205.14 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 6.95506" stroke-width="1.7388" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3066.2)" d="m241.29 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 3.47753, 1.73877, 3.47753" stroke-width="1.7388" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3066.2)" d="m277.43 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.811426, 0.811426" stroke-width=".81143" inkscape:connector-curvature="0"/>
-  <rect id="av" x="20" y="3120.5" width="300" height="1e3px" display="none"/>
+  <rect id="as" x="20" y="3120.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#av"/>
+    <use xlink:href="#as"/>
    </flowRegion>
    <flowDiv>Egyenletes szín helyett <flowSpan font-style="italic">színátmenet</flowSpan> is választható mind a kitöltéshez, mind a körvonalhoz:</flowDiv>
   </flowRoot>
@@ -771,39 +771,39 @@
   <path transform="translate(20 3145.8)" d="m208.72 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dj)" fill-rule="evenodd" stroke="url(#dq)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3145.8)" d="m192.1 20.273c0-9.8338 13.238-17.806 29.568-17.806s29.568 7.9719 29.568 17.806-13.238 17.806-29.568 17.806-29.568-7.9719-29.568-17.806z" fill="url(#dm)" fill-rule="evenodd" stroke="url(#dn)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3145.8)" d="m286.67 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dk)" fill-rule="evenodd" stroke="url(#dl)" stroke-dasharray="3.76251, 3.76251" stroke-width="3.7625" inkscape:connector-curvature="0"/>
-  <rect id="au" x="20" y="3197.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#au"/>
-   </flowRegion>
-   <flowDiv>Ha egyszínű kitöltésről színátmenetre vált, a kezdeti színátmenet az eredeti színen alapul, annak teljesen átlátszatlanból teljesen átlátszóba való átmenete lesz. Váltson a Színátmenet eszközre (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F1</flowSpan> vagy csak szimplán a <flowSpan font-weight="bold">G</flowSpan>), és a <flowSpan font-style="italic">színátmenet fogantyúi</flowSpan>val alakíthatja a színátmenetet – a vezérlőket vonalak kötik össze, melyek meghatározzák a színátmenet irányát és hosszát. Ha bármelyik színátmenet-fogantyút kijelöli (kék szín jelzi), a Kitöltés és körvonal párbeszédablakban az ehhez a fogantyúhoz tartozó színt lehet beállítani (és megjeleníteni), nem pedig az egész kijelölt objektumét.</flowDiv>
-  </flowRoot>
-  <rect id="at" x="20" y="3278.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#at"/>
-   </flowRegion>
-   <flowDiv>A Színpipetta eszközzel (<flowSpan font-weight="bold">F7</flowSpan> vagy <flowSpan font-weight="bold">D</flowSpan>) is kényelmesen módosítható egy objektumok színe. Csak <flowSpan font-weight="bold">kattint</flowSpan>son az eszközzel bárhová, és a kijelölt objektum kitöltése (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> esetén a körvonal színe) a felszedett szín lesz.</flowDiv>
-  </flowRoot>
-  <rect id="as" x="20" y="3322.4" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#as"/>
-   </flowRegion>
-   <flowDiv>Kettőzés, igazítás és elrendezés</flowDiv>
-  </flowRoot>
-  <rect id="ar" x="20" y="3334.9" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="3197.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv>Az egyik leggyakoribb művelet egy objektum <flowSpan font-style="italic">megkettőzés</flowSpan>e (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>). A másodpéldány pontosan az eredeti felett jön létre, majd <flowSpan font-weight="bold">egér</flowSpan>rel vagy <flowSpan font-weight="bold">nyíl</flowSpan> billentyűkkel áthelyezhető máshová. Gyakorlásképpen próbáljon meg az alábbi fekete négyszögről másolatokat készíteni és ezek egymás mellé helyezésével egy sort kitölteni.</flowDiv>
+   <flowDiv>Ha egyszínű kitöltésről színátmenetre vált, a kezdeti színátmenet az eredeti színen alapul, annak teljesen átlátszatlanból teljesen átlátszóba való átmenete lesz. Váltson a Színátmenet eszközre (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F1</flowSpan> vagy csak szimplán a <flowSpan font-weight="bold">G</flowSpan>), és a <flowSpan font-style="italic">színátmenet fogantyúi</flowSpan>val alakíthatja a színátmenetet – a vezérlőket vonalak kötik össze, melyek meghatározzák a színátmenet irányát és hosszát. Ha bármelyik színátmenet-fogantyút kijelöli (kék szín jelzi), a Kitöltés és körvonal párbeszédablakban az ehhez a fogantyúhoz tartozó színt lehet beállítani (és megjeleníteni), nem pedig az egész kijelölt objektumét.</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 3392.3)" x="10" width="11.092" height="11.092" fill-rule="evenodd"/>
-  <rect id="aq" x="20" y="3415.4" width="300" height="1e3px" display="none"/>
+  <rect id="aq" x="20" y="3278.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aq"/>
+   </flowRegion>
+   <flowDiv>A Színpipetta eszközzel (<flowSpan font-weight="bold">F7</flowSpan> vagy <flowSpan font-weight="bold">D</flowSpan>) is kényelmesen módosítható egy objektumok színe. Csak <flowSpan font-weight="bold">kattint</flowSpan>son az eszközzel bárhová, és a kijelölt objektum kitöltése (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> esetén a körvonal színe) a felszedett szín lesz.</flowDiv>
+  </flowRoot>
+  <rect id="ap" x="20" y="3322.4" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+   <flowRegion>
+    <use xlink:href="#ap"/>
+   </flowRegion>
+   <flowDiv>Kettőzés, igazítás és elrendezés</flowDiv>
+  </flowRoot>
+  <rect id="ao" x="20" y="3334.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ao"/>
+   </flowRegion>
+   <flowDiv>Az egyik leggyakoribb művelet egy objektum <flowSpan font-style="italic">megkettőzés</flowSpan>e (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>). A másodpéldány pontosan az eredeti felett jön létre, majd <flowSpan font-weight="bold">egér</flowSpan>rel vagy <flowSpan font-weight="bold">nyíl</flowSpan> billentyűkkel áthelyezhető máshová. Gyakorlásképpen próbáljon meg az alábbi fekete négyszögről másolatokat készíteni és ezek egymás mellé helyezésével egy sort kitölteni.</flowDiv>
+  </flowRoot>
+  <rect transform="translate(20 3392.3)" x="10" width="11.092" height="11.092" fill-rule="evenodd"/>
+  <rect id="an" x="20" y="3415.4" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#an"/>
    </flowRegion>
    <flowDiv>Előfordulhat, hogy a másolatok többé-kevésbé szabálytalanul helyezkednek el. Ezen segíthet az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objektum</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Igazítás és elrendezés</flowSpan> párbeszédablak (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>). Jelölje ki az összes négyszöget (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> vagy rajzolja körbe őket), nyissa meg a párbeszédablakot, válassza a „Középre igazítás a vízszintes tengelyhez” gombot, aztán „Az objektumok közti vízszintes helyek azonossá tétele” gombot (figyelje a gombok gyorstippjeit). Az objektumok így most egy sorban, egymástól egyenlő távolságra vannak. Íme néhány példa az igazítás és elrendezés egyéb módozataira:</flowDiv>
   </flowRoot>
@@ -872,24 +872,24 @@
   <path transform="translate(20 3504.7)" d="m252.34 52.406c0 0.1579-0.21227 1.6131 0.73678 2.2376" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3504.7)" d="m256.85 52.183c1.0548 1.2333 1.1304 2.6855 6.631 3.5801" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3504.7)" d="m267.26 52.854c0 0.8403-0.10579 1.6705 0.73678 2.4614" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <rect id="ap" x="20" y="3578.2" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="3578.2" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#ap"/>
+    <use xlink:href="#am"/>
    </flowRegion>
    <flowDiv>Z tengely</flowDiv>
   </flowRoot>
-  <rect id="ao" x="20" y="3590.7" width="300" height="1e3px" display="none"/>
+  <rect id="al" x="20" y="3590.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#ao"/>
+    <use xlink:href="#al"/>
    </flowRegion>
    <flowDiv>A <flowSpan font-style="italic">z-sorrend</flowSpan> kifejezés a rajzon egymásra helyezett objektumok sorrendjére utal, vagyis hogy melyik objektum van a többi felett, és takarja le azokat úgy, hogy az alsóbb objektumok nem (teljesen) láthatóak. Az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Objektum</flowSpan> menü két parancsa, a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Felülre helyezés</flowSpan> (a <flowSpan font-weight="bold">Home</flowSpan> billentyű) és az <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Alulra helyezés</flowSpan> (az <flowSpan font-weight="bold">End</flowSpan> billentyű) a kijelölt objektumokat az aktuális réteg z-sorrendjében legfelülre vagy legalulra mozgatja. A további két parancs, a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Feljebb helyezés</flowSpan> (<flowSpan font-weight="bold">PgUp</flowSpan>) és a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lejjebb helyezés</flowSpan> (<flowSpan font-weight="bold">PgDn</flowSpan>) <flowSpan font-style="italic">csak egy lépéssel</flowSpan> mozgatja fel vagy le az objektumot, vagyis egy nem kijelölt objektumon túlra mozgatja a z-sorrendben (csak azon objektumokon túl, melyek fedésben vannak a kijelölttel a határoló téglalapuk alapján).</flowDiv>
   </flowRoot>
-  <rect id="an" x="20" y="3683.1" width="300" height="1e3px" display="none"/>
+  <rect id="ak" x="20" y="3683.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#an"/>
+    <use xlink:href="#ak"/>
    </flowRegion>
    <flowDiv>Gyakorlásképpen próbálja ezekkel a parancsokkal megfordítani az alábbi objektumok sorrendjét a z tengelyen úgy, hogy a bal oldali ellipszis legyen a legfelső, a jobbra levő pedig a legalsó:</flowDiv>
   </flowRoot>
@@ -899,52 +899,52 @@
   <path transform="translate(20 3729.7)" d="m198.09 18.86c0 5.622-5.7804 10.18-12.911 10.18-7.1304 0-12.911-4.5576-12.911-10.18 0-5.6222 5.7804-10.18 12.911-10.18 7.1304 0 12.911 4.5575 12.911 10.18z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3729.7)" d="m212.19 22.63c0 4.4296-5.2549 8.0203-11.737 8.0203-6.4822 0-11.737-3.5908-11.737-8.0203 0-4.4295 5.2549-8.0203 11.737-8.0203 6.4822 0 11.737 3.5909 11.737 8.0203z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
   <path transform="translate(20 3729.7)" d="m219.23 17.597c0 3.2369-3.2843 5.861-7.3357 5.861-4.0514 0-7.3357-2.6241-7.3357-5.861 0-3.237 3.2843-5.861 7.3357-5.861 4.0514 0 7.3357 2.624 7.3357 5.861z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
-  <rect id="am" x="20" y="3794.5" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#am"/>
-   </flowRegion>
-   <flowDiv>Nagyon jól használható kijelölésre a <flowSpan font-weight="bold">Tab</flowSpan> billentyű is. Ha semmi nincs kijelölve, akkor a legalsó objektumot jelöli ki; egyébként pedig a z tengelyen a <flowSpan font-style="italic">kijelölt objektumok felett</flowSpan> levőt. A <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> fordítva működik: a legfelső objektumtól indul, és lefelé halad. Mivel egy újonnan létrehozott objektum mindig legfelülre kerül, így ha olyankor nyomja meg a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> kombinációt, amikor semmi sincs kijelölve, akkor ezzel a <flowSpan font-style="italic">legutóbb</flowSpan> létrehozott objektumot jelölheti ki. Próbálgassa a <flowSpan font-weight="bold">Tab</flowSpan> és a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> billentyűket a fenti ellipszisekkel.</flowDiv>
-  </flowRoot>
-  <rect id="ak" x="20" y="3870.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ak"/>
-   </flowRegion>
-   <flowDiv>Takart objektum kijelölése és kijelölt objektum húzása</flowDiv>
-  </flowRoot>
-  <rect id="aj" x="20" y="3883" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="3794.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aj"/>
    </flowRegion>
-   <flowDiv>Előfordulhat, hogy éppen egy másik takarásában levő objektummal szeretne dolgozni. Az alsó objektum még látható is lehet, ha a felette levő (részlegesen) átlátszó, de rákattintva csak a felső objektumot tudja kijelölni, az alatta levőt nem.</flowDiv>
+   <flowDiv>Nagyon jól használható kijelölésre a <flowSpan font-weight="bold">Tab</flowSpan> billentyű is. Ha semmi nincs kijelölve, akkor a legalsó objektumot jelöli ki; egyébként pedig a z tengelyen a <flowSpan font-style="italic">kijelölt objektumok felett</flowSpan> levőt. A <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> fordítva működik: a legfelső objektumtól indul, és lefelé halad. Mivel egy újonnan létrehozott objektum mindig legfelülre kerül, így ha olyankor nyomja meg a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> kombinációt, amikor semmi sincs kijelölve, akkor ezzel a <flowSpan font-style="italic">legutóbb</flowSpan> létrehozott objektumot jelölheti ki. Próbálgassa a <flowSpan font-weight="bold">Tab</flowSpan> és a <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> billentyűket a fenti ellipszisekkel.</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="3921.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ai" x="20" y="3870.5" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
-   <flowDiv>Ekkor használható az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>. Az első <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> a felső objektumot jelöli ki, ahogy a rendes kattintás is. De a következő <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> ugyanott már az <flowSpan font-style="italic">alatta</flowSpan> levőt, a következő az az alattit és így tovább. Tehát egymás utáni <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>okkal egy adott helyen rendre kijelölhetők az ott a z tengely vonatkozásában egymáson elhelyezkedő objektumok. A legalsó objektumot elérve a következő <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> újra a legfelső objektumot jelöli ki.</flowDiv>
+   <flowDiv>Takart objektum kijelölése és kijelölt objektum húzása</flowDiv>
   </flowRoot>
-  <rect id="ag" x="20" y="3992.3" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="3883" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ah"/>
+   </flowRegion>
+   <flowDiv>Előfordulhat, hogy éppen egy másik takarásában levő objektummal szeretne dolgozni. Az alsó objektum még látható is lehet, ha a felette levő (részlegesen) átlátszó, de rákattintva csak a felső objektumot tudja kijelölni, az alatta levőt nem.</flowDiv>
+  </flowRoot>
+  <rect id="ag" x="20" y="3921.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ag"/>
    </flowRegion>
-   <flowDiv>[Linuxon az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> esetleg nem a leírtaknak megfelelően működik, hanem az egész Inkscape-ablakot mozgatja. Ez akkor fordulhat elő, ha az ablakkezelőben az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>hoz valamilyen művelet van rendelve. Keresse meg az ablakkezelő beállításaiban az ablakműveletekre vonatkozó részt, és vagy kapcsolja ki a módosítóbillentyűt, vagy állítsa át a <flowSpan font-weight="bold">Meta</flowSpan> (<flowSpan font-weight="bold">Windows</flowSpan>) billentyűre, így az Inkscape és más alkalmazások is szabadon használhatják az <flowSpan font-weight="bold">Alt</flowSpan> billentyűt.]</flowDiv>
+   <flowDiv>Ekkor használható az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>. Az első <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> a felső objektumot jelöli ki, ahogy a rendes kattintás is. De a következő <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> ugyanott már az <flowSpan font-style="italic">alatta</flowSpan> levőt, a következő az az alattit és így tovább. Tehát egymás utáni <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>okkal egy adott helyen rendre kijelölhetők az ott a z tengely vonatkozásában egymáson elhelyezkedő objektumok. A legalsó objektumot elérve a következő <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> újra a legfelső objektumot jelöli ki.</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="4063" width="300" height="1e3px" display="none"/>
+  <rect id="af" x="20" y="3992.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#af"/>
    </flowRegion>
-   <flowDiv>Mindez szép és jó, de mit lehet kezdeni egy másik objektum alatt elhelyezkedő, kijelölt objektummal? Billentyűzettel alakítható, és egérrel a kijelölő fogantyúi is mozgathatók. Viszont ha megpróbálja az objektumot magát egérrel arrébb húzni, akkor a kijelölés megszűnik, és a legfelső objektum válik kijelöltté (ahogy a kattintás-és-húzásnak működni is kell – kijelöli a kurzor alatti (legfelső) objektumot, és mozgatja a kijelölést). Ha egy <flowSpan font-style="italic">jelenleg éppen kijelölt</flowSpan> objektumot úgy szeretne húzni, hogy a kijelölés ne változzon meg a kattintás pillanatában, akkor az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> a megfelelő módszer. Ez mindig az aktuális kijelölést mozgatja, attól függetlenül, hogy az egérrel hová kattintva kezdi a húzást.</flowDiv>
+   <flowDiv>[Linuxon az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan> esetleg nem a leírtaknak megfelelően működik, hanem az egész Inkscape-ablakot mozgatja. Ez akkor fordulhat elő, ha az ablakkezelőben az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>hoz valamilyen művelet van rendelve. Keresse meg az ablakkezelő beállításaiban az ablakműveletekre vonatkozó részt, és vagy kapcsolja ki a módosítóbillentyűt, vagy állítsa át a <flowSpan font-weight="bold">Meta</flowSpan> (<flowSpan font-weight="bold">Windows</flowSpan>) billentyűre, így az Inkscape és más alkalmazások is szabadon használhatják az <flowSpan font-weight="bold">Alt</flowSpan> billentyűt.]</flowDiv>
   </flowRoot>
-  <rect id="ae" x="20" y="4154.8" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="4063" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ae"/>
+   </flowRegion>
+   <flowDiv>Mindez szép és jó, de mit lehet kezdeni egy másik objektum alatt elhelyezkedő, kijelölt objektummal? Billentyűzettel alakítható, és egérrel a kijelölő fogantyúi is mozgathatók. Viszont ha megpróbálja az objektumot magát egérrel arrébb húzni, akkor a kijelölés megszűnik, és a legfelső objektum válik kijelöltté (ahogy a kattintás-és-húzásnak működni is kell – kijelöli a kurzor alatti (legfelső) objektumot, és mozgatja a kijelölést). Ha egy <flowSpan font-style="italic">jelenleg éppen kijelölt</flowSpan> objektumot úgy szeretne húzni, hogy a kijelölés ne változzon meg a kattintás pillanatában, akkor az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan> a megfelelő módszer. Ez mindig az aktuális kijelölést mozgatja, attól függetlenül, hogy az egérrel hová kattintva kezdi a húzást.</flowDiv>
+  </flowRoot>
+  <rect id="ad" x="20" y="4154.8" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ad"/>
    </flowRegion>
    <flowDiv>Próbálja ki az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">kattintás</flowSpan>t és az <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">húzás</flowSpan>t az átlátszó, zöld négyszög alatti barna alakzatokkal:</flowDiv>
   </flowRoot>
@@ -1004,24 +1004,24 @@
   <rect transform="translate(20 4343.6)" x="254.55" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
   <rect transform="translate(20 4343.6)" x="49.49" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
   <rect transform="translate(20 4343.6)" x="254.55" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect id="z" x="20" y="4404.7" width="300" height="1e3px" display="none"/>
+  <rect id="aa" x="20" y="4404.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#z"/>
+    <use xlink:href="#aa"/>
    </flowRegion>
    <flowDiv>A kitöltésszínnel való kijelöléshez hasonlóan több hasonló objektumot is kijelölhet a körvonalszín, a körvonalstílus, a kitöltés és körvonal valamint az objektumtípus alapján. Ha ezek nem fedik le kívánalmait, próbálja ki a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szerkesztés</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Szöveg keresése és cseréje</flowSpan> párbeszédablakot.</flowDiv>
   </flowRoot>
-  <rect id="y" x="20" y="4459.4" width="300" height="1e3px" display="none"/>
+  <rect id="z" x="20" y="4459.4" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
-    <use xlink:href="#y"/>
+    <use xlink:href="#z"/>
    </flowRegion>
    <flowDiv>Zárszó</flowDiv>
   </flowRoot>
-  <rect id="x" x="20" y="4470.3" width="300" height="1e3px" display="none"/>
+  <rect id="y" x="20" y="4470.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#x"/>
+    <use xlink:href="#y"/>
    </flowRegion>
    <flowDiv>Ezzel véget is ért a Bevezetés. Az Inkscape a fentieknél jóval több lehetőséget nyújt, ám a bemutatott módszerek segítségével Ön már képes egyszerű, de használható grafikákat készíteni. A további tanuláshoz javasoljuk az „Inkscape: Haladó” ismertetőt valamint a többit a <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Súgó</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Ismertetők</flowSpan> menüpontban.</flowDiv>
   </flowRoot>
@@ -1039,7 +1039,7 @@
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
-   <flowDiv>Somogyvári Róbert — 2008; Gyuris Gellért — 2018, 2019, 2020</flowDiv>
+   <flowDiv>Somogyvári Róbert — 2008; Gyuris Gellért — 2018</flowDiv>
   </flowRoot>
   <use x="47" y="4605.3232008" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
   <rect id="ct" x="70" y="4599.3" width="230" height="1e3px" display="none"/>

@@ -258,474 +258,474 @@
  </g>
  <use inkscape:label="Footer" sodipodi:insensitive="true" xlink:href="#cr"/>
  <g inkscape:groupmode="layer" inkscape:label="Content">
-  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">Tutorial<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">基本</tspan></tspan></text>
-  <rect id="ap" x="40" y="134" width="264" height="1e3px" display="none"/>
+  <text x="20" y="122" fill="#000000" font-family="Liberation Serif,Times New Roman,serif" font-size="16" style="line-height:100%" xml:space="preserve"><tspan fill="#000000" sodipodi:role="line">指導手冊<tspan fill="#de5f3a"> | </tspan><tspan font-style="italic">基本</tspan></tspan></text>
+  <rect id="af" x="40" y="134" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#ap"/>
+    <use xlink:href="#af"/>
    </flowRegion>
-   <flowDiv>This tutorial demonstrates the basics of using Inkscape. If you have opened it from the Inkscape <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan> menu, it is a regular Inkscape document that you can view, edit, or copy from. You can also save a copy to a location of your choice.</flowDiv>
+   <flowDiv>這篇教學示範 Inkscape 的基本使用。如果你從 Inkscape <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">說明</flowSpan> 選單開啟這篇教學，那麼本文是標準的 Inkscape 文件，因此你可以觀看、編輯、複製內容或儲存。你也可以將檔案作為副本儲存到想要的位置。</flowDiv>
   </flowRoot>
-  <rect id="al" x="40" y="174.31" width="264" height="1e3px" display="none"/>
+  <rect id="aa" x="40" y="174.46" width="264" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Sans,Arial,sans-serif" font-size="7.2" font-style="italic" style="line-height:150%">
    <flowRegion>
-    <use xlink:href="#al"/>
+    <use xlink:href="#aa"/>
    </flowRegion>
-   <flowDiv>The Basic Tutorial covers canvas navigation, managing documents, shape tool basics, selection techniques, transforming objects with selector, grouping, setting fill and stroke, alignment, and stacking order. For more advanced topics, check out the other tutorials in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan> menu.</flowDiv>
+   <flowDiv>基本教學的內容涵蓋畫布瀏覽、管理文件、形狀工具基礎、選取技巧、用選取器改變物件、群組、設定填色和邊框、對齊和排列順序。到<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">說明</flowSpan>選單中看看其他教學有更多進階的主題。</flowDiv>
   </flowRoot>
-  <rect id="ag" x="20" y="230.82" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ag"/>
-   </flowRegion>
-   <flowDiv>平移畫布</flowDiv>
-  </flowRoot>
-  <rect id="ae" x="20" y="243.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#ae"/>
-   </flowRegion>
-   <flowDiv>There are many ways to pan (scroll) the document canvas. Try <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">arrow</flowSpan> keys to scroll by keyboard. (Try this now to scroll this document down.) You can also drag the canvas by the middle mouse button. Or, you can use the scrollbars (press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">B</flowSpan> to show or hide them). The <flowSpan font-weight="bold">wheel</flowSpan> on your mouse also works for scrolling vertically; press <flowSpan font-weight="bold">Shift</flowSpan> and move the wheel to scroll horizontally.</flowDiv>
-  </flowRoot>
-  <rect id="w" x="20" y="308.44" width="300" height="1e3px" display="none"/>
+  <rect id="w" x="20" y="220.16" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#w"/>
    </flowRegion>
-   <flowDiv>縮放畫面</flowDiv>
+   <flowDiv>平移畫布</flowDiv>
   </flowRoot>
-  <rect id="v" x="20" y="320.69" width="300" height="1e3px" display="none"/>
+  <rect id="v" x="20" y="232.44" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#v"/>
    </flowRegion>
-   <flowDiv>The easiest way to zoom is by pressing <flowSpan font-weight="bold">-</flowSpan> and <flowSpan font-weight="bold">+</flowSpan> (or <flowSpan font-weight="bold">=</flowSpan>) keys. You can also use <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">middle click</flowSpan> or <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">right click</flowSpan> to zoom in, <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">middle click</flowSpan> or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">right click</flowSpan> to zoom out, or rotate the mouse <flowSpan font-weight="bold">wheel</flowSpan> with <flowSpan font-weight="bold">Ctrl</flowSpan>. Or, you can click in the zoom entry field (in the bottom right region of the document window, labelled “Z”), type a precise zoom value in %, and press <flowSpan font-weight="bold">Enter</flowSpan>. We also have the Zoom tool (in the toolbar on left) which lets you to zoom into an area by dragging around it.</flowDiv>
+   <flowDiv>有許多方式來平移 (捲動) 文件畫布。試著用鍵盤上的 <flowSpan font-weight="bold">Crtl</flowSpan>+<flowSpan font-weight="bold">方向鍵</flowSpan> 來捲動。(立刻嘗試這個方法向下捲動這個文件。) 你也可以用滑鼠中鍵拖動畫布。或者，使用捲軸 (按 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">B</flowSpan> 以顯示或隱藏捲軸)。<flowSpan font-weight="bold">滑鼠滾輪</flowSpan> 也可進行垂直方向的捲動；按 <flowSpan font-weight="bold">Shift</flowSpan> 並滾動可水平捲動。</flowDiv>
   </flowRoot>
-  <rect id="u" x="20" y="391.31" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="u" x="20" y="287.3" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#u"/>
    </flowRegion>
-   <flowDiv>Inkscape also keeps a history of the zoom levels you've used in this work session. Press the <flowSpan font-weight="bold">`</flowSpan> key to go back to the previous zoom, or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">`</flowSpan> to go forward.</flowDiv>
+   <flowDiv>縮放畫面</flowDiv>
   </flowRoot>
-  <rect id="t" x="20" y="424.74" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="t" x="20" y="299.55" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#t"/>
    </flowRegion>
-   <flowDiv>Inkscape 工具</flowDiv>
+   <flowDiv>按 <flowSpan font-weight="bold">-</flowSpan> 和 <flowSpan font-weight="bold">+</flowSpan> (或 <flowSpan font-weight="bold">=</flowSpan>) 按鍵進行縮放是最簡單的方法。你也可以用 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">點擊滑鼠中鍵</flowSpan> 或者 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">點擊滑鼠右鍵</flowSpan> 來放大 (拉近) 畫面、<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">點擊滑鼠中鍵</flowSpan> 或 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">點擊滑鼠右鍵</flowSpan> 來縮小 (拉遠) 畫面，或按著 <flowSpan font-weight="bold">Ctrl</flowSpan> 鍵 <flowSpan font-weight="bold">滾動滑鼠滾輪</flowSpan>。或者，你可以在縮放輸入區中點擊一下 (在文件視窗的左下角，用“Z”標示)，輸入一個縮放畫面的精確值 (單位為 %)，並按一下 <flowSpan font-weight="bold">Enter</flowSpan> 鍵。我們也有縮放工具 (在左側的工具列中) 讓你經由拖動周圍放大到一個區域。</flowDiv>
   </flowRoot>
-  <rect id="s" x="20" y="437.65" width="300" height="1e3px" display="none"/>
+  <rect id="s" x="20" y="370.35" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#s"/>
    </flowRegion>
-   <flowDiv>The vertical toolbar on the left shows Inkscape's drawing and editing tools. Depending on your screen resolution, the <flowSpan font-style="italic">Commands bar</flowSpan> with general command buttons, such as “Save” and “Print”, can be found either in the top part of the window, right below the menu, or on the right side of the window, in between the scroll bar and the <flowSpan font-style="italic">Snap Controls bar</flowSpan>. Right above the white <flowSpan font-style="italic">Canvas Area</flowSpan>, there's the <flowSpan font-style="italic">Tool Controls bar</flowSpan> with controls that are specific to each tool. The <flowSpan font-style="italic">status bar</flowSpan> at the bottom of the window will display useful hints and messages as you work.</flowDiv>
+   <flowDiv>Inkscape 也保留在這個工作階段中使用過的縮放層級記錄。按下 <flowSpan font-weight="bold">`</flowSpan> 鍵回到上一個縮放狀態，或 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">`</flowSpan> 前往下一個。</flowDiv>
   </flowRoot>
-  <rect id="r" x="20" y="518.86" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="r" x="20" y="404.05" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#r"/>
    </flowRegion>
-   <flowDiv>Many operations are available through keyboard shortcuts. Open <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Keys and Mouse Reference</flowSpan> to see the complete list of available shortcuts.</flowDiv>
+   <flowDiv>Inkscape 工具</flowDiv>
   </flowRoot>
-  <rect id="q" x="20" y="552.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="q" x="20" y="416.96" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#q"/>
    </flowRegion>
-   <flowDiv>建立和管理文件</flowDiv>
+   <flowDiv>於左側的垂直工具列陳列著 Inkscape 的繪製和編輯工具。根據你的螢幕解析度，在視窗頂部可以發現有如“儲存” and “列印”命令按鈕的<flowSpan font-style="italic">命令列</flowSpan>，選單右下或視窗右側可以看到捲動軸和<flowSpan font-style="italic">貼齊控制列</flowSpan>。空白<flowSpan font-style="italic">畫布區域</flowSpan>右上的<flowSpan font-style="italic">工具控制列</flowSpan>上面對應每項工具的控制項目。位於視窗底部的<flowSpan font-style="italic">狀態列</flowSpan>在你使用時會顯示有用的提示與訊息。</flowDiv>
   </flowRoot>
-  <rect id="p" x="20" y="564.82" width="300" height="1e3px" display="none"/>
+  <rect id="p" x="20" y="466.35" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#p"/>
    </flowRegion>
-   <flowDiv>To create a new empty document, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">New</flowSpan> or press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>. To create a new document from one of Inkscape's many templates, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">New from Template…</flowSpan> or press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">N</flowSpan>.</flowDiv>
+   <flowDiv>許多操作可由鍵盤的快捷鍵達成。開啟 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">說明</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">鍵盤和滑鼠</flowSpan> 可看見完整的參照。</flowDiv>
   </flowRoot>
-  <rect id="cn" x="20" y="603.74" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cn" x="20" y="489.25" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cn"/>
    </flowRegion>
-   <flowDiv>To open an existing SVG document, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Open</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>). To save, use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Save</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>), or <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">File</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Save As</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>) to save under a new name. (While Inkscape comes with its Autosave feature enabled, it is still recommended that you follow the best practice to “save early, save often“.)</flowDiv>
+   <flowDiv>建立和管理文件</flowDiv>
   </flowRoot>
-  <rect id="cm" x="20" y="653.35" width="300" height="1e3px" display="none"/>
+  <rect id="cm" x="20" y="501.57" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cm"/>
    </flowRegion>
-   <flowDiv>Inkscape uses the SVG (Scalable Vector Graphics) format for its files. SVG is an open standard widely supported by graphic software. SVG files are based on XML and can be edited with any text or XML editor (apart from Inkscape, that is). Besides SVG, Inkscape can import and export many other file formats. You can find lists of the supported file formats in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Save</flowSpan> and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Import</flowSpan> dialogs.</flowDiv>
+   <flowDiv>使用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">檔案</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">新增</flowSpan> 或按 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">N</flowSpan> 快捷鍵建立新的空白文件。若要從 Inkscape 範本建立新的文件，則使用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">檔案</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">從範本新增...</flowSpan> 或者按 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">N</flowSpan> 快捷鍵。</flowDiv>
   </flowRoot>
-  <rect id="cl" x="20" y="713.38" width="300" height="1e3px" display="none"/>
+  <rect id="cl" x="20" y="529.91" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cl"/>
    </flowRegion>
-   <flowDiv>Inkscape opens a separate document window for each document. You can navigate among them using your window manager (e.g. by <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>), or you can use the Inkscape shortcut, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>, which will cycle through all open document windows. (Create a new document now and switch between it and this document for practice.) Note: Inkscape treats these windows like tabs in a web browser, this means the <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> shortcut only works with documents running in the same process. If you open multiple files from a file browser or launch more than one Inkscape process from an icon it will not work.</flowDiv>
+   <flowDiv>使用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">檔案</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">開啟</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">O</flowSpan>) 開啟現有的 SVG 檔案。使用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">檔案</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">儲存</flowSpan> (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>) 儲存檔案，或者用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">檔案</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">另存新檔</flowSpan> (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">S</flowSpan>) 以新名稱儲存檔案。(即使現在 Inkscape 預設啟用自動儲存功能，仍然建議“提早儲存，經常儲存“。)</flowDiv>
   </flowRoot>
-  <rect id="ck" x="20" y="800.06" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ck" x="20" y="569.56" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ck"/>
    </flowRegion>
-   <flowDiv>建立形狀</flowDiv>
+   <flowDiv>Inkscape 使用 SVG (可縮放向量圖形) 格式作為檔案格式。SVG 是開放標準且圖形軟體都廣泛地支援。SVG 檔案以 XML 為基底並可藉由任何的文字或 XML 編輯器進行編輯 (Inkscape 以外的軟體)。除了 SVG 外，Inkscape 也能匯入和匯出許多其他檔案格式。你可以在 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">儲存</flowSpan> 和 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">匯入</flowSpan> 對話窗中找到支援檔案格式的清單。</flowDiv>
   </flowRoot>
-  <rect id="cj" x="20" y="812.28" width="300" height="1e3px" display="none"/>
+  <rect id="cj" x="20" y="618.92" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cj"/>
    </flowRegion>
-   <flowDiv>Time for some nice shapes! Click on the Rectangle tool in the toolbar on the left (or press <flowSpan font-weight="bold">F4</flowSpan>) and click-and-drag, either in a new empty document or right here:</flowDiv>
+   <flowDiv>Inkscape 針對每一個文件個別開啟一個分離視窗。你可以使用你的視窗管理程式 (例如用 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan>) 在這些檔案之間瀏覽，或者使用 Inkscape 快捷鍵 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> 循環切換所有開啟的文件視窗。(現在建立一個新文件，並在新文件和本文件之間切換進行練習。) 注意：Inkscape 將這些視窗視為像網頁瀏覽器中的分頁一樣，這表示 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> 快捷鍵只對在同一程式的文件有用。如果你從檔案瀏覽器中開啟多個檔案或從圖示啟動數個 Inkscape 程式，那麼快捷鍵就不會有作用。</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 848.31)" x="23.003" y="11.835" width="19.394" height="21.106" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect transform="translate(20 848.31)" x="52.665" y="7.2717" width="23.387" height="15.972" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect transform="translate(20 848.31)" x="84.609" y=".99707" width="71.303" height="48.486" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect transform="translate(20 848.31)" x="123.4" y="2.7083" width="55.331" height="22.247" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect transform="translate(20 848.31)" x="137.09" y="15.828" width="39.93" height="25.099" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect transform="translate(20 848.31)" x="167.32" y="23.814" width="35.366" height="24.528" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect transform="translate(20 848.31)" x="191.28" y="4.4196" width="31.944" height="28.521" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
-  <rect transform="translate(20 848.31)" x="228.15" y="41.053" width="8.8205" height="3.5282" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect transform="translate(20 848.31)" x="247.55" y="28.116" width="7.0564" height="4.1162" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect transform="translate(20 848.31)" x="262.25" y="20.472" width="4.1162" height="1.7641" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect transform="translate(20 848.31)" x="274.01" y="17.532" width="2.9402" height="1.1761" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="ci" x="20" y="910.05" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="ci" x="20" y="695.82" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ci"/>
    </flowRegion>
-   <flowDiv>As you can see, default rectangles come up with a blue <flowSpan font-style="italic">fill</flowSpan> and a black <flowSpan font-style="italic">stroke</flowSpan> (outline), and fully opaque. We'll see how to change that below. With other tools, you can also create ellipses, stars, and spirals:</flowDiv>
+   <flowDiv>建立形狀</flowDiv>
   </flowRoot>
-  <ellipse transform="translate(20 956.66)" cx="26.425" cy="13.847" rx="9.7025" ry="3.8222" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <ellipse transform="translate(20 956.66)" cx="34.363" cy="35.604" rx="5.2923" ry="14.407" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <ellipse transform="translate(20 956.66)" cx="49.652" cy="17.375" rx="9.9965" ry="9.1145" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <ellipse transform="translate(20 956.66)" cx="62.588" cy="48.541" rx="15.289" ry="6.1743" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <ellipse transform="translate(20 956.66)" cx="65.529" cy="25.02" rx="16.465" ry="15.583" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <ellipse transform="translate(20 956.66)" cx="89.05" cy="26.784" rx="9.9965" ry="4.4102" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <path transform="translate(20 956.66)" d="m187.25 37.074c0.6781 0.38328-0.1821 1.1032-0.63704 1.1271-1.2328 0.06473-1.8327-1.3708-1.6171-2.4011 0.38567-1.843 2.4972-2.6329 4.1652-2.1071 2.4479 0.7716 3.4512 3.6368 2.5971 5.9293-1.1384 3.0556-4.7808 4.2769-7.6934 3.0872-3.6652-1.4972-5.1064-5.9269-3.5772-9.4575 1.8521-4.276 7.0742-5.938 11.222-4.0672 4.8876 2.2047 6.771 8.2222 4.5572 12.986-2.5559 5.4997-9.3706 7.6049-14.75 5.0473-6.1122-2.9062-8.4394-10.519-5.5373-16.514 3.2558-6.7249 11.668-9.2744 18.278-6.0273 7.3379 3.6049 10.11 12.818 6.5173 20.042" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.335104" sodipodi:cx="187.25098" sodipodi:cy="37.074486" sodipodi:expansion="1" sodipodi:radius="15.535585" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 956.66)" d="m214.3 25.314c-0.6781-0.50121 0.34107-1.1614 0.83305-1.1271 1.3332 0.09294 1.7885 1.7145 1.4211 2.7931-0.65731 1.9295-3.0302 2.4999-4.7532 1.7151-2.5286-1.1517-3.229-4.3626-2.0091-6.7133 1.6259-3.1332 5.7007-3.9654 8.6734-2.3031 3.7409 2.0918 4.7056 7.0415 2.5971 10.634-2.5537 4.3504-8.3839 5.448-12.594 2.8912-4.9611-3.0132-6.1917-9.7271-3.1852-14.554 3.4712-5.5725 11.071-6.9364 16.514-3.4792 6.1845 3.9283 7.6817 12.415 3.7732 18.474-4.3847 6.7968-13.76 8.4274-20.434 4.0672-7.4094-4.8406-9.1735-15.105-4.3612-22.394" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-21.354641" sodipodi:cx="214.30038" sodipodi:cy="25.313868" sodipodi:expansion="1" sodipodi:radius="16.818087" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 956.66)" d="m253.7 31.255c-1.7395 0.26535-1.2159-2.2139-0.44102-2.8912 2.0998-1.8353 5.1686-0.12213 6.2233 2.0091 1.8866 3.8123-0.76223 8.1619-4.4592 9.5555-5.4255 2.0451-11.206-1.6449-12.888-6.9094-2.2415-7.0168 2.5251-14.269 9.3595-16.22 8.6004-2.4546 17.342 3.4037 19.552 11.81 2.6765 10.181-4.2813 20.42-14.26 22.884-11.759 2.9035-23.502-5.1583-26.216-16.71-3.1338-13.337 6.0349-26.586 19.16-29.549 14.914-3.3662 29.672 6.9112 32.881 21.61 3.6002 16.49-7.7873 32.758-24.06 36.213-18.066 3.8353-35.846-8.6632-39.545-26.51" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-15.859339" sodipodi:cx="253.69844" sodipodi:cy="31.254644" sodipodi:expansion="1" sodipodi:radius="35.095131" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 956.66)" d="m225.47 16.463c0.58965 0.32431-0.14625 0.95485-0.53903 0.98005-1.0644 0.06829-1.597-1.1659-1.4211-2.0581 0.31469-1.596 2.1309-2.2996 3.5772-1.8621 2.1225 0.64204 3.018 3.1072 2.3031 5.0963-0.95278 2.6511-4.0872 3.7428-6.6154 2.7441-3.1813-1.2567-4.4708-5.0691-3.1852-8.1344 1.5571-3.7126 6.0518-5.2008 9.6535-3.6262 4.2444 1.8556 5.9319 7.0352 4.0672 11.173-2.1529 4.7768-8.019 6.6638-12.692 4.5082-5.3094-2.4493-7.3963-9.003-4.9492-14.211 2.7452-5.8423 9.9873-8.1291 15.73-5.3903 6.3753 3.0407 8.8623 10.972 5.8313 17.249" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.346712" sodipodi:cx="225.47298" sodipodi:cy="16.463167" sodipodi:expansion="1" sodipodi:radius="13.422048" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 956.66)" d="m125.71 42.362-14.404-3.9992-11.46 9.5986-0.64768-14.935-12.67-7.9333 14.004-5.2311 3.6297-14.502 9.3025 11.702 14.914-1.0292-8.2546 12.463z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.72927738" sodipodi:arg2="1.3575959" sodipodi:cx="108.92823" sodipodi:cy="27.362183" sodipodi:r1="22.511335" sodipodi:r2="11.255667" sodipodi:sides="5" sodipodi:type="star"/>
-  <path transform="translate(20 956.66)" d="m131.43 40.934-9.6121-7.6866-11.781 3.5605 4.3401-11.517-7.0269-10.104 12.294 0.56876 7.4384-9.8054 3.2583 11.868 11.624 4.0443-10.281 6.7663z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="1.133005" sodipodi:arg2="1.7613236" sodipodi:cx="123.57109" sodipodi:cy="24.147896" sodipodi:r1="18.533615" sodipodi:r2="9.2668076" sodipodi:sides="5" sodipodi:type="star"/>
-  <path transform="translate(20 956.66)" d="m149.29 34.862-10.28-1.5383-7.0953 7.5966-1.7138-10.253-9.4174-4.4005 9.2212-4.7982 1.275-10.316 7.4128 7.2871 10.205-1.9753-4.6398 9.3019z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.60698766" sodipodi:arg2="1.2353062" sodipodi:cx="136.42823" sodipodi:cy="25.933609" sodipodi:r1="15.653291" sodipodi:r2="7.8266454" sodipodi:sides="5" sodipodi:type="star"/>
-  <path transform="translate(20 956.66)" d="m166.79 26.291-10.51 1.7486-4.5176 9.6488-4.9106-9.4548-10.573-1.3148 7.4746-7.592-2.0166-10.461 9.5302 4.7627 9.3262-5.1507-1.5846 10.536z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.29358899" sodipodi:arg2="0.92190752" sodipodi:cx="151.42822" sodipodi:cy="21.647896" sodipodi:r1="16.043627" sodipodi:r2="8.0218134" sodipodi:sides="5" sodipodi:type="star"/>
-  <path transform="translate(20 956.66)" d="m184.64 21.648-5.3031-0.02752-3.0291 4.353-1.6126-5.0521-5.076-1.5357 4.3065-3.0948-0.10804-5.3021 4.2742 3.1394 5.0092-1.7412-1.6649 5.0351z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.46364761" sodipodi:arg2="1.0919661" sodipodi:cx="177.49966" sodipodi:cy="18.076466" sodipodi:r1="7.9859571" sodipodi:r2="3.9929783" sodipodi:sides="5" sodipodi:type="star"/>
-  <path transform="translate(20 956.66)" d="m202.14 24.505-3.7067-1.0799-2.991 2.4413-0.11839-3.859-3.246-2.0902 3.6335-1.3051 0.9848-3.7331 2.364 3.0524 3.8547-0.21699-2.1725 3.1916z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.74194727" sodipodi:arg2="1.3702658" sodipodi:cx="197.85681" sodipodi:cy="20.576469" sodipodi:r1="5.8138647" sodipodi:r2="2.9069321" sodipodi:sides="5" sodipodi:type="star"/>
-  <rect id="ch" x="20" y="1029.2" width="300" height="1e3px" display="none"/>
+  <rect id="ch" x="20" y="708.04" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ch"/>
    </flowRegion>
-   <flowDiv>These tools are collectively known as <flowSpan font-style="italic">shape tools</flowSpan>. Each shape you create displays one or more <flowSpan font-style="italic">handles</flowSpan>; try dragging them to see how the shape responds. The Tool Controls bar for a shape tool is another way to tweak a shape; these controls affect the currently selected shapes (i.e. those that display the handles) <flowSpan font-style="italic">and</flowSpan> set the default that will apply to newly created shapes.</flowDiv>
+   <flowDiv>是時候學習繪製一些漂亮的形狀！點擊在工具列上的矩形工具 (或按 <flowSpan font-weight="bold">F4</flowSpan>) 然後在一個新的空白文件或這裡點擊並拖曳：</flowDiv>
   </flowRoot>
-  <rect id="cg" x="20" y="1089" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 744.06)" x="23.003" y="11.835" width="19.394" height="21.106" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect transform="translate(20 744.06)" x="52.665" y="7.2717" width="23.387" height="15.972" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect transform="translate(20 744.06)" x="84.609" y=".99707" width="71.303" height="48.486" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect transform="translate(20 744.06)" x="123.4" y="2.7083" width="55.331" height="22.247" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect transform="translate(20 744.06)" x="137.09" y="15.828" width="39.93" height="25.099" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect transform="translate(20 744.06)" x="167.32" y="23.814" width="35.366" height="24.528" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect transform="translate(20 744.06)" x="191.28" y="4.4196" width="31.944" height="28.521" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1.25"/>
+  <rect transform="translate(20 744.06)" x="228.15" y="41.053" width="8.8205" height="3.5282" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect transform="translate(20 744.06)" x="247.55" y="28.116" width="7.0564" height="4.1162" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect transform="translate(20 744.06)" x="262.25" y="20.472" width="4.1162" height="1.7641" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect transform="translate(20 744.06)" x="274.01" y="17.532" width="2.9402" height="1.1761" fill="#00f" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect id="cg" x="20" y="805.79" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cg"/>
    </flowRegion>
-   <flowDiv>To <flowSpan font-style="italic">undo</flowSpan> your last action, press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan>. (Or, if you change your mind again, you can <flowSpan font-style="italic">redo</flowSpan> the undone action by <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan>.)</flowDiv>
+   <flowDiv>如你所見，預設矩形為藍色<flowSpan font-style="italic">填充</flowSpan>並帶有黑色 <flowSpan font-style="italic">邊框</flowSpan> (輪廓)，且完全不透明。下面內容我們將會見到如何去改變它。用其他工具，你也可以建立橢圓形、星形和螺旋形：</flowDiv>
   </flowRoot>
-  <rect id="cf" x="20" y="1122.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <ellipse transform="translate(20 842.03)" cx="26.425" cy="13.847" rx="9.7025" ry="3.8222" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <ellipse transform="translate(20 842.03)" cx="34.363" cy="35.604" rx="5.2923" ry="14.407" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <ellipse transform="translate(20 842.03)" cx="49.652" cy="17.375" rx="9.9965" ry="9.1145" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <ellipse transform="translate(20 842.03)" cx="62.588" cy="48.541" rx="15.289" ry="6.1743" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <ellipse transform="translate(20 842.03)" cx="65.529" cy="25.02" rx="16.465" ry="15.583" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <ellipse transform="translate(20 842.03)" cx="89.05" cy="26.784" rx="9.9965" ry="4.4102" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <path transform="translate(20 842.03)" d="m187.25 37.074c0.6781 0.38328-0.1821 1.1032-0.63704 1.1271-1.2328 0.06473-1.8327-1.3708-1.6171-2.4011 0.38567-1.843 2.4972-2.6329 4.1652-2.1071 2.4479 0.7716 3.4512 3.6368 2.5971 5.9293-1.1384 3.0556-4.7808 4.2769-7.6934 3.0872-3.6652-1.4972-5.1064-5.9269-3.5772-9.4575 1.8521-4.276 7.0742-5.938 11.222-4.0672 4.8876 2.2047 6.771 8.2222 4.5572 12.986-2.5559 5.4997-9.3706 7.6049-14.75 5.0473-6.1122-2.9062-8.4394-10.519-5.5373-16.514 3.2558-6.7249 11.668-9.2744 18.278-6.0273 7.3379 3.6049 10.11 12.818 6.5173 20.042" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.335104" sodipodi:cx="187.25098" sodipodi:cy="37.074486" sodipodi:expansion="1" sodipodi:radius="15.535585" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 842.03)" d="m214.3 25.314c-0.6781-0.50121 0.34107-1.1614 0.83305-1.1271 1.3332 0.09294 1.7885 1.7145 1.4211 2.7931-0.65731 1.9295-3.0302 2.4999-4.7532 1.7151-2.5286-1.1517-3.229-4.3626-2.0091-6.7133 1.6259-3.1332 5.7007-3.9654 8.6734-2.3031 3.7409 2.0918 4.7056 7.0415 2.5971 10.634-2.5537 4.3504-8.3839 5.448-12.594 2.8912-4.9611-3.0132-6.1917-9.7271-3.1852-14.554 3.4712-5.5725 11.071-6.9364 16.514-3.4792 6.1845 3.9283 7.6817 12.415 3.7732 18.474-4.3847 6.7968-13.76 8.4274-20.434 4.0672-7.4094-4.8406-9.1735-15.105-4.3612-22.394" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-21.354641" sodipodi:cx="214.30038" sodipodi:cy="25.313868" sodipodi:expansion="1" sodipodi:radius="16.818087" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 842.03)" d="m253.7 31.255c-1.7395 0.26535-1.2159-2.2139-0.44102-2.8912 2.0998-1.8353 5.1686-0.12213 6.2233 2.0091 1.8866 3.8123-0.76223 8.1619-4.4592 9.5555-5.4255 2.0451-11.206-1.6449-12.888-6.9094-2.2415-7.0168 2.5251-14.269 9.3595-16.22 8.6004-2.4546 17.342 3.4037 19.552 11.81 2.6765 10.181-4.2813 20.42-14.26 22.884-11.759 2.9035-23.502-5.1583-26.216-16.71-3.1338-13.337 6.0349-26.586 19.16-29.549 14.914-3.3662 29.672 6.9112 32.881 21.61 3.6002 16.49-7.7873 32.758-24.06 36.213-18.066 3.8353-35.846-8.6632-39.545-26.51" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-15.859339" sodipodi:cx="253.69844" sodipodi:cy="31.254644" sodipodi:expansion="1" sodipodi:radius="35.095131" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 842.03)" d="m225.47 16.463c0.58965 0.32431-0.14625 0.95485-0.53903 0.98005-1.0644 0.06829-1.597-1.1659-1.4211-2.0581 0.31469-1.596 2.1309-2.2996 3.5772-1.8621 2.1225 0.64204 3.018 3.1072 2.3031 5.0963-0.95278 2.6511-4.0872 3.7428-6.6154 2.7441-3.1813-1.2567-4.4708-5.0691-3.1852-8.1344 1.5571-3.7126 6.0518-5.2008 9.6535-3.6262 4.2444 1.8556 5.9319 7.0352 4.0672 11.173-2.1529 4.7768-8.019 6.6638-12.692 4.5082-5.3094-2.4493-7.3963-9.003-4.9492-14.211 2.7452-5.8423 9.9873-8.1291 15.73-5.3903 6.3753 3.0407 8.8623 10.972 5.8313 17.249" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.346712" sodipodi:cx="225.47298" sodipodi:cy="16.463167" sodipodi:expansion="1" sodipodi:radius="13.422048" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 842.03)" d="m125.71 42.362-14.404-3.9992-11.46 9.5986-0.64768-14.935-12.67-7.9333 14.004-5.2311 3.6297-14.502 9.3025 11.702 14.914-1.0292-8.2546 12.463z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.72927738" sodipodi:arg2="1.3575959" sodipodi:cx="108.92823" sodipodi:cy="27.362183" sodipodi:r1="22.511335" sodipodi:r2="11.255667" sodipodi:sides="5" sodipodi:type="star"/>
+  <path transform="translate(20 842.03)" d="m131.43 40.934-9.6121-7.6866-11.781 3.5605 4.3401-11.517-7.0269-10.104 12.294 0.56876 7.4384-9.8054 3.2583 11.868 11.624 4.0443-10.281 6.7663z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="1.133005" sodipodi:arg2="1.7613236" sodipodi:cx="123.57109" sodipodi:cy="24.147896" sodipodi:r1="18.533615" sodipodi:r2="9.2668076" sodipodi:sides="5" sodipodi:type="star"/>
+  <path transform="translate(20 842.03)" d="m149.29 34.862-10.28-1.5383-7.0953 7.5966-1.7138-10.253-9.4174-4.4005 9.2212-4.7982 1.275-10.316 7.4128 7.2871 10.205-1.9753-4.6398 9.3019z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.60698766" sodipodi:arg2="1.2353062" sodipodi:cx="136.42823" sodipodi:cy="25.933609" sodipodi:r1="15.653291" sodipodi:r2="7.8266454" sodipodi:sides="5" sodipodi:type="star"/>
+  <path transform="translate(20 842.03)" d="m166.79 26.291-10.51 1.7486-4.5176 9.6488-4.9106-9.4548-10.573-1.3148 7.4746-7.592-2.0166-10.461 9.5302 4.7627 9.3262-5.1507-1.5846 10.536z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.29358899" sodipodi:arg2="0.92190752" sodipodi:cx="151.42822" sodipodi:cy="21.647896" sodipodi:r1="16.043627" sodipodi:r2="8.0218134" sodipodi:sides="5" sodipodi:type="star"/>
+  <path transform="translate(20 842.03)" d="m184.64 21.648-5.3031-0.02752-3.0291 4.353-1.6126-5.0521-5.076-1.5357 4.3065-3.0948-0.10804-5.3021 4.2742 3.1394 5.0092-1.7412-1.6649 5.0351z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.46364761" sodipodi:arg2="1.0919661" sodipodi:cx="177.49966" sodipodi:cy="18.076466" sodipodi:r1="7.9859571" sodipodi:r2="3.9929783" sodipodi:sides="5" sodipodi:type="star"/>
+  <path transform="translate(20 842.03)" d="m202.14 24.505-3.7067-1.0799-2.991 2.4413-0.11839-3.859-3.246-2.0902 3.6335-1.3051 0.9848-3.7331 2.364 3.0524 3.8547-0.21699-2.1725 3.1916z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:flatsided="false" inkscape:randomized="0" inkscape:rounded="0" sodipodi:arg1="0.74194727" sodipodi:arg2="1.3702658" sodipodi:cx="197.85681" sodipodi:cy="20.576469" sodipodi:r1="5.8138647" sodipodi:r2="2.9069321" sodipodi:sides="5" sodipodi:type="star"/>
+  <rect id="cf" x="20" y="914.58" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cf"/>
    </flowRegion>
-   <flowDiv>移動、縮放、旋轉</flowDiv>
+   <flowDiv>這些工具統稱為<flowSpan font-style="italic">形狀工具</flowSpan>。每個你建立的形狀會顯示一個或多個方塊形狀的<flowSpan font-style="italic">控制點</flowSpan>；試著拖動它們可見到形狀如何跟著變化。形狀工具的控制面板可用另一種方式來微調形狀；這些控制影響目前選擇的形狀 (即那些顯示的控制點) <flowSpan font-style="italic">並且</flowSpan>將會套用到新建立形狀的預設情形。</flowDiv>
   </flowRoot>
-  <rect id="ce" x="20" y="1134.9" width="300" height="1e3px" display="none"/>
+  <rect id="ce" x="20" y="964" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ce"/>
    </flowRegion>
-   <flowDiv>The most frequently used Inkscape tool is the <flowSpan font-style="italic">Selector</flowSpan>. Click the topmost button (with the arrow) on the toolbar, or press <flowSpan font-weight="bold">s</flowSpan>, <flowSpan font-weight="bold">F1</flowSpan> or toggle the tool using <flowSpan font-weight="bold">Space</flowSpan>. Now you can select any object on the canvas. Click on the rectangle below.</flowDiv>
+   <flowDiv>按 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan> 可<flowSpan font-style="italic">復原</flowSpan>你上一個動作。(或者，如果你改變主意，可以用 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">Z</flowSpan> 快捷鍵<flowSpan font-style="italic">重做</flowSpan>復原的動作。)</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 1181.6)" x="129.71" y=".66667" width="40.574" height="38.81" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
-  <rect id="cd" x="20" y="1233.7" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="cd" x="20" y="998.34" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#cd"/>
    </flowRegion>
-   <flowDiv>你會見到 8 個箭頭形狀的控制點出現在物件的四周。現在你可以：</flowDiv>
+   <flowDiv>移動、縮放、旋轉</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1257.2)" r="2"/>
-  <rect id="cc" x="40" y="1251.2" width="280" height="1e3px" display="none"/>
+  <rect id="cc" x="20" y="1010.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cc"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Move</flowSpan> the object by dragging it. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to restrict movement to horizontal and vertical.)</flowDiv>
+   <flowDiv>使用最頻繁的 Inkscape 工具就是<flowSpan font-style="italic">選取器</flowSpan>。點選工具列上最上面的按鈕 (箭頭)，或者按 <flowSpan font-weight="bold">s</flowSpan>、<flowSpan font-weight="bold">F1</flowSpan> 或用 <flowSpan font-weight="bold">空白鍵</flowSpan> 切換工具。現在你可以在畫布上選取任何物件。點擊下面的矩形。</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1285.2)" r="2"/>
-  <rect id="cb" x="40" y="1279.2" width="280" height="1e3px" display="none"/>
+  <rect transform="translate(20 1046.9)" x="129.71" y=".66667" width="40.574" height="38.81" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt"/>
+  <rect id="cb" x="20" y="1099.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#cb"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Scale</flowSpan> the object by dragging any handle. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to preserve the original height/width ratio.)</flowDiv>
+   <flowDiv>你會見到 8 個箭頭形狀的控制點出現在物件的四周。現在你可以：</flowDiv>
   </flowRoot>
-  <rect id="ca" x="20" y="1307.1" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1122.6)" r="2"/>
+  <rect id="ca" x="40" y="1116.6" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ca"/>
    </flowRegion>
-   <flowDiv>現在再點一次矩形。控制點改變了。現在你可以：</flowDiv>
+   <flowDiv>拖動它來<flowSpan font-style="italic">移動</flowSpan>物件。(按 <flowSpan font-weight="bold">Ctrl</flowSpan> 以固定移動方向為垂直和水平)</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1330.5)" r="2"/>
-  <rect id="bz" x="40" y="1324.5" width="280" height="1e3px" display="none"/>
+  <circle transform="translate(35 1140.8)" r="2"/>
+  <rect id="bz" x="40" y="1134.8" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bz"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Rotate</flowSpan> the object by dragging the corner handles. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to restrict rotation to 15 degree steps. Drag the cross mark to position the center of rotation.)</flowDiv>
+   <flowDiv>拖動任何控制點來<flowSpan font-style="italic">縮放</flowSpan>物件大小。(按 <flowSpan font-weight="bold">Ctrl</flowSpan> 以維持原來的長寬比例)</flowDiv>
   </flowRoot>
-  <circle transform="translate(35 1358.5)" r="2"/>
-  <rect id="by" x="40" y="1352.5" width="280" height="1e3px" display="none"/>
+  <rect id="by" x="20" y="1153" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#by"/>
    </flowRegion>
-   <flowDiv><flowSpan font-style="italic">Skew</flowSpan> (shear) the object by dragging non-corner handles. (Press <flowSpan font-weight="bold">Ctrl</flowSpan> to restrict skewing to 15 degree steps.)</flowDiv>
+   <flowDiv>現在再點一次矩形。控制點改變了。現在你可以：</flowDiv>
   </flowRoot>
-  <rect id="bx" x="20" y="1380.5" width="300" height="1e3px" display="none"/>
+  <circle transform="translate(35 1176.5)" r="2"/>
+  <rect id="bx" x="40" y="1170.5" width="280" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bx"/>
    </flowRegion>
-   <flowDiv>While using the Selector, you can also use the numeric entry fields in the Tool Controls bar (above the canvas) to set exact values for coordinates (X and Y) and size (W and H) of the selection. </flowDiv>
+   <flowDiv>拖動頂點上的控制點來<flowSpan font-style="italic">旋轉</flowSpan>物件。(按 <flowSpan font-weight="bold">Ctrl</flowSpan> 以固定每 15 度為一階作旋轉。拖動交叉記號以改變旋轉中心的位置。)</flowDiv>
   </flowRoot>
-  <rect id="bw" x="20" y="1422.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <circle transform="translate(35 1205.4)" r="2"/>
+  <rect id="bw" x="40" y="1199.4" width="280" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bw"/>
    </flowRegion>
-   <flowDiv>用按鍵改變物件</flowDiv>
+   <flowDiv>拖動非頂點上的控制點來<flowSpan font-style="italic">傾斜</flowSpan> (切變) 物件。(按 <flowSpan font-weight="bold">Ctrl</flowSpan> 以固定每 15 度為一階作傾斜 。)</flowDiv>
   </flowRoot>
-  <rect id="bv" x="20" y="1435.2" width="300" height="1e3px" display="none"/>
+  <rect id="bv" x="20" y="1228.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bv"/>
    </flowRegion>
-   <flowDiv>One of the features that set Inkscape apart from most other vector editors is its emphasis on keyboard accessibility. There's hardly any command or action that is impossible to do from keyboard, and transforming objects is no exception. </flowDiv>
+   <flowDiv>當用選取器時，你也可以使用工具控制列 (畫布上方) 的數字輸入區來設定選取的坐標 (X 和 Y) 和大小 (W 和 H) 的準確數值。</flowDiv>
   </flowRoot>
-  <rect id="bu" x="20" y="1473.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bu" x="20" y="1262.7" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bu"/>
    </flowRegion>
-   <flowDiv>You can use the keyboard to move (<flowSpan font-weight="bold">arrow</flowSpan> keys), scale (<flowSpan font-weight="bold">&lt;</flowSpan> and <flowSpan font-weight="bold">&gt;</flowSpan> keys), and rotate (<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">]</flowSpan> keys) objects. Default moves and scales are by 2 px; with <flowSpan font-weight="bold">Shift</flowSpan>, you move by 10 times that. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> and <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> scale up or down to 200% or 50% of the original, respectively. Default rotates are by 15 degrees; with <flowSpan font-weight="bold">Ctrl</flowSpan>, you rotate by 90 degrees.</flowDiv>
+   <flowDiv>用按鍵改變物件</flowDiv>
   </flowRoot>
-  <rect id="bt" x="20" y="1523.1" width="300" height="1e3px" display="none"/>
+  <rect id="bt" x="20" y="1275" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bt"/>
    </flowRegion>
-   <flowDiv>However, perhaps the most useful are <flowSpan font-style="italic">pixel-size transformations</flowSpan>, invoked by using <flowSpan font-weight="bold">Alt</flowSpan> with the transform keys. For example, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrows</flowSpan> will move the selection by 1 <flowSpan font-style="italic">screen pixel</flowSpan> (i.e. a pixel on your monitor). This means that if you zoom in, you can move objects with very high precision, if you're using <flowSpan font-weight="bold">Alt</flowSpan> with your keyboard shortcut. In reverse, when you zoom out, precision will be lower when you use the <flowSpan font-weight="bold">Alt</flowSpan> key. Using different zoom levels, you can vary the amount of precision that you need for your current task.</flowDiv>
+   <flowDiv>一個 Inkscape 的特色是除了大部份向量繪圖的特點以外還強調能用鍵盤完成所有設定。幾乎沒有任何命令和動作是鍵盤做不到的，改變物件也沒有例外。</flowDiv>
   </flowRoot>
-  <rect id="bs" x="20" y="1593.8" width="300" height="1e3px" display="none"/>
+  <rect id="bs" x="20" y="1303.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bs"/>
    </flowRegion>
-   <flowDiv>Similarly, <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> scale the selection so that its visible size changes by one screen pixel, and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> rotate it so that its farthest-from-center point moves by one screen pixel.</flowDiv>
+   <flowDiv>你可以使用鍵盤操作移動 (<flowSpan font-weight="bold">方向鍵</flowSpan>)、縮放 (<flowSpan font-weight="bold">&lt;</flowSpan> 和 <flowSpan font-weight="bold">&gt;</flowSpan> 鍵) 和旋轉 (<flowSpan font-weight="bold">[</flowSpan> 和 <flowSpan font-weight="bold">]</flowSpan> 鍵) 物件。預設移動和縮放的單位為 2 px；按 <flowSpan font-weight="bold">Shift</flowSpan>，以 10 倍預設值來移動或縮放。<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> 和 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> 分別放大或縮小為原來的 200% 或 50%。預設以 15 度進行旋轉；按 <flowSpan font-weight="bold">Ctrl</flowSpan>，可以以 90 度進行旋轉。</flowDiv>
   </flowRoot>
-  <rect id="br" x="20" y="1632.4" width="300" height="1e3px" display="none"/>
+  <rect id="br" x="20" y="1352.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#br"/>
    </flowRegion>
-   <flowDiv>Note: Linux users may not get the expected results with the <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrow</flowSpan> and a few other key combinations if their Window Manager catches those key events before they reach the Inkscape application (and uses it to do things like switching workspaces instead). One solution would be to change the Window Manager's configuration accordingly.</flowDiv>
+   <flowDiv>無論如何，或許最有用的是<flowSpan font-style="italic">像素大小的改變</flowSpan>，藉由使用 <flowSpan font-weight="bold">Alt</flowSpan> 搭配改變按鍵來調用。例如，<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">方向鍵</flowSpan> 可&gt;以 1 <flowSpan font-style="italic">螢幕像素</flowSpan> (即你的螢幕上一個像素大小) 移動選取物件。這表示如果放大 (拉近) 畫面，用 <flowSpan font-weight="bold">Alt</flowSpan> 搭配快捷鍵你可以以很高精確度的方式移動物件。相反地，縮小 (拉遠) 畫面時，移動精確度會小於使用 <flowSpan font-weight="bold">Alt</flowSpan> 鍵移動。使用不同螢幕縮放等級，你按照任務需求使用各種精確度。</flowDiv>
   </flowRoot>
-  <rect id="bq" x="20" y="1687.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bq" x="20" y="1412.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bq"/>
    </flowRegion>
-   <flowDiv>多重選取</flowDiv>
+   <flowDiv>同樣地，<flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&gt;</flowSpan> 和 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">&lt;</flowSpan> 縮放選取物件是由 1 螢幕像素改變外觀大小，而 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">[</flowSpan> 和 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">]</flowSpan> 旋轉是以距離中心最遠的點移動 1 螢幕像素。</flowDiv>
   </flowRoot>
-  <rect id="bp" x="20" y="1699.4" width="300" height="1e3px" display="none"/>
+  <rect id="bp" x="20" y="1441.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bp"/>
    </flowRegion>
-   <flowDiv>You can select any number of objects simultaneously by <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>ing them. Or, you can <flowSpan font-weight="bold">drag</flowSpan> around the objects you need to select; this is called <flowSpan font-style="italic">rubberband selection</flowSpan>. (Selector creates rubberband when dragging from an empty space; however, if you press <flowSpan font-weight="bold">Shift</flowSpan> before starting to drag, Inkscape will always create the rubberband.) Practice by selecting all three of the shapes below:</flowDiv>
+   <flowDiv>備註：如果 Linux 使用者的視窗管理程式在進行 inkscape 應用前捕獲那些按鍵事件 (該快捷鍵可能被用於切換工作區)，那麼可能無法得到 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">arrow</flowSpan> 和一些其他按鍵組合預期的結果。因此其中一種解決方式就是改變視窗管理器的設置。</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 1767.4)" x="84.63" y="6.0478" width="25.253" height="26.656" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt"/>
-  <path transform="translate(20 1767.4)" d="m166.54 18.915c0 7.8776-7.8516 14.264-17.537 14.264s-17.537-6.386-17.537-14.264c0-7.8775 7.8516-14.264 17.537-14.264s17.537 6.386 17.537 14.264z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 1767.4)" d="m213.42 29.945-11.509-2.8097-8.8394 7.8882-0.88434-11.814-10.234-5.9692 10.963-4.4919 2.5147-11.577 7.6597 9.0381 11.788-1.186-6.2288 10.078z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
-  <rect id="bo" x="20" y="1815.6" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bo" x="20" y="1485.4" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bo"/>
    </flowRegion>
-   <flowDiv>Now, use rubberband (by drag or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan>) to select the two ellipses but not the rectangle:</flowDiv>
+   <flowDiv>多重選取</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 1841)" x="74.428" y="1.7363" width="151.14" height="39.698" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".93523pt"/>
-  <path transform="translate(20 1841)" d="m141.19 16.262c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 1841)" d="m168.87 16.619c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
-  <rect id="bn" x="20" y="1893.9" width="300" height="1e3px" display="none"/>
+  <rect id="bn" x="20" y="1497.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bn"/>
    </flowRegion>
-   <flowDiv>Each individual object within a selection displays a <flowSpan font-style="italic">selection cue</flowSpan> — by default, a dashed rectangular frame. These cues make it easy to see at once what is selected and what is not. For example, if you select both the two ellipses and the rectangle, without the cues you would have a hard time guessing whether the ellipses are selected or not.</flowDiv>
+   <flowDiv>你可以用多次 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 來同時選取任意數量的物件。或者，你可以在需要選取的物件周圍<flowSpan font-weight="bold">拖曳</flowSpan>；這稱為<flowSpan font-style="italic">框選</flowSpan>。(當從一個空白區域拖曳時，選取器會產生一個矩形線框；不過如果你在開始拖曳前按 <flowSpan font-weight="bold">Shift</flowSpan>，Inkscape 就會一直產生矩形線框。) 藉由選取下面全部三個物件做練習：</flowDiv>
   </flowRoot>
-  <rect id="bm" x="20" y="1943.2" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 1555)" x="84.63" y="6.0478" width="25.253" height="26.656" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt"/>
+  <path transform="translate(20 1555)" d="m166.54 18.915c0 7.8776-7.8516 14.264-17.537 14.264s-17.537-6.386-17.537-14.264c0-7.8775 7.8516-14.264 17.537-14.264s17.537 6.386 17.537 14.264z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 1555)" d="m213.42 29.945-11.509-2.8097-8.8394 7.8882-0.88434-11.814-10.234-5.9692 10.963-4.4919 2.5147-11.577 7.6597 9.0381 11.788-1.186-6.2288 10.078z" color="#000000" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".80106pt" inkscape:connector-curvature="0"/>
+  <rect id="bm" x="20" y="1603.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bm"/>
    </flowRegion>
-   <flowDiv><flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>ing on a selected object excludes it from the selection. Select all three objects above, then use <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> to exclude both ellipses from the selection leaving only the rectangle selected.</flowDiv>
+   <flowDiv>現在，使用框選 (拖曳或 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">拖曳</flowSpan>) 來選擇這兩個橢圓，但不要矩形：</flowDiv>
   </flowRoot>
-  <rect id="bl" x="20" y="1981.9" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 1629.4)" x="74.428" y="1.7363" width="151.14" height="39.698" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".93523pt"/>
+  <path transform="translate(20 1629.4)" d="m141.19 16.262c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 1629.4)" d="m168.87 16.619c4.8816 4.8816 6.7471 10.931 4.1669 13.511-2.5802 2.5802-8.6292 0.71467-13.511-4.1669-4.8816-4.8816-6.7471-10.931-4.1669-13.511 2.5802-2.5802 8.6292-0.71468 13.511 4.1669z" color="#000000" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".48693pt" inkscape:connector-curvature="0"/>
+  <rect id="bl" x="20" y="1682.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bl"/>
    </flowRegion>
-   <flowDiv>Pressing <flowSpan font-weight="bold">Esc</flowSpan> deselects all selected objects. <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> selects all objects in the current layer (if you did not create any layers, this is the same as all objects in the document). The default behavior of the <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> shortcut can be adjusted in the preferences.</flowDiv>
+   <flowDiv>每個單獨的物件在選取範圍內會顯示<flowSpan font-style="italic">選取標示</flowSpan> — 預設是一個矩形虛線框。這些標示使得容易一眼看出哪個被選取、哪個沒被選取。舉例來說，如果你選擇兩個橢圓形和一個矩形，沒有標示的情況下你會很難猜測橢圓形是否已被選取。</flowDiv>
   </flowRoot>
-  <rect id="bk" x="20" y="2025.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="bk" x="20" y="1721.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bk"/>
    </flowRegion>
-   <flowDiv>群組</flowDiv>
+   <flowDiv>在一個已選取的物件上按 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 可從選取區中將它排除。選取上面全部三個物件，然後使用 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 從選取區中將兩個橢圓形排除只留下矩形。</flowDiv>
   </flowRoot>
-  <rect id="bj" x="20" y="2038.1" width="300" height="1e3px" display="none"/>
+  <rect id="bj" x="20" y="1749.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bj"/>
    </flowRegion>
-   <flowDiv>幾個物件可結合為一個<flowSpan font-style="italic">群組</flowSpan>。一個群組於拖曳或變形時會表現得像單一個物件。下面左邊的三個物件是獨立的，而右邊相同的三個物件是已群組的。試著拖動這個群組看看。</flowDiv>
+   <flowDiv>按 <flowSpan font-weight="bold">Esc</flowSpan> 鍵可取消選取任何已選擇的物件。<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> 可選取再目前圖層中所有的物件(如果你沒有建立圖層，那就變為選取文件中的所有物件)。<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan> 快捷鍵的預設行為可在偏好設定中進行調整。</flowDiv>
   </flowRoot>
-  <path transform="translate(20 2084.9)" d="m24.927 22.485h31.525v33.276h-31.525z" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2084.9)" d="m77.557 19.387c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2084.9)" d="m109.54 59.151-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <g transform="translate(21.667 627.97)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt">
-   <path d="m186.25 1479.4h31.525v33.276h-31.525z" fill="#00f" inkscape:connector-curvature="0"/>
-   <path transform="translate(104.03 224.65)" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" inkscape:connector-curvature="0"/>
-   <path transform="translate(86.386 261.2)" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0" inkscape:connector-curvature="0"/>
-  </g>
-  <rect id="bi" x="20" y="2163.3" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bi" x="20" y="1793.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bi"/>
    </flowRegion>
-   <flowDiv>To create a group, select one or more objects and press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">G</flowSpan>. To ungroup one or more groups, select them and press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan>. These actions are also accessible by <flowSpan font-weight="bold">right click</flowSpan>, the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object</flowSpan> menu, or the Commands bar. Groups themselves may be grouped, just like any other objects; such nested groups may go down to arbitrary depth. However, <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> only ungroups the topmost level of grouping in a selection; you'll need to press <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> repeatedly if you want to completely ungroup a deep group-in-group (or use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Extensions</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Arrange</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Deep Ungroup</flowSpan>).</flowDiv>
+   <flowDiv>群組</flowDiv>
   </flowRoot>
-  <rect id="bh" x="20" y="2244.9" width="300" height="1e3px" display="none"/>
+  <rect id="bh" x="20" y="1806" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bh"/>
    </flowRegion>
-   <flowDiv>You don't necessarily have to ungroup, however, if you want to edit an object within a group. Just <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> that object and it will be selected and editable alone, or <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> several objects (inside or outside any groups) for multiple selection regardless of grouping.</flowDiv>
+   <flowDiv>幾個物件可結合為一個<flowSpan font-style="italic">群組</flowSpan>。一個群組於拖曳或變形時會表現得像單一個物件。下面左邊的三個物件是獨立的，而右邊相同的三個物件是已群組的。試著拖動這個群組看看。</flowDiv>
   </flowRoot>
-  <rect id="bg" x="20" y="2283.6" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 1852.7)" d="m24.927 22.485h31.525v33.276h-31.525z" fill="#00f" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 1852.7)" d="m77.557 19.387c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 1852.7)" d="m109.54 59.151-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <g transform="translate(21.667 395.8)" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt">
+   <path d="m186.25 1479.4h31.525v33.276h-31.525z" fill="#00f" inkscape:connector-curvature="0"/>
+   <path transform="translate(104.03 224.65)" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806s-21.892-7.9719-21.892-17.806c0-9.8338 9.8015-17.806 21.892-17.806s21.892 7.9719 21.892 17.806z" fill="#f00" inkscape:connector-curvature="0"/>
+   <path transform="translate(86.386 261.2)" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" fill="#ff0" inkscape:connector-curvature="0"/>
+  </g>
+  <rect id="bg" x="20" y="1931.1" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bg"/>
    </flowRegion>
-   <flowDiv>You can also <flowSpan font-weight="bold">double-click</flowSpan> on a group, to enter it and access all the objects inside without ungrouping. <flowSpan font-weight="bold">Double-click</flowSpan> on any empty canvas area to leave the group again.</flowDiv>
+   <flowDiv>你選取一個或多個物件並按 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">G</flowSpan> 可建立一個群組。選取它們並按 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> 可解散一個或多個群組。這些動作也可由 <flowSpan font-weight="bold">點擊滑鼠右鍵</flowSpan>、<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">物件</flowSpan>選單或命令列完成。多個群組本身也可能被再次群組，只是看起來像任何其他物件；這樣遞迴的群組可以做下去到任意深度。然而，<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> 只會解散一個選取中最上層的群組；如果想要完全解散深層的「群組中有群組」，那麼就需要重複地按 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">U</flowSpan> (或者使用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">擴充模組</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">排列</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">深層解散群組</flowSpan>)。</flowDiv>
   </flowRoot>
-  <rect id="bf" x="20" y="2311.5" width="300" height="1e3px" display="none"/>
+  <rect id="bf" x="20" y="2002.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bf"/>
    </flowRegion>
-   <flowDiv>Try to move or transform the individual shapes in the group (above right) without ungrouping it, then deselect and select the group normally to see that it still remains grouped. </flowDiv>
+   <flowDiv>如果想要編輯群組中的一個物件，你未必一定得解散群組。只要 <flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 那個物件，那麼物件會被選取並可進行編輯，或者 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 多個物件(任何群組的內部或外面)來多重選取而不管群組與否。</flowDiv>
   </flowRoot>
-  <rect id="be" x="20" y="2344.9" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="be" x="20" y="2042.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#be"/>
    </flowRegion>
-   <flowDiv>填色和邊框</flowDiv>
+   <flowDiv>你也可以在群組上<flowSpan font-weight="bold">點擊兩下</flowSpan>，進入群組內部並存取全部物件而不需要解散群組。在空白畫布區域上再次<flowSpan font-weight="bold">點擊兩下</flowSpan>離開群組。</flowDiv>
   </flowRoot>
-  <rect id="bd" x="20" y="2357.3" width="300" height="1e3px" display="none"/>
+  <rect id="bd" x="20" y="2070.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bd"/>
    </flowRegion>
-   <flowDiv>Probably the simplest way to paint an object some color is to select an object, and click a <flowSpan font-style="italic">swatch</flowSpan> (color field) in the palette below the canvas to paint it (change its fill color).</flowDiv>
+   <flowDiv>試著不解散群組便移動或變形群組 (右上) 內個別的形狀，然後取消選擇並再次選取群組可發現其仍維持群組狀態。</flowDiv>
   </flowRoot>
-  <rect id="bc" x="20" y="2385.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="bc" x="20" y="2103.9" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#bc"/>
    </flowRegion>
-   <flowDiv>Alternatively, you can open the Swatches dialog from the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">View</flowSpan> menu (or press <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">W</flowSpan>), select the palette that you want to use after clicking on the little triangle in its top right corner, select an object, and click any swatch to fill the object (change its fill color).</flowDiv>
+   <flowDiv>填色和邊框</flowDiv>
   </flowRoot>
-  <rect id="bb" x="20" y="2434.7" width="300" height="1e3px" display="none"/>
+  <rect id="bb" x="20" y="2116.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#bb"/>
    </flowRegion>
-   <flowDiv>More powerful is the Fill and Stroke dialog from the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object</flowSpan> menu (or press <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F</flowSpan>). Select the shape below and open the Fill and Stroke dialog.</flowDiv>
+   <flowDiv>設定物件顏色最簡單的方式是選取物件，然後點擊畫布下方調色盤上的<flowSpan font-style="italic">色票</flowSpan> (顏色欄位) 便可將其作為物件的填色。</flowDiv>
   </flowRoot>
-  <path transform="translate(20 2470.9)" d="m216.26 17.909c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <rect id="ba" x="20" y="2516.9" width="300" height="1e3px" display="none"/>
+  <rect id="ba" x="20" y="2145.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ba"/>
    </flowRegion>
-   <flowDiv>You will see that the dialog has three tabs: Fill, Stroke paint, and Stroke style. The Fill tab lets you edit the fill (interior) of the selected object(s). Using the buttons just below the tab, you can select types of fill, including no fill (the button with the X), flat color fill, as well as linear or radial gradients. For the above shape, the flat fill button will be activated. </flowDiv>
+   <flowDiv>另外，你可以從<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">檢視</flowSpan>選單開啟色票對話窗 (或按 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">W</flowSpan>)，點擊右上角的小三角形然後選擇你要使用的調色盤，選取物件，並點擊任何色票作為物件的填色 (變更物件的填色)。</flowDiv>
   </flowRoot>
-  <rect id="az" x="20" y="2566.1" width="300" height="1e3px" display="none"/>
+  <rect id="az" x="20" y="2184.8" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#az"/>
    </flowRegion>
-   <flowDiv>Further below, you see a collection of <flowSpan font-style="italic">color pickers</flowSpan>, each in its own tab: RGB, CMYK, HSL, and Wheel. Perhaps the most convenient is the Wheel picker, where you can rotate the triangle to choose a hue on the wheel, and then select a shade of that hue within the triangle. All color pickers contain a slider labelled “A“ to set the <flowSpan font-style="italic">alpha</flowSpan> (opacity) of the selected color.</flowDiv>
+   <flowDiv>更強大的是從<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">物件</flowSpan>選單開啟填充和邊框對話窗 (或按 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F</flowSpan> 快捷鍵)。選取下面的形狀並開啟填充和邊框對話窗。</flowDiv>
   </flowRoot>
-  <rect id="ay" x="20" y="2615.4" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 2220.9)" d="m216.26 17.909c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill="#f00" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <rect id="ay" x="20" y="2267" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ay"/>
    </flowRegion>
-   <flowDiv>每當你選擇一個物件，顏色選擇器會更新並顯示目前的填色和邊框 (若是多重選取，對話窗顯示是它們的<flowSpan font-style="italic">平均</flowSpan>顏色)。用這些樣品玩玩或建立你自己的：</flowDiv>
+   <flowDiv>你會見到對話窗有三個分頁：填充、邊框塗繪和邊框樣式。填充分頁讓你編輯選取物件的填色 (內部)。使用於分頁下面一點的按鈕可選擇填入類型，包括沒有填色 (有 X 圖案的按鈕)、純色填充、線性漸層或放射狀漸層。以上面的形狀來說，純色填充按鈕會是開啟的狀態。</flowDiv>
   </flowRoot>
-  <path transform="translate(20 2652.3)" d="m77.917 17.306c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#80765b" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2652.3)" d="m112.83 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#d0765b" fill-opacity=".26769" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2652.3)" d="m148.18 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#12c097" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2652.3)" d="m181.96 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#e7da05" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2652.3)" d="m213.78 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#3d0fa1" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2652.3)" d="m245.6 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#6fe225" fill-opacity=".74902" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2652.3)" d="m277.42 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#ff3077" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
-  <rect id="ax" x="20" y="2699.5" width="300" height="1e3px" display="none"/>
+  <rect id="ax" x="20" y="2316.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ax"/>
    </flowRegion>
-   <flowDiv>使用邊框填塗分頁可以移除物件的<flowSpan font-style="italic">邊框</flowSpan> (輪廓)，或者指定任何顏色或透明度 ：</flowDiv>
+   <flowDiv>更進一步你會看到<flowSpan font-style="italic">顏色選擇器</flowSpan>的集合在它們自己所屬的分頁中：RGB、CMYK、HSL和色環。色環選擇器大概是最方便的，你可以旋轉三角形來選擇色環上的色相，然後在三角形範圍裡選擇那個色相的明暗程度。所有顏色選擇器包含一個滑動拉桿可設定選取物件的 <flowSpan font-style="italic">透明</flowSpan>(不透明度)。</flowDiv>
   </flowRoot>
-  <path transform="translate(20 2725.8)" d="m76.488 17.707c0 9.2086-12.397 16.674-27.689 16.674s-27.689-7.4651-27.689-16.674c0-9.2086 12.397-16.674 27.689-16.674s27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2725.8)" d="m103.03 17.707c0 9.2086-12.397 16.674-27.689 16.674s-27.689-7.4651-27.689-16.674c0-9.2086 12.397-16.674 27.689-16.674s27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2725.8)" d="m132.9 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-opacity=".15692" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2725.8)" d="m159.44 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#f00" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2725.8)" d="m189.3 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#00ff7c" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2725.8)" d="m222.48 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#16417c" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2725.8)" d="m252.35 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#7c7016" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2725.8)" d="m278.89 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <rect id="aw" x="20" y="2772.4" width="300" height="1e3px" display="none"/>
+  <rect id="aw" x="20" y="2366.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#aw"/>
    </flowRegion>
-   <flowDiv>最後一個分頁「邊框樣式」讓你設定寬度和邊框的其他參數：</flowDiv>
+   <flowDiv>每當你選擇一個物件，顏色選擇器會更新並顯示目前的填色和邊框 (若是多重選取，對話窗顯示是它們的<flowSpan font-style="italic">平均</flowSpan>顏色)。用這些樣品玩玩或建立你自己的：</flowDiv>
   </flowRoot>
-  <path transform="translate(20 2797.8)" d="m76.995 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-width=".011592" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2797.8)" d="m103.28 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-width="2.3184" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2797.8)" d="m136.14 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-width="9.2734" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2797.8)" d="m169 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="1.73877, 3.47754" stroke-width="1.7388" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2797.8)" d="m205.14 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 6.95506" stroke-width="1.7388" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2797.8)" d="m241.29 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 3.47753, 1.73877, 3.47753" stroke-width="1.7388" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2797.8)" d="m277.43 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.811426, 0.811426" stroke-width=".81143" inkscape:connector-curvature="0"/>
-  <rect id="av" x="20" y="2852.1" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 2403.5)" d="m77.917 17.306c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#80765b" fill-opacity=".75" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2403.5)" d="m112.83 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#d0765b" fill-opacity=".26769" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2403.5)" d="m148.18 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#12c097" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2403.5)" d="m181.96 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#e7da05" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2403.5)" d="m213.78 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#3d0fa1" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2403.5)" d="m245.6 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#6fe225" fill-opacity=".74902" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2403.5)" d="m277.42 17.852c0 9.2019-12.388 16.662-27.668 16.662-15.281 0-27.668-7.4596-27.668-16.662s12.388-16.662 27.668-16.662c15.281 0 27.668 7.4596 27.668 16.662z" fill="#ff3077" fill-rule="evenodd" stroke="#000" stroke-width=".96626pt" inkscape:connector-curvature="0"/>
+  <rect id="av" x="20" y="2450.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#av"/>
    </flowRegion>
-   <flowDiv>Finally, instead of a flat color, you can use <flowSpan font-style="italic">gradients</flowSpan> for fills and/or strokes:</flowDiv>
+   <flowDiv>使用邊框填塗分頁可以移除物件的<flowSpan font-style="italic">邊框</flowSpan> (輪廓)，或者指定任何顏色或透明度 ：</flowDiv>
+  </flowRoot>
+  <path transform="translate(20 2477)" d="m76.488 17.707c0 9.2086-12.397 16.674-27.689 16.674s-27.689-7.4651-27.689-16.674c0-9.2086 12.397-16.674 27.689-16.674s27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2477)" d="m103.03 17.707c0 9.2086-12.397 16.674-27.689 16.674s-27.689-7.4651-27.689-16.674c0-9.2086 12.397-16.674 27.689-16.674s27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2477)" d="m132.9 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-opacity=".15692" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2477)" d="m159.44 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#f00" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2477)" d="m189.3 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#00ff7c" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2477)" d="m222.48 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#16417c" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2477)" d="m252.35 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" stroke="#7c7016" stroke-width=".96696pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2477)" d="m278.89 17.707c0 9.2086-12.397 16.674-27.689 16.674-15.292 0-27.689-7.4651-27.689-16.674 0-9.2086 12.397-16.674 27.689-16.674 15.292 0 27.689 7.4651 27.689 16.674z" fill="#dbdbdb" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <rect id="au" x="20" y="2523.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#au"/>
+   </flowRegion>
+   <flowDiv>最後一個分頁「邊框樣式」讓你設定寬度和邊框的其他參數：</flowDiv>
+  </flowRoot>
+  <path transform="translate(20 2549)" d="m76.995 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-width=".011592" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2549)" d="m103.28 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-width="2.3184" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2549)" d="m136.14 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-width="9.2734" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2549)" d="m169 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="1.73877, 3.47754" stroke-width="1.7388" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2549)" d="m205.14 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 6.95506" stroke-width="1.7388" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2549)" d="m241.29 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="6.95506, 3.47753, 1.73877, 3.47753" stroke-width="1.7388" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2549)" d="m277.43 21.728c0 9.1193-12.276 16.512-27.42 16.512-15.144 0-27.42-7.3927-27.42-16.512 0-9.1193 12.276-16.512 27.42-16.512 15.144 0 27.42 7.3927 27.42 16.512z" fill="#dbdbdb" fill-rule="evenodd" stroke="#000" stroke-dasharray="0.811426, 0.811426" stroke-width=".81143" inkscape:connector-curvature="0"/>
+  <rect id="at" x="20" y="2603.3" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#at"/>
+   </flowRegion>
+   <flowDiv>最後，你可以用<flowSpan font-style="italic">漸層色</flowSpan>替代純色作為填色和(或)邊框顏色：</flowDiv>
   </flowRoot>
   <defs>
    <linearGradient id="ds" x1="28.86" x2="31.507" y1="2043.7" y2="2084.7" gradientTransform="matrix(1.3307 0 0 .80132 -1.0602 -1632.8)" gradientUnits="userSpaceOnUse">
@@ -764,48 +764,48 @@
     <stop stop-color="#aba6a6" stop-opacity=".24314" offset="1"/>
    </radialGradient>
   </defs>
-  <path transform="translate(20 2877.4)" d="m70.526 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#ds)" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2877.4)" d="m98.873 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dr)" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2877.4)" d="m134.31 20.278c0 9.8338-13.238 17.806-29.568 17.806-16.33 0-29.568-7.9719-29.568-17.806s13.238-17.806 29.568-17.806c16.33 0 29.568 7.9719 29.568 17.806z" fill="url(#dp)" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2877.4)" d="m166.2 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#do)" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2877.4)" d="m208.72 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dj)" fill-rule="evenodd" stroke="url(#dq)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2877.4)" d="m192.1 20.273c0-9.8338 13.238-17.806 29.568-17.806s29.568 7.9719 29.568 17.806-13.238 17.806-29.568 17.806-29.568-7.9719-29.568-17.806z" fill="url(#dm)" fill-rule="evenodd" stroke="url(#dn)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 2877.4)" d="m286.67 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dk)" fill-rule="evenodd" stroke="url(#dl)" stroke-dasharray="3.76251, 3.76251" stroke-width="3.7625" inkscape:connector-curvature="0"/>
-  <rect id="au" x="20" y="2928.8" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 2629.5)" d="m70.526 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#ds)" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2629.5)" d="m98.873 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dr)" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2629.5)" d="m134.31 20.278c0 9.8338-13.238 17.806-29.568 17.806-16.33 0-29.568-7.9719-29.568-17.806s13.238-17.806 29.568-17.806c16.33 0 29.568 7.9719 29.568 17.806z" fill="url(#dp)" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2629.5)" d="m166.2 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#do)" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2629.5)" d="m208.72 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dj)" fill-rule="evenodd" stroke="url(#dq)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2629.5)" d="m192.1 20.273c0-9.8338 13.238-17.806 29.568-17.806s29.568 7.9719 29.568 17.806-13.238 17.806-29.568 17.806-29.568-7.9719-29.568-17.806z" fill="url(#dm)" fill-rule="evenodd" stroke="url(#dn)" stroke-width="3.7625" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2629.5)" d="m286.67 20.278c0 9.8338-13.238 17.806-29.568 17.806s-29.568-7.9719-29.568-17.806 13.238-17.806 29.568-17.806 29.568 7.9719 29.568 17.806z" fill="url(#dk)" fill-rule="evenodd" stroke="url(#dl)" stroke-dasharray="3.76251, 3.76251" stroke-width="3.7625" inkscape:connector-curvature="0"/>
+  <rect id="as" x="20" y="2680.9" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#au"/>
-   </flowRegion>
-   <flowDiv>When you switch from flat color to gradient, the newly created gradient uses the previous flat color, going from opaque to transparent. Switch to the Gradient tool (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F1</flowSpan> or just <flowSpan font-weight="bold">G</flowSpan>) to drag the <flowSpan font-style="italic">gradient handles</flowSpan> — the controls connected by lines that define the direction and length of the gradient. When any of the gradient handles is selected (highlighted blue), the Fill and Stroke dialog sets (and displays) the color of that handle instead of the color of the entire selected object.</flowDiv>
-  </flowRoot>
-  <rect id="at" x="20" y="2999.4" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#at"/>
-   </flowRegion>
-   <flowDiv>Yet another convenient way to change the color of an object is by using the Dropper tool (<flowSpan font-weight="bold">F7</flowSpan> or <flowSpan font-weight="bold">D</flowSpan>). Just <flowSpan font-weight="bold">click</flowSpan> anywhere in the drawing with that tool, and the color you clicked on will be assigned to the selected object's fill (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> will assign the stroke color).</flowDiv>
-  </flowRoot>
-  <rect id="as" x="20" y="3043.5" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#as"/>
    </flowRegion>
-   <flowDiv>再製、對齊、分佈</flowDiv>
+   <flowDiv>當你從純色切換為漸層時，會使用先前的純色建立新的漸層 (從不透明到透明)。切換到漸層工具(<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">F1</flowSpan> 或按 <flowSpan font-weight="bold">G</flowSpan> 鍵)可拖動<flowSpan font-style="italic">漸層控制點</flowSpan> — 連接控制點的直線定義漸層的方向和長度。當任何漸層控制點被選取時 (以藍色標示)，填色和邊框對話窗變為控制點的顏色而非選取物件整體的顏色。</flowDiv>
   </flowRoot>
-  <rect id="ar" x="20" y="3056" width="300" height="1e3px" display="none"/>
+  <rect id="ar" x="20" y="2730.4" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ar"/>
    </flowRegion>
-   <flowDiv>One of the most common operations is <flowSpan font-style="italic">duplicating</flowSpan> an object (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>). The duplicate is placed exactly on top of the original and is selected, so you can drag it away by <flowSpan font-weight="bold">mouse</flowSpan> or by <flowSpan font-weight="bold">arrow</flowSpan> keys. For practice, try to add copies of this black square in a line next to each other:</flowDiv>
+   <flowDiv>還有另一種簡便的方式可改變物件的顏色就是使用滴管工具 (<flowSpan font-weight="bold">F7</flowSpan> 或 <flowSpan font-weight="bold">D</flowSpan>)。只要用這個工具<flowSpan font-weight="bold">點擊</flowSpan>繪圖區中的任何地方，那麼點取的顏色會被指定為選取物件的填色 (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 會指定邊框顏色)。</flowDiv>
   </flowRoot>
-  <rect transform="translate(20 3102.7)" x="10" width="11.092" height="11.092" fill-rule="evenodd"/>
-  <rect id="aq" x="20" y="3125.8" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <rect id="aq" x="20" y="2775.4" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aq"/>
    </flowRegion>
-   <flowDiv>Chances are, your copies of the square are placed more or less randomly. This is where the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Align and Distribute</flowSpan> dialog (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>) is useful. Select all the squares (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> or drag a rubberband), open the dialog and press the “Center on horizontal axis” button, then the “Make horizontal gaps between objects equal” button (read the button tooltips). The objects are now neatly aligned and distributed with equal spaces in between. Here are some other alignment and distribution examples:</flowDiv>
+   <flowDiv>再製、對齊、分佈</flowDiv>
+  </flowRoot>
+  <rect id="ap" x="20" y="2787.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ap"/>
+   </flowRegion>
+   <flowDiv>最常見的動作之一為<flowSpan font-style="italic">再製</flowSpan>物件 (<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">D</flowSpan>)。再製物件會放置在原本物件的正上方並且已選取，所以你可以用<flowSpan font-weight="bold">滑鼠</flowSpan>或<flowSpan font-weight="bold">方向鍵</flowSpan>將它拖走。試著用這個黑色正方形排成直線作為練習：</flowDiv>
+  </flowRoot>
+  <rect transform="translate(20 2834.5)" x="10" width="11.092" height="11.092" fill-rule="evenodd"/>
+  <rect id="ao" x="20" y="2857.6" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ao"/>
+   </flowRegion>
+   <flowDiv>基本上你的正方形複製體有可能會任意擺放。這時<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">物件</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">對齊與分佈</flowSpan>對話窗 (<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Ctrl</flowSpan>+<flowSpan font-weight="bold">A</flowSpan>) 就相當有用。選取所有正方形(<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan>或拖曳一個選框)，開啟對話窗並點選“水平置中”按鈕，然後點選“物件間以同樣的水平間距來分佈”按鈕 (閱讀按鈕的工具提示)。這些物件現在排列整齊且等距離分佈。這裡是一些其他對齊和分佈的例子：</flowDiv>
   </flowRoot>
   <defs>
    <radialGradient id="dc" cx="188.95" cy="2278" r="19.568" gradientTransform="matrix(-1.0695 0 0 .93503 431.93 -2103.1)" gradientUnits="userSpaceOnUse" xlink:href="#c"/>
@@ -829,220 +829,220 @@
     <stop stop-color="#0082ab" stop-opacity="0" offset="1"/>
    </linearGradient>
   </defs>
-  <path transform="translate(20 3204.5)" d="m208.92 44.557 41.855 0.6907-20.329-36.593-10.763 17.951z" fill="url(#dc)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m224.07 43.678-20.273-34.005-9.6564 17.28-9.6564 17.28 19.793-0.2772z" fill="url(#dd)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m232.97 38.89-10.862-23.877-15.247 21.346 13.055 1.2656z" fill="url(#de)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m241.88 35.755-7.5821-10.246-7.5821-10.246-10.165 23.379 12.664-1.4432z" fill="url(#df)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m197.36 33.776-7.3778-13.649-8.1317 13.214 7.7548 0.2176z" fill="url(#dg)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m206.26 33.114-9.6466-13.786-3.5576 7.6235-3.5576 7.6234 8.3809-0.7307z" fill="url(#dh)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m215.17 32.319-4.3649-10.736-7.1152 9.1482 5.7401 0.7939z" fill="url(#di)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m48.478 5.2707 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m45.935 9.5989 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m43.392 13.927 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m40.849 18.255 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m38.306 22.584 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m35.763 26.912 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m33.22 31.24 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m30.677 35.568 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m28.134 39.897 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5) matrix(0 .6141 -.6141 0 1442.7 -30.971)" d="m131.46 2120.6c0.41193 0.206-0.0744 0.6569-0.34233 0.6847-0.72607 0.075-1.1234-0.7544-1.027-1.3693 0.1724-1.0999 1.3955-1.6298 2.3963-1.3694 1.4687 0.3822 2.1472 2.044 1.7117 3.4234-0.58046 1.8385-2.6947 2.6691-4.4503 2.0539-2.2093-0.774-3.1933-3.3465-2.3963-5.4773 0.96528-2.5806 3.9991-3.7188 6.5043-2.7386 2.9523 1.1551 4.2452 4.6519 3.081 7.5313-1.3442 3.3243-5.3051 4.7721-8.5583 3.4233-3.6965-1.5326-5.2994-5.9584-3.7656-9.5853 1.7206-4.0689 6.6118-5.8269 10.612-4.108 4.4413 1.9084 6.3547 7.2654 4.4503 11.639" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.385908" sodipodi:cx="131.4554" sodipodi:cy="2120.6279" sodipodi:expansion="1" sodipodi:radius="9.1857243" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 3204.5) matrix(0 .6141 -.6141 0 1458.9 -40.212)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 3204.5) matrix(0 .6141 -.6141 0 1442.7 -54.588)" d="m154.34 2141.8c1.1181 0.5885-0.24162 1.7976-0.97809 1.8584-1.9958 0.1649-3.0381-2.1335-2.7386-3.8145 0.53572-3.007 3.9209-4.3904 6.651-3.619 4.0066 1.1321 5.7726 5.7289 4.4992 9.4875-1.6972 5.0097-7.5437 7.167-12.324 5.3795-6.0155-2.2494-8.5676-9.3617-6.2598-15.16 2.7951-7.0231 11.181-9.9718 17.997-7.1401 8.0318 3.3371 11.378 13.002 8.0203 20.833-3.8768 9.0413-14.824 12.786-23.67 8.9006-10.051-4.4149-14.195-16.646-9.7809-26.506 4.952-11.062 18.468-15.605 29.343-10.661 12.073 5.4883 17.015 20.291 11.541 32.179" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="154.34271" sodipodi:cy="2141.7546" sodipodi:expansion="1" sodipodi:radius="25.200598" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 3204.5) matrix(0 .6141 -.6141 0 1442.7 -65.476)" d="m177.23 2161.1c0.94157 0.2943 0.0679 1.4144-0.48904 1.565-1.5093 0.408-2.6338-1.21-2.6408-2.543-0.0126-2.3846 2.3918-3.9242 4.597-3.7168 3.2363 0.3044 5.2405 3.5853 4.7926 6.651-0.59691 4.0862-4.7822 6.5672-8.705 5.8686-4.9364-0.8792-7.899-5.9808-6.9444-10.759 1.1561-5.7871 7.1801-9.2339 12.813-8.0204 6.6381 1.4301 10.571 8.3801 9.0962 14.867-1.7021 7.4895-9.5802 11.908-16.921 10.172-8.341-1.973-13.247-10.781-11.248-18.975 2.2429-9.1927 11.981-14.587 21.029-12.324 10.044 2.5121 15.927 13.182 13.4 23.083" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.546671" sodipodi:cx="177.23004" sodipodi:cy="2161.1208" sodipodi:expansion="1" sodipodi:radius="19.674946" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 3204.5) matrix(0 .15352 -.15352 0 491.99 31.386)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 3204.5) matrix(0 .30705 -.30705 0 825.19 7.5196)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 3204.5) matrix(0 1.2282 -1.2282 0 2772.1 -135.68)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 3204.5) matrix(0 2.4564 -2.4564 0 5365.9 -326.6)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width=".125" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 3204.5)" d="m244.97 44.557-41.855 0.6907 20.329-36.593 10.763 17.951z" fill="url(#cv)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m229.82 43.678 20.273-34.005 19.313 34.56-19.793-0.2772z" fill="url(#cw)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m220.92 38.89 10.862-23.877 7.6235 10.673 7.6235 10.673-13.055 1.2656z" fill="url(#cx)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m212.01 35.755 15.164-20.492 10.165 23.379-12.664-1.4432z" fill="url(#cy)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m256.53 33.776 3.6889-6.8247 3.6889-6.8246 8.1317 13.214-7.7548 0.2176z" fill="url(#cz)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m247.63 33.114 4.8233-6.8928 4.8233-6.8927 7.1152 15.247-8.3809-0.7307z" fill="url(#da)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m238.72 32.319 2.1825-5.3681 2.1825-5.368 7.1152 9.1482-5.7401 0.7939z" fill="url(#db)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5) matrix(0 .34966 -.34966 0 872.35 1.0356)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
-  <path transform="translate(20 3204.5)" d="m193.58 52.071c-0.0437 0.9606-0.0841 2.0544-1.1052 2.797" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m200.67 52.183c0 0.7432-0.45969 2.1149-0.36838 3.0207" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m207.02 52.294c0.19998 0.6951 0.0821 1.788 1.842 2.5733" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m216.05 51.847c-0.21579 0.6669-1.8609 2.5621-1.1052 3.2446" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m223.2 52.63c-0.28049 0.399-1.3518 1.8021 0 2.3495" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m229.4 51.847c0.0915 0.9266-0.48104 1.8809 1.842 2.9089" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m238.52 52.294c0.0798 0.5698-0.99104 1.5626-1.4736 2.4614" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m243.77 52.183c0.0271 0.4366 0.19539 1.7227 2.9471 2.3495" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m252.34 52.406c0 0.1579-0.21227 1.6131 0.73678 2.2376" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m256.85 52.183c1.0548 1.2333 1.1304 2.6855 6.631 3.5801" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3204.5)" d="m267.26 52.854c0 0.8403-0.10579 1.6705 0.73678 2.4614" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
-  <rect id="ao" x="20" y="3278" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 2925.6)" d="m208.92 44.557 41.855 0.6907-20.329-36.593-10.763 17.951z" fill="url(#dc)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m224.07 43.678-20.273-34.005-9.6564 17.28-9.6564 17.28 19.793-0.2772z" fill="url(#dd)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m232.97 38.89-10.862-23.877-15.247 21.346 13.055 1.2656z" fill="url(#de)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m241.88 35.755-7.5821-10.246-7.5821-10.246-10.165 23.379 12.664-1.4432z" fill="url(#df)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m197.36 33.776-7.3778-13.649-8.1317 13.214 7.7548 0.2176z" fill="url(#dg)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m206.26 33.114-9.6466-13.786-3.5576 7.6235-3.5576 7.6234 8.3809-0.7307z" fill="url(#dh)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m215.17 32.319-4.3649-10.736-7.1152 9.1482 5.7401 0.7939z" fill="url(#di)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m48.478 5.2707 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m45.935 9.5989 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m43.392 13.927 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m40.849 18.255 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m38.306 22.584 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m35.763 26.912 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m33.22 31.24 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m30.677 35.568 53.602 14.363" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m28.134 39.897 53.602 14.362" fill="none" stroke="#000" stroke-width="1pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6) matrix(0 .6141 -.6141 0 1442.7 -30.971)" d="m131.46 2120.6c0.41193 0.206-0.0744 0.6569-0.34233 0.6847-0.72607 0.075-1.1234-0.7544-1.027-1.3693 0.1724-1.0999 1.3955-1.6298 2.3963-1.3694 1.4687 0.3822 2.1472 2.044 1.7117 3.4234-0.58046 1.8385-2.6947 2.6691-4.4503 2.0539-2.2093-0.774-3.1933-3.3465-2.3963-5.4773 0.96528-2.5806 3.9991-3.7188 6.5043-2.7386 2.9523 1.1551 4.2452 4.6519 3.081 7.5313-1.3442 3.3243-5.3051 4.7721-8.5583 3.4233-3.6965-1.5326-5.2994-5.9584-3.7656-9.5853 1.7206-4.0689 6.6118-5.8269 10.612-4.108 4.4413 1.9084 6.3547 7.2654 4.4503 11.639" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.385908" sodipodi:cx="131.4554" sodipodi:cy="2120.6279" sodipodi:expansion="1" sodipodi:radius="9.1857243" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 2925.6) matrix(0 .6141 -.6141 0 1458.9 -40.212)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 2925.6) matrix(0 .6141 -.6141 0 1442.7 -54.588)" d="m154.34 2141.8c1.1181 0.5885-0.24162 1.7976-0.97809 1.8584-1.9958 0.1649-3.0381-2.1335-2.7386-3.8145 0.53572-3.007 3.9209-4.3904 6.651-3.619 4.0066 1.1321 5.7726 5.7289 4.4992 9.4875-1.6972 5.0097-7.5437 7.167-12.324 5.3795-6.0155-2.2494-8.5676-9.3617-6.2598-15.16 2.7951-7.0231 11.181-9.9718 17.997-7.1401 8.0318 3.3371 11.378 13.002 8.0203 20.833-3.8768 9.0413-14.824 12.786-23.67 8.9006-10.051-4.4149-14.195-16.646-9.7809-26.506 4.952-11.062 18.468-15.605 29.343-10.661 12.073 5.4883 17.015 20.291 11.541 32.179" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="154.34271" sodipodi:cy="2141.7546" sodipodi:expansion="1" sodipodi:radius="25.200598" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 2925.6) matrix(0 .6141 -.6141 0 1442.7 -65.476)" d="m177.23 2161.1c0.94157 0.2943 0.0679 1.4144-0.48904 1.565-1.5093 0.408-2.6338-1.21-2.6408-2.543-0.0126-2.3846 2.3918-3.9242 4.597-3.7168 3.2363 0.3044 5.2405 3.5853 4.7926 6.651-0.59691 4.0862-4.7822 6.5672-8.705 5.8686-4.9364-0.8792-7.899-5.9808-6.9444-10.759 1.1561-5.7871 7.1801-9.2339 12.813-8.0204 6.6381 1.4301 10.571 8.3801 9.0962 14.867-1.7021 7.4895-9.5802 11.908-16.921 10.172-8.341-1.973-13.247-10.781-11.248-18.975 2.2429-9.1927 11.981-14.587 21.029-12.324 10.044 2.5121 15.927 13.182 13.4 23.083" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.546671" sodipodi:cx="177.23004" sodipodi:cy="2161.1208" sodipodi:expansion="1" sodipodi:radius="19.674946" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 2925.6) matrix(0 .15352 -.15352 0 491.99 31.386)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 2925.6) matrix(0 .30705 -.30705 0 825.19 7.5196)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 2925.6) matrix(0 1.2282 -1.2282 0 2772.1 -135.68)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 2925.6) matrix(0 2.4564 -2.4564 0 5365.9 -326.6)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width=".125" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 2925.6)" d="m244.97 44.557-41.855 0.6907 20.329-36.593 10.763 17.951z" fill="url(#cv)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m229.82 43.678 20.273-34.005 19.313 34.56-19.793-0.2772z" fill="url(#cw)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m220.92 38.89 10.862-23.877 7.6235 10.673 7.6235 10.673-13.055 1.2656z" fill="url(#cx)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m212.01 35.755 15.164-20.492 10.165 23.379-12.664-1.4432z" fill="url(#cy)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m256.53 33.776 3.6889-6.8247 3.6889-6.8246 8.1317 13.214-7.7548 0.2176z" fill="url(#cz)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m247.63 33.114 4.8233-6.8928 4.8233-6.8927 7.1152 15.247-8.3809-0.7307z" fill="url(#da)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m238.72 32.319 2.1825-5.3681 2.1825-5.368 7.1152 9.1482-5.7401 0.7939z" fill="url(#db)" fill-opacity=".75" fill-rule="evenodd" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6) matrix(0 .34966 -.34966 0 872.35 1.0356)" d="m143.19 2128.8c0.55906 0.2942-0.12081 0.8988-0.48904 0.9292-0.99789 0.082-1.5191-1.0668-1.3693-1.9073 0.26786-1.5035 1.9604-2.1952 3.3255-1.8095 2.0033 0.5661 2.8863 2.8645 2.2496 4.7438-0.84859 2.5048-3.7718 3.5835-6.162 2.6897-3.0077-1.1247-4.2838-4.6808-3.1299-7.5802 1.3975-3.5115 5.5907-4.9859 8.9984-3.57 4.0159 1.6685 5.6891 6.5011 4.0102 10.417-1.9384 4.5206-7.4118 6.393-11.835 4.4503-5.0258-2.2075-7.0975-8.3229-4.8905-13.253 2.476-5.531 9.2341-7.8023 14.671-5.3306 6.0364 2.7442 8.5075 10.146 5.7707 16.09" fill="none" stroke="#000" stroke-width="1pt" sodipodi:argument="-18.365078" sodipodi:cx="143.19247" sodipodi:cy="2128.844" sodipodi:expansion="1" sodipodi:radius="12.600299" sodipodi:revolution="3" sodipodi:t0="0" sodipodi:type="spiral"/>
+  <path transform="translate(20 2925.6)" d="m193.58 52.071c-0.0437 0.9606-0.0841 2.0544-1.1052 2.797" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m200.67 52.183c0 0.7432-0.45969 2.1149-0.36838 3.0207" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m207.02 52.294c0.19998 0.6951 0.0821 1.788 1.842 2.5733" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m216.05 51.847c-0.21579 0.6669-1.8609 2.5621-1.1052 3.2446" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m223.2 52.63c-0.28049 0.399-1.3518 1.8021 0 2.3495" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m229.4 51.847c0.0915 0.9266-0.48104 1.8809 1.842 2.9089" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m238.52 52.294c0.0798 0.5698-0.99104 1.5626-1.4736 2.4614" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m243.77 52.183c0.0271 0.4366 0.19539 1.7227 2.9471 2.3495" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m252.34 52.406c0 0.1579-0.21227 1.6131 0.73678 2.2376" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m256.85 52.183c1.0548 1.2333 1.1304 2.6855 6.631 3.5801" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 2925.6)" d="m267.26 52.854c0 0.8403-0.10579 1.6705 0.73678 2.4614" fill="none" stroke="#000" stroke-width=".36292pt" inkscape:connector-curvature="0"/>
+  <rect id="an" x="20" y="2999.1" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
-   <flowRegion>
-    <use xlink:href="#ao"/>
-   </flowRegion>
-   <flowDiv>排列順序</flowDiv>
-  </flowRoot>
-  <rect id="an" x="20" y="3290.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#an"/>
    </flowRegion>
-   <flowDiv>The term <flowSpan font-style="italic">z-order</flowSpan> refers to the stacking order of objects in a drawing, i.e. to which objects are on top of other objects, and cover them, so the bottom objects are not (completely) visible. The two commands in the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Object</flowSpan> menu, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Raise to Top</flowSpan> (the <flowSpan font-weight="bold">Home</flowSpan> key) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lower to Bottom</flowSpan> (the <flowSpan font-weight="bold">End</flowSpan> key), will move your selected objects to the very top or very bottom of the current layer's z-order. Two more commands, <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Raise</flowSpan> (<flowSpan font-weight="bold">PgUp</flowSpan>) and <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Lower</flowSpan> (<flowSpan font-weight="bold">PgDn</flowSpan>), will sink or emerge the selection <flowSpan font-style="italic">one step only</flowSpan>, i.e. move it past one non-selected object in z-order (only objects that overlap the selection count, based on their respective bounding boxes).</flowDiv>
+   <flowDiv>排列順序</flowDiv>
   </flowRoot>
-  <rect id="am" x="20" y="3371.8" width="300" height="1e3px" display="none"/>
+  <rect id="am" x="20" y="3011.3" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#am"/>
    </flowRegion>
+   <flowDiv><flowSpan font-style="italic">排列順序</flowSpan>這項涉及繪畫時物件的堆疊次序，即哪些物件在頂層而遮住其他物件，導致下方的物件 (完全) 看不見。在<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">物件</flowSpan>選單中有兩個指令 — <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">提到最上層</flowSpan> (<flowSpan font-weight="bold">Home</flowSpan> 鍵) 和<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">降到最下層</flowSpan> (<flowSpan font-weight="bold">End</flowSpan> 鍵)，可移動你的選取物件到目前圖層排列順序的最上層和最下層。另外兩個指令 — <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">提升</flowSpan> (<flowSpan font-weight="bold">PgUp</flowSpan>) 和<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">降低</flowSpan> (<flowSpan font-weight="bold">PgDn</flowSpan>)，可<flowSpan font-style="italic">只作一次</flowSpan>下沉或上升選取，即在排列順序中移動它越過一個非選取物件 (根據它們各自的邊界框，只有物件重疊選取區時才算)。</flowDiv>
+  </flowRoot>
+  <rect id="al" x="20" y="3082.9" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#al"/>
+   </flowRegion>
    <flowDiv>以反向順序排列下面的物件來練習這些指令，所以最左邊的橢圓形在頂層而最右邊那個在底層：</flowDiv>
   </flowRoot>
-  <path transform="translate(20 3407.8)" d="m144.7 29.467c0 13.289-14.32 24.061-31.984 24.061-17.664 0-31.984-10.772-31.984-24.061 0-13.289 14.32-24.061 31.984-24.061 17.664 0 31.984 10.773 31.984 24.061z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3407.8)" d="m164.66 19.907c0 10.222-11.429 18.509-25.528 18.509-14.099 0-25.528-8.2865-25.528-18.509 0-10.222 11.429-18.508 25.528-18.508 14.099 0 25.528 8.2865 25.528 18.508z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3407.8)" d="m185.78 30.38c0 7.8369-9.7215 14.19-21.714 14.19s-21.714-6.353-21.714-14.19c0-7.8368 9.7215-14.19 21.714-14.19s21.714 6.353 21.714 14.19z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3407.8)" d="m198.09 18.86c0 5.622-5.7804 10.18-12.911 10.18-7.1304 0-12.911-4.5576-12.911-10.18 0-5.6222 5.7804-10.18 12.911-10.18 7.1304 0 12.911 4.5575 12.911 10.18z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3407.8)" d="m212.19 22.63c0 4.4296-5.2549 8.0203-11.737 8.0203-6.4822 0-11.737-3.5908-11.737-8.0203 0-4.4295 5.2549-8.0203 11.737-8.0203 6.4822 0 11.737 3.5909 11.737 8.0203z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
-  <path transform="translate(20 3407.8)" d="m219.23 17.597c0 3.2369-3.2843 5.861-7.3357 5.861-4.0514 0-7.3357-2.6241-7.3357-5.861 0-3.237 3.2843-5.861 7.3357-5.861 4.0514 0 7.3357 2.624 7.3357 5.861z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
-  <rect id="ak" x="20" y="3472.6" width="300" height="1e3px" display="none"/>
+  <path transform="translate(20 3118.9)" d="m144.7 29.467c0 13.289-14.32 24.061-31.984 24.061-17.664 0-31.984-10.772-31.984-24.061 0-13.289 14.32-24.061 31.984-24.061 17.664 0 31.984 10.773 31.984 24.061z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 3118.9)" d="m164.66 19.907c0 10.222-11.429 18.509-25.528 18.509-14.099 0-25.528-8.2865-25.528-18.509 0-10.222 11.429-18.508 25.528-18.508 14.099 0 25.528 8.2865 25.528 18.508z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 3118.9)" d="m185.78 30.38c0 7.8369-9.7215 14.19-21.714 14.19s-21.714-6.353-21.714-14.19c0-7.8368 9.7215-14.19 21.714-14.19s21.714 6.353 21.714 14.19z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 3118.9)" d="m198.09 18.86c0 5.622-5.7804 10.18-12.911 10.18-7.1304 0-12.911-4.5576-12.911-10.18 0-5.6222 5.7804-10.18 12.911-10.18 7.1304 0 12.911 4.5575 12.911 10.18z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 3118.9)" d="m212.19 22.63c0 4.4296-5.2549 8.0203-11.737 8.0203-6.4822 0-11.737-3.5908-11.737-8.0203 0-4.4295 5.2549-8.0203 11.737-8.0203 6.4822 0 11.737 3.5909 11.737 8.0203z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
+  <path transform="translate(20 3118.9)" d="m219.23 17.597c0 3.2369-3.2843 5.861-7.3357 5.861-4.0514 0-7.3357-2.6241-7.3357-5.861 0-3.237 3.2843-5.861 7.3357-5.861 4.0514 0 7.3357 2.624 7.3357 5.861z" fill="#f90" fill-rule="evenodd" stroke="#000" stroke-width=".61519" inkscape:connector-curvature="0"/>
+  <rect id="ak" x="20" y="3183.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ak"/>
    </flowRegion>
-   <flowDiv>A very useful selection shortcut is the <flowSpan font-weight="bold">Tab</flowSpan> key. If nothing is selected, it selects the bottommost object; otherwise it selects the object <flowSpan font-style="italic">above the selected object(s)</flowSpan> in z-order. <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> works in reverse, starting from the topmost object and proceeding downwards. Since the objects you create are added to the top of the stack, pressing <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> with nothing selected will conveniently select the object you created <flowSpan font-style="italic">last</flowSpan>. Practice the <flowSpan font-weight="bold">Tab</flowSpan> and <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> keys on the stack of ellipses above.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Tab</flowSpan> 鍵是非常有用的選取快捷鍵。如果沒有任何選取，那麼它會選取最下層的物件；不然它會選取排列順序中<flowSpan font-style="italic">選取物件上面</flowSpan>的一個物件。<flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> 則反之，從最上層物件開始且向下進行。你建立的物件新增至堆疊的最上層，於沒有任何選取情形下按下 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> 可簡便地選取你<flowSpan font-style="italic">最後</flowSpan>建立的物件。於上面堆疊在一起的橢圓形上練習 <flowSpan font-weight="bold">Tab</flowSpan> 和 <flowSpan font-weight="bold">Shift</flowSpan>+<flowSpan font-weight="bold">Tab</flowSpan> 鍵。</flowDiv>
   </flowRoot>
-  <rect id="aj" x="20" y="3548.7" width="300" height="1e3px" display="none"/>
+  <rect id="aj" x="20" y="3249.2" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#aj"/>
    </flowRegion>
    <flowDiv>選取下方物件和拖曳選取物件</flowDiv>
   </flowRoot>
-  <rect id="ai" x="20" y="3560.9" width="300" height="1e3px" display="none"/>
+  <rect id="ai" x="20" y="3261.5" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ai"/>
    </flowRegion>
    <flowDiv>如果你需要的物件隱藏在其他物件背後，該怎麼辦？如果上層物件 (可能) 是透明的，你仍然可看見底層的物件，但是在它上面點擊會選取到上層的物件 (你不需要的那個)。</flowDiv>
   </flowRoot>
-  <rect id="ah" x="20" y="3600.5" width="300" height="1e3px" display="none"/>
+  <rect id="ah" x="20" y="3301" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ah"/>
    </flowRegion>
-   <flowDiv>This is what <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> is for. First <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> selects the top object, just like the regular click. However, the next <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> at the same point will select the object <flowSpan font-style="italic">below</flowSpan> the top one; the next one, the object still lower, etc. Thus, several <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan>s in a row will cycle, top-to-bottom, through the entire z-order stack of objects at the click point. When the bottom object is reached, next <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> will, naturally, again select the topmost object.</flowDiv>
+   <flowDiv><flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 就是針對這種情況。首先用 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 選取上層的物件就像普通的點選。然而，再次 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 同一個點會選取上層物件<flowSpan font-style="italic">下面</flowSpan>的那個物件；再做一次會選取更下面的物件，等等。因此，連續 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 幾次會從上層到下層循環，經由點擊位置上的物件群整個堆疊順序。當達到最下層物件時，再 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 一次自然會再一次選取最上層物件。</flowDiv>
   </flowRoot>
-  <rect id="af" x="20" y="3660.5" width="300" height="1e3px" display="none"/>
+  <rect id="ag" x="20" y="3361.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
-    <use xlink:href="#af"/>
+    <use xlink:href="#ag"/>
    </flowRegion>
-   <flowDiv>[If you are on Linux, you might find that <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> does not work properly. Instead, it might be moving the whole Inkscape window. This is because your window manager has reserved <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> for a different action. The way to fix this is to find the Window Behavior configuration for your window manager, and either turn it off, or map it to use the <flowSpan font-weight="bold">Meta</flowSpan> key (aka <flowSpan font-weight="bold">Windows</flowSpan> key), so Inkscape and other applications may use the <flowSpan font-weight="bold">Alt</flowSpan> key freely.]</flowDiv>
+   <flowDiv>[如果你在 Linux 下，你會發現 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 可能沒有作用。相反地，可能會變成拖動整個 Inkscape 視窗。這是因為你的視窗管理程式已經預定 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 為不同的動作。修正此問題的方法為找到視窗管理程式的視窗行為設定並關閉該快捷鍵功能，或者將其對應到使用 Meta 鍵 (亦稱 Windows 鍵)，如此一來 Inkscape 和其他應用程式便可自由使用 <flowSpan font-weight="bold">Alt</flowSpan> 鍵。]</flowDiv>
   </flowRoot>
-  <rect id="ad" x="20" y="3720.5" width="300" height="1e3px" display="none"/>
+  <rect id="ae" x="20" y="3421.5" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+   <flowRegion>
+    <use xlink:href="#ae"/>
+   </flowRegion>
+   <flowDiv>這樣不錯，但是你選取一個表面下的物件可以做些什麼？可以用按鍵改變它和拖曳選取控制點。然而拖動物件本身會再次變回選取最上層物件(這是點擊和拖曳設計為如何工作 — 它會先選取游標下的(最上層)物件，然後拖曳選取)。使用 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">拖曳</flowSpan> 來告訴 Inkscape <flowSpan font-style="italic">現在什麼被選取</flowSpan>要進行拖動而不要選取任何別的東西。這將會移動目前的選取而不管你的滑鼠拖曳到哪裡。</flowDiv>
+  </flowRoot>
+  <rect id="ad" x="20" y="3481.6" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ad"/>
    </flowRegion>
-   <flowDiv>This is nice, but once you selected an under-the-surface object, what can you do with it? You can use keys to transform it, and you can drag the selection handles. However, dragging the object itself will reset the selection to the top object again (this is how click-and-drag is designed to work — it selects the (top) object under the cursor first, then drags the selection). To tell Inkscape to drag <flowSpan font-style="italic">what is selected now</flowSpan>, without selecting anything else, use <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan>. This will move the current selection, no matter where you drag your mouse.</flowDiv>
+   <flowDiv>練習 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">點擊</flowSpan> 和 <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">拖曳</flowSpan> 在綠色透明矩形下面的兩個褐色形狀：</flowDiv>
   </flowRoot>
-  <rect id="ac" x="20" y="3791.1" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
+  <path transform="translate(20 3506.9) matrix(.39512 .68437 -.68437 .39512 2799.7 -1592.7)" d="m126.89 3940.5c-1.7128 2.7762-13.227-1.9871-15.92-0.2673-2.6928 1.7197-2.717 13.972-5.8567 14.525-3.1397 0.5531-6.3535-10.32-9.5433-11.1s-13.307 5.7281-15.627 3.5431c-2.3203-2.1851 6.0756-11.819 4.6565-14.776-1.4191-2.9564-12.432-3.072-12.315-6.2422s12.009-3.7964 13.505-6.565c1.4954-2.7687-2.9446-13.24-0.39835-15.118 2.5463-1.8777 10.873 5.667 14.076 5.0626 3.2032-0.6043 7.3014-9.5359 10.365-8.6831s0.25246 11.285 2.778 13.344c2.5256 2.0584 12.649-0.7081 13.802 2.2959 1.1532 3.0041-8.7265 9.769-8.7641 12.932-0.0376 3.1628 10.955 8.2731 9.2423 11.049z" color="#000000" fill="#ac7335" inkscape:flatsided="false" inkscape:randomized="0.047" inkscape:rounded="0.21" sodipodi:arg1="0.52143444" sodipodi:arg2="0.97023339" sodipodi:cx="100.73942" sodipodi:cy="3927.1016" sodipodi:r1="28.739008" sodipodi:r2="16.983238" sodipodi:sides="7" sodipodi:type="star"/>
+  <path transform="translate(20 3506.9) matrix(.8326 .4807 -.4807 .8326 1967.2 -3288.2)" d="m107.62 3941.6c-0.52759 2.111-9.0763-3.5197-10.951-2.3937-2.4976 1.5003-1.9722 11.854-4.8626 12.594-2.1693 0.5554-1.5842-8.522-3.5626-9.4629-2.6361-1.2536-11.029 4.1052-13.221 2.1498-1.6453-1.4675 6.9505-5.6944 6.8942-7.9439-0.07507-2.9973-9.6434-9.8527-9.0821-12.757 0.42125-2.18 9.4727 5.1817 11.397 4.018 2.5638-1.5505 2.3375-12.598 5.2294-13.243 2.1704-0.4837 1.6931 9.0878 3.6599 10.096 2.6207 1.3439 12.061-3.374 14.214-1.3192 1.6159 1.5422-7.3719 4.7859-7.261 6.987 0.14775 2.9328 8.2486 8.462 7.5456 11.275z" color="#000000" fill="#ff9400" inkscape:flatsided="false" inkscape:randomized="0.047" inkscape:rounded="0.21" sodipodi:arg1="0.48833395" sodipodi:arg2="0.77161843" sodipodi:cx="90.665482" sodipodi:cy="3933.4641" sodipodi:r1="19.21225" sodipodi:r2="9.3934679" sodipodi:sides="6" sodipodi:type="star"/>
+  <rect transform="translate(20 3506.9)" x="64.106" width="171.79" height="56.564" rx="10.424" ry="10.424" color="#000000" fill="#2dd268" fill-opacity=".29609"/>
+  <rect id="ac" x="20" y="3580.8" width="300" height="1e3px" display="none"/>
+  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#ac"/>
    </flowRegion>
-   <flowDiv>Practice <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">click</flowSpan> and <flowSpan font-weight="bold">Alt</flowSpan>+<flowSpan font-weight="bold">drag</flowSpan> on the two brown shapes under the green transparent rectangle:</flowDiv>
+   <flowDiv>選取相似物件</flowDiv>
   </flowRoot>
-  <path transform="translate(20 3827.1) matrix(.39512 .68437 -.68437 .39512 2799.7 -1592.7)" d="m126.89 3940.5c-1.7128 2.7762-13.227-1.9871-15.92-0.2673-2.6928 1.7197-2.717 13.972-5.8567 14.525-3.1397 0.5531-6.3535-10.32-9.5433-11.1s-13.307 5.7281-15.627 3.5431c-2.3203-2.1851 6.0756-11.819 4.6565-14.776-1.4191-2.9564-12.432-3.072-12.315-6.2422s12.009-3.7964 13.505-6.565c1.4954-2.7687-2.9446-13.24-0.39835-15.118 2.5463-1.8777 10.873 5.667 14.076 5.0626 3.2032-0.6043 7.3014-9.5359 10.365-8.6831s0.25246 11.285 2.778 13.344c2.5256 2.0584 12.649-0.7081 13.802 2.2959 1.1532 3.0041-8.7265 9.769-8.7641 12.932-0.0376 3.1628 10.955 8.2731 9.2423 11.049z" color="#000000" fill="#ac7335" inkscape:flatsided="false" inkscape:randomized="0.047" inkscape:rounded="0.21" sodipodi:arg1="0.52143444" sodipodi:arg2="0.97023339" sodipodi:cx="100.73942" sodipodi:cy="3927.1016" sodipodi:r1="28.739008" sodipodi:r2="16.983238" sodipodi:sides="7" sodipodi:type="star"/>
-  <path transform="translate(20 3827.1) matrix(.8326 .4807 -.4807 .8326 1967.2 -3288.2)" d="m107.62 3941.6c-0.52759 2.111-9.0763-3.5197-10.951-2.3937-2.4976 1.5003-1.9722 11.854-4.8626 12.594-2.1693 0.5554-1.5842-8.522-3.5626-9.4629-2.6361-1.2536-11.029 4.1052-13.221 2.1498-1.6453-1.4675 6.9505-5.6944 6.8942-7.9439-0.07507-2.9973-9.6434-9.8527-9.0821-12.757 0.42125-2.18 9.4727 5.1817 11.397 4.018 2.5638-1.5505 2.3375-12.598 5.2294-13.243 2.1704-0.4837 1.6931 9.0878 3.6599 10.096 2.6207 1.3439 12.061-3.374 14.214-1.3192 1.6159 1.5422-7.3719 4.7859-7.261 6.987 0.14775 2.9328 8.2486 8.462 7.5456 11.275z" color="#000000" fill="#ff9400" inkscape:flatsided="false" inkscape:randomized="0.047" inkscape:rounded="0.21" sodipodi:arg1="0.48833395" sodipodi:arg2="0.77161843" sodipodi:cx="90.665482" sodipodi:cy="3933.4641" sodipodi:r1="19.21225" sodipodi:r2="9.3934679" sodipodi:sides="6" sodipodi:type="star"/>
-  <rect transform="translate(20 3827.1)" x="64.106" width="171.79" height="56.564" rx="10.424" ry="10.424" color="#000000" fill="#2dd268" fill-opacity=".29609"/>
-  <rect id="ab" x="20" y="3901.1" width="300" height="1e3px" display="none"/>
-  <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
+  <rect id="ab" x="20" y="3593" width="300" height="1e3px" display="none"/>
+  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#ab"/>
    </flowRegion>
-   <flowDiv>選取相似物件</flowDiv>
+   <flowDiv>Inkscape 能夠選取和目前物件相似的其他物件。例如，你想要選取在第一個選取藍色正方形底下的所有藍色正方形，則使用選單中的 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">編輯</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">選取相同物件</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">填色</flowSpan> (在畫布上 <flowSpan font-weight="bold">點擊滑鼠右鍵</flowSpan>)。那麼所有填色為藍色的物件都會被選取。</flowDiv>
   </flowRoot>
-  <rect id="aa" x="20" y="3913.2" width="300" height="1e3px" display="none"/>
-  <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
-   <flowRegion>
-    <use xlink:href="#aa"/>
-   </flowRegion>
-   <flowDiv>Inkscape can select other objects that are similar to the object that is currently selected. For example, if you want to select all the blue squares below, first select one of the blue squares, and use <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Edit</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Select Same</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Fill Color</flowSpan> from the menu (<flowSpan font-weight="bold">right-click</flowSpan> on the canvas). All objects with the same blue fill color are now selected.</flowDiv>
-  </flowRoot>
-  <rect transform="translate(20 3970.6)" x="69.693" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="69.693" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="69.693" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="88.886" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="107.57" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="125.76" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="143.43" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="161.62" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="180.3" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="197.98" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="216.16" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="88.886" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="107.57" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="125.76" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="143.43" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="161.62" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="180.3" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="197.98" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="216.16" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="88.886" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="107.57" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="125.76" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="143.43" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="161.62" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="180.3" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="197.98" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="216.16" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="30.297" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="235.36" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="30.297" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="235.36" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="30.297" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="235.36" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="49.49" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="254.55" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="49.49" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="254.55" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="49.49" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect transform="translate(20 3970.6)" x="254.55" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
-  <rect id="z" x="20" y="4031.6" width="300" height="1e3px" display="none"/>
+  <rect transform="translate(20 3640.7)" x="69.693" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="69.693" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="69.693" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="88.886" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="107.57" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="125.76" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="143.43" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="161.62" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="180.3" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="197.98" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="216.16" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="88.886" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="107.57" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="125.76" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="143.43" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="161.62" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="180.3" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="197.98" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="216.16" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="88.886" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="107.57" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="125.76" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="143.43" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="161.62" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="180.3" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="197.98" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="216.16" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="30.297" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="235.36" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="30.297" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="235.36" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="30.297" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="235.36" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="49.49" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="254.55" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="49.49" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="254.55" y="17.678" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#4e9a06" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="49.49" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect transform="translate(20 3640.7)" x="254.55" y="34.85" width="15.152" height="14.205" rx="0" ry="0" color="#000000" color-rendering="auto" fill="#204a87" image-rendering="auto" opacity=".924" shape-rendering="auto" style="isolation:auto"/>
+  <rect id="z" x="20" y="3701.7" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#z"/>
    </flowRegion>
-   <flowDiv>In addition to selecting by fill color, you can select multiple similar objects by stroke color, stroke style, fill &amp; stroke, and object type. If these are not enough choices for your use case, try using the <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Edit</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Find/Replace</flowSpan> dialog.</flowDiv>
+   <flowDiv>除了依照填色選取外，你也可以依照邊框顏色、邊框樣式、填色 &amp; 邊框、物件類型來選取多個相似物件。如果需要比上述更複雜的操作可以試著使用 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">編輯</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">尋找/取代</flowSpan> 對話窗。</flowDiv>
   </flowRoot>
-  <rect id="y" x="20" y="4075.8" width="300" height="1e3px" display="none"/>
+  <rect id="y" x="20" y="3746" width="300" height="1e3px" display="none"/>
   <flowRoot fill="#000000" font-family="Liberation Sans,Arial,sans-serif" font-size="8" font-weight="bold">
    <flowRegion>
     <use xlink:href="#y"/>
    </flowRegion>
    <flowDiv>結論</flowDiv>
   </flowRoot>
-  <rect id="x" x="20" y="4087.9" width="300" height="1e3px" display="none"/>
+  <rect id="x" x="20" y="3758.2" width="300" height="1e3px" display="none"/>
   <flowRoot font-family="Liberation Serif,Times New Roman,serif" font-size="8" style="line-height:133%">
    <flowRegion>
     <use xlink:href="#x"/>
    </flowRegion>
-   <flowDiv>This concludes the Basic tutorial. There's much more than that to Inkscape, but with the techniques described here, you will already be able to create simple yet useful graphics. To learn more, we recommend going through the “Inkscape: Advanced” tutorial and the other tutorials in <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Help</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">Tutorials</flowSpan>.</flowDiv>
+   <flowDiv>對基本教學作一個總結。Inkscape 遠不止這些，但經由這裡介紹的技巧，你已經可以製作簡單而有用的圖形。建議閱讀“Inkscape: 進階”與 <flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">說明</flowSpan>⇒<flowSpan fill="#6495ED" font-family="Liberation Sans,Arial,sans-serif">指導手冊</flowSpan> 中的其他教學了解更複雜的東西。</flowDiv>
   </flowRoot>
-  <use x="47" y="4173.1772007" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
-  <rect id="cu" x="70" y="4167.2" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3833.0380282" inkscape:label="icon-credits-authors" xlink:href="#cq"/>
+  <rect id="cu" x="70" y="3827" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#cu"/>
    </flowRegion>
    <flowDiv>Bulia Byak; Jonathan Leighton; Ralf Stephan; Bryce Harrington; Alexandre Prokoudine; Colin Marquardt; Josh Andler; Nicolas Dufour; Maren Hachmann; Gellért Gyuris</flowDiv>
   </flowRoot>
-  <use x="47" y="4205.1699747" inkscape:label="icon-credits-translators" xlink:href="#co"/>
-  <rect id="cs" x="70" y="4199.2" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3865.0308022" inkscape:label="icon-credits-translators" xlink:href="#co"/>
+  <rect id="cs" x="70" y="3859" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#cs"/>
    </flowRegion>
-   <flowDiv>Dong-Jun Wu — 2009, 2014, 2016</flowDiv>
+   <flowDiv>dongjun wu — 2009</flowDiv>
   </flowRoot>
-  <use x="47" y="4222.604545" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
-  <rect id="ct" x="70" y="4216.6" width="230" height="1e3px" display="none"/>
+  <use x="47" y="3882.6235756" inkscape:label="icon-credits-designer" xlink:href="#cp"/>
+  <rect id="ct" x="70" y="3876.6" width="230" height="1e3px" display="none"/>
   <flowRoot fill="#999999" font-family="Liberation Sans,Arial,sans-serif" font-size="6" text-align="left" style="line-height:120%">
    <flowRegion>
     <use xlink:href="#ct"/>
@@ -1051,7 +1051,7 @@
   </flowRoot>
  </g>
  <defs>
-  <g id="cr" transform="translate(0 4064.2)">
+  <g id="cr" transform="translate(0 3724.2)">
    <defs>
     <filter id="l" x="-.0061708" y="-.0058384" width="1.0123" height="1.0117" color-interpolation-filters="sRGB">
      <feGaussianBlur stdDeviation="1.4349239"/>
