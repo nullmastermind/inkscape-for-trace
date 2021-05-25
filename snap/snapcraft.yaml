@@ -114,6 +114,7 @@ parts:
       - lxml
       - numpy
       - pip
+      - pillow
       - pyserial
       - scour
       - virtualenv
