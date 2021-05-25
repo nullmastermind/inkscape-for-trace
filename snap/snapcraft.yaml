@@ -149,6 +149,9 @@ parts:
       - ibus-gtk3
       - libibus-1.0-5
       - fcitx-frontend-gtk3
+    override-prime: |
+      snapcraftctl prime
+      glib-compile-schemas ${SNAPCRAFT_PRIME}/usr/share/glib-2.0/schemas/
 
 apps:
   inkscape:
