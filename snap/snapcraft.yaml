@@ -164,11 +164,10 @@ apps:
       - x11
       - unity7
       - dot-config-inkscape
+      - raw-usb # plotter support
 # TODO: Remove with portals
       - home
-      - cups-control
       - removable-media
-      - raw-usb # plotter support
     slots:
       - inkscape-dbus
     desktop: share/applications/org.inkscape.Inkscape.desktop
@@ -186,7 +185,6 @@ apps:
       - dot-config-inkscape
 # TODO: Remove with portals
       - home
-      - cups-control
       - removable-media
 
 hooks:
