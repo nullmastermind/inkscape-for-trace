@@ -20,7 +20,10 @@ namespace Inkscape {
 extern char const *version_string; ///< full version string
 extern char const *version_string_without_revision; ///< version string excluding revision and date
 
-extern char const *short_version; ///< version string (without dots) excluding revision, date and suffix
+extern unsigned int const version_major;
+extern unsigned int const version_minor;
+extern unsigned int const version_patch;
+
 } // namespace Inkscape
 
 #endif

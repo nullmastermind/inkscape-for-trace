@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include "inkscape-version.h"
+
 namespace Inkscape {
     char const *version_string = "@INKSCAPE_VERSION@" " " "(${INKSCAPE_REVISION})";
     char const *version_string_without_revision = "@INKSCAPE_VERSION@";
 
-    char const *short_version = "@INKSCAPE_SHORT_VERSION@";
+    unsigned int const version_major = @INKSCAPE_VERSION_MAJOR@;
+    unsigned int const version_minor = @INKSCAPE_VERSION_MINOR@;
+    unsigned int const version_patch = @INKSCAPE_VERSION_PATCH@;
 }
-

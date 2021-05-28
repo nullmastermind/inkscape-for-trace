@@ -2061,20 +2061,21 @@ void HelpUrlVerb::perform(SPAction *action, void *data)
     static const char *lang = _("en"); // TODO: strip /en/ for English version?
     static const char *version = Inkscape::version_string_without_revision;
     static const bool development_version = g_str_has_suffix(version, "-dev"); // this detection is not perfect but should be close enough
-    static const char *short_version = development_version ? "-master" : Inkscape::short_version;
+    static const Glib::ustring branch = development_version ? "master" :
+        Glib::ustring::compose("%1.%2.x", Inkscape::version_major,  Inkscape::version_major);
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_URL_ASK_QUESTION:
             url = Glib::ustring::compose("https://inkscape.org/%1/community/", lang);
             break;
         case SP_VERB_HELP_URL_MAN:
-            url = Glib::ustring::compose("https://inkscape.org/%1/doc/inkscape-man%2.html", lang, short_version);
+            url = Glib::ustring::compose("https://inkscape.org/%1/doc/inkscape-man-%2.html", lang, branch);
             break;
         case SP_VERB_HELP_URL_FAQ:
             url = Glib::ustring::compose("https://inkscape.org/%1/learn/faq/", lang);
             break;
         case SP_VERB_HELP_URL_KEYS:
-            url = Glib::ustring::compose("https://inkscape.org/%1/doc/keys%2.html", lang, short_version);
+            url = Glib::ustring::compose("https://inkscape.org/%1/doc/keys-%2.html", lang, branch);
             break;
         case SP_VERB_HELP_URL_RELEASE_NOTES:
             url = Glib::ustring::compose("https://inkscape.org/%1/release/inkscape-%2", lang, development_version ? "master" : version);
