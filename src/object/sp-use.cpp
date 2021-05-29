@@ -22,6 +22,7 @@
 #include <glibmm/markup.h>
 
 #include "bad-uri-exception.h"
+#include "display/curve.h"
 #include "display/drawing-group.h"
 #include "attributes.h"
 #include "document.h"
