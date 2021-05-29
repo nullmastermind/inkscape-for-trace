@@ -728,6 +728,11 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // Render from cache if possible
     // Bypass in case of pattern, see below.
     if (_cached && !(flags & RENDER_BYPASS_CACHE)) {
+        if (_cache && _cache->device_scale() != device_scale) {
+            delete _cache;
+            _cache = nullptr;
+        }
+
         if (_cache) {
             _cache->prepare();
             dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
