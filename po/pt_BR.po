@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2021-05-09 14:58+0000\n"
-"PO-Revision-Date: 2021-05-21 16:34-0300\n"
+"PO-Revision-Date: 2021-05-23 16:40-0300\n"
 "Last-Translator: João Lima Neto <contato@joaolimaneto.com.br>\n"
 "Language-Team: Brazilian Portuguese <contato@joaolimaneto.com.br>\n"
 "Language: pt_BR\n"
@@ -139,7 +139,7 @@ msgstr "Sangria"
 #: ../share/filters/filters.svg.h:27 ../share/filters/filters.svg.h:31
 #: ../share/filters/filters.svg.h:119 ../share/filters/filters.svg.h:435
 msgid "Protrusions"
-msgstr "Excessos"
+msgstr "Saliências"
 
 #: ../share/filters/filters.svg.h:28
 msgid "Inky splotches underneath the object"
@@ -1409,7 +1409,7 @@ msgstr "Textura de tinta espessa brilhante e translúcida com alta profundidade"
 
 #: ../share/filters/filters.svg.h:542
 msgid "Canvas Bumps"
-msgstr "Saliências de Tela"
+msgstr "Relevos de Tela"
 
 #: ../share/filters/filters.svg.h:544
 msgid "Canvas texture with an HSL sensitive height map"
@@ -1417,7 +1417,7 @@ msgstr "Textura de tela com um mapa de altura sensível ao HSL"
 
 #: ../share/filters/filters.svg.h:546
 msgid "Canvas Bumps Matte"
-msgstr "Saliências de Tela Foscas"
+msgstr "Relevos de Tela Fosca"
 
 #: ../share/filters/filters.svg.h:548
 msgid "Same as Canvas Bumps but with a diffuse light instead of a specular one"
@@ -1425,7 +1425,7 @@ msgstr "Igual a Saliências da Tela mas com uma luz difusa em vez de especular"
 
 #: ../share/filters/filters.svg.h:550
 msgid "Canvas Bumps Alpha"
-msgstr "Saliências de Tela Alfa"
+msgstr "Relevos de Tela Alfa"
 
 #: ../share/filters/filters.svg.h:552
 msgid "Same as Canvas Bumps but with transparent highlights"
@@ -1457,7 +1457,7 @@ msgstr "Chanfro fosco com bordas desfocadas"
 
 #: ../share/filters/filters.svg.h:566
 msgid "Melted Jelly"
-msgstr "Geléia Derretida"
+msgstr "Geleia Derretida"
 
 #: ../share/filters/filters.svg.h:568
 msgid "Glossy bevel with blurred edges"
@@ -1529,7 +1529,7 @@ msgstr "Reduza ou remova suavização em torno das formas"
 
 #: ../share/filters/filters.svg.h:598
 msgid "Basic Diffuse Bump"
-msgstr "Saliência Difusa Básica"
+msgstr "Relevo Difuso Básico"
 
 #: ../share/filters/filters.svg.h:600
 msgid "Matte emboss effect"
@@ -1537,7 +1537,7 @@ msgstr "Efeito fosco em relevo"
 
 #: ../share/filters/filters.svg.h:602
 msgid "Basic Specular Bump"
-msgstr "Saliência Especular Básica"
+msgstr "Relevo Especular Básico"
 
 #: ../share/filters/filters.svg.h:604
 msgid "Specular emboss effect"
@@ -1573,7 +1573,7 @@ msgstr "Pintura em Tela Áspera"
 
 #: ../share/filters/filters.svg.h:622
 msgid "Paper Bump"
-msgstr "Saliência de Papel"
+msgstr "Relevo em Papel"
 
 #: ../share/filters/filters.svg.h:624
 msgid "Paper like emboss effect"
@@ -1581,7 +1581,7 @@ msgstr "Efeito de relevo semelhante ao papel"
 
 #: ../share/filters/filters.svg.h:626
 msgid "Jelly Bump"
-msgstr "Saliência de Geléia"
+msgstr "Relevo de Geleia"
 
 #: ../share/filters/filters.svg.h:628
 msgid "Convert pictures to thick jelly"
@@ -1933,7 +1933,7 @@ msgstr "Efeito cromatoctográfico antigo"
 
 #: ../share/filters/filters.svg.h:810
 msgid "Convoluted Bump"
-msgstr "Saliência Erodada"
+msgstr "Relevo Complexo"
 
 #: ../share/filters/filters.svg.h:812
 msgid "Convoluted emboss effect"
@@ -5729,7 +5729,7 @@ msgstr "Deslocamento:"
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:52
 #: ../src/extension/internal/bitmap/wave.cpp:47
 msgid "Raster"
-msgstr "Rasterizar"
+msgstr "Alterar Bitmap"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:51
 msgid "Apply adaptive thresholding to selected bitmap(s)"
@@ -6093,7 +6093,7 @@ msgstr "Saturação:"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:46
 msgid "Brightness:"
-msgstr "Luminosidade:"
+msgstr "Brilho:"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:52
 msgid ""
@@ -6207,7 +6207,7 @@ msgstr "Sombra"
 #: ../src/extension/internal/bitmap/shade.cpp:44
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1182
 msgid "Azimuth:"
-msgstr "Azimute:"
+msgstr "Ângulo de Visão:"
 
 #: ../src/extension/internal/bitmap/shade.cpp:45
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1183
@@ -6730,7 +6730,7 @@ msgstr "Luminosidade"
 
 #: ../src/extension/internal/filter/bevels.h:151
 msgid "Bulging, matte jelly covering"
-msgstr "Aplica um suave chanfro lembrando uma geléia, porém fosca"
+msgstr "Aplica um suave chanfro lembrando uma geleia, porém fosca"
 
 #: ../src/extension/internal/filter/bevels.h:223
 msgid "Specular Light"
@@ -6949,7 +6949,7 @@ msgstr "Relevo"
 #: ../src/extension/internal/filter/bumps.h:86
 #: ../src/extension/internal/filter/bumps.h:319
 msgid "Image simplification"
-msgstr "Simplificação de imagem"
+msgstr "Simplificação da imagem"
 
 #: ../src/extension/internal/filter/bumps.h:87
 #: ../src/extension/internal/filter/bumps.h:320
@@ -6959,7 +6959,7 @@ msgstr "Simplificação do relevo"
 #: ../src/extension/internal/filter/bumps.h:89
 #: ../src/extension/internal/filter/bumps.h:322
 msgid "Bump source"
-msgstr "Relevo fonte"
+msgstr "Fonte de colisão"
 
 #: ../src/extension/internal/filter/bumps.h:90
 #: ../src/extension/internal/filter/bumps.h:323
@@ -7055,7 +7055,7 @@ msgstr "Distante"
 
 #: ../src/extension/internal/filter/bumps.h:108
 msgid "Point"
-msgstr "Ponto"
+msgstr "Pontual"
 
 #: ../src/extension/internal/filter/bumps.h:109
 msgid "Spot"
@@ -7063,12 +7063,12 @@ msgstr "Local"
 
 #: ../src/extension/internal/filter/bumps.h:111
 msgid "Distant light options"
-msgstr "Opções de luz distante"
+msgstr "Opções da luz distante"
 
 #: ../src/extension/internal/filter/bumps.h:112
 #: ../src/extension/internal/filter/bumps.h:338
 msgid "Azimuth"
-msgstr "Azimute"
+msgstr "Ângulo de Visão"
 
 #: ../src/extension/internal/filter/bumps.h:113
 #: ../src/extension/internal/filter/bumps.h:339
@@ -7077,7 +7077,7 @@ msgstr "Elevação"
 
 #: ../src/extension/internal/filter/bumps.h:114
 msgid "Point light options"
-msgstr "Opções de luz pontual"
+msgstr "Opções da luz pontual"
 
 #: ../src/extension/internal/filter/bumps.h:115
 #: ../src/extension/internal/filter/bumps.h:119
@@ -7096,7 +7096,7 @@ msgstr "Localização Z"
 
 #: ../src/extension/internal/filter/bumps.h:118
 msgid "Spot light options"
-msgstr "Opções de luz local"
+msgstr "Opções da luz local"
 
 #: ../src/extension/internal/filter/bumps.h:122
 msgid "X target"
@@ -7124,7 +7124,7 @@ msgstr "Cor da imagem"
 
 #: ../src/extension/internal/filter/bumps.h:130
 msgid "Color bump"
-msgstr "Saliência de cor"
+msgstr "Colisão de cores"
 
 #: ../src/extension/internal/filter/bumps.h:147
 msgid "All purposes bump filter"
@@ -8666,7 +8666,7 @@ msgstr "Deslocamento Vertical:"
 #: ../share/extensions/svgcalendar.inx:138 ../share/extensions/triangle.inx:21
 #: ../share/extensions/wireframe_sphere.inx:14
 msgid "Render"
-msgstr "Renderizar"
+msgstr "Gerar"
 
 #: ../src/extension/internal/grid.cpp:205
 #: ../src/ui/dialog/document-properties.cpp:152
@@ -20666,7 +20666,7 @@ msgstr "Zoom"
 #: ../src/ui/dialog/inkscape-preferences.cpp:848 ../src/verbs.cpp:2719
 msgctxt "ContextVerb"
 msgid "Measure"
-msgstr "Paquímetro"
+msgstr "Medidor"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:850
 msgid "Bounding box to use"
@@ -23512,7 +23512,7 @@ msgstr "Qualidades dos filtros para exibição"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2591
 #: ../src/ui/dialog/print.cpp:107
 msgid "Rendering"
-msgstr "Renderizando"
+msgstr "Renderização"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2597 ../src/verbs.cpp:164
 msgid "Edit"
@@ -27716,7 +27716,7 @@ msgstr "Medidas apenas do selecionadas."
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:311
 msgid "Measure all."
-msgstr "Meça tudo."
+msgstr "Medir tudo."
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:326
 msgid "Start and end measures inactive."
@@ -33642,7 +33642,7 @@ msgstr "Zoom - Amplie ou Reduza o nível de zoom"
 
 #: ../src/verbs.cpp:2719
 msgid "Measurement tool"
-msgstr "Paquímetro - Ferramenta de Medida"
+msgstr "Medidor - Ferramenta de Medida"
 
 #: ../src/verbs.cpp:2721
 msgctxt "ContextVerb"
@@ -33829,7 +33829,7 @@ msgstr "Preferências de Medição"
 
 #: ../src/verbs.cpp:2767
 msgid "Open Preferences for the Measure tool"
-msgstr "Preferências abertas para a ferramenta Paquímetro"
+msgstr "Preferências abertas para a ferramenta Medidor"
 
 #: ../src/verbs.cpp:2768
 msgid "Dropper Preferences"
@@ -36358,7 +36358,7 @@ msgstr "Número de segmentos:"
 #: ../share/extensions/rubberstretch.inx:10
 #: ../share/extensions/straightseg.inx:10 ../share/extensions/whirl.inx:10
 msgid "Modify Path"
-msgstr "Modificar Caminho"
+msgstr "Alterar Caminho"
 
 #: ../share/extensions/aisvg.inx:3
 msgid "AI SVG Input"
@@ -36615,7 +36615,7 @@ msgstr "Abrir arquivos de Digimemo ACECAD"
 
 #: ../share/extensions/dimension.inx:3
 msgid "Dimensions"
-msgstr "Dimensões"
+msgstr "Colocar Cotas"
 
 #: ../share/extensions/dimension.inx:5
 msgid "X Offset:"
@@ -36640,8 +36640,9 @@ msgstr "Visual"
 #: ../share/extensions/dimension.inx:14 ../share/extensions/handles.inx:8
 #: ../share/extensions/measure.inx:67
 #: ../share/extensions/path_number_nodes.inx:24
+
 msgid "Visualize Path"
-msgstr "Visualizando Caminho"
+msgstr "Detalhar Caminho"
 
 #: ../share/extensions/docinfo.inx:3
 msgid "DOC Info"
@@ -37157,8 +37158,8 @@ msgid "Exports the colors of this document as GIMP Palette"
 msgstr "Exporta as cores do desenho como Paleta do GIMP"
 
 #: ../share/extensions/extension-manager-bootstrap.inx:3
-msgid "Manage Extensions..."
-msgstr "Gerenciar Extensões..."
+msgid "Manage Extensions"
+msgstr "Gerenciar Extensões"
 
 #: ../share/extensions/extrude.inx:6
 msgid "Lines"
@@ -40351,7 +40352,7 @@ msgstr ""
 #: ../share/extensions/printing_marks.inx:40
 #: ../share/extensions/svgcalendar.inx:21
 msgid "Layout"
-msgstr "Arranjo"
+msgstr "Layout"
 
 #: ../share/extensions/lindenmayer.inx:3
 msgid "L-system"
@@ -41625,7 +41626,7 @@ msgstr "Páginas por polegada (PPI)"
 #: ../share/extensions/perfectboundcover.inx:13
 #: ../share/extensions/perfectboundcover.inx:22
 msgid "Caliper (inches)"
-msgstr "Paquímetro (polegadas)"
+msgstr "Paquimetro (polegadas)"
 
 #: ../share/extensions/perfectboundcover.inx:14
 #: ../share/extensions/perfectboundcover.inx:23
@@ -50672,7 +50673,7 @@ msgstr "Metade da altura da fonte"
 
 #, fuzzy
 #~ msgid "_Register"
-#~ msgstr "Rasterizar"
+#~ msgstr "Alterar Bitmap"
 
 #, fuzzy
 #~ msgid "_Username:"
@@ -50986,16 +50987,16 @@ msgstr "Metade da altura da fonte"
 #~ msgstr "Relevo especular bem adaptado"
 
 #~ msgid "Glossy jelly"
-#~ msgstr "Geléia brilhante"
+#~ msgstr "Geleia brilhante"
 
 #~ msgid "Bulging, glossy jelly covering"
-#~ msgstr "Aplica um suave chanfro lembrando uma geléia"
+#~ msgstr "Aplica um suave chanfro lembrando uma geleia"
 
 #~ msgid "Glossy jelly, backlit"
-#~ msgstr "Geléia brilhante, iluminado"
+#~ msgstr "Geleia brilhante, iluminado"
 
 #~ msgid "Bulging, glossy jelly covering; two light sources"
-#~ msgstr "Aplica um suave chanfro lembrando uma geléia; duas fontes luminosas"
+#~ msgstr "Aplica um suave chanfro lembrando uma geleia; duas fontes luminosas"
 
 #~ msgid "HSL bubbles"
 #~ msgstr "Bolhas HSL"
