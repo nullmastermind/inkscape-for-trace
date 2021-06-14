@@ -1053,7 +1053,7 @@ void MeasureTool::setMeasureCanvasText(bool is_angle, double precision, double a
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
-    Glib::ustring measure = Glib::ustring::format(std::setprecision(2), std::fixed, amount);
+    Glib::ustring measure = Glib::ustring::format(std::setprecision(precision), std::fixed, amount);
     measure += " ";
     measure += (is_angle ? "°" : unit_name);
     auto canvas_tooltip = new Inkscape::CanvasItemText(desktop->getCanvasTemp(), position, measure);
