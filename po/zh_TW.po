@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2021-03-14 20:46+0000\n"
-"PO-Revision-Date: 2021-05-10 20:04+0800\n"
+"PO-Revision-Date: 2021-06-14 09:32+0800\n"
 "Last-Translator: Dongjun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0\n"
 
 #: ../share/filters/filters.svg.h:2
 msgid "Smart Jelly"
@@ -33154,13 +33154,13 @@ msgstr "游標坐標"
 #| msgid "Z:"
 msgctxt "canvas"
 msgid "Z:"
-msgstr "Z:"
+msgstr "畫布縮放:"
 
 #. TRANSLATORS: Abbreviation for canvas rotation
 #: ../src/widgets/desktop-widget.cpp:363
 msgctxt "canvas"
 msgid "R:"
-msgstr "紅:"
+msgstr "畫布旋轉:"
 
 #: ../src/widgets/desktop-widget.cpp:505
 msgid "outline"
