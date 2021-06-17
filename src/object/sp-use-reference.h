@@ -14,10 +14,9 @@
 
 #include "sp-item.h"
 #include "uri-references.h"
+#include "display/curve.h"
 
 #include <memory>
-
-class SPCurve;
 
 namespace Inkscape {
 namespace XML {
