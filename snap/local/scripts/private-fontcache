@@ -12,6 +12,9 @@ function ensure_dir_exists() {
 
 # Set $REALHOME to the users real home directory
 REALHOME=$(getent passwd $UID | cut -d ':' -f 6)
+# fallback to pre-1.2 behaviour in case getent doesn't work due to apparmor
+# could suggest to install unscd to proxy requests to blocked nss module
+REALHOME=${REALHOME:-${SNAP_USER_DATA}/../../..}
 
 # Set config folder to local path
 export XDG_CONFIG_HOME="$SNAP_USER_DATA/.config"

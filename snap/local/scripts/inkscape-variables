@@ -3,6 +3,9 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 REALHOME=`getent passwd $UID | cut -d ':' -f 6`
+# fallback to pre-1.2 behaviour in case getent doesn't work due to apparmor
+# could suggest to install unscd to proxy requests to blocked nss module
+REALHOME=${REALHOME:-${SNAP_USER_DATA}/../../..}
 
 export INKSCAPE_PROFILE_DIR=${REALHOME}/.config/inkscape
 export INKSCAPE_LOCALEDIR=${SNAP}/share/locale
