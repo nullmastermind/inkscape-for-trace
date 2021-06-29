@@ -269,7 +269,7 @@ CanvasGrid::newWidget()
     _as_alignment = Gtk::manage( new Inkscape::UI::Widget::AlignmentSelector() );
     _as_alignment->on_alignmentClicked().connect(sigc::mem_fun(*this, &CanvasGrid::align_clicked));
 
-    Gtk::Box *left = new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4);
+    Gtk::Box *left = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
     left->pack_start(*_rcb_enabled, false, false);
     left->pack_start(*_rcb_visible, false, false);
     left->pack_start(*_rcb_snap_visible_only, false, false);
@@ -288,7 +288,7 @@ CanvasGrid::newWidget()
     auto right = newSpecificWidget();
     right->set_hexpand(false);
 
-    Gtk::Box *inner = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4);
+    Gtk::Box *inner = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
     inner->pack_start(*left, true, true);
     inner->pack_start(*right, false, false);
     vbox->pack_start(*inner, false, false);
@@ -679,7 +679,7 @@ CanvasXYGrid::newSpecificWidget()
     _rsu_sx->setProgrammatically = false;
     _rsu_sy->setProgrammatically = false;
 
-    Gtk::Box *column = new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4);
+    Gtk::Box *column = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
     column->pack_start(*_rumg, true, false);
     column->pack_start(*_rsu_ox, true, false);
     column->pack_start(*_rsu_oy, true, false);

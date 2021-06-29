@@ -344,7 +344,7 @@ CanvasAxonomGrid::newSpecificWidget()
     _rsu_ox->setProgrammatically = false;
     _rsu_oy->setProgrammatically = false;
 
-    Gtk::Box *column = new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4);
+    Gtk::Box *column = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
     column->pack_start(*_rumg, true, false);
     column->pack_start(*_rsu_ox, true, false);
     column->pack_start(*_rsu_oy, true, false);
