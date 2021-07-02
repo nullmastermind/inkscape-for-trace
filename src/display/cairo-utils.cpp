@@ -772,7 +772,7 @@ feed_curve_to_cairo(cairo_t *cr, Geom::Curve const &c, Geom::Affine const & tran
             } else {
                 Geom::Affine xform = arc->unitCircleTransform() * trans;
                 // Don't draw anything if the angle is borked
-                if(isnan(arc->initialAngle()) || isnan(arc->finalAngle())) {
+                if(std::isnan(arc->initialAngle()) || std::isnan(arc->finalAngle())) {
                     g_warning("Bad angle while drawing EllipticalArc");
                     break;
                 }
