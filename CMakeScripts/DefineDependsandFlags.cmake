@@ -41,6 +41,7 @@ list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Wunused-function")
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Wunused-variable")
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-D_GLIBCXX_ASSERTIONS")
 if (CMAKE_COMPILER_IS_GNUCC)
+    list(APPEND INKSCAPE_CXX_FLAGS "-Wstrict-null-sentinel")    # For NULL instead of nullptr
     list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fexceptions -grecord-gcc-switches -fasynchronous-unwind-tables")
     if(CXX_COMPILER_VERSION VERSION_GREATER 8.0)
         list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fstack-clash-protection -fcf-protection")
