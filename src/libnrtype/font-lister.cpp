@@ -1233,7 +1233,7 @@ void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
         g_free(sample_escaped);
     }
 
-    g_object_set(G_OBJECT(cell), "markup", markup.c_str(), NULL);
+    g_object_set(G_OBJECT(cell), "markup", markup.c_str(), nullptr);
     g_free(family);
     g_free(family_escaped);
 }

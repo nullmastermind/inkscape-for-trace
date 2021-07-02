@@ -116,7 +116,7 @@ void GradientTool::selection_changed(Inkscape::Selection*) {
                 _("%s selected"),
                 //TRANSLATORS: Mind the space in front. This is part of a compound message
                 ngettext(" out of %d gradient handle"," out of %d gradient handles",n_tot),
-                ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
+                ngettext(" on %d selected object"," on %d selected objects",n_obj),nullptr);
             message_context->setF(Inkscape::NORMAL_MESSAGE,
                                   message,_(gr_handle_descr[drag->singleSelectedDraggerSingleDraggableType()]), n_tot, n_obj);
         } else {
@@ -125,14 +125,14 @@ void GradientTool::selection_changed(Inkscape::Selection*) {
                 ngettext("One handle merging %d stop (drag with <b>Shift</b> to separate) selected",
                          "One handle merging %d stops (drag with <b>Shift</b> to separate) selected",drag->singleSelectedDraggerNumDraggables()),
                 ngettext(" out of %d gradient handle"," out of %d gradient handles",n_tot),
-                ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
+                ngettext(" on %d selected object"," on %d selected objects",n_obj),nullptr);
             message_context->setF(Inkscape::NORMAL_MESSAGE,message,drag->singleSelectedDraggerNumDraggables(), n_tot, n_obj);
         }
     } else if (n_sel > 1) {
         //TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
         gchar * message = g_strconcat(ngettext("<b>%d</b> gradient handle selected out of %d","<b>%d</b> gradient handles selected out of %d",n_sel),
                                       //TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
-                                      ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
+                                      ngettext(" on %d selected object"," on %d selected objects",n_obj),nullptr);
         message_context->setF(Inkscape::NORMAL_MESSAGE,message, n_sel, n_tot, n_obj);
     } else if (n_sel == 0) {
         message_context->setF(Inkscape::NORMAL_MESSAGE,

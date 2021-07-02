@@ -3663,7 +3663,7 @@ void ObjectSet::createBitmapCopy()
     if (directory == nullptr) {
         directory = Inkscape::IO::Resource::homedir_path(nullptr);
     }
-    gchar *filepath = g_build_filename(directory, basename, NULL);
+    gchar *filepath = g_build_filename(directory, basename, nullptr);
     g_free(directory);
 
     //g_print("%s\n", filepath);

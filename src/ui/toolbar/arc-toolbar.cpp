@@ -309,7 +309,7 @@ ArcToolbar::startend_value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
     // in turn, prevent listener from responding
     _freeze = true;
 
-    gchar* namespaced_name = g_strconcat("sodipodi:", value_name, NULL);
+    gchar* namespaced_name = g_strconcat("sodipodi:", value_name, nullptr);
 
     bool modmade = false;
     auto itemlist= _desktop->getSelection()->items();

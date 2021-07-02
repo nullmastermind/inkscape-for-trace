@@ -445,14 +445,14 @@ char const *profile_path()
             }
 
             if (prefdir) {
-                const char *prefdir_profile = g_build_filename(prefdir, INKSCAPE_PROFILE_DIR, NULL);
+                const char *prefdir_profile = g_build_filename(prefdir, INKSCAPE_PROFILE_DIR, nullptr);
                 g_free((void *)prefdir);
                 prefdir = prefdir_profile;
             }
         }
 #endif
         if (!prefdir) {
-            prefdir = g_build_filename(g_get_user_config_dir(), INKSCAPE_PROFILE_DIR, NULL);
+            prefdir = g_build_filename(g_get_user_config_dir(), INKSCAPE_PROFILE_DIR, nullptr);
             // In case the XDG user config dir of the moment does not yet exist...
             int mode = S_IRWXU;
 #ifdef S_IRGRP
@@ -471,7 +471,7 @@ char const *profile_path()
                 gchar const *userDirs[] = { "keys", "templates", "icons", "extensions", "ui",
                                             "symbols", "paint", "themes", "palettes", nullptr };
                 for (gchar const** name = userDirs; *name; ++name) {
-                    gchar *dir = g_build_filename(prefdir, *name, NULL);
+                    gchar *dir = g_build_filename(prefdir, *name, nullptr);
                     g_mkdir_with_parents(dir, mode);
                     g_free(dir);
                 }
@@ -495,7 +495,7 @@ char *homedir_path(const char *filename)
     static const gchar *homedir = nullptr;
     homedir = g_get_home_dir();
 
-    return g_build_filename(homedir, filename, NULL);
+    return g_build_filename(homedir, filename, nullptr);
 }
 
 }

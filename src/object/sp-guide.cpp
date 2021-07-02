@@ -538,7 +538,7 @@ char* SPGuide::description(bool const verbose) const
         
         if (verbose) {
             gchar *oldDescr = descr;
-            descr = g_strconcat(oldDescr, shortcuts, NULL);
+            descr = g_strconcat(oldDescr, shortcuts, nullptr);
             g_free(oldDescr);
         }
 

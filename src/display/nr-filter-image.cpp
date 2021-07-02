@@ -158,7 +158,7 @@ void FilterImage::render_cairo(FilterSlot &slot)
         if ( !g_file_test( fullname, G_FILE_TEST_EXISTS ) ) {
             // Try to load from relative position combined with document base
             if( document ) {
-                fullname = g_build_filename( document->getDocumentBase(), feImageHref, NULL );
+                fullname = g_build_filename( document->getDocumentBase(), feImageHref, nullptr );
             }
         }
         if ( !g_file_test( fullname, G_FILE_TEST_EXISTS ) ) {

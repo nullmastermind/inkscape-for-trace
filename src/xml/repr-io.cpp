@@ -449,7 +449,7 @@ void promote_to_namespace(Node *repr, const gchar *prefix) {
     if ( repr->type() == Inkscape::XML::NodeType::ELEMENT_NODE ) {
         GQuark code = repr->code();
         if (!qname_prefix(code).id()) {
-            gchar *svg_name = g_strconcat(prefix, ":", g_quark_to_string(code), NULL);
+            gchar *svg_name = g_strconcat(prefix, ":", g_quark_to_string(code), nullptr);
             repr->setCodeUnsafe(g_quark_from_string(svg_name));
             g_free(svg_name);
         }

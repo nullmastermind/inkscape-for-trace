@@ -175,7 +175,7 @@ SpiralToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment> &adj,
     // in turn, prevent listener from responding
     _freeze = true;
 
-    gchar* namespaced_name = g_strconcat("sodipodi:", value_name.data(), NULL);
+    gchar* namespaced_name = g_strconcat("sodipodi:", value_name.data(), nullptr);
 
     bool modmade = false;
     auto itemlist= _desktop->getSelection()->items();

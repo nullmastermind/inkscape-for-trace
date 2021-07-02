@@ -30,15 +30,15 @@
 static void inkscape_fill_gtk(const gchar *path, gtkThemeList &themes)
 {
     const gchar *dir_entry;
-    GDir *dir = g_dir_open(path, 0, NULL);
+    GDir *dir = g_dir_open(path, 0, nullptr);
     if (!dir)
         return;
     while ((dir_entry = g_dir_read_name(dir))) {
-        gchar *filename = g_build_filename(path, dir_entry, "gtk-3.0", "gtk.css", NULL);
+        gchar *filename = g_build_filename(path, dir_entry, "gtk-3.0", "gtk.css", nullptr);
         bool has_prefer_dark = false;
   
         Glib::ustring theme = dir_entry;
-        gchar *filenamedark = g_build_filename(path, dir_entry, "gtk-3.0", "gtk-dark.css", NULL);
+        gchar *filenamedark = g_build_filename(path, dir_entry, "gtk-3.0", "gtk-dark.css", nullptr);
         if (g_file_test(filenamedark, G_FILE_TEST_IS_REGULAR))
             has_prefer_dark = true;
         if (themes.find(theme) != themes.end() && !has_prefer_dark) {
@@ -67,7 +67,7 @@ std::map<Glib::ustring, bool> get_available_themes()
     const gchar *const *dirs;
   
     /* Builtin themes */
-    builtin_themes = g_resources_enumerate_children("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+    builtin_themes = g_resources_enumerate_children("/org/gtk/libgtk/theme", G_RESOURCE_LOOKUP_FLAGS_NONE, nullptr);
     for (i = 0; builtin_themes[i] != NULL; i++) {
         if (g_str_has_suffix(builtin_themes[i], "/")) {
             theme = builtin_themes[i];
@@ -75,7 +75,7 @@ std::map<Glib::ustring, bool> get_available_themes()
             Glib::ustring theme_path = "/org/gtk/libgtk/theme";
             theme_path += "/" + theme;
             gchar **builtin_themes_files =
-                g_resources_enumerate_children(theme_path.c_str(), G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+                g_resources_enumerate_children(theme_path.c_str(), G_RESOURCE_LOOKUP_FLAGS_NONE, nullptr);
             bool has_prefer_dark = false;
             if (builtin_themes_files != NULL) {
                 for (j = 0; builtin_themes_files[j] != NULL; j++) {
@@ -92,17 +92,17 @@ std::map<Glib::ustring, bool> get_available_themes()
 
     g_strfreev(builtin_themes);
 
-    path = g_build_filename(g_get_user_data_dir(), "themes", NULL);
+    path = g_build_filename(g_get_user_data_dir(), "themes", nullptr);
     inkscape_fill_gtk(path, themes);
     g_free(path);
   
-    path = g_build_filename(g_get_home_dir(), ".themes", NULL);
+    path = g_build_filename(g_get_home_dir(), ".themes", nullptr);
     inkscape_fill_gtk(path, themes);
     g_free(path);
   
     dirs = g_get_system_data_dirs();
     for (i = 0; dirs[i]; i++) {
-        path = g_build_filename(dirs[i], "themes", NULL);
+        path = g_build_filename(dirs[i], "themes", nullptr);
         inkscape_fill_gtk(path, themes);
         g_free(path);
     }

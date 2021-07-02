@@ -131,7 +131,7 @@ void MeshTool::selection_changed(Inkscape::Selection* /*sel*/) {
                 _("%s selected"),
                 //TRANSLATORS: Mind the space in front. This is part of a compound message
                 ngettext(" out of %d mesh handle"," out of %d mesh handles",n_tot),
-                ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
+                ngettext(" on %d selected object"," on %d selected objects",n_obj),nullptr);
             this->message_context->setF(Inkscape::NORMAL_MESSAGE,
                                        message,_(ms_handle_descr[drag->singleSelectedDraggerSingleDraggableType()]), n_tot, n_obj);
         } else {
@@ -142,7 +142,7 @@ void MeshTool::selection_changed(Inkscape::Selection* /*sel*/) {
                              "One handle merging %d stops (drag with <b>Shift</b> to separate) selected",
                              drag->singleSelectedDraggerNumDraggables()),
                     ngettext(" out of %d mesh handle"," out of %d mesh handles",n_tot),
-                    ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
+                    ngettext(" on %d selected object"," on %d selected objects",n_obj),nullptr);
             this->message_context->setF(Inkscape::NORMAL_MESSAGE,message,drag->singleSelectedDraggerNumDraggables(), n_tot, n_obj);
         }
     } else if (n_sel > 1) {
@@ -150,7 +150,7 @@ void MeshTool::selection_changed(Inkscape::Selection* /*sel*/) {
         gchar * message =
             g_strconcat(ngettext("<b>%d</b> mesh handle selected out of %d","<b>%d</b> mesh handles selected out of %d",n_sel),
                         //TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
-                        ngettext(" on %d selected object"," on %d selected objects",n_obj),NULL);
+                        ngettext(" on %d selected object"," on %d selected objects",n_obj),nullptr);
         this->message_context->setF(Inkscape::NORMAL_MESSAGE,message, n_sel, n_tot, n_obj);
     } else if (n_sel == 0) {
         this->message_context->setF(Inkscape::NORMAL_MESSAGE,

@@ -159,7 +159,7 @@ CloneTiler::CloneTiler()
             auto cell_list = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(combo->gobj()));
             gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo->gobj()),
                                            GTK_CELL_RENDERER(cell_list->data),
-                                           "markup", 0, NULL);
+                                           "markup", 0, nullptr);
 
             for (const auto & sg : sym_groups) {
                 // Add the description of the symgroup to a new row

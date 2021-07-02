@@ -186,7 +186,7 @@ bool Dependency::check ()
                         break;
                     }
                     /* Look for deprecated locations next */
-                    auto deprloc = g_build_filename("inkex", "deprecated-simple", location.c_str(), NULL);
+                    auto deprloc = g_build_filename("inkex", "deprecated-simple", location.c_str(), nullptr);
                     std::string tempdepr =
                         Inkscape::IO::Resource::get_filename_string(Inkscape::IO::Resource::EXTENSIONS, deprloc, false, true);
                     g_free(deprloc);

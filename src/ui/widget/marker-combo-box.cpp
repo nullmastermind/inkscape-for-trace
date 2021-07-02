@@ -201,7 +201,7 @@ const gchar * MarkerComboBox::get_active_marker_uri()
         gchar *markurn;
         if (stockid)
         {
-            markurn = g_strconcat("urn:inkscape:marker:",markid,NULL);
+            markurn = g_strconcat("urn:inkscape:marker:",markid,nullptr);
         }
         else
         {
@@ -211,7 +211,7 @@ const gchar * MarkerComboBox::get_active_marker_uri()
         g_free(markurn);
         if (mark) {
             Inkscape::XML::Node *repr = mark->getRepr();
-            marker = g_strconcat("url(#", repr->attribute("id"), ")", NULL);
+            marker = g_strconcat("url(#", repr->attribute("id"), ")", nullptr);
         }
     } else {
         marker = g_strdup(markid);
@@ -366,7 +366,7 @@ void MarkerComboBox::add_markers (std::vector<SPMarker *> const& marker_list, SP
 void
 MarkerComboBox::update_marker_image(gchar const *mname)
 {
-    gchar *cache_name = g_strconcat(combo_id, mname, NULL);
+    gchar *cache_name = g_strconcat(combo_id, mname, nullptr);
     Glib::ustring key = svg_preview_cache.cache_key(doc->getDocumentURI(), cache_name, 24);
     g_free (cache_name);
     svg_preview_cache.remove_preview_from_cache(key);
@@ -403,7 +403,7 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
     }
 
     /* Get from cache right away */
-    gchar *cache_name = g_strconcat(combo_id, mname, NULL);
+    gchar *cache_name = g_strconcat(combo_id, mname, nullptr);
     Glib::ustring key = svg_preview_cache.cache_key(source->getDocumentURI(), cache_name, psize);
     g_free (cache_name);
     GdkPixbuf *pixbuf = svg_preview_cache.get_preview_from_cache(key); // no ref created

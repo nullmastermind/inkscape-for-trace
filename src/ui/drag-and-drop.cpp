@@ -357,7 +357,7 @@ ink_drag_data_received(GtkWidget *widget,
             ext->set_param_optiongroup("link", "embed");
             ext->set_gui(false);
 
-            gchar *filename = g_build_filename( g_get_tmp_dir(), "inkscape-dnd-import", NULL );
+            gchar *filename = g_build_filename( g_get_tmp_dir(), "inkscape-dnd-import", nullptr );
             g_file_set_contents(filename,
                 reinterpret_cast<gchar const *>(gtk_selection_data_get_data (data)),
                 gtk_selection_data_get_length (data),

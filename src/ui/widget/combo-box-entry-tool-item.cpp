@@ -74,8 +74,8 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
     set_name(name);
 
     gchar *action_name = g_strdup( get_name().c_str() );
-    gchar *combobox_name = g_strjoin( nullptr, action_name, "_combobox", NULL );
-    gchar *entry_name =    g_strjoin( nullptr, action_name, "_entry", NULL );
+    gchar *combobox_name = g_strjoin( nullptr, action_name, "_combobox", nullptr );
+    gchar *entry_name =    g_strjoin( nullptr, action_name, "_entry", nullptr );
     g_free( action_name );
 
     GtkWidget* comboBoxEntry = gtk_combo_box_new_with_model_and_entry (_model);

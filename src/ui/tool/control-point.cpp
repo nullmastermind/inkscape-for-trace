@@ -185,7 +185,7 @@ void ControlPoint::_setControlType(Inkscape::CanvasItemCtrlType type)
 
 void ControlPoint::_setAnchor(SPAnchorType anchor)
 {
-//     g_object_set(_canvas_item_ctrl, "anchor", anchor, NULL);
+//     g_object_set(_canvas_item_ctrl, "anchor", anchor, nullptr);
 }
 
 void ControlPoint::_setPixbuf(Glib::RefPtr<Gdk::Pixbuf> p)

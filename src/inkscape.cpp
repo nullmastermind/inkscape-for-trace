@@ -434,15 +434,15 @@ void Application::add_gtk_css(bool only_providers)
     gboolean gtkApplicationPreferDarkTheme;
     GtkSettings *settings = gtk_settings_get_default();
     if (settings && !only_providers) {
-        g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
-        g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
-        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
+        g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, nullptr);
+        g_object_get(settings, "gtk-theme-name", &gtkThemeName, nullptr);
+        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, nullptr);
         prefs->setBool("/theme/defaultPreferDarkTheme", gtkApplicationPreferDarkTheme);
         prefs->setString("/theme/defaultGtkTheme", Glib::ustring(gtkThemeName));
         prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
         if (gtkthemename != "") {
-            g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
+            g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), nullptr);
         } else {
             Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
             Glib::RefPtr<Gdk::Screen>  screen = display->get_default_screen();
@@ -451,13 +451,13 @@ void Application::add_gtk_css(bool only_providers)
             prefs->setBool("/theme/symbolicIcons", iconinfo.is_symbolic());
         }
         bool preferdarktheme = prefs->getBool("/theme/preferDarkTheme", false);
-        g_object_set(settings, "gtk-application-prefer-dark-theme", preferdarktheme, NULL);
+        g_object_set(settings, "gtk-application-prefer-dark-theme", preferdarktheme, nullptr);
         themeiconname = prefs->getString("/theme/iconTheme");
         // legacy cleanup
         if (themeiconname == prefs->getString("/theme/defaultIconTheme")) {
             prefs->setString("/theme/iconTheme", "");
         } else if (themeiconname != "") {
-            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), nullptr);
         }
     }
 
@@ -684,7 +684,7 @@ Application::crash_handler (int /*signum*/)
             FILE *file = nullptr;
             for(auto & location : locations) {
                 if (!location) continue; // It seems to be okay, but just in case
-                gchar * filename = g_build_filename(location, c, NULL);
+                gchar * filename = g_build_filename(location, c, nullptr);
                 Inkscape::IO::dump_fopen_call(filename, "E");
                 file = Inkscape::IO::fopen_utf8name(filename, "w");
                 if (file) {

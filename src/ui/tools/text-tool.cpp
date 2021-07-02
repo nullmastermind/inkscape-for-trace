@@ -100,8 +100,8 @@ TextTool::~TextTool() {
 void TextTool::setup() {
     GtkSettings* settings = gtk_settings_get_default();
     gint timeout = 0;
-    g_object_get( settings, "gtk-cursor-blink-time", &timeout, NULL );
-    
+    g_object_get( settings, "gtk-cursor-blink-time", &timeout, nullptr );
+
     if (timeout < 0) {
         timeout = 200;
     } else {

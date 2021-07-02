@@ -543,7 +543,7 @@ const gchar *RDFImpl::getReprText( Inkscape::XML::Node const * repr, struct rdf_
                     const gchar * str = temp->firstChild()->content();
                     if (bag) {
                         holder = bag;
-                        bag = g_strconcat(holder, ", ", str, NULL);
+                        bag = g_strconcat(holder, ", ", str, nullptr);
                         g_free(holder);
                     }
                     else {
