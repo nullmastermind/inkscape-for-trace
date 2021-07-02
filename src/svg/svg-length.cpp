@@ -22,6 +22,8 @@
 #include "stringstream.h"
 #include "util/units.h"
 
+using std::pow;
+
 static unsigned sp_svg_length_read_lff(gchar const *str, SVGLength::Unit *unit, float *val, float *computed, char **next);
 
 #ifndef MAX
