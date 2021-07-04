@@ -721,8 +721,6 @@ SPDesktop::set_display_area (bool log)
         transforms_future.clear();
     }
 
-    redrawDesktop();
-
     // Scroll
     Geom::Point offset = _current_affine.getOffset();
     canvas->scroll_to(offset, true);

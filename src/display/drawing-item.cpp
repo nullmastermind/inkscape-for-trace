@@ -487,6 +487,13 @@ DrawingItem::setItemBounds(Geom::OptRect const &bounds)
 void
 DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigned flags, unsigned reset)
 {
+
+    // We don't need to update what is not visible
+    if (!visible()) {
+        _state = STATE_ALL; // Touch the state for future change to this item
+        return;
+    }
+
     bool render_filters = _drawing.renderFilters();
     bool outline = _drawing.outline();
 
