@@ -533,6 +533,9 @@ bool MeasureTool::root_handler(GdkEvent* event)
 
     switch (event->type) {
     case GDK_BUTTON_PRESS: {
+        if (event->button.button != 1) {
+            break;
+        }
         this->knot_start->hide();
         this->knot_end->hide();
         Geom::Point const button_w(event->button.x, event->button.y);
@@ -540,13 +543,9 @@ bool MeasureTool::root_handler(GdkEvent* event)
         explicit_base_tmp = std::nullopt;
         last_end = std::nullopt;
 
-        if (event->button.button == 1) {
-            // save drag origin
-            start_p = desktop->w2d(Geom::Point(event->button.x, event->button.y));
-            within_tolerance = true;
-
-            ret = TRUE;
-        }
+        // save drag origin
+        start_p = desktop->w2d(Geom::Point(event->button.x, event->button.y));
+        within_tolerance = true;
 
         SnapManager &snap_manager = desktop->namedview->snap_manager;
         snap_manager.setup(desktop);
@@ -558,6 +557,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
                          Gdk::BUTTON_PRESS_MASK   |
                          Gdk::BUTTON_RELEASE_MASK |
                          Gdk::POINTER_MOTION_MASK );
+        ret = TRUE;
         break;
     }
     case GDK_KEY_PRESS: {
@@ -639,6 +639,9 @@ bool MeasureTool::root_handler(GdkEvent* event)
         break;
     }
     case GDK_BUTTON_RELEASE: {
+        if (event->button.button != 1) {
+            break;
+        }
         this->knot_start->moveto(start_p);
         this->knot_start->show();
         if(last_end) {
