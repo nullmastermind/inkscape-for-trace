@@ -810,7 +810,7 @@ void font_factory::AddFontsDir(char const *utf8dir)
     g_info("Adding additional font directories only supported for fontconfig backend.");
 #else
     if (!Inkscape::IO::file_test(utf8dir, G_FILE_TEST_IS_DIR)) {
-        g_warning("Fonts dir '%s' does not exist and will be ignored.", utf8dir);
+        g_info("Fonts dir '%s' does not exist and will be ignored.", utf8dir);
         return;
     }
 
