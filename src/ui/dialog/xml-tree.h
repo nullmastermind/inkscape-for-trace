@@ -238,6 +238,9 @@ private:
     Gtk::ToolButton lower_node_button;
 
     GtkWidget *new_window;
+
+    gulong _selection_changed = 0;
+    gulong _tree_move = 0;
 };
 
 }

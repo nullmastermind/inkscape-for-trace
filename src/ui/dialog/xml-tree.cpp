@@ -214,8 +214,8 @@ XmlTree::XmlTree()
     contents->pack_start(*actionsbox, false, false, 0);
     /* Signal handlers */
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
-    g_signal_connect (G_OBJECT(selection), "changed", G_CALLBACK (on_tree_select_row), this);
-    g_signal_connect_after( G_OBJECT(tree), "tree_move", G_CALLBACK(after_tree_move), this);
+    _selection_changed = g_signal_connect (G_OBJECT(selection), "changed", G_CALLBACK (on_tree_select_row), this);
+    _tree_move = g_signal_connect_after( G_OBJECT(tree), "tree_move", G_CALLBACK(after_tree_move), this);
 
     xml_element_new_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_new_element_node));
     xml_text_new_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_new_text_node));
@@ -270,6 +270,10 @@ void XmlTree::_attrtoggler()
 XmlTree::~XmlTree ()
 {
     set_tree_desktop(nullptr);
+    // disconnect signals, they can fire after we leave destructor when 'tree' gets deleted
+    GtkTreeSelection* selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
+    g_signal_handler_disconnect(G_OBJECT(selection), _selection_changed);
+    g_signal_handler_disconnect(G_OBJECT(tree), _tree_move);
     _message_changed_connection.disconnect();
 }
 
