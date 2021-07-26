@@ -726,7 +726,7 @@ StartScreen::keyboard_changed()
 
         Gtk::InfoBar* keys_warning;
         builder->get_widget("keys_warning", keys_warning);
-        if (set_to != "inkscape.xml") {
+        if (set_to != "inkscape.xml" && set_to != "default.xml") {
             keys_warning->set_message_type(Gtk::MessageType::MESSAGE_WARNING);
             keys_warning->show();
         } else {
