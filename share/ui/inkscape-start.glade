@@ -218,9 +218,9 @@ along with Inkscape Extensions Manager.  If not, see <http://www.gnu.org/license
         <col id="0" translatable="yes">A4 (Landscape)</col>
         <col id="1">resources/template_print_landscape.svg</col>
         <col id="2">-</col>
-        <col id="3">279mm</col>
+        <col id="3">297mm</col>
         <col id="4">210mm</col>
-        <col id="5">279mm x 210mm</col>
+        <col id="5">297mm × 210mm</col>
       </row>
       <row>
         <col id="0" translatable="yes">US Letter</col>
