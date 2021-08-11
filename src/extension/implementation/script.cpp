@@ -671,15 +671,14 @@ void Script::effect(Inkscape::Extension::Effect *module,
             SPObject *layer = nullptr;
             if ( nv != nullptr)
             {
-                if( nv->default_layer_id != 0 ) {
-                    SPDocument *document = desktop->doc();
+                SPDocument *document = desktop->doc();
+                if (document != nullptr) {
                     //If so, get that layer
-                    if (document != nullptr)
-                    {
+                    if( nv->default_layer_id != 0 ) {
                         layer = document->getObjectById(g_quark_to_string(nv->default_layer_id));
                     }
+                    desktop->showGrids(nv->grids_visible);
                 }
-                desktop->showGrids(nv->grids_visible);
             }
 
             sp_namedview_update_layers_from_document(desktop);
