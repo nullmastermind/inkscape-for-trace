@@ -14,6 +14,7 @@
 
 
 #include <iostream>  // For debugging
+#include <memory>
 
 // FreeType
 #include FT_FREETYPE_H
@@ -31,6 +32,11 @@
 
 
 // Utilities used in this file
+
+struct HbSetDeleter {
+    void operator()(hb_set_t* x) { hb_set_destroy(x); }
+};
+using HbSet = std::unique_ptr<hb_set_t, HbSetDeleter>;
 
 void dump_tag( guint32 *tag, Glib::ustring prefix = "", bool lf=true ) {
     std::cout << prefix
@@ -54,11 +60,11 @@ Glib::ustring extract_tag( guint32 *tag ) {
 
 
 #if HB_VERSION_ATLEAST(1,2,3)  // Released Feb 2016
-void get_glyphs( hb_font_t* font, hb_set_t* set, Glib::ustring& characters) {
+void get_glyphs(hb_font_t* font, HbSet& set, Glib::ustring& characters) {
 
     // There is a unicode to glyph mapping function but not the inverse!
     hb_codepoint_t codepoint = -1;
-    while (hb_set_next (set, &codepoint)) {
+    while (hb_set_next (set.get(), &codepoint)) {
         for (hb_codepoint_t unicode_i = 0; unicode_i < 0xffff; ++unicode_i) {
             hb_codepoint_t glyph = 0;
             hb_font_get_nominal_glyph (font, unicode_i, &glyph);
@@ -192,17 +198,17 @@ void readOpenTypeGsubTable (hb_font_t* hb_font,
                 // std::cout << "  Lookup count: " << count << " total: " << lookup_count << std::endl;
 
                 for (int i = 0; i < count; ++i) {
-                    hb_set_t* glyphs_before = hb_set_create();
-                    hb_set_t* glyphs_input  = hb_set_create();
-                    hb_set_t* glyphs_after  = hb_set_create();
-                    hb_set_t* glyphs_output = hb_set_create();
+                    HbSet glyphs_before (hb_set_create());
+                    HbSet glyphs_input  (hb_set_create());
+                    HbSet glyphs_after  (hb_set_create());
+                    HbSet glyphs_output (hb_set_create());
 
                     hb_ot_layout_lookup_collect_glyphs (hb_face, HB_OT_TAG_GSUB,
                                                         lookup_indexes[i],
-                                                        glyphs_before,
-                                                        glyphs_input,
-                                                        glyphs_after,
-                                                        glyphs_output );
+                                                        glyphs_before.get(),
+                                                        glyphs_input.get(),
+                                                        glyphs_after.get(),
+                                                        glyphs_output.get() );
 
                     // std::cout << "  Populations: "
                     //           << " " << hb_set_get_population (glyphs_before)
@@ -220,12 +226,6 @@ void readOpenTypeGsubTable (hb_font_t* hb_font,
                     // std::cout << "  Input:  " << tables[table.first].input.c_str() << std::endl;
                     // std::cout << "  After:  " << tables[table.first].after.c_str() << std::endl;
                     // std::cout << "  Output: " << tables[table.first].output.c_str() << std::endl;
-
-                    hb_set_destroy (glyphs_before);
-                    hb_set_destroy (glyphs_input);
-                    hb_set_destroy (glyphs_after);
-                    hb_set_destroy (glyphs_output);
-
                 } // End count (lookups)
 
             } else {
