@@ -727,6 +727,9 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
         out = fill;
     } else if(did) {
         out = g_repr;
+    } else {
+        parent->removeChild(g_repr);
+        return nullptr;
     }
 
     SPCSSAttr *r_style = sp_repr_css_attr_new();
