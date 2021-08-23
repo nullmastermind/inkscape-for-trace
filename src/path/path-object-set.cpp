@@ -33,16 +33,17 @@ ObjectSet::strokesToPaths(bool legacy, bool skip_undo)
     return false;
   }
 
+  bool did = false;
+
   Inkscape::Preferences *prefs = Inkscape::Preferences::get();
   if (prefs->getBool("/options/pathoperationsunlink/value", true)) {
-      unlinkRecursive(true);
+      did = unlinkRecursive(true);
   }
 
   // Need to turn on stroke scaling to ensure stroke is scaled when transformed!
   bool scale_stroke = prefs->getBool("/options/transform/stroke", true);
   prefs->setBool("/options/transform/stroke", true);
 
-  bool did = false;
 
   std::vector<SPItem *> my_items(items().begin(), items().end());
 

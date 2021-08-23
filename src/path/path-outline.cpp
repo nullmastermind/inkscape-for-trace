@@ -33,10 +33,13 @@
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 
+#include "object/object-set.h"
+#include "object/box3d.h"
 #include "object/sp-item.h"
 #include "object/sp-marker.h"
 #include "object/sp-shape.h"
 #include "object/sp-text.h"
+#include "object/sp-flowtext.h"
 
 #include "svg/svg.h"
 
@@ -374,28 +377,52 @@ void item_to_paths_add_marker( SPItem *context,
 
 /*
  * Find an outline that represents an item.
- * If not legacy, items are already converted to paths (see verbs.cpp).
  * If legacy, text will not be handled as it is not a shape.
  * If a new item is created it is returned.
  * If the input item is a group and that group contains a changed item, the group node is returned
  * (marking a change).
  *
- * The return value is only used externally to update a selection.
+ * The return value is used externally to update a selection. It is nullptr if no change is made.
  */
 Inkscape::XML::Node*
 item_to_paths(SPItem *item, bool legacy, SPItem *context)
 {
     char const *id = item->getAttribute("id");
+    SPDocument *doc = item->document;
+    bool flatten = false;
     // flatten all paths effects
     SPLPEItem *lpeitem = SP_LPE_ITEM(item);
-    if (lpeitem) {
-        SPDocument * document = item->document;
+    if (lpeitem && lpeitem->hasPathEffect()) {
         lpeitem->removeAllPathEffects(true);
-        SPObject *elemref = document->getObjectById(id);
+        SPObject *elemref = doc->getObjectById(id);
         if (elemref && elemref != item) {
             // If the LPE item is a shape, it is converted to a path 
             // so we need to reupdate the item
             item = dynamic_cast<SPItem *>(elemref);
+        }
+        auto flat_item = dynamic_cast<SPLPEItem *>(elemref);
+        if (!flat_item || !flat_item->hasPathEffect()) {
+            flatten = true;
+        }
+    }
+    // convert text/3dbox to path
+    if (dynamic_cast<SPText *>(item)
+        || dynamic_cast<SPFlowtext *>(item)
+        || dynamic_cast<SPBox3D *>(item)) {
+        if (legacy) {
+            return nullptr;
+        }
+
+        Inkscape::ObjectSet original_objects {doc}; // doc or desktop shouldn't be necessary
+        original_objects.add(dynamic_cast<SPObject *>(item));
+        original_objects.toCurves(true);
+        SPItem * new_item = original_objects.singleItem();
+        if (new_item && new_item != item) {
+            flatten = true;
+            item = new_item;
+        } else {
+            g_warning("item_to_paths: flattening text or 3D box failed.");
+            return nullptr;
         }
     }
     // if group, recurse
@@ -411,7 +438,7 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
                 did = true;
             }
         }
-        if (did) {
+        if (did || flatten) {
             // This indicates that at least one thing was changed inside the group.
             return group->getRepr();
         } else {
@@ -419,7 +446,6 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
         }
     }
 
-    // As written, only shapes are handled. We bail on text early.
     SPShape* shape = dynamic_cast<SPShape *>(item);
     if (!shape) {
         return nullptr;
@@ -507,7 +533,6 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
     // Remember parent
     Inkscape::XML::Node *parent = item->getRepr()->parent();
 
-    SPDocument * doc = item->document;
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
     // Create a group to put everything in.
@@ -713,7 +738,8 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
     }
 
     bool did = false;
-    if( fill || stroke || markers ) {
+    // only consider it a change if more than a fill is created.
+    if (stroke || markers) {
         did = true;
     }
 
@@ -723,13 +749,11 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
         out = stroke;
     } else if (!fill && !stroke  && did) {
         out = markers;
-    } else if (!markers && !stroke  && did) {
-        out = fill;
     } else if(did) {
         out = g_repr;
     } else {
         parent->removeChild(g_repr);
-        return nullptr;
+        return (flatten ? item->getRepr() : nullptr);
     }
 
     SPCSSAttr *r_style = sp_repr_css_attr_new();
