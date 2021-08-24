@@ -917,7 +917,6 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
                     remove_hidder_filter(newitem);
                     gchar *id = strdup(newitem->getId());
                     newitem = (SPItem *)sp_lpe_item_remove_autoflatten(newitem, id);
-                    obj_copy = newitem->getRepr();
                     g_free(id);
                 }
             }
