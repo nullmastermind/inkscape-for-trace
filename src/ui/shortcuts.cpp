@@ -889,7 +889,8 @@ Shortcuts::get_from_event(GdkEventKey const *event, bool fix)
     }
 
     auto unused_modifiers = Gdk::ModifierType((initial_modifiers &~ consumed_modifiers)
-                                                                 & GDK_MODIFIER_MASK);
+                                                                 & GDK_MODIFIER_MASK
+                                                                 &~ GDK_LOCK_MASK);
 
     // std::cout << "Shortcuts::get_from_event: End:   "
     //           << " Key: " << std::hex << keyval << " (" << (char)keyval << ")"
