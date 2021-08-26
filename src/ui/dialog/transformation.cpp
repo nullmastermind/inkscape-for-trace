@@ -204,6 +204,17 @@ void Transformation::layoutPageMove()
 {
     _units_move.setUnitType(UNIT_TYPE_LINEAR);
 
+    SPDesktop *desktop = getDesktop();
+
+    if (desktop) {    
+        // Setting default unit to document unit
+        SPNamedView *nv = desktop->getNamedView();
+        if (nv->display_units) {
+            _units_move.setUnit(nv->display_units->abbr);
+            _units_transform.setUnit(nv->display_units->abbr);
+        }
+    }
+
     _scalar_move_horizontal.initScalar(-1e6, 1e6);
     _scalar_move_horizontal.setDigits(3);
     _scalar_move_horizontal.setIncrements(0.1, 1.0);
@@ -1169,13 +1180,6 @@ void Transformation::update()
 
     if (!desktop) {
         return;
-    }
-
-    // Setting default unit to document unit
-    SPNamedView *nv = desktop->getNamedView();
-    if (nv->display_units) {
-        _units_move.setUnit(nv->display_units->abbr);
-        _units_transform.setUnit(nv->display_units->abbr);
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
