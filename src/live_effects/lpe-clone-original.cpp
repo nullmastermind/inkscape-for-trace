@@ -193,19 +193,22 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
             }
         }
     }
+
     gchar ** attarray = g_strsplit(old_attributes.c_str(), ",", 0);
     gchar ** iter = attarray;
-    while (*iter != nullptr) {
-        const char* attribute = (*iter);
+    while (*iter) {
+        const char* attribute = g_strstrip(*iter);
         if (strlen(attribute)) {
             dest->getRepr()->removeAttribute(attribute);
         }
         iter++;
     }
+    g_strfreev(attarray);
+
     attarray = g_strsplit(attributes, ",", 0);
     iter = attarray;
-    while (*iter != nullptr) {
-        const char* attribute = (*iter);
+    while (*iter) {
+        const char* attribute = g_strstrip(*iter);
         if (strlen(attribute) && shape_dest && shape_origin) {
             if (std::strcmp(attribute, "d") == 0) {
                 std::unique_ptr<SPCurve> c;
@@ -254,7 +257,8 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     if (!allow_transforms) {
         dest->getRepr()->setAttribute("transform", origin->getRepr()->attribute("transform"));
     }
-    g_strfreev (attarray);
+    g_strfreev(attarray);
+
     SPCSSAttr *css_origin = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css_origin, origin->getRepr()->attribute("style"));
     SPCSSAttr *css_dest = sp_repr_css_attr_new();
@@ -264,17 +268,19 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     }
     gchar ** styleattarray = g_strsplit(old_css_properties.c_str(), ",", 0);
     gchar ** styleiter = styleattarray;
-    while (*styleiter != nullptr) {
-        const char* attribute = (*styleiter);
+    while (*styleiter) {
+        const char* attribute = g_strstrip(*styleiter);
         if (strlen(attribute)) {
             sp_repr_css_set_property (css_dest, attribute, nullptr);
         }
         styleiter++;
     }
+    g_strfreev(styleattarray);
+
     styleattarray = g_strsplit(css_properties, ",", 0);
     styleiter = styleattarray;
-    while (*styleiter != nullptr) {
-        const char* attribute = (*styleiter);
+    while (*styleiter) {
+        const char* attribute = g_strstrip(*styleiter);
         if (strlen(attribute)) {
             const char* origin_attribute = sp_repr_css_property(css_origin, attribute, "");
             if (!strlen(origin_attribute)) { //==0
@@ -285,7 +291,8 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         }
         styleiter++;
     }
-    g_strfreev (styleattarray);
+    g_strfreev(styleattarray);
+
     Glib::ustring css_str;
     sp_repr_css_write_string(css_dest,css_str);
     dest->getRepr()->setAttributeOrRemoveIfEmpty("style", css_str);
