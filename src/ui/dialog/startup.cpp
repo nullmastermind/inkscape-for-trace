@@ -436,6 +436,7 @@ StartScreen::new_now()
         auto q_width = unit_table.parseQuantity(width);
         _document->setWidthAndHeight(q_width, unit_table.parseQuantity(height), true);
         nv->setAttribute("inkscape:document-units", q_width.unit->abbr);
+        _document->setDocumentScale(1.0);
     }
 
     DocumentUndo::clearUndo(_document);
