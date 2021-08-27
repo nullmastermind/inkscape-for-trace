@@ -314,7 +314,7 @@ void ObjectSet::toCurves(bool skip_undo)
     if (desktop()) {
         desktop()->clearWaitingCursor();
     }
-    if (did&& !skip_undo) {
+    if (did && !skip_undo) {
         DocumentUndo::done(document(), SP_VERB_OBJECT_TO_CURVE, 
                                _("Object to path"));
     } else {
@@ -377,7 +377,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         char const *id = item->getRepr()->attribute("id");
         
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-        if (lpeitem) {
+        if (lpeitem && lpeitem->hasPathEffect()) {
             lpeitem->removeAllPathEffects(true);
             SPObject *elemref = document->getObjectById(id);
             if (elemref != item) {
@@ -388,9 +388,11 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
                     selected.push_back(item);
                     did = true;
                 }
+            } else if (!lpeitem->hasPathEffect()) {
+                did = true;
             }
         }
-        
+
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (path) {
             // remove connector attributes
