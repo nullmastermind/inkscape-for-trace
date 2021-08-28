@@ -10,4 +10,6 @@ export INKSCAPE_DATADIR=${SNAP}/share
 
 export GTK_USE_PORTAL=1
 
+export GS_LIB=${SNAP}/usr/share/ghostscript/9.50/Resource/Init/
+
 exec "$@"
