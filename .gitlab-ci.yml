@@ -123,6 +123,7 @@ inkscape:mac:
     - mac
   rules:
     - *do_not_run_for_schedules
+    # Mac runner is restricted to "inkscape" and "dehesselle" namespaces; only generate pipelines for those
     - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
     - if: '$CI_PROJECT_NAMESPACE == "dehesselle"'
   variables:
@@ -149,6 +150,7 @@ inkscape:windows:x64: &windows_job
     - inkscape # differentiates our runner from shared runners
   rules:
     - *do_not_run_for_schedules
+    # Windows runner is restricted to "inkscape" and "ede123" namespaces; only generate pipelines for those
     - if: '$CI_PROJECT_NAMESPACE == "inkscape"'
     - if: '$CI_PROJECT_NAMESPACE == "ede123"'
   cache:
