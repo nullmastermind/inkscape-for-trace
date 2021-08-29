@@ -142,7 +142,7 @@ inkscape:mac:
       - Inkscape.dmg
 
 
-inkscape:windows:
+inkscape:windows:x64: &windows_job
   stage: build
   tags:
     - windows
@@ -157,11 +157,7 @@ inkscape:windows:
       - build/ccache
   variables:
     PACMAN_OPTIONS: "--needed --noconfirm --noprogressbar --overwrite \\*"
-  parallel:
-    matrix:
-      - MSYSTEM:
-          - MINGW64
-          - MINGW32
+    MSYSTEM: MINGW64
   script:
     - $env:CHERE_INVOKING = 'yes'  # Preserve the current working directory
     - C:/msys64/usr/bin/bash -lc "buildtools/msys2build_GitLab.sh"
@@ -172,6 +168,12 @@ inkscape:windows:
       - build/inkscape*.exe
       - build/inkscape*.msi
       - build/testfiles.7z
+
+inkscape:windows:x86:
+  <<: *windows_job
+  rules:
+    # trigger 32-bit build via schedule only to save runner time (MSYSTEM overridden via schedule variable)
+    - if: $SCHEDULED_JOB_NAME == "windows_32bit"
 
 
 #tests, always run after building
