@@ -66,7 +66,7 @@ cmake .. -G Ninja \
 # build
 message "--- Compiling Inkscape"
 ccache --zero-stats
-ninja
+ninja || error "compilation failed"
 ccache --show-stats
 
 # install
@@ -86,7 +86,10 @@ INKSCAPE_DATADIR=inkscape_datadir bin/inkscape.exe -V >/dev/null || error "unins
 err=$(INKSCAPE_DATADIR=inkscape_datadir bin/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr:"; echo "$err"; fi
 # run tests
-ninja check || error "tests failed"
+ninja check || {
+    7z a testfiles.7z testfiles
+    error "tests failed"
+}
 
 message "##### BUILD SUCCESSFUL #####\n\n"
 
