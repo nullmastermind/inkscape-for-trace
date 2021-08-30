@@ -34,12 +34,12 @@ export FONTCONFIG_FILE=$(cygpath -a fonts.conf)
 cat > "$FONTCONFIG_FILE" <<EOF
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-<fontconfig><dir>$(cygpath -aw fonts)</dir></fontconfig>
+<fontconfig><dir>$(cygpath -aw fonts)</dir><cachedir>$(cygpath -aw fontconfig)</cachedir></fontconfig>
 EOF
 
 mkdir fonts
 wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.tar.bz2 \
-    && tar -xf dejavu-fonts-ttf-2.37.tar.bz2 --directory=fonts
+    && tar -xf dejavu-fonts-ttf-2.37.tar.bz2 && cp dejavu-fonts-ttf-2.37/ttf/* fonts/ && rm -rf dejavu-fonts-ttf-2.37
 
 # install dependencies
 message "--- Installing dependencies"
