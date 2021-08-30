@@ -44,7 +44,7 @@ wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_
 # install dependencies
 message "--- Installing dependencies"
 source ../buildtools/msys2installdeps.sh
-pacman -S p7zip $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git,ghostscript} $PACMAN_OPTIONS
+pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git,ghostscript} $PACMAN_OPTIONS
 
 export CCACHE_DIR=$(cygpath -a ccache)
 ccache --max-size=500M
@@ -87,7 +87,7 @@ err=$(INKSCAPE_DATADIR=inkscape_datadir bin/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr:"; echo "$err"; fi
 # run tests
 ninja check || {
-    7z a testfiles.7z testfiles
+    "C:/Program Files/7-Zip/7z.exe" a testfiles.7z testfiles
     error "tests failed"
 }
 
