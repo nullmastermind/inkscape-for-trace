@@ -107,7 +107,7 @@ FILENAME=$(ls inkscape*.7z)
 URL=$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/raw/build/$FILENAME
 BRANCH=$CI_COMMIT_BRANCH
 HTMLNAME=latest_${BRANCH}_x${MSYSTEM#MINGW}.html
-sed -e "s#\${FILENAME}#${FILENAME}#" -e "s#\${URL}#${URL}#" -e "s#\${BRANCH}#${BRANCH}#" ../buildtools/appveyor_redirect_template.html > $HTMLNAME
+sed -e "s#\${FILENAME}#${FILENAME}#" -e "s#\${URL}#${URL}#" -e "s#\${BRANCH}#${BRANCH}#" ../buildtools/ci_artifact_redirect_template.html > $HTMLNAME
 # upload redirect to http://alpha.inkscape.org/snapshots/
 if [ "${CI_PROJECT_PATH}" == "inkscape/inkscape" ] && [ -n "${INKSCAPE_CI_SSH_KEY}" ]; then
     if [ "$BRANCH" == "master" ]; then
