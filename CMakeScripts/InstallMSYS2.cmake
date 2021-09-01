@@ -10,6 +10,7 @@ if(WIN32)
     ${MINGW_BIN}/LIBEAY32.dll
     ${MINGW_BIN}/SSLEAY32.dll
     ${MINGW_BIN}/imagequant.dll
+    ${MINGW_BIN}/libLerc.dll
     ${MINGW_BIN}/libMagick*.dll
     ${MINGW_BIN}/libaspell-[0-9]*.dll
     ${MINGW_BIN}/libatk-1.0-[0-9]*.dll
