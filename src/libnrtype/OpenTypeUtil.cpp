@@ -60,45 +60,25 @@ Glib::ustring extract_tag( guint32 *tag ) {
 }
 
 
-#if HB_VERSION_ATLEAST(1,2,3)  // Released Feb 2016
 // Later (see get_glyphs) we need to lookup the Unicode codepoint for a glyph
 // but there's no direct API for that. So, we need a way to iterate over all
 // glyph mappings and build a reverse map.
 // FIXME: we should handle UVS at some point... or better, work with glyphs directly
-
-// Iterates over all *possibly* mapped Unicode codepoints of a font, sorted.
-class FontUnicodeSet {
-public:
-#if HB_VERSION_ATLEAST(1,9,0) && !defined(HB_NO_FACE_COLLECT_UNICODES)  // Released Sep 2018
-    HbSet set;
-    FontUnicodeSet(hb_font_t* font): set(hb_set_create()) {
-        hb_face_collect_unicodes(hb_font_get_face(font), set.get());
-    }
-    inline bool next(hb_codepoint_t* x) { return hb_set_next(set.get(), x); }
-#else
-    // if hb_face_collect_unicodes() is not available, fall back to old behavior by
-    // simulating a set with all BMP codepoints (non-BMP codepoints are ignored)
-    FontUnicodeSet(hb_font_t* font) {}
-    inline bool next(hb_codepoint_t* x) {
-        if (*x == HB_SET_VALUE_INVALID) *x = 0;
-        else ++(*x);
-        return (*x) < 0x10000;
-    }
-#endif
-};
 
 // Allows looking up the lowest Unicode codepoint mapped to a given glyph.
 // To do so, it lazily builds a reverse map.
 class GlyphToUnicodeMap {
 protected:
     hb_font_t* font;
-    FontUnicodeSet codepointSet;
+    HbSet codepointSet;
 
     std::unordered_map<hb_codepoint_t, hb_codepoint_t> mappings;
     bool more = true; // false if we have finished iterating the set
     hb_codepoint_t codepoint = HB_SET_VALUE_INVALID; // current iteration
 public:
-    GlyphToUnicodeMap(hb_font_t* font): font(font), codepointSet(font) {}
+    GlyphToUnicodeMap(hb_font_t* font): font(font), codepointSet(hb_set_create()) {
+        hb_face_collect_unicodes(hb_font_get_face(font), codepointSet.get());
+    }
 
     hb_codepoint_t lookup(hb_codepoint_t glyph) {
         // first, try to find it in the mappings we've seen so far
@@ -106,7 +86,7 @@ public:
             return it->second;
 
         // populate more mappings from the set
-        while (more = more && codepointSet.next(&codepoint)) {
+        while (more = more && hb_set_next(codepointSet.get(), &codepoint)) {
             // get the glyph that this codepoint is associated with, if any
             hb_codepoint_t tGlyph;
             if (!hb_font_get_nominal_glyph(font, codepoint, &tGlyph)) continue;
@@ -126,7 +106,6 @@ void get_glyphs(GlyphToUnicodeMap& glyphMap, HbSet& set, Glib::ustring& characte
             characters += codepoint;
     }
 }
-#endif
 
 // Make a list of all tables found in the GSUB
 // This list includes all tables regardless of script or language.
@@ -190,7 +169,6 @@ void readOpenTypeGsubTable (hb_font_t* hb_font,
         }
     }
 
-#if HB_VERSION_ATLEAST(1,2,3)  // Released Feb 2016
     // Find glyphs in OpenType substitution tables ('gsub').
     // Note that pango's functions are just dummies. Must use harfbuzz.
 
@@ -287,10 +265,6 @@ void readOpenTypeGsubTable (hb_font_t* hb_font,
         }
 
     }
-#else
-    std::cerr << "Requires Harfbuzz 1.2.3 for visualizing alternative glyph OpenType tables. "
-              << "Compiled with: " << HB_VERSION_STRING << "." << std::endl;
-#endif
 
     g_free(hb_scripts);
 }
