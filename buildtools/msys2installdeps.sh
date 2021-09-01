@@ -34,7 +34,6 @@ pacman -Sy
 # install basic development system, compiler toolchain and build tools
 eval pacman -S $PACMAN_OPTIONS \
 git \
-intltool \
 base-devel \
 $ARCH-toolchain \
 $ARCH-cmake \

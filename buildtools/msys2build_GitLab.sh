@@ -21,15 +21,11 @@ wget --no-verbose --tries=1 --timeout=10 repo.msys2.org 2> /dev/nul || {
     done
 }
 
-# remove Ada and ObjC compilers (they cause update conflicts, see https://github.com/msys2/MINGW-packages/issues/5434)
-pacman -R $MINGW_PACKAGE_PREFIX-gcc-{ada,objc} --noconfirm
-
 # update MSYS2-packages and MINGW-packages (but only for current architecture)
 pacman -Quq | grep -v mingw-w64- | xargs pacman -S $PACMAN_OPTIONS
 pacman -Quq | grep ${MINGW_PACKAGE_PREFIX} | xargs pacman -S $PACMAN_OPTIONS
 
 # do everything in /build
-cd "$(cygpath ${APPVEYOR_BUILD_FOLDER})"
 mkdir build
 cd build
 
@@ -38,12 +34,12 @@ export FONTCONFIG_FILE=$(cygpath -a fonts.conf)
 cat > "$FONTCONFIG_FILE" <<EOF
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-<fontconfig><dir>$(cygpath -aw fonts)</dir></fontconfig>
+<fontconfig><dir>$(cygpath -aw fonts)</dir><cachedir>$(cygpath -aw fontconfig)</cachedir></fontconfig>
 EOF
 
 mkdir fonts
 wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.tar.bz2 \
-    && tar -xf dejavu-fonts-ttf-2.37.tar.bz2 --directory=fonts
+    && tar -xf dejavu-fonts-ttf-2.37.tar.bz2 && cp dejavu-fonts-ttf-2.37/ttf/* fonts/ && rm -rf dejavu-fonts-ttf-2.37
 
 # install dependencies
 message "--- Installing dependencies"
@@ -70,21 +66,8 @@ cmake .. -G Ninja \
 # build
 message "--- Compiling Inkscape"
 ccache --zero-stats
-
-# We have 90min total. It takes about 5min to reach this line.
-# Use a timeout of 75min to make sure the cache is saved if we run out of time.
-# Without "nice -19" there would be a huge delay (~20min) between the timeout
-# and actual termination of "ninja".
-timeout --verbose 4500 nice -19 ninja || {
-    if [ $? = 124 ]; then
-        appveyor SetVariable -Name APPVEYOR_SAVE_CACHE_ON_ERROR -Value true
-        error "timed out"
-    fi
-    error "compilation failed"
-}
-
+ninja || error "compilation failed"
 ccache --show-stats
-appveyor SetVariable -Name APPVEYOR_SAVE_CACHE_ON_ERROR -Value true # build succeeded so it's safe to save the cache
 
 # install
 message "--- Installing the project"
@@ -104,8 +87,7 @@ err=$(INKSCAPE_DATADIR=inkscape_datadir bin/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr:"; echo "$err"; fi
 # run tests
 ninja check || {
-    7z a testfiles.7z testfiles
-    appveyor PushArtifact testfiles.7z
+    "C:/Program Files/7-Zip/7z.exe" a testfiles.7z testfiles
     error "tests failed"
 }
 
@@ -113,7 +95,7 @@ message "##### BUILD SUCCESSFUL #####\n\n"
 
 
 ### package
-if [ "$APPVEYOR_REPO_TAG" = "true" ]
+if [ "$CI_COMMIT_TAG" = "true" ]
 then
     ninja dist-win-all
 else
@@ -122,14 +104,14 @@ fi
 
 # create redirect to the 7z archive we just created (and are about to upload as an artifact)
 FILENAME=$(ls inkscape*.7z)
-URL=https://ci.appveyor.com/api/buildjobs/$APPVEYOR_JOB_ID/artifacts/build%2F$FILENAME
-BRANCH=$APPVEYOR_REPO_BRANCH
+URL=$CI_PROJECT_URL/-/jobs/$CI_JOB_ID/artifacts/raw/build/$FILENAME
+BRANCH=$CI_COMMIT_BRANCH
 HTMLNAME=latest_${BRANCH}_x${MSYSTEM#MINGW}.html
-sed -e "s#\${FILENAME}#${FILENAME}#" -e "s#\${URL}#${URL}#" -e "s#\${BRANCH}#${BRANCH}#" ../buildtools/appveyor_redirect_template.html > $HTMLNAME
+sed -e "s#\${FILENAME}#${FILENAME}#" -e "s#\${URL}#${URL}#" -e "s#\${BRANCH}#${BRANCH}#" ../buildtools/ci_artifact_redirect_template.html > $HTMLNAME
 # upload redirect to http://alpha.inkscape.org/snapshots/
-if [ "${APPVEYOR_REPO_NAME}" == "inkscape/inkscape" ] && [ -n "${SSH_KEY}" ]; then
+if [ "${CI_PROJECT_PATH}" == "inkscape/inkscape" ] && [ -n "${INKSCAPE_CI_SSH_KEY}" ]; then
     if [ "$BRANCH" == "1.1.x" ]; then
-        echo -e "-----BEGIN RSA PRIVATE KEY-----\n${SSH_KEY}\n-----END RSA PRIVATE KEY-----" > ssh_key
+        echo -e "-----BEGIN RSA PRIVATE KEY-----\n${INKSCAPE_CI_SSH_KEY}\n-----END RSA PRIVATE KEY-----" > ssh_key
         scp -oStrictHostKeyChecking=no -i ssh_key $HTMLNAME appveyor-ci@alpha.inkscape.org:/var/www/alpha.inkscape.org/public_html/snapshots/
         rm -f ssh_key
     fi
