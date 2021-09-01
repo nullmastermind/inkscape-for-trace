@@ -110,7 +110,7 @@ HTMLNAME=latest_${BRANCH}_x${MSYSTEM#MINGW}.html
 sed -e "s#\${FILENAME}#${FILENAME}#" -e "s#\${URL}#${URL}#" -e "s#\${BRANCH}#${BRANCH}#" ../buildtools/ci_artifact_redirect_template.html > $HTMLNAME
 # upload redirect to http://alpha.inkscape.org/snapshots/
 if [ "${CI_PROJECT_PATH}" == "inkscape/inkscape" ] && [ -n "${INKSCAPE_CI_SSH_KEY}" ]; then
-    if [ "$BRANCH" == "master" ]; then
+    if [ "$BRANCH" == "1.1.x" ]; then
         echo -e "-----BEGIN RSA PRIVATE KEY-----\n${INKSCAPE_CI_SSH_KEY}\n-----END RSA PRIVATE KEY-----" > ssh_key
         scp -oStrictHostKeyChecking=no -i ssh_key $HTMLNAME appveyor-ci@alpha.inkscape.org:/var/www/alpha.inkscape.org/public_html/snapshots/
         rm -f ssh_key
