@@ -887,8 +887,11 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             // convert 3D boxes to ordinary groups before spraying their shapes
+            desktop->getSelection()->remove(dynamic_cast<SPObject *>(item));
+            set->remove(item);
             item = box->convert_to_group();
             set->add(item);
+            desktop->getSelection()->add(dynamic_cast<SPObject *>(item));
         }
     }
 
@@ -1019,6 +1022,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     object_set_tmp.add(item_copied);
                     if (unionResult) { // No need to add the very first item (initialized with NULL).
                         object_set_tmp.add(unionResult);
+                        set->remove(dynamic_cast<SPObject*>(unionResult));
                     }
                     object_set_tmp.pathUnion(true);
                     set->add(parent_item);
