@@ -753,6 +753,10 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
         out = g_repr;
     } else {
         parent->removeChild(g_repr);
+        Inkscape::GC::release(g_repr);
+        if (fill) {
+            Inkscape::GC::release(fill);
+        }
         return (flatten ? item->getRepr() : nullptr);
     }
 
@@ -766,6 +770,7 @@ item_to_paths(SPItem *item, bool legacy, SPItem *context)
         g_assert(out != g_repr);
         parent->addChild(out, g_repr);
         parent->removeChild(g_repr);
+        Inkscape::GC::release(g_repr);
     }
     out->setAttribute("transform", item->getRepr()->attribute("transform"));
 

@@ -78,6 +78,8 @@ ObjectSet::strokesToPaths(bool legacy, bool skip_undo)
 
   if (did && !skip_undo) {
     Inkscape::DocumentUndo::done(document(), SP_VERB_NONE, _("Convert stroke to path"));
+  } else if (!did && !skip_undo) {
+    Inkscape::DocumentUndo::cancel(document());
   }
 
   return did;
