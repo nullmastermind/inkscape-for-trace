@@ -287,6 +287,10 @@ Box3DToolbar::selection_changed(Inkscape::Selection *selection)
     if (box) {
         // FIXME: Also deal with multiple selected boxes
         Persp3D *persp = box->get_perspective();
+        if (!persp) {
+            g_warning("Box has no perspective set!");
+            return;
+        }
         persp_repr = persp->getRepr();
         if (persp_repr) {
             _repr = persp_repr;
