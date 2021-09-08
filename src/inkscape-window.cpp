@@ -129,6 +129,12 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     Inkscape::Shortcuts::getInstance().update_gui_text_recursive(this);
 }
 
+InkscapeWindow::~InkscapeWindow()
+{
+    Gtk::Window *win = _desktop->getToplevel();
+    g_idle_remove_by_data(win);
+}
+
 // Change a document, leaving desktop/view the same. (Eventually move all code here.)
 void
 InkscapeWindow::change_document(SPDocument* document)
