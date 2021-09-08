@@ -428,7 +428,7 @@ void MeasureTool::knotClickHandler(SPKnot *knot, guint state)
     if (state & GDK_SHIFT_MASK) {
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        Glib::ustring const unit_name =  prefs->getString("/tools/measure/unit");
+        Glib::ustring const unit_name =  prefs->getString("/tools/measure/unit", "px");
         explicit_base = explicit_base_tmp;
         Inkscape::UI::Dialogs::KnotPropertiesDialog::showDialog(desktop, knot, unit_name);
     }
