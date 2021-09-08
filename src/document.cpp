@@ -494,10 +494,9 @@ std::unique_ptr<SPDocument> SPDocument::copy() const
     }
 
     auto doc = createDoc(new_rdoc, document_uri, document_base, document_name, keepalive, nullptr);
-    doc->_original_document = this->doRef();
-    Inkscape::GC::release(new_rdoc);
+    doc->_original_document = this;
 
-    return std::unique_ptr<SPDocument>(doc);
+    return doc->doRef();
 }
 
 /**

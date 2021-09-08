@@ -242,6 +242,8 @@ Output::save(SPDocument *doc, gchar const *filename, bool detachbase)
     imp->setDetachBase(detachbase);
     auto new_doc = doc->copy();
     imp->save(this, new_doc.get(), filename);
+    // This shouldn't be needed, but the unique_ptr is not destroying this SPDocument.
+    delete new_doc.release();
 }
 
 /**

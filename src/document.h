@@ -133,7 +133,7 @@ public:
     // Document status --------------------
     void setVirgin(bool Virgin) { virgin = Virgin; }
     bool getVirgin() { return virgin; }
-    const SPDocument *getOriginalDocument() const { return _original_document.get(); }
+    const SPDocument *getOriginalDocument() const { return _original_document; }
 
     //! Increment reference count by one and return a self-dereferencing pointer.
     std::unique_ptr<SPDocument> doRef();
@@ -325,7 +325,7 @@ private:
     // Conversely this is a parent document because this is a child.
     SPDocument *_parent_document;
     // When copying documents, this can refer to it's original
-    std::unique_ptr<SPDocument const> _original_document;
+    SPDocument const *_original_document;
 
     // Styling
     CRCascade *style_cascade;
