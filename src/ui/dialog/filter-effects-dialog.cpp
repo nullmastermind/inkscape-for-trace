@@ -1577,8 +1577,11 @@ void FilterEffectsDialog::FilterModifier::update_counts()
    Keeps the same selection if possible, otherwise selects the first element */
 void FilterEffectsDialog::FilterModifier::update_filters()
 {
+    // Make sure dialog doesn't crash when closing windows
     SPDesktop* desktop = _dialog.getDesktop();
+    if (!desktop) return;
     SPDocument* document = desktop->getDocument();
+    if (!document) return;
 
     std::vector<SPObject *> filters = document->getResourceList( "filter" );
 
