@@ -1525,7 +1525,9 @@ void ClipboardManagerImpl::_createInternalClipboard()
 void ClipboardManagerImpl::_discardInternalClipboard()
 {
     if ( _clipboardSPDoc != nullptr ) {
-        _clipboardSPDoc = nullptr;
+        // Explicit delete required to free SPDocument
+        // see https://gitlab.com/inkscape/inkscape/-/issues/2723
+        delete _clipboardSPDoc.release();
         _defs = nullptr;
         _doc = nullptr;
         _root = nullptr;

@@ -170,6 +170,9 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
         std::cerr << "load_svg_cursor: failed to create pixbuf for: " << full_file_path << std::endl;
     }
 
+    // Explicit delete required for SPDocument to be freed
+    // see https://gitlab.com/inkscape/inkscape/-/issues/2723
+    delete document.release();
     return cursor;
 }
 
