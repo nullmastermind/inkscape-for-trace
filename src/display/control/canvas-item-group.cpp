@@ -76,8 +76,6 @@ void CanvasItemGroup::update(Geom::Affine const &affine)
 
     // Update all children and calculate new bounds.
     for (auto & item : items) {
-        // We don't need to update what is not visible
-        if (!item.is_visible()) continue;
         item.update(_affine);
         _bounds.unionWith(item.get_bounds());
     }
