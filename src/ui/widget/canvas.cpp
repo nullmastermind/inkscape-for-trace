@@ -1663,6 +1663,7 @@ Canvas::emit_event(GdkEvent *event)
     // different event structures.
     GdkEvent *event_copy = gdk_event_copy(event);
     switch (event_copy->type) {
+        case GDK_ENTER_NOTIFY:
         case GDK_LEAVE_NOTIFY:
             event_copy->crossing.x += _x0;
             event_copy->crossing.y += _y0;
