@@ -729,25 +729,20 @@ StrokeStyle::updateLine()
         // if none of the selected objects has a stroke, than quite some controls should be disabled
         // These options should also be disabled for hairlines, since they don't make sense for
         // 0-width lines.
-        // The markers might still be shown though, so these will not be disabled
-        bool enabled = (result_sw != QUERY_STYLE_NOTHING) && !targPaint.isNoneSet();
+        // The markers might still be shown though, so marker and stroke-width widgets stay enabled
+        bool enabled = (result_sw != QUERY_STYLE_NOTHING) && !targPaint.isNoneSet()
+                           && !query.stroke_extensions.hairline;
+        joinMiter->set_sensitive(enabled);
+        joinRound->set_sensitive(enabled);
+        joinBevel->set_sensitive(enabled);
 
-        /* No objects stroked, set insensitive */
-        widthSpin->set_sensitive(enabled && 
-                (!query.stroke_extensions.hairline || result_sw == QUERY_STYLE_MULTIPLE_AVERAGED));
-        unitSelector->set_sensitive(enabled);
+        miterLimitSpin->set_sensitive(enabled);
 
-        joinMiter->set_sensitive(enabled && !query.stroke_extensions.hairline);
-        joinRound->set_sensitive(enabled && !query.stroke_extensions.hairline);
-        joinBevel->set_sensitive(enabled && !query.stroke_extensions.hairline);
+        capButt->set_sensitive(enabled);
+        capRound->set_sensitive(enabled);
+        capSquare->set_sensitive(enabled);
 
-        miterLimitSpin->set_sensitive(enabled && !query.stroke_extensions.hairline);
-
-        capButt->set_sensitive(enabled && !query.stroke_extensions.hairline);
-        capRound->set_sensitive(enabled && !query.stroke_extensions.hairline);
-        capSquare->set_sensitive(enabled && !query.stroke_extensions.hairline);
-
-        dashSelector->set_sensitive(enabled && !query.stroke_extensions.hairline);
+        dashSelector->set_sensitive(enabled);
     }
 
     if (result_ml != QUERY_STYLE_NOTHING)
