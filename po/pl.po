@@ -14526,7 +14526,7 @@ msgstr "[złe odniesienie]: %s"
 #: ../src/object/sp-image.cpp:525 ../src/object/sp-image.cpp:542
 #, c-format
 msgid "%d &#215; %d: %s"
-msgstr "% d & #215;% d: %s"
+msgstr "%d &#215; %d: %s"
 
 #: ../src/object/sp-item-group.cpp:300 ../share/extensions/frame.inx:18
 msgid "Group"
@@ -29854,7 +29854,7 @@ msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; <b>Shift+Click</b> creates cusp node, "
 "<b>ALT</b> moves previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
-"<b> Segment krzywej </b>: kąt% 3.2f i # 176;; za pomocą <b> Shift + kliknięcie </"
+"<b> Segment krzywej </b>: kąt %3.2f&#176;; za pomocą <b> Shift + kliknięcie </"
 "b> węzła węzłowego, <b> ALT </b> poprzedni ruch, <b> Enter </b> lub <b> Shift + "
 "Enter </b>, aby zakończyć"
 
@@ -29867,7 +29867,7 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; <b>Shift+Click</b> creates cusp node, "
 "<b>ALT</b> moves previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
 msgstr ""
-"<b> Segment linii </b>: kąt %3.2f i # 176;; za pomocą <b> Shift + kliknięcie </b> "
+"<b> Segment linii </b>: kąt %3.2f&#176;; za pomocą <b> Shift + kliknięcie </b> "
 "węzła węzłowego, <b> ALT </b> poprzedni ruch, <b> Enter </b> lub <b> Shift + "
 "Enter </b>, aby zakończyć"
 
@@ -29877,7 +29877,7 @@ msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap "
 "angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
-"<b> Segment krzywej </b>: kąt %3.2f & # 176;, odległość %s; z <b> Ctrl </b>, aby "
+"<b> Segment krzywej </b>: kąt %3.2f&#176;, odległość %s; z <b> Ctrl </b>, aby "
 "przyciągnąć kąt, <b> Enter </b> lub <b> Shift + Enter </b>, aby zakończyć ścieżkę"
 
 #: ../src/ui/tools/pen-tool.cpp:1749
@@ -29886,7 +29886,7 @@ msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to snap "
 "angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
-"<b> Segment linii </b>: kąt %3.2f & # 176;, odległość %s; z <b> Ctrl </b>, aby "
+"<b> Segment linii </b>: kąt %3.2f&#176;, odległość %s; z <b> Ctrl </b>, aby "
 "przyciągnąć kąt, <b> Enter </b> lub <b> Shift + Enter </b>, aby zakończyć ścieżkę"
 
 #: ../src/ui/tools/pen-tool.cpp:1767
