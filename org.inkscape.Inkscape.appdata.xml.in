@@ -40,6 +40,17 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.1.1" date="2021-09-21">
+    <description>
+      <p>Inkscape 1.1.1</p>
+      <ul>
+        <li>Text stroke to path fixed</li>
+        <li>Startup time improved</li>
+        <li>Fixed various crashes</li>
+      </ul>
+    </description>
+    <url>http://wiki.inkscape.org/wiki/index.php/Release_notes/1.1.1</url>
+    </release>
     <release version="1.1" date="2021-05-24">
       <description>
         <p>Inkscape 1.1</p>

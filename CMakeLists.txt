@@ -42,7 +42,7 @@ set(PROJECT_NAME inkscape)
 # see https://gitlab.com/inkscape/inkscape/-/issues/551 for versioning suffixes
 set(INKSCAPE_VERSION_MAJOR  1)
 set(INKSCAPE_VERSION_MINOR  1)
-set(INKSCAPE_VERSION_PATCH  0)
+set(INKSCAPE_VERSION_PATCH  1)
 set(INKSCAPE_VERSION_SUFFIX "")
 
 set(INKSCAPE_VERSION ${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR})
