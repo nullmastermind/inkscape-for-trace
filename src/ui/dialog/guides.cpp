@@ -314,10 +314,7 @@ void GuidelinePropertiesDialog::_setup() {
     }
 
     {
-        // FIXME holy crap!!!
-        Inkscape::XML::Node *repr = _guide->getRepr();
-        const gchar *guide_id = repr->attribute("id");
-        gchar *label = g_strdup_printf(_("Guideline ID: %s"), guide_id);
+        gchar *label = g_strdup_printf(_("Guideline ID: %s"), _guide->getId());
         _label_name.set_label(label);
         g_free(label);
     }
