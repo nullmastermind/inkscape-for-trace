@@ -144,3 +144,13 @@ scrollbar.horizontal:hover button.down:active {
 #InkSpinScale spinbutton {
     margin-right: 5px;
 }
+
+/* Fix text contrast issues while hovering */
+
+treeview.view:selected {
+    color: #000;
+}
+
+treeview.view:selected:focus {
+    background-color: #a0d4fc;
+}
