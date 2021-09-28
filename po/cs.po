@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2021-05-23 23:57+0200\n"
-"PO-Revision-Date: 2021-06-04 07:37+0200\n"
+"PO-Revision-Date: 2021-09-27 22:23+0200\n"
 "Last-Translator: Tomáš Marný\n"
 "Language-Team: Josef Vybíral (josef.vybiral@gmail.com); Ivan Řihošek "
 "(osmdesat@seznam.cz); Tobiczech (tobiczech@gmail.com); Tomáš Marný (tomik."
@@ -17016,9 +17016,8 @@ msgstr ""
 "b>."
 
 #: ../src/ui/dialog/clonetiler.cpp:2102
-#, fuzzy
 msgid "<small>Creating tiled clones...</small>"
-msgstr "<small>Objekt nemá dlážděné klony.</small>"
+msgstr "<small>Vytváření dlaždicových klonů…</small>"
 
 #: ../src/ui/dialog/clonetiler.cpp:2514
 msgid "Create tiled clones"
@@ -17086,9 +17085,8 @@ msgid "Capture log messages"
 msgstr "Zachytávat zprávy logu"
 
 #: ../src/ui/dialog/debug.cpp:83
-#, fuzzy
 msgid "Release log messages"
-msgstr "Zprávy záznamu o vydání"
+msgstr "Uvolnit zprávy protokolu"
 
 #: ../src/ui/dialog/dialog-container.cpp:231 ../src/ui/dialog/dialog-notebook.cpp:68
 msgid "Close Tab"
@@ -17100,7 +17098,7 @@ msgstr "Zde můžete přetáhnout ukotvitelná dialogová okna."
 
 #: ../src/ui/dialog/dialog-notebook.cpp:74
 msgid "Close Notebook"
-msgstr ""
+msgstr "Zavřít blok"
 
 #: ../src/ui/dialog/dialog-notebook.cpp:80
 msgid "Move Tab to New Window"
@@ -36995,13 +36993,13 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:4
 msgid "Prepare path for plasma"
-msgstr ""
+msgstr "Připravit cestu pro plazmu"
 
 #
 # File: ../share/extensions/gcodetools_prepare_path_for_plasma.inx, line: 9
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:8
 msgid "Prepare path for plasma or laser cutters"
-msgstr ""
+msgstr "Připravit cestu pro plazmové nebo laserové řezačky"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:9
 #, fuzzy
@@ -37024,9 +37022,8 @@ msgid "In-out path type:"
 msgstr "Typ interpolace:"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:14
-#, fuzzy
 msgid "Perpendicular"
-msgstr "Přilínat kolmo"
+msgstr "Kolmo"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:15
 msgid "Tangent"
@@ -38214,7 +38211,7 @@ msgstr ""
 
 #: ../share/extensions/interp_att_g.inx:3
 msgid "Interpolate Attribute in a group"
-msgstr ""
+msgstr "Interpolovat atribut ve skupině"
 
 #: ../share/extensions/interp_att_g.inx:7
 msgid "Attribute to Interpolate:"
@@ -38857,7 +38854,7 @@ msgstr "Tento efekt náhodně posune uzly (a volitelně úchyty uzlů) vybrané 
 
 #: ../share/extensions/layer2png.inx:3
 msgid "Export Layer Slices"
-msgstr ""
+msgstr "Exportovat řezy vrstvy"
 
 #: ../share/extensions/layer2png.inx:7
 msgid "Icon mode"
@@ -38869,7 +38866,7 @@ msgstr "Velikosti"
 
 #: ../share/extensions/layer2png.inx:9
 msgid "Layer with Slices:"
-msgstr ""
+msgstr "Vrstva s řezy:"
 
 #: ../share/extensions/layer2png.inx:10
 msgid "Overwrite existing exports"
@@ -39369,9 +39366,8 @@ msgid "View Next Glyph"
 msgstr "Zobrazit další glyf"
 
 #: ../share/extensions/nicechart.inx:29
-#, fuzzy
 msgid "NiceCharts"
-msgstr "Grafy"
+msgstr "Pěkné grafy"
 
 #: ../share/extensions/nicechart.inx:32
 msgid "Data"
@@ -39413,13 +39409,13 @@ msgstr "Přímý vstup"
 # File: ../share/extensions/nicechart.inx, line: 45
 #: ../share/extensions/nicechart.inx:44
 msgid "Type in comma separated values:"
-msgstr ""
+msgstr "Zadejte hodnoty oddělené čárkami:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 46
 #: ../share/extensions/nicechart.inx:45
 msgid "(format like this: apples:3,bananas:5)"
-msgstr ""
+msgstr "(v takovém formátu: jablka:3,banány:5)"
 
 #: ../share/extensions/nicechart.inx:46
 msgid "Data:"
@@ -39446,47 +39442,42 @@ msgid "Charts"
 msgstr "Grafy"
 
 #: ../share/extensions/nicechart.inx:56
-#, fuzzy
 msgid "Draw horizontally"
-msgstr "Obrátit vodorovně"
+msgstr "Vykreslit vodorovně"
 
 #: ../share/extensions/nicechart.inx:57
-#, fuzzy
 msgid "Bar length:"
-msgstr "Výška čárového kódu:"
+msgstr "Délka sloupce:"
 
 #: ../share/extensions/nicechart.inx:58
-#, fuzzy
 msgid "Bar width:"
-msgstr "Šířka oblasti:"
+msgstr "Šířka sloupce:"
 
 #: ../share/extensions/nicechart.inx:59
-#, fuzzy
 msgid "Pie radius:"
-msgstr "Vnitřní poloměr:"
+msgstr "Poloměr koláče:"
 
 #: ../share/extensions/nicechart.inx:60
-#, fuzzy
 msgid "Bar offset:"
-msgstr "Modrý posun"
+msgstr "Posun sloupce:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 61
 #: ../share/extensions/nicechart.inx:62
 msgid "Offset between chart and labels:"
-msgstr ""
+msgstr "Odsazení mezi grafem a popisky:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 62
 #: ../share/extensions/nicechart.inx:63
 msgid "Offset between chart and chart title:"
-msgstr ""
+msgstr "Odsazení mezi grafem a názvem grafu:"
 
 #
 # File: ../share/extensions/nicechart.inx, line: 63
 #: ../share/extensions/nicechart.inx:64
 msgid "Work around aliasing effects (creates overlapping segments)"
-msgstr ""
+msgstr "Obejít aliasingové efekty (vytvoří překrývající se segmenty)"
 
 #: ../share/extensions/nicechart.inx:66
 msgid "Color scheme:"
@@ -39507,37 +39498,32 @@ msgid "Reverse color scheme"
 msgstr "Obrátit barevné schéma"
 
 #: ../share/extensions/nicechart.inx:77
-#, fuzzy
 msgid "Drop shadow"
-msgstr "Stíny"
+msgstr "Vrhat stín"
 
 #: ../share/extensions/nicechart.inx:80
 msgid "Show values"
 msgstr "Zobrazit hodnoty"
 
 #: ../share/extensions/nicechart.inx:87
-#, fuzzy
 msgid "Chart type:"
-msgstr "  typ: "
+msgstr "Typ grafu:"
 
 #: ../share/extensions/nicechart.inx:88
-#, fuzzy
 msgid "Bar chart"
-msgstr "Výška čárového kódu:"
+msgstr "Sloupcový graf"
 
 #: ../share/extensions/nicechart.inx:89
-#, fuzzy
 msgid "Pie chart"
-msgstr "Výška čárového kódu:"
+msgstr "Koláčový graf"
 
 #: ../share/extensions/nicechart.inx:90
 msgid "Pie chart (percentage)"
 msgstr "Koláčový graf (procenta)"
 
 #: ../share/extensions/nicechart.inx:91
-#, fuzzy
 msgid "Stacked bar chart"
-msgstr "Výška čárového kódu:"
+msgstr "Skládaný sloupcový graf"
 
 #: ../share/extensions/output_scour.inx:3
 msgid "Optimized SVG Output"
@@ -42370,9 +42356,8 @@ msgstr ""
 "diagramu. Textové objekty nejsou zpracovány."
 
 #: ../share/extensions/web_interactive_mockup.inx:3
-#, fuzzy
 msgid "Interactive Mockup"
-msgstr "_Interaktivita"
+msgstr "Interaktivní maketa (mockup)"
 
 #: ../share/extensions/web_interactive_mockup.inx:8
 msgid "click"
@@ -42634,7 +42619,7 @@ msgstr ""
 
 #: ../share/extensions/webslicer_create_group.inx:3
 msgid "Set a layout group"
-msgstr ""
+msgstr "Nastavit skupinu rozložení"
 
 #: ../share/extensions/webslicer_create_group.inx:8
 #: ../share/extensions/webslicer_create_rect.inx:33
