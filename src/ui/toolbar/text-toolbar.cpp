@@ -1383,6 +1383,8 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     if (old_unit == temp_length.unit) {
         _freeze = false;
         return;
+    } else {
+        _lineheight_unit = temp_length.unit;
     }
 
     // Read current line height value
@@ -1412,6 +1414,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     if (count > 0) {
         font_size /= count;
     } else {
+        // ideally use default font-size.
         font_size = 20;
     }
     if ((unit->abbr == "" || unit->abbr == "em") && (old_unit == SP_CSS_UNIT_NONE || old_unit == SP_CSS_UNIT_EM)) {
