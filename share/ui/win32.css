@@ -153,6 +153,7 @@ treeview.view:selected {
 
 treeview.view:selected:focus {
     background-color: #a0d4fc;
+}
 
 /*fix context-menu decoration */
 
