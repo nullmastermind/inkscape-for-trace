@@ -850,7 +850,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     Geom::Affine parentaffinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
     Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
     Geom::Affine itemtransform = affinetransform * parentaffinetransform.inverse();
-    //Projection prepare
+    ////Projection prepare
     Geom::PathVector pathvector;
     std::vector< Point > nodes;
     if (active_projection) {
@@ -960,7 +960,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         bool previous_fix_overlaps = true;
         for (size_t i = 0; i < pathvector.size(); i++) {
             size_t count = pathvector[i].size_default();
-            if ( pathvector[i].closed()) {
+            if (!pathvector[i].empty() && pathvector[i].closed()) {
               const Geom::Curve &closingline = pathvector[i].back_closed(); 
               if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
                 count = pathvector[i].size_open();
