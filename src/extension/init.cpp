@@ -193,7 +193,11 @@ init()
     Internal::Grid::init();
 
 #ifdef WITH_DBUS
-    Dbus::init();
+    static bool dbus_was_init = false;
+    if (! dbus_was_init) {
+        Dbus::init();
+        dbus_was_init = true;
+    }
 #endif
 
     /* Raster Effects */
