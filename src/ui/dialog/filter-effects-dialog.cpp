@@ -2830,7 +2830,7 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings->add_spinscale(1, SPAttr::FLOOD_OPACITY, _("Opacity:"), 0, 1, 0.1, 0.01, 2);
 
     _settings->type(NR_FILTER_GAUSSIANBLUR);
-    _settings->add_dualspinscale(SPAttr::STDDEVIATION, _("Standard Deviation:"), 0.01, 100, 1, 0.01, 2, _("The standard deviation for the blur operation."));
+    _settings->add_dualspinscale(SPAttr::STDDEVIATION, _("Standard Deviation:"), 0, 100, 1, 0.01, 2, _("The standard deviation for the blur operation."));
 
     _settings->type(NR_FILTER_MERGE);
     _settings->add_no_params();
