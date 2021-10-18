@@ -160,3 +160,17 @@ treeview.view:selected:focus {
 .popup decoration {
     all: unset;
 }
+
+/*add expander arrow*/
+
+expander arrow {
+    -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+}
+
+expander arrow:dir(rtl) {
+    -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl");
+}
+
+expander arrow:checked {
+    -gtk-icon-source: -gtk-icontheme("pan-down-symbolic");
+}
