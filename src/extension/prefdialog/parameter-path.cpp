@@ -98,7 +98,7 @@ const std::string& ParamPath::set(const std::string &in)
 
 std::string ParamPath::value_to_string() const
 {
-    if (!Glib::path_is_absolute(_value)) {
+    if (!Glib::path_is_absolute(_value) && !_value.empty()) {
         return Glib::build_filename(_extension->get_base_directory(), _value);
     } else {
         return _value;
