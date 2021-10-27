@@ -487,57 +487,30 @@ static void init_extended()
 
 void snoop_extended(GdkEvent* event, SPDesktop *desktop)
 {
+    GdkDevice *source_device = gdk_event_get_source_device (event);
     GdkInputSource source = GDK_SOURCE_MOUSE;
     std::string name;
 
+    if (! source_device) return;
     switch ( event->type ) {
         case GDK_MOTION_NOTIFY:
-        {
-            GdkEventMotion* event2 = reinterpret_cast<GdkEventMotion*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
-        }
-        break;
-
         case GDK_BUTTON_PRESS:
         case GDK_2BUTTON_PRESS:
         case GDK_3BUTTON_PRESS:
         case GDK_BUTTON_RELEASE:
-        {
-            GdkEventButton* event2 = reinterpret_cast<GdkEventButton*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
-        }
-        break;
-
         case GDK_SCROLL:
-        {
-            GdkEventScroll* event2 = reinterpret_cast<GdkEventScroll*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
-        }
-        break;
-
         case GDK_PROXIMITY_IN:
         case GDK_PROXIMITY_OUT:
-        {
-            GdkEventProximity* event2 = reinterpret_cast<GdkEventProximity*>(event);
-            if ( event2->device ) {
-                source = gdk_device_get_source(event2->device);
-                name = gdk_device_get_name(event2->device);
-            }
-        }
+    // fix to previous code using event->device that did not point to original device that generated the event.
+        source = gdk_device_get_source(source_device);
+        name = gdk_device_get_name(source_device);
+    
         break;
 
         default:
             ;
     }
+
 
     if (!name.empty()) {
         if ( lastType != source || lastName != name ) {

@@ -1660,6 +1660,11 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
     Glib::ustring key;
     gint hotButton = -1;
 
+    /* Code for determining which input device caused the event fails with GTK3
+    * because event->device gives a "generic" input device, not the one that
+    * actually caused the event. See snoop_extended in desktop-events.cpp
+    */
+
     switch ( event->type ) {
         case GDK_KEY_PRESS:
         case GDK_KEY_RELEASE:
