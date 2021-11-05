@@ -1392,7 +1392,7 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
     }
 
     TRACE(("whole para: \"%s\"\n", para->text.data()));
-    TRACE(("%d input sources used\n", input_index - para->first_input_index));
+//    TRACE(("%d input sources used\n", input_index - para->first_input_index));
 
     // Pango Itemize
     GList *pango_items_glist = nullptr;
@@ -1428,6 +1428,10 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
     // and get the character attributes on everything
     para->char_attributes.resize(para->text.length() + 1);
     pango_get_log_attrs(para->text.data(), para->text.bytes(), -1, nullptr, &*para->char_attributes.begin(), para->char_attributes.size());
+
+    // Fix for Pango 1.49 which changes the end of a paragraph to a mandatory break.
+    // This breaks Inkscape's multiline text (i.e. sodipodi:role line).
+    para->char_attributes[para->text.length()].is_mandatory_break = 0;
 
     TRACE(("end para itemize, direction = %d\n", para->direction));
 }
@@ -1542,7 +1546,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                 unsigned const text_source_bytes = ( text_source->text_end.base()
                                                      - text_source->text_begin.base()
                                                      - span_start_byte_in_source );
-                TRACE(("New Span\n"));
+                TRACE(("New Unbroken Span\n"));
                 UnbrokenSpan new_span;
                 new_span.text_bytes = std::min(text_source_bytes, pango_item_bytes);
                 new_span.input_stream_first_character = Glib::ustring::const_iterator(text_source->text_begin.base() + span_start_byte_in_source);
