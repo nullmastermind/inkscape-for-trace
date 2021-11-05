@@ -367,32 +367,7 @@ void FontLister::update_font_list(SPDocument *document)
 
     }
 
-    /* Now we do a song and dance to find the correct row as the row corresponding
-     * to the current_family may have changed. We can't simply search for the
-     * family name in the list since it can occur twice, once in the document
-     * font family part and once in the system font family part. Above we determined
-     * which part it is in.
-     */
-    if (current_family_row > -1) {
-        int start = 0;
-        if (row_is_system)
-            start = font_data.size();
-        int length = font_list_store->children().size();
-        for (int i = 0; i < length; ++i) {
-            int row = i + start;
-            if (row >= length)
-                row -= length;
-            Gtk::TreePath path;
-            path.push_back(row);
-            Gtk::TreeModel::iterator iter = font_list_store->get_iter(path);
-            if (iter) {
-                if (familyNamesAreEqual(current_family, (*iter)[FontList.family])) {
-                    current_family_row = row;
-                    break;
-                }
-            }
-        }
-    }
+	font_family_row_update(row_is_system ? font_data.size() : 0);
     // std::cout << "  Out: row: " << current_family_row << "  " << current_family << std::endl;
 
     font_list_store->thaw_notify();
@@ -526,6 +501,33 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::ui_from_fontspec(Glib::ustri
     return std::make_pair(Family, Style);
 }
 
+/* Now we do a song and dance to find the correct row as the row corresponding
+ * to the current_family may have changed. We can't simply search for the
+ * family name in the list since it can occur twice, once in the document
+ * font family part and once in the system font family part. Above we determined
+ * which part it is in.
+ */
+void FontLister::font_family_row_update(int start) 
+{
+    if (this->current_family_row > -1 && start > -1) {
+        int length = this->font_list_store->children().size();
+        for (int i = 0; i < length; ++i) {
+            int row = i + start;
+            if (row >= length)
+                row -= length;
+            Gtk::TreePath path;
+            path.push_back(row);
+            Gtk::TreeModel::iterator iter = this->font_list_store->get_iter(path);
+            if (iter) {
+                if (familyNamesAreEqual(this->current_family, (*iter)[FontList.family])) {
+                    this->current_family_row = row;
+                    break;
+                }
+            }
+        }
+    }
+}
+
 std::pair<Glib::ustring, Glib::ustring> FontLister::selection_update()
 {
 #ifdef DEBUG_FONT
@@ -573,6 +575,9 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::selection_update()
         fontspec = current_family + ", " + current_style;
         //std::cout << "   fontspec from thin air   :" << fontspec << ":" << std::endl;
     }
+
+	// Need to update font family row too
+	font_family_row_update();
 
     std::pair<Glib::ustring, Glib::ustring> ui = ui_from_fontspec(fontspec);
     set_font_family(ui.first);

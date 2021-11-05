@@ -305,6 +305,8 @@ private:
 
     void update_font_data_recursive(SPObject& r, std::map<Glib::ustring, std::set<Glib::ustring>> &font_data);
 
+	void font_family_row_update(int start=0);
+
     Glib::RefPtr<Gtk::ListStore> font_list_store;
     Glib::RefPtr<Gtk::ListStore> style_list_store;
 
