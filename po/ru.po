@@ -10880,7 +10880,7 @@ msgstr "Контур, по которому будет изогнут исход
 #: ../src/live_effects/lpe-patternalongpath.cpp:80 ../src/ui/dialog/export.cpp:285
 #: ../src/ui/dialog/transformation.cpp:68 ../src/ui/widget/page-sizer.cpp:45
 msgid "_Width:"
-msgstr "_Толщина:"
+msgstr "_Ширина:"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 msgid "Width of the path"
