@@ -88,6 +88,7 @@ void sp_repr_css_set_property(SPCSSAttr *css, char const *name, char const *valu
 void sp_repr_css_unset_property(SPCSSAttr *css, char const *name);
 bool sp_repr_css_property_is_unset(SPCSSAttr *css, char const *name);
 double sp_repr_css_double_property(SPCSSAttr *css, char const *name, double defval);
+void sp_repr_css_set_property_double(SPCSSAttr *css, char const *name, double value);
 
 void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str);
 void sp_repr_css_set(Inkscape::XML::Node *repr, SPCSSAttr *css, char const *key);

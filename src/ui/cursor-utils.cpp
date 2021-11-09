@@ -122,13 +122,10 @@ load_svg_cursor(Glib::RefPtr<Gdk::Display> display,
                   << std::setfill ('0') << std::setw(6)
                   << std::hex << (stroke >> 8);
 
-    std::string fill_opacity_string = std::to_string(fill_opacity);
-    std::string stroke_opacity_string = std::to_string(stroke_opacity);
-
     sp_repr_css_set_property(css, "fill",   fill_stream.str().c_str());
     sp_repr_css_set_property(css, "stroke", stroke_stream.str().c_str());
-    sp_repr_css_set_property(css, "fill-opacity",   fill_opacity_string.c_str());
-    sp_repr_css_set_property(css, "stroke-opacity", stroke_opacity_string.c_str());
+    sp_repr_css_set_property_double(css, "fill-opacity",   fill_opacity);
+    sp_repr_css_set_property_double(css, "stroke-opacity", stroke_opacity);
     root->changeCSS(css, "style");
     sp_repr_css_attr_unref(css);
 

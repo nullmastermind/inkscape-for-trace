@@ -224,6 +224,17 @@ double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double def
 }
 
 /**
+ * Set a style property to a new float value (e.g. opacity to 0.5).
+ */
+void sp_repr_css_set_property_double(SPCSSAttr *css, gchar const *name, double value)
+{
+    g_assert(css != nullptr);
+    g_assert(name != nullptr);
+
+    sp_repr_set_css_double(css, name, value);
+}
+
+/**
  * Write a style attribute string from a list of properties stored in an SPCSAttr object.
  */
 void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str)
