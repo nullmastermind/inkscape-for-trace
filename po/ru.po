@@ -10884,15 +10884,15 @@ msgstr "_Ширина:"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 msgid "Width of the path"
-msgstr "Толщина контура"
+msgstr "Ширина контура"
 
 #: ../src/live_effects/lpe-bendpath.cpp:62
 msgid "W_idth in units of length"
-msgstr "Т_олщина в единицах длины контура"
+msgstr "Ши_рина в единицах длины контура"
 
 #: ../src/live_effects/lpe-bendpath.cpp:62
 msgid "Scale the width of the path in units of its length"
-msgstr "Измерять толщину контура в единицах его длины"
+msgstr "Измерять ширину контура в единицах его длины"
 
 #: ../src/live_effects/lpe-bendpath.cpp:63
 msgid "_Original path is vertical"
