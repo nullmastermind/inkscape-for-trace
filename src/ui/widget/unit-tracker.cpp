@@ -191,6 +191,7 @@ UnitTracker::create_tool_item(Glib::ustring const &label,
     combo->set_active(_active);
     combo->signal_changed().connect(sigc::mem_fun(*this, &UnitTracker::_unitChangedCB));
     combo->set_name("unit-tracker");
+    combo->set_data(Glib::Quark("unit-tracker"), this);
     _combo_list.push_back(combo);
     return combo;    
 }

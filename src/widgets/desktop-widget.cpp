@@ -65,6 +65,7 @@
 #include "ui/widget/button.h"
 #include "ui/widget/canvas.h"
 #include "ui/widget/canvas-grid.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/ink-ruler.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/selected-style.h"
@@ -1474,10 +1475,12 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
                         if ( name == "TextToolbar" || name == "MeasureToolbar")
                             continue;
 
-                        auto tracker = dynamic_cast<UnitTracker*>(sp_search_by_name_recursive(j, "unit-tracker"));
+                        auto tracker = dynamic_cast<Inkscape::UI::Widget::ComboToolItem*>(sp_search_by_name_recursive(j, "unit-tracker"));
 
                         if (tracker) { // it's null when inkscape is first opened
-                            tracker->setActiveUnit( nv->display_units );
+                            if (auto ptr = static_cast<UnitTracker*>(tracker->get_data(Glib::Quark("unit-tracker")))) {
+                                ptr->setActiveUnit(nv->display_units);
+                            }
                         }
                     } // grandchildren
                 } // if child is a container
