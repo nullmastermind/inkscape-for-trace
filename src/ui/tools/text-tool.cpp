@@ -730,9 +730,10 @@ bool TextTool::root_handler(GdkEvent* event) {
                                     break;
 
                                 default: {
-                                    if (g_ascii_isxdigit(group0_keyval)) {
+                                    guint32 xdigit = gdk_keyval_to_unicode(group0_keyval);
+                                    if (xdigit <= 255 && g_ascii_isxdigit(xdigit)) {
                                         g_return_val_if_fail(this->unipos < sizeof(this->uni) - 1, TRUE);
-                                        this->uni[this->unipos++] = group0_keyval;
+                                        this->uni[this->unipos++] = xdigit;
                                         this->uni[this->unipos] = '\0';
                                         if (this->unipos == 8) {
                                             /* This behaviour is partly to allow us to continue to
