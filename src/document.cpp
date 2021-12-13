@@ -1028,7 +1028,7 @@ void SPDocument::enforceObjectIds()
             gchar *id = sp_object_get_unique_id(item, nullptr);
             item->setAttribute("id", id);
             item->updateRepr();
-            msg += Glib::ustring::compose(_(" %1\n"), id);
+            msg += Glib::ustring::compose(" %1\n", id);
             g_free(id);
             showInfoDialog = true;
         }
