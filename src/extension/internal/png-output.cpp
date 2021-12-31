@@ -23,9 +23,14 @@
 
 #include "clear-n_.h"
 
+#ifdef G_OS_WIN32
+#include <filesystem>
+namespace filesystem = std::filesystem;
+#else
 // Replace with C++17, see notes in file-export-cmd.cpp
 #include <boost/filesystem.hpp>
 namespace filesystem = boost::filesystem;
+#endif
 
 namespace Inkscape {
 namespace Extension {
@@ -34,11 +39,24 @@ namespace Internal {
 void PngOutput::export_raster(Inkscape::Extension::Output * /*module*/,
         const SPDocument * /*doc*/, std::string const png_file, gchar const *filename)
 {
-    // We want to move the png file to the new location
+#ifdef G_OS_WIN32
+    const auto copy_option = filesystem::copy_options::overwrite_existing;
+    auto input_fn = filesystem::u8path(png_file);
+    auto output_fn = filesystem::u8path(filename);
+#else
+    // Use the deprecated filesystem::copy_option to support older Boost
+    const auto copy_option = filesystem::copy_option::overwrite_if_exists;
     auto input_fn = filesystem::path(png_file);
     auto output_fn = filesystem::path(filename);
-    filesystem::copy_file(input_fn, output_fn, filesystem::copy_option::overwrite_if_exists);
-    boost::filesystem::remove(input_fn);
+#endif
+
+    try {
+        // We want to move the png file to the new location
+        filesystem::copy_file(input_fn, output_fn, copy_option);
+        filesystem::remove(input_fn);
+    } catch (const filesystem::filesystem_error &e) {
+        std::cerr << e.what();
+    }
 }
 
 void PngOutput::init()
