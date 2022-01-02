@@ -73,7 +73,7 @@ workflow:
 #  Building inkscape  #
 #                     #
 #######################
-# Linux, Appimage, mac. Windows is handled in .appveyor.yml
+# Linux, Appimage, macOS, Windows.
 
 
 inkscape:linux:
@@ -160,6 +160,9 @@ inkscape:windows:x64: &windows_job
   variables:
     PACMAN_OPTIONS: "--needed --noconfirm --noprogressbar --overwrite \\*"
     MSYSTEM: MINGW64
+    # Workaround for failing CI (hopefully temporary)
+    # https://docs.gitlab.com/ee/ci/large_repositories/#git-clean-flags
+    GIT_CLEAN_FLAGS: -ffdx -e "build/dejavu-fonts-ttf-*.tar.bz2"
   script:
     - $env:CHERE_INVOKING = 'yes'  # Preserve the current working directory
     - C:/msys64/usr/bin/bash -lc "buildtools/msys2build_GitLab.sh"
