@@ -447,6 +447,7 @@ public:
 
     void iconify();
     void maximize();
+    void hide();
     void fullscreen();
     void focusMode(bool mode = true);
 

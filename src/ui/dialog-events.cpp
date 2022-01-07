@@ -40,14 +40,14 @@ void sp_dialog_defocus_cpp(Gtk::Window *win)
 void
 sp_dialog_defocus (GtkWindow *win)
 {
-    GtkWindow *w;
-    //find out the document window we're transient for
-    w = gtk_window_get_transient_for(GTK_WINDOW(win));
-    //switch to it
-
-    if (w) {
-        gtk_window_present (w);
-    }
+//    GtkWindow *w;
+//    //find out the document window we're transient for
+//    w = gtk_window_get_transient_for(GTK_WINDOW(win));
+//    //switch to it
+//
+//    if (w) {
+//        gtk_window_present (w);
+//    }
 }
 
 

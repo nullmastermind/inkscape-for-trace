@@ -14,38 +14,29 @@
  *
  */
 
-
 #include "inkscape-window.h"
-#include "inkscape.h"   // SP_ACTIVE_DESKTOP
-#include "desktop-events.h" // Handle key events
-#include "enums.h"      // PREFS_WINDOW_GEOMETRY_NONE
-
-#include "inkscape-application.h"
 
 #include "actions/actions-canvas-mode.h"
 #include "actions/actions-canvas-transform.h"
-
-#include "object/sp-namedview.h"  // TODO Remove need for this!
-
+#include "desktop-events.h" // Handle key events
+#include "enums.h"          // PREFS_WINDOW_GEOMETRY_NONE
+#include "inkscape-application.h"
+#include "inkscape.h"            // SP_ACTIVE_DESKTOP
+#include "object/sp-namedview.h" // TODO Remove need for this!
+#include "ui/desktop/menubar.h"
 #include "ui/dialog/dialog-container.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/dialog-window.h"
-#include "ui/drag-and-drop.h"  // Move to canvas?
-#include "ui/interface.h" // main menu, sp_ui_close_view()
-
-#include "ui/monitor.h" // get_monitor_geometry_at_point()
-
-#include "ui/desktop/menubar.h"
-
+#include "ui/drag-and-drop.h" // Move to canvas?
 #include "ui/drag-and-drop.h"
-
 #include "ui/event-debug.h"
+#include "ui/interface.h" // main menu, sp_ui_close_view()
+#include "ui/monitor.h"   // get_monitor_geometry_at_point()
 #include "ui/shortcuts.h"
-
 #include "widgets/desktop-widget.h"
 
-using Inkscape::UI::Dialog::DialogManager;
 using Inkscape::UI::Dialog::DialogContainer;
+using Inkscape::UI::Dialog::DialogManager;
 using Inkscape::UI::Dialog::DialogWindow;
 
 static gboolean _resize_children(Gtk::Window *win)
@@ -54,8 +45,7 @@ static gboolean _resize_children(Gtk::Window *win)
     return false;
 }
 
-
-InkscapeWindow::InkscapeWindow(SPDocument* document)
+InkscapeWindow::InkscapeWindow(SPDocument *document)
     : _document(document)
     , _app(nullptr)
 {
@@ -76,19 +66,19 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // Main box
     _mainbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     _mainbox->set_name("DesktopMainBox");
-    _mainbox->show();
+    //    _mainbox->show();
     add(*_mainbox);
 
     // Desktop widget (=> MultiPaned)
     _desktop_widget = new SPDesktopWidget(_document);
     _desktop_widget->window = this;
-    _desktop_widget->show();
+    //    _desktop_widget->show();
     _desktop = _desktop_widget->desktop;
 
     // =================== Actions ===================
     // After canvas has been constructed.. move to canvas proper.
-    add_actions_canvas_transform(this);    // Actions to transform canvas view.
-    add_actions_canvas_mode(this);         // Actions to change canvas display mode.
+    add_actions_canvas_transform(this); // Actions to transform canvas view.
+    add_actions_canvas_mode(this);      // Actions to change canvas display mode.
 
     // ========== Drag and Drop of Documents =========
     ink_drag_setup(_desktop_widget);
@@ -106,10 +96,9 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     _mainbox->pack_start(*Gtk::manage(_desktop_widget), true, true);
 
     // ================== Callbacks ==================
-    signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
+    signal_delete_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
     signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
-    signal_focus_in_event().connect(    sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
-
+    signal_focus_in_event().connect(sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
 
     // ================ Window Options ===============
     setup_view();
@@ -136,8 +125,7 @@ InkscapeWindow::~InkscapeWindow()
 }
 
 // Change a document, leaving desktop/view the same. (Eventually move all code here.)
-void
-InkscapeWindow::change_document(SPDocument* document)
+void InkscapeWindow::change_document(SPDocument *document)
 {
     if (!_app) {
         std::cerr << "Inkscapewindow::change_document: app is nullptr!" << std::endl;
@@ -154,12 +142,11 @@ InkscapeWindow::change_document(SPDocument* document)
 }
 
 // Sets up the window and view according to user preferences and <namedview> of the just loaded document
-void
-InkscapeWindow::setup_view()
+void InkscapeWindow::setup_view()
 {
     // Make sure the GdkWindow is fully initialized before resizing/moving
     // (ensures the monitor it'll be shown on is known)
-    realize();
+    //    realize();
 
     // Resize the window to match the document properties
     sp_namedview_window_from_document(_desktop); // This should probably be a member function here.
@@ -170,15 +157,15 @@ InkscapeWindow::setup_view()
     // TODO: This does *not* work when called from 'change_document()', i.e. when the window is already visible.
     //       This can result in off-screen windows! We previously worked around this by hiding and re-showing
     //       the window, but a call to hide() causes Inkscape to just exit since the migration to Gtk::Application
-    show();
-    
-    sp_namedview_zoom_and_view_from_document(_desktop);
-    sp_namedview_update_layers_from_document(_desktop);
+    //    show();
 
-    SPNamedView *nv = _desktop->namedview;
-    if (nv && nv->lockguides) {
-        nv->lockGuides();
-    }
+    //    sp_namedview_zoom_and_view_from_document(_desktop);
+    //    sp_namedview_update_layers_from_document(_desktop);
+
+    //    SPNamedView *nv = _desktop->namedview;
+    //    if (nv && nv->lockguides) {
+    //        nv->lockGuides();
+    //    }
 }
 
 /**
@@ -193,8 +180,7 @@ inline bool is_Cmd_Q(GdkEventKey *event)
 #endif
 }
 
-bool
-InkscapeWindow::on_key_press_event(GdkEventKey* event)
+bool InkscapeWindow::on_key_press_event(GdkEventKey *event)
 {
 #ifdef EVENT_DEBUG
     ui_dump_event(reinterpret_cast<GdkEvent *>(event), "\nInkscapeWindow::on_key_press_event");
@@ -248,8 +234,7 @@ static void retransientize_dialogs(Gtk::Window &parent)
     }
 }
 
-bool
-InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
+bool InkscapeWindow::on_focus_in_event(GdkEventFocus *event)
 {
     if (_app) {
         _app->set_active_window(this);
@@ -267,8 +252,7 @@ InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
 }
 
 // Called when a window is closed via the 'X' in the window bar.
-bool
-InkscapeWindow::on_delete_event(GdkEventAny* event)
+bool InkscapeWindow::on_delete_event(GdkEventAny *event)
 {
     if (_app) {
         _app->destroy_window(this);

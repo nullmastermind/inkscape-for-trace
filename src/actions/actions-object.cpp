@@ -8,26 +8,45 @@
  *
  */
 
+#include "actions-object.h"
+
+#include <giomm.h> // Not <gtkmm.h>! To eventually allow a headless version!
+#include <glibmm/i18n.h>
 #include <iostream>
 
-#include <giomm.h>  // Not <gtkmm.h>! To eventually allow a headless version!
-#include <glibmm/i18n.h>
-
-#include "actions-object.h"
 #include "actions-helper.h"
 #include "document-undo.h"
 #include "inkscape-application.h"
-
-#include "inkscape.h"             // Inkscape::Application
-#include "selection.h"            // Selection
+#include "inkscape.h" // Inkscape::Application
 #include "path/path-simplify.h"
+#include "selection.h" // Selection
+#include "trace/autotrace/inkscape-autotrace.h"
+#include "trace/depixelize/inkscape-depixelize.h"
+#include "trace/potrace/inkscape-potrace.h"
 
+void selection_trace(const Glib::VariantBase &value, InkscapeApplication *app)
+{
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring>>(value);
+    std::vector<Glib::ustring> settings = Glib::Regex::split_simple(",", s.get());
+    Inkscape::Trace::Tracer tracer;
+    auto scans = std::stoi(settings[0]);           // Scans
+    auto smooth = settings[1] == "true";           // Smooth
+    auto stack = settings[2] == "true";            // Stack
+    auto removeBackground = settings[3] == "true"; // Remove background
+    Inkscape::Trace::Potrace::PotraceTracingEngine pte(Inkscape::Trace::Potrace::TRACE_QUANT_COLOR, false, 64, 0.45, 0.,
+                                                       .65, scans, stack, smooth, removeBackground);
+    pte.potraceParams->opticurve = true;
+    pte.potraceParams->opttolerance = std::stof(settings[6]); // Optimize
+    pte.potraceParams->alphamax = std::stof(settings[5]);     // Smooth corners
+    pte.potraceParams->turdsize = std::stoi(settings[4]);     // Speckles
+
+    tracer.trace(&pte);
+}
 
 // No sanity checking is done... should probably add.
-void
-object_set_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
+void object_set_attribute(const Glib::VariantBase &value, InkscapeApplication *app)
 {
-    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring>>(value);
 
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", s.get());
     if (tokens.size() != 2) {
@@ -52,12 +71,10 @@ object_set_attribute(const Glib::VariantBase& value, InkscapeApplication *app)
     Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionObjectSetAttribute");
 }
 
-
 // No sanity checking is done... should probably add.
-void
-object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
+void object_set_property(const Glib::VariantBase &value, InkscapeApplication *app)
 {
-    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring> >(value);
+    Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring>>(value);
 
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple(",", s.get());
     if (tokens.size() != 2) {
@@ -85,61 +102,51 @@ object_set_property(const Glib::VariantBase& value, InkscapeApplication *app)
     Inkscape::DocumentUndo::done(app->get_active_document(), 0, "ActionObjectSetProperty");
 }
 
-
-void
-object_unlink_clones(InkscapeApplication *app)
+void object_unlink_clones(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
 
     // We should not have to do this!
-    auto document  = app->get_active_document();
+    auto document = app->get_active_document();
     selection->setDocument(document);
 
     selection->unlink();
 }
 
-
-void
-object_to_path(InkscapeApplication *app)
+void object_to_path(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
 
     // We should not have to do this!
-    auto document  = app->get_active_document();
+    auto document = app->get_active_document();
     selection->setDocument(document);
 
-    selection->toCurves();  // TODO: Rename toPaths()
+    selection->toCurves(); // TODO: Rename toPaths()
 }
 
-
-void
-object_stroke_to_path(InkscapeApplication *app)
+void object_stroke_to_path(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
 
     // We should not have to do this!
-    auto document  = app->get_active_document();
+    auto document = app->get_active_document();
     selection->setDocument(document);
 
     selection->strokesToPaths();
 }
 
-
-void
-object_simplify_path(InkscapeApplication *app)
+void object_simplify_path(InkscapeApplication *app)
 {
     auto selection = app->get_active_selection();
 
     // We should not have to do this!
-    auto document  = app->get_active_document();
+    auto document = app->get_active_document();
     selection->setDocument(document);
 
     selection->simplifyPaths();
 }
 
-
-std::vector<std::vector<Glib::ustring>> raw_data_object =
-{
+std::vector<std::vector<Glib::ustring>> raw_data_object = {
     // clang-format off
     {"app.object-set-attribute",      N_("Set Attribute"),         "Object",     N_("Set or update an attribute of selected objects; usage: object-set-attribute:attribute name, attribute value;")},
     {"app.object-set-property",       N_("Set Property"),          "Object",     N_("Set or update a property on selected objects; usage: object-set-property:property name, property value;")},
@@ -150,11 +157,10 @@ std::vector<std::vector<Glib::ustring>> raw_data_object =
     // clang-format on
 };
 
-void
-add_actions_object(InkscapeApplication* app)
+void add_actions_object(InkscapeApplication *app)
 {
-    Glib::VariantType Bool(  Glib::VARIANT_TYPE_BOOL);
-    Glib::VariantType Int(   Glib::VARIANT_TYPE_INT32);
+    Glib::VariantType Bool(Glib::VARIANT_TYPE_BOOL);
+    Glib::VariantType Int(Glib::VARIANT_TYPE_INT32);
     Glib::VariantType Double(Glib::VARIANT_TYPE_DOUBLE);
     Glib::VariantType String(Glib::VARIANT_TYPE_STRING);
 
@@ -165,6 +171,7 @@ add_actions_object(InkscapeApplication* app)
 
     // clang-format off
     gapp->add_action_with_parameter( "object-set-attribute",     String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_attribute),      app));
+    gapp->add_action_with_parameter( "selection-trace",          String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&selection_trace),           app));
     gapp->add_action_with_parameter( "object-set-property",      String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_set_property),       app));
     gapp->add_action(                "object-unlink-clones",             sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_unlink_clones),      app));
     gapp->add_action(                "object-to-path",                   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&object_to_path),            app));
@@ -176,7 +183,6 @@ add_actions_object(InkscapeApplication* app)
 
     app->get_action_extra_data().add_data(raw_data_object);
 }
-
 
 /*
   Local Variables:

@@ -50,3 +50,5 @@ src/helper/sp-marshal.*
 
 # Ctags
 tags
+.idea
+cmake-build-debug
