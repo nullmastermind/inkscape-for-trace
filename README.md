@@ -18,3 +18,5 @@ $ inkscape.exe --actions="select-all;selection-trace:256,false,true,true,4,1.0,0
 
 # If "false|true" does not work, please replace it with "0|1", because my project has been bankrupt for a long time and is no longer maintained, but rest assured that it still works very well.
 ```
+
+If you encounter the "png bitmap image import" settings popup, please follow this issue to disable it: https://github.com/nullmastermind/inkscape-for-trace/issues/2
