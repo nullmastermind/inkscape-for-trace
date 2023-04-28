@@ -6,7 +6,8 @@
 ## <code>Features</code>
 
 - [x] Add options for tracing
-- This is a video where I used this repository to automate some pixel art image editing: https://www.youtube.com/watch?v=-rXxJMkYn5w
+
+This is a video where I used this repository to automate some pixel art image editing: https://www.youtube.com/watch?v=-rXxJMkYn5w
 
 ## <code>Quick guide</code>
 
