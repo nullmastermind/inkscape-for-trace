@@ -9,5 +9,4 @@ set -euo pipefail
 INPUT="${1:-input.png}"
 OUTPUT="${2:-output.svg}"
 
-./build/bin/inkscape --headless --actions="select-all;selection-trace:256,false,true,true,4,1.0,0.20;export-filename:${OUTPUT};export-do;" "${INPUT}"
-
+./build/bin/inkscape --headless --actions="select-all;selection-trace:256,false,true,true,2,1.0,0.20;export-filename:${OUTPUT};export-do;" "${INPUT}"

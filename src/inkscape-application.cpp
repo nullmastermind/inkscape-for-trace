@@ -76,6 +76,7 @@
 #endif
 
 #include "io/resource.h"
+#include "preferences.h"  // For headless import preferences
 using Inkscape::IO::Resource::UIS;
 
 // This is a bit confusing as there are two ways to handle command line arguments and files
@@ -718,6 +719,18 @@ InkscapeApplication::on_startup2()
 {
     // This should be completely rewritten.
     Inkscape::Application::create(_with_gui);
+
+    // In headless mode, suppress all import dialogs by setting preferences
+    // This prevents the "PNG bitmap image import" dialog from appearing
+    if (_headless) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        // Disable "ask about linking and scaling" dialog for bitmap imports
+        prefs->setBool("/dialogs/import/ask", false);
+        // Disable "ask about linking and scaling" dialog for SVG imports
+        prefs->setBool("/dialogs/import/ask_svg", false);
+        // Default to embedding images (not linking)
+        prefs->setString("/dialogs/import/link", "embed");
+    }
 
     if (!_with_gui) {
         return;
