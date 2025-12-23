@@ -1,0 +1,5 @@
+# Git attributes file
+# Set executable bit for shell scripts
+*.sh text eol=lf
+release.sh text eol=lf
+

@@ -52,3 +52,7 @@ src/helper/sp-marshal.*
 tags
 .idea
 cmake-build-debug
+auggie_shell.ps1
+auggie_shell.sh
+auggie_shell_user_request.txt
+auggie_shell_conversation.txt
