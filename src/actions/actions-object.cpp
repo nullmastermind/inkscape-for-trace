@@ -24,23 +24,188 @@
 #include "trace/depixelize/inkscape-depixelize.h"
 #include "trace/potrace/inkscape-potrace.h"
 
+#include "display/cairo-utils.h" // For Inkscape::Pixbuf
+#include "object/sp-image.h"     // For SPImage
+#include "xml/repr.h"            // For sp_repr_get_double
+#include <2geom/transforms.h>    // For Geom::Translate, Geom::Scale, Geom::Affine
+
+// Headless-compatible bitmap tracing implementation.
+// This function works without requiring SP_ACTIVE_DESKTOP by using the app's
+// active selection and document directly, suitable for CLI batch processing.
 void selection_trace(const Glib::VariantBase &value, InkscapeApplication *app)
 {
+    // Parse parameters from the action string
     Glib::Variant<Glib::ustring> s = Glib::VariantBase::cast_dynamic<Glib::Variant<Glib::ustring>>(value);
     std::vector<Glib::ustring> settings = Glib::Regex::split_simple(",", s.get());
-    Inkscape::Trace::Tracer tracer;
-    auto scans = std::stoi(settings[0]);           // Scans
-    auto smooth = settings[1] == "true";           // Smooth
-    auto stack = settings[2] == "true";            // Stack
-    auto removeBackground = settings[3] == "true"; // Remove background
-    Inkscape::Trace::Potrace::PotraceTracingEngine pte(Inkscape::Trace::Potrace::TRACE_QUANT_COLOR, false, 64, 0.45, 0.,
-                                                       .65, scans, stack, smooth, removeBackground);
-    pte.potraceParams->opticurve = true;
-    pte.potraceParams->opttolerance = std::stof(settings[6]); // Optimize
-    pte.potraceParams->alphamax = std::stof(settings[5]);     // Smooth corners
-    pte.potraceParams->turdsize = std::stoi(settings[4]);     // Speckles
 
-    tracer.trace(&pte);
+    if (settings.size() < 7) {
+        std::cerr << "selection_trace: requires 7 parameters: scans,smooth,stack,removeBackground,speckles,smoothCorners,optimize" << std::endl;
+        return;
+    }
+
+    auto scans = std::stoi(settings[0]);           // Number of colors/scans
+    auto smooth = settings[1] == "true";           // Smooth tracing
+    auto stack = settings[2] == "true";            // Stack scan results
+    auto removeBackground = settings[3] == "true"; // Remove background
+    auto speckles = std::stoi(settings[4]);        // Speckle suppression (turdsize)
+    auto smoothCorners = std::stof(settings[5]);   // Corner smoothing (alphamax)
+    auto optimize = std::stof(settings[6]);        // Path optimization (opttolerance)
+
+    // Get document and selection without requiring a desktop
+    SPDocument *document = app->get_active_document();
+    if (!document) {
+        std::cerr << "selection_trace: No active document" << std::endl;
+        return;
+    }
+
+    Inkscape::Selection *selection = app->get_active_selection();
+    if (!selection) {
+        std::cerr << "selection_trace: No active selection" << std::endl;
+        return;
+    }
+
+    if (selection->isEmpty()) {
+        std::cerr << "selection_trace: Selection is empty" << std::endl;
+        return;
+    }
+
+    // Find the first SPImage in the selection
+    SPImage *img = nullptr;
+    auto items = selection->items();
+    for (auto i = items.begin(); i != items.end(); ++i) {
+        if (SP_IS_IMAGE(*i)) {
+            img = SP_IMAGE(*i);
+            break;
+        }
+    }
+
+    if (!img) {
+        std::cerr << "selection_trace: No image found in selection" << std::endl;
+        return;
+    }
+
+    // Ensure the document (and image pixbuf) is up to date
+    document->ensureUpToDate();
+
+    if (!img->pixbuf) {
+        std::cerr << "selection_trace: Image has no bitmap data" << std::endl;
+        return;
+    }
+
+    // Get pixbuf from the image, converting format if needed
+    GdkPixbuf *raw_pb = img->pixbuf->getPixbufRaw(false);
+    GdkPixbuf *trace_pb = gdk_pixbuf_copy(raw_pb);
+    if (img->pixbuf->pixelFormat() == Inkscape::Pixbuf::PF_CAIRO) {
+        convert_pixels_argb32_to_pixbuf(
+            gdk_pixbuf_get_pixels(trace_pb),
+            gdk_pixbuf_get_width(trace_pb),
+            gdk_pixbuf_get_height(trace_pb),
+            gdk_pixbuf_get_rowstride(trace_pb));
+    }
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf = Glib::wrap(trace_pb, false);
+
+    if (!pixbuf) {
+        std::cerr << "selection_trace: Failed to get pixbuf from image" << std::endl;
+        return;
+    }
+
+    // Create and configure the Potrace tracing engine
+    Inkscape::Trace::Potrace::PotraceTracingEngine pte(
+        Inkscape::Trace::Potrace::TRACE_QUANT_COLOR,
+        false,      // invert
+        64,         // quantization colors (internal)
+        0.45,       // brightness threshold
+        0.,         // brightness floor
+        .65,        // canny high threshold
+        scans,
+        stack,
+        smooth,
+        removeBackground
+    );
+    pte.potraceParams->opticurve = true;
+    pte.potraceParams->opttolerance = optimize;
+    pte.potraceParams->alphamax = smoothCorners;
+    pte.potraceParams->turdsize = speckles;
+
+    // Perform the trace
+    std::vector<Inkscape::Trace::TracingEngineResult> results = pte.trace(pixbuf);
+    int nrPaths = results.size();
+
+    if (nrPaths < 1) {
+        std::cerr << "selection_trace: Tracing produced no paths" << std::endl;
+        return;
+    }
+
+    // Get image position and size for transforming result paths
+    Inkscape::XML::Node *imgRepr = img->getRepr();
+    Inkscape::XML::Node *par = imgRepr->parent();
+
+    double x = 0.0, y = 0.0, width = 0.0, height = 0.0, dval = 0.0;
+    if (sp_repr_get_double(imgRepr, "x", &dval)) x = dval;
+    if (sp_repr_get_double(imgRepr, "y", &dval)) y = dval;
+    if (sp_repr_get_double(imgRepr, "width", &dval)) width = dval;
+    if (sp_repr_get_double(imgRepr, "height", &dval)) height = dval;
+
+    double iwidth = (double)pixbuf->get_width();
+    double iheight = (double)pixbuf->get_height();
+    double iwscale = width / iwidth;
+    double ihscale = height / iheight;
+
+    // Compute transform: scale then translate, combined with image's own transform
+    Geom::Translate trans(x, y);
+    Geom::Scale scal(iwscale, ihscale);
+    Geom::Affine tf(scal * trans);
+    tf *= img->transform;
+
+    // Create new path elements from trace results
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    Inkscape::XML::Node *groupRepr = nullptr;
+
+    // If multiple paths, wrap them in a group
+    if (nrPaths > 1) {
+        groupRepr = xml_doc->createElement("svg:g");
+        par->addChild(groupRepr, imgRepr);
+    }
+
+    long totalNodeCount = 0L;
+    for (auto &result : results) {
+        totalNodeCount += result.getNodeCount();
+
+        Inkscape::XML::Node *pathRepr = xml_doc->createElement("svg:path");
+        pathRepr->setAttributeOrRemoveIfEmpty("style", result.getStyle());
+        pathRepr->setAttributeOrRemoveIfEmpty("d", result.getPathData());
+
+        if (nrPaths > 1) {
+            groupRepr->addChild(pathRepr, nullptr);
+        } else {
+            par->addChild(pathRepr, imgRepr);
+        }
+
+        // Apply the transform from the image to the new path
+        SPObject *reprobj = document->getObjectByRepr(pathRepr);
+        if (reprobj) {
+            SPItem *newItem = SP_ITEM(reprobj);
+            newItem->doWriteTransform(tf);
+        }
+
+        if (nrPaths == 1) {
+            selection->clear();
+            selection->add(pathRepr);
+        }
+        Inkscape::GC::release(pathRepr);
+    }
+
+    // If we have a group, select it
+    if (nrPaths > 1) {
+        selection->clear();
+        selection->add(groupRepr);
+        Inkscape::GC::release(groupRepr);
+    }
+
+    // Commit the change for undo
+    Inkscape::DocumentUndo::done(document, 0, "Trace bitmap (headless)");
+
+    std::cerr << "selection_trace: Done. " << totalNodeCount << " nodes created in " << nrPaths << " path(s)" << std::endl;
 }
 
 // No sanity checking is done... should probably add.

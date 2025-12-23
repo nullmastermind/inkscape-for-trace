@@ -46,14 +46,14 @@ Tests use **Google Test (gtest)**. Test files are in `testfiles/src/` for unit t
 
 **Location:** `src/actions/actions-object.cpp` (function `selection_trace`)
 
-The fork adds a custom `selection-trace` action for command-line bitmap tracing:
+The fork adds a custom `selection-trace` action for command-line bitmap tracing. This implementation is **fully headless-compatible** and does not require a GUI/desktop.
 
 ```bash
 # Action signature:
 selection-trace:{scans},{is_smooth[false|true]},{is_stack[false|true]},{is_remove_background[false|true]},{speckles},{smooth_corners},{optimize}
 
-# Example usage:
-inkscape.exe --actions="select-all;selection-trace:256,false,true,true,4,1.0,0.20;export-filename:output.svg;export-do;" "input.png" --batch-process
+# Example usage (headless, no GUI):
+inkscape --headless --actions="select-all;selection-trace:256,false,true,true,4,1.0,0.20;export-filename:output.svg;export-do;" "input.png"
 ```
 
 **Parameters:**
@@ -66,6 +66,24 @@ inkscape.exe --actions="select-all;selection-trace:256,false,true,true,4,1.0,0.2
 - `optimize`: Path optimization tolerance - `potraceParams->opttolerance` (float)
 
 The tracing uses the **Potrace** engine with `TRACE_QUANT_COLOR` mode.
+
+## Headless Mode
+
+The fork adds a `--headless` command-line flag for truly headless operation:
+
+```bash
+# --headless: Run without GUI and quit after executing all actions
+inkscape --headless --actions="..." input.png
+```
+
+**Key differences from `--batch-process`:**
+- `--batch-process`: Opens GUI, processes files, then closes GUI
+- `--headless`: Never opens GUI, processes files, then quits (suitable for automation/CI)
+
+The `--headless` flag:
+1. Forces `_with_gui = false` (overrides any other GUI settings)
+2. Automatically quits after processing all files
+3. Works with the headless-compatible `selection-trace` action
 
 ## Architecture
 

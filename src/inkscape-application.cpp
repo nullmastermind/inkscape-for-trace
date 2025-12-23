@@ -689,6 +689,7 @@ InkscapeApplication::InkscapeApplication()
     _start_main_option_section(_("Interface"));
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "with-gui",               'g', N_("With graphical user interface (required by some actions/verbs)"),           "");
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "batch-process",         '\0', N_("Close GUI after executing all actions/verbs"),"");
+    gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "headless",              '\0', N_("Run without GUI and quit after executing all actions (for automation)"),   "");
     _start_main_option_section();
     gapp->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",                 '\0', N_("Start Inkscape in interactive shell mode"),                                 "");
 
@@ -1028,8 +1029,9 @@ InkscapeApplication::on_open(const Gio::Application::type_vec_files& files, cons
         process_document (document, file->get_path());
     }
 
-    if (_batch_process) {
+    if (_batch_process || _headless) {
         // If with_gui, we've reused a window for each file. We must quit to destroy it.
+        // If headless, we quit after processing all files.
         gio_app()->quit();
     }
 }
@@ -1350,6 +1352,12 @@ InkscapeApplication::on_handle_local_options(const Glib::RefPtr<Glib::VariantDic
         options->contains("batch-process")
         ) {
         _with_gui = true; // Override turning GUI off
+    }
+
+    // --headless forces no GUI and will quit after processing
+    if (options->contains("headless")) {
+        _headless = true;
+        _with_gui = false; // Override any GUI setting
     }
 
     if (options->contains("batch-process"))  _batch_process = true;

@@ -126,6 +126,7 @@ public:
 protected:
     bool _with_gui    = true;
     bool _batch_process = false; // Temp
+    bool _headless    = false;   // Truly headless mode (no GUI, quit after processing)
     bool _use_shell   = false;
     bool _use_pipe    = false;
     bool _auto_export = false;
